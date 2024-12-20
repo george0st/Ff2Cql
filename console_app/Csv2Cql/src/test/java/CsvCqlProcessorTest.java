@@ -1,10 +1,7 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
@@ -58,6 +55,31 @@ class CsvCqlProcessorTest {
         aaa = new String();
     }
 
+    @RepeatedTest(3)
+    @DisplayName("Sequence 1K items in CSV")
+    void csvSequence1K(){
+        // generate random file
+
+        // generate random content
+
+        // write to CQL
+
+        // validation, read from CQL
+    }
+
+    @RepeatedTest(10)
+    @DisplayName("Random 1K items in CSV")
+    void csvRandom1K(){
+        // generate random file
+
+        // generate random content
+
+        // write to CQL
+
+        // validation, read from CQL
+
+    }
+
     @Test
     void csv1kItems(@TempDir Path tempDir) {
 
@@ -71,9 +93,5 @@ class CsvCqlProcessorTest {
         assertTrue(true);
     }
 
-    @RepeatedTest(5)
-    @DisplayName("Ensure correct handling of zero")
-    void testMultiplyWithZero() {
-        assertTrue(true);
-    }
+
 }
