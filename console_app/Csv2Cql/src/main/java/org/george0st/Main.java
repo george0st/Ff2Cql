@@ -5,6 +5,11 @@ import java.io.File;
 
 public class Main {
 
+    /**
+     * Choose the first existing setup file name.
+     * @param files List of setup file names for check.
+     * @return Setup file name.
+     */
     private static String setupFile(String[] files){
         for (String file: files)
             if (new File(file).exists())
@@ -18,6 +23,6 @@ public class Main {
         CsvCqlProcessor aa = new CsvCqlProcessor(Setup.getInstance(setupFile));
         aa.execute("test.csv");
 
-        System.out.printf("Hello and welcome!");
+        System.out.printf("! DONE !");
     }
 }

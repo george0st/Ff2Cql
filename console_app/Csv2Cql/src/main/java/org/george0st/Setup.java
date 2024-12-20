@@ -1,16 +1,13 @@
 package org.george0st;
 
-
 import com.google.gson.Gson;
-
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.HashMap;
 
+
 /**
- * The definition of Setup for CQL access (load setting from *.json file)
+ * The definition of Setup (load setting from *.json file)
  */
 public class Setup {
     private static HashMap<String, Setup> instances;
