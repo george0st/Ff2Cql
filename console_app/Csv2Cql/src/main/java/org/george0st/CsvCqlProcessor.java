@@ -70,10 +70,7 @@ public class CsvCqlProcessor implements CqlProcessor {
 
     public void execute(String fileName){
         try (CqlSession session = sessionBuilder.build()) {
-
-
             try (Reader reader = new FileReader(fileName)) {
-
                 CSVParser parser = new CSVParserBuilder()
                         .withSeparator(',')
                         .build();
@@ -126,7 +123,7 @@ public class CsvCqlProcessor implements CqlProcessor {
                 .append(this.setup.table)
                 .append(String.format(" (%s) ",prepareHeaders))
                 .append("VALUES ")
-                .append(String.format("(%s); ",prepareItems)).toString();
+                .append(String.format("(%s);",prepareItems)).toString();
         return session.prepare(insertQuery);
     }
 

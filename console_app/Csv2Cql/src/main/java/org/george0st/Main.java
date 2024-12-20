@@ -23,6 +23,6 @@ public class Main {
         CsvCqlProcessor aa = new CsvCqlProcessor(Setup.getInstance(setupFile));
         aa.execute("test.csv");
 
-        System.out.printf("Hello and welcome!");
+        System.out.printf("! DONE !");
     }
 }
