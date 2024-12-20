@@ -1,5 +1,7 @@
 # Csv2Cql
 
+![NiFi + Cassandra](./assets/nifi_cassandra.png)
+
 A simple transfer from CSV to CQL data. The implementation details:
  - development as console application and NiFi extension (in Java 17 and 21)
  - support Apache Cassandra v4/v5, ScyllaDB, AstraDB based on CQL
