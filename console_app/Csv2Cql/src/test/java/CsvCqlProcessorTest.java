@@ -1,6 +1,11 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.CSVWriter;
+import com.opencsv.CSVWriterBuilder;
+import org.george0st.RndGenerator;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -11,56 +16,71 @@ import java.io.FileWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 import java.util.random.RandomGenerator;
 
 //  https://www.vogella.com/tutorials/JUnit/article.html#junitsetup
 class CsvCqlProcessorTest {
 
-    String aaa;
+    private RndGenerator rnd=new RndGenerator();
+    private static String testOutput="./test_output";
 
-    String getRandomFile(){
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 5;
-        Random random = new Random();
+    CsvCqlProcessorTest() throws InterruptedException {
 
-        String fileName = random.ints(leftLimit, rightLimit + 1)
-                .limit(targetStringLength)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
-
-        try {
-            File temp = File.createTempFile("CsvToCql_", ".csv.tmp");
-            System.out.println("Temp file : " + temp.getAbsolutePath());
-
-            temp.deleteOnExit();
-
-            //Path tmpdir = Files.createTempDirectory(Paths.get("target"), "tmpDirPrefix");
-
-
-            String absolutePath = temp.getAbsolutePath();
-            String tempFilePath = absolutePath
-                    .substring(0, absolutePath.lastIndexOf(File.separator));
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        return fileName;
     }
 
-    @BeforeEach
-    void setUp() {
-        aaa = new String();
+
+    private File getRandomFile(){
+
+        File temp= new File(String.format("%s/CsvToCql_%s.csv.tmp",testOutput, rnd.getStringSequence(10)));
+        //File temp = File.createTempFile("CsvToCql_", ".csv.tmp");
+        return temp;
+
+
+    }
+
+    @BeforeAll
+    static void setUp() {
+        //File file=new File(testOutput);
+        File[] contents = new File(testOutput).listFiles();
+        if (contents != null)
+            for (File f : contents)
+                f.delete();
     }
 
     @RepeatedTest(3)
     @DisplayName("Sequence 1K items in CSV")
-    void csvSequence1K(){
-        // generate random file
+    void csvSequence1K() throws InterruptedException, IOException {
+        // generate random file name
+        File file=getRandomFile();
 
         // generate random content
+        try (FileWriter writer =new FileWriter(file,false)){
+
+            try (CSVWriter csvWriter = new CSVWriter(writer)){
+
+//                CSVWriter writer = new CSVWriter(outputfile, ';',
+//                        CSVWriter.NO_QUOTE_CHARACTER,
+//                        CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+//                        CSVWriter.DEFAULT_LINE_END);
+                int size=100;
+                // write header
+                csvWriter.writeNext(new String[]{"colID", "colA", "colB", "colC"});
+
+                // write content
+                for (int i =0;i<size;i++) {
+
+                    csvWriter.writeNext(new String[]{Integer.toString(i),
+                            rnd.getStringSequence(10),
+                            rnd.getStringSequence(10),
+                            rnd.getStringSequence(10)});
+                }
+
+            }
+        }
+
 
         // write to CQL
 
@@ -84,7 +104,7 @@ class CsvCqlProcessorTest {
     void csv1kItems(@TempDir Path tempDir) {
 
         //  generate data
-        String aa=getRandomFile();
+        //String aa=getRandomFile();
 
 //        try (Writer reader = new FileWriter(generatedString)) {
 //
