@@ -1,0 +1,12 @@
+{
+  "ipAddresses": ["<add ip>","<add ip2>","<add ip3>","..."],
+  "port": 9042,
+  "username": "<add username>",
+  "pwd": "<add pwd>",
+  "localDC": "datacenter1",
+  "connectionTimeout": "900",
+  "requestTimeout": "60",
+  "consistencyLevel": "LOCAL_ONE",
+  "table": "<add keyspace.table>",
+  "bulk": 200
+}

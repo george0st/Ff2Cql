@@ -1,6 +1,8 @@
 package org.george0st;
 
 import com.google.gson.Gson;
+
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -51,5 +53,17 @@ public class Setup {
             }
         }
         return instances.get(connectionFile);
+    }
+
+    /**
+     * Choose the first existing setup file name.
+     * @param files List of setup file names for check.
+     * @return Setup file name.
+     */
+    public static String getSetupFile(String[] files){
+        for (String file: files)
+            if (new File(file).exists())
+                return file;
+        return null;
     }
 }

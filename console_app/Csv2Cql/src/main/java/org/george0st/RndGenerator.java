@@ -3,10 +3,7 @@ package org.george0st;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Random;
 import java.util.UUID;
-import java.util.random.RandomGenerator;
-import java.util.stream.IntStream;
 
 /**
  * The pseudo-random number generator with extra seed (local datetime, cpu speed, UUID version 4)
@@ -37,32 +34,49 @@ public class RndGenerator {
                 .getBytes();
 
         try {
-            this.rnd = SecureRandom.getInstance("SHA1PRNG");
+            rnd = SecureRandom.getInstance("SHA1PRNG");
         }
         catch (NoSuchAlgorithmException ex) {
-            this.rnd = new SecureRandom();
+            rnd = new SecureRandom();
         }
-        this.rnd.setSeed(init);
+        rnd.setSeed(init);
     }
 
     public String getStringSequence(int length){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i ++)
-            sb.append(stringCandidates.charAt(this.rnd.nextInt(stringCandidates.length())));
+            sb.append(stringCandidates.charAt(rnd.nextInt(stringCandidates.length())));
         return sb.toString();
     }
 
     public String getNumberSequence(int length){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i ++)
-            sb.append(numberCandidates.charAt(this.rnd.nextInt(numberCandidates.length())));
+            sb.append(numberCandidates.charAt(rnd.nextInt(numberCandidates.length())));
         return sb.toString();
     }
 
     public String getAllSequence(int length){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i ++)
-            sb.append(allCandidates.charAt(this.rnd.nextInt(allCandidates.length())));
+            sb.append(allCandidates.charAt(rnd.nextInt(allCandidates.length())));
         return sb.toString();
     }
+
+    public int getInt(int toNumber){
+        return getInt(0, toNumber);
+    }
+
+    public int getInt(int fromNumber, int toNumber){
+        return rnd.nextInt(fromNumber, toNumber);
+    }
+
+    public float getFloat(float toNumber){
+        return getFloat(0, toNumber);
+    }
+
+    public float getFloat(float fromNumber, float toNumber){
+        return rnd.nextFloat(fromNumber, toNumber);
+    }
+
 }
