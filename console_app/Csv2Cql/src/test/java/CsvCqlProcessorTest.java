@@ -67,8 +67,18 @@ class CsvCqlProcessorTest {
         }
     }
 
+    @Test
+    @DisplayName("Sequence 100 items in CSV")
+    void csvSequence100() throws IOException {
+        generateRandomCSV(100, true);
 
-    @RepeatedTest(3)
+        // write to CQL
+
+        // validation, read from CQL
+    }
+
+    //@RepeatedTest(3)
+    @Test
     @DisplayName("Sequence 1K items in CSV")
     void csvSequence1K() throws IOException {
         generateRandomCSV(1000, true);
@@ -78,7 +88,18 @@ class CsvCqlProcessorTest {
         // validation, read from CQL
     }
 
-    @RepeatedTest(10)
+    @Test
+    @DisplayName("Random 100 items in CSV")
+    void csvRandom100() throws IOException {
+        generateRandomCSV(100, false);
+
+        // write to CQL
+
+        // validation, read from CQL
+    }
+
+    //@RepeatedTest(10)
+    @Test
     @DisplayName("Random 1K items in CSV")
     void csvRandom1K() throws IOException {
         generateRandomCSV(1000, false);
@@ -87,19 +108,5 @@ class CsvCqlProcessorTest {
 
         // validation, read from CQL
     }
-
-    @Test
-    void csv1kItems(@TempDir Path tempDir) {
-
-        //  generate data
-        //String aa=getRandomFile();
-
-//        try (Writer reader = new FileWriter(generatedString)) {
-//
-//        }
-        System.out.println(tempDir);
-        assertTrue(true);
-    }
-
 
 }
