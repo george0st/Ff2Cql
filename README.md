@@ -11,4 +11,4 @@ A simple transfer from CSV to CQL data. The implementation details:
  - the Apache NiFi 2 (last version) does not suppprt Apache Cassandra v4 and v5
 
 ### Current state:
- - under development (unstale)
+ - under development (unstable)
