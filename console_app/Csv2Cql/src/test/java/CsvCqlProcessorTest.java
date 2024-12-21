@@ -86,6 +86,16 @@ class CsvCqlProcessorTest {
     }
 
     @Test
+    @DisplayName("Sequence, 3. 10K items in CSV")
+    void csvSequence10K() throws IOException {
+        generateRandomCSV(10000, true);
+
+        // write to CQL
+
+        // validation, read from CQL
+    }
+
+    @Test
     @DisplayName("Random, 1. 100 items in CSV")
     void csvRandom100() throws IOException {
         generateRandomCSV(100, false);
@@ -100,6 +110,16 @@ class CsvCqlProcessorTest {
     @DisplayName("Random, 2. 1K items in CSV")
     void csvRandom1K() throws IOException {
         generateRandomCSV(1000, false);
+
+        // write to CQL
+
+        // validation, read from CQL
+    }
+
+    @Test
+    @DisplayName("Random, 3. 10K items in CSV")
+    void csvRandom10K() throws IOException {
+        generateRandomCSV(10000, false);
 
         // write to CQL
 
