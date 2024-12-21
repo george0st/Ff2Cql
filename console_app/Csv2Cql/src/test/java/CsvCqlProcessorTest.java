@@ -1,25 +1,15 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
-import com.opencsv.CSVWriterBuilder;
 import org.george0st.RndGenerator;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.Reader;
-import java.io.Writer;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
-import java.util.Random;
-import java.util.random.RandomGenerator;
 
 //  https://www.vogella.com/tutorials/JUnit/article.html#junitsetup
 class CsvCqlProcessorTest {
@@ -37,6 +27,7 @@ class CsvCqlProcessorTest {
     }
 
     private static void cleanUp(){
+        //  remove all random files from testOutput directory
         File[] contents = new File(testOutput).listFiles();
         if (contents != null)
             for (File f : contents)
@@ -51,14 +42,11 @@ class CsvCqlProcessorTest {
     private void generateRandomCSV(int csvItems, boolean sequenceID) throws IOException {
         // generate random file name
         File file=getRandomFile();
-        int randomSize= csvItems*csvItems;
-
+        int randomIDRange = csvItems * csvItems;
 
         // generate random content
         try (FileWriter writer =new FileWriter(file,false)){
-
             try (CSVWriter csvWriter = new CSVWriter(writer)){
-
 //                CSVWriter writer = new CSVWriter(outputfile, ';',
 //                        CSVWriter.NO_QUOTE_CHARACTER,
 //                        CSVWriter.DEFAULT_ESCAPE_CHARACTER,
@@ -68,14 +56,13 @@ class CsvCqlProcessorTest {
                 csvWriter.writeNext(new String[]{"colID", "colA", "colB", "colC"});
 
                 // write content
-                for (int i =0;i<csvItems;i++) {
+                for (int i=0;i<csvItems;i++) {
 
-                    csvWriter.writeNext(new String[]{sequenceID ? Integer.toString(i) : Integer.toString(rnd.getNumber(randomSize)),
+                    csvWriter.writeNext(new String[]{sequenceID ? Integer.toString(i) : Integer.toString(rnd.getNumber(randomIDRange)),
                             rnd.getStringSequence(10),
                             rnd.getStringSequence(10),
                             rnd.getStringSequence(10)});
                 }
-
             }
         }
     }
@@ -84,9 +71,7 @@ class CsvCqlProcessorTest {
     @RepeatedTest(3)
     @DisplayName("Sequence 1K items in CSV")
     void csvSequence1K() throws IOException {
-
         generateRandomCSV(1000, true);
-
 
         // write to CQL
 
@@ -101,7 +86,6 @@ class CsvCqlProcessorTest {
         // write to CQL
 
         // validation, read from CQL
-
     }
 
     @Test
