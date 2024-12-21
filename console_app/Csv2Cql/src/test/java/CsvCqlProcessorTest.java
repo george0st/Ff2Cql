@@ -2,7 +2,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.opencsv.CSVWriter;
+import org.george0st.CsvCqlProcessor;
+import org.george0st.Main;
 import org.george0st.RndGenerator;
+import org.george0st.Setup;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -14,6 +17,7 @@ class CsvCqlProcessorTest {
 
     private RndGenerator rnd=new RndGenerator();
     private static String testOutput="./test_output";
+    private static String testInput="./test_input";
 
     CsvCqlProcessorTest() throws InterruptedException {
 
@@ -37,15 +41,15 @@ class CsvCqlProcessorTest {
         cleanUp();
     }
 
-    private void generateRandomCSV(int csvItems, boolean sequenceID) throws IOException {
+    private File generateRandomCSV(int csvItems, boolean sequenceID) throws IOException {
         // generate random file name
-        File file=getRandomFile();
+        File randomFile=getRandomFile();
         int randomIDRange = csvItems * csvItems;
 
         // generate random content
-        try (FileWriter writer =new FileWriter(file,false)){
+        try (FileWriter writer =new FileWriter(randomFile,false)){
             try (CSVWriter csvWriter = new CSVWriter(writer)){
-//                CSVWriter writer = new CSVWriter(outputfile, ';',
+//                CSVWriter writer = new CSVWriter(outputFile, ';',
 //                        CSVWriter.NO_QUOTE_CHARACTER,
 //                        CSVWriter.DEFAULT_ESCAPE_CHARACTER,
 //                        CSVWriter.DEFAULT_LINE_END);
@@ -62,14 +66,26 @@ class CsvCqlProcessorTest {
                 }
             }
         }
+        return randomFile;
     }
 
     @Test
     @DisplayName("Sequence, 1. 100 items in CSV")
     void csvSequence100() throws IOException {
-        generateRandomCSV(100, true);
+        File randomFile = generateRandomCSV(100, true);
 
         // write to CQL
+        String testSetupFile = Setup.getSetupFile(new String[]{
+                String.format("%s/test-connection-private.json", testInput),
+                String.format("%s/test-connection.json", testInput)});
+
+        Setup testSetup = Setup.getInstance(testSetupFile);
+        CsvCqlProcessor processor=new CsvCqlProcessor(testSetup);
+//        System.out.println(randomFile.getName());
+//        System.out.println(randomFile.getAbsoluteFile());
+//        System.out.println(randomFile.getAbsolutePath());
+//        System.out.println(randomFile.getPath());
+        processor.execute(randomFile.getPath());
 
         // validation, read from CQL
     }
