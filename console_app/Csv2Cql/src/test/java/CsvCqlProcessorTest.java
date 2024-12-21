@@ -33,26 +33,22 @@ class CsvCqlProcessorTest {
 
 
     private File getRandomFile(){
-
-        File temp= new File(String.format("%s/CsvToCql_%s.csv.tmp",testOutput, rnd.getStringSequence(10)));
-        //File temp = File.createTempFile("CsvToCql_", ".csv.tmp");
-        return temp;
-
-
+        return new File(String.format("%s/CsvToCql_%s.csv.tmp",testOutput, rnd.getStringSequence(10)));
     }
 
-    @BeforeAll
-    static void setUp() {
-        //File file=new File(testOutput);
+    private static void cleanUp(){
         File[] contents = new File(testOutput).listFiles();
         if (contents != null)
             for (File f : contents)
                 f.delete();
     }
 
-    @RepeatedTest(3)
-    @DisplayName("Sequence 1K items in CSV")
-    void csvSequence1K() throws InterruptedException, IOException {
+    @BeforeAll
+    public static void setUp() {
+        cleanUp();
+    }
+
+    private void generateRandomCSV(int csvItems) throws IOException {
         // generate random file name
         File file=getRandomFile();
 
@@ -80,6 +76,14 @@ class CsvCqlProcessorTest {
 
             }
         }
+    }
+
+
+    @RepeatedTest(3)
+    @DisplayName("Sequence 1K items in CSV")
+    void csvSequence1K() throws IOException {
+
+        generateRandomCSV(1000);
 
 
         // write to CQL

@@ -8,7 +8,11 @@ import java.util.UUID;
 import java.util.random.RandomGenerator;
 import java.util.stream.IntStream;
 
+/**
+ * The pseudo-random number generator with extra seed (local datetime, cpu speed, UUID version 4)
+ */
 public class RndGenerator {
+
 
     private static String allCandidates = "abcdefghijklmnopqrstuvwxyz" +
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
@@ -23,12 +27,12 @@ public class RndGenerator {
 
     public RndGenerator() throws InterruptedException {
 
-        // calc based on CPU speed
+        // calc based on current CPU speed
         long startTime = System.nanoTime();
         Thread.sleep(3);
         long calcClock = System. nanoTime() - startTime;
 
-        // define INIT seed
+        // define sequence for seed init
         byte[] init = String.format("%s,%d,%s", LocalDateTime.now().toString(), calcClock, UUID.randomUUID().toString())
                 .getBytes();
 
