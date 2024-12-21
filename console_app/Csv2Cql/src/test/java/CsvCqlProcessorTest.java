@@ -4,12 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.opencsv.CSVWriter;
 import org.george0st.RndGenerator;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
 import java.io.File;
 import java.io.FileWriter;
-import java.nio.file.Path;
 
 //  https://www.vogella.com/tutorials/JUnit/article.html#junitsetup
 class CsvCqlProcessorTest {
@@ -57,8 +55,7 @@ class CsvCqlProcessorTest {
 
                 // write content
                 for (int i=0;i<csvItems;i++) {
-
-                    csvWriter.writeNext(new String[]{sequenceID ? Integer.toString(i) : Integer.toString(rnd.getNumber(randomIDRange)),
+                    csvWriter.writeNext(new String[]{sequenceID ? Integer.toString(i) : Integer.toString(rnd.getInt(randomIDRange)),
                             rnd.getStringSequence(10),
                             rnd.getStringSequence(10),
                             rnd.getStringSequence(10)});
@@ -68,7 +65,7 @@ class CsvCqlProcessorTest {
     }
 
     @Test
-    @DisplayName("Sequence 100 items in CSV")
+    @DisplayName("Sequence, 1. 100 items in CSV")
     void csvSequence100() throws IOException {
         generateRandomCSV(100, true);
 
@@ -79,7 +76,7 @@ class CsvCqlProcessorTest {
 
     //@RepeatedTest(3)
     @Test
-    @DisplayName("Sequence 1K items in CSV")
+    @DisplayName("Sequence, 2. 1K items in CSV")
     void csvSequence1K() throws IOException {
         generateRandomCSV(1000, true);
 
@@ -89,7 +86,7 @@ class CsvCqlProcessorTest {
     }
 
     @Test
-    @DisplayName("Random 100 items in CSV")
+    @DisplayName("Random, 1. 100 items in CSV")
     void csvRandom100() throws IOException {
         generateRandomCSV(100, false);
 
@@ -100,7 +97,7 @@ class CsvCqlProcessorTest {
 
     //@RepeatedTest(10)
     @Test
-    @DisplayName("Random 1K items in CSV")
+    @DisplayName("Random, 2. 1K items in CSV")
     void csvRandom1K() throws IOException {
         generateRandomCSV(1000, false);
 
