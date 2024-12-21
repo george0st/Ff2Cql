@@ -10,6 +10,10 @@ import java.util.stream.IntStream;
 
 public class RndGenerator {
 
+    private static String allCandidates = "abcdefghijklmnopqrstuvwxyz" +
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+            "1234567890"+
+            " ()_-,.";
     private static String stringCandidates = "abcdefghijklmnopqrstuvwxyz" +
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
             "1234567890";
@@ -51,4 +55,10 @@ public class RndGenerator {
         return sb.toString();
     }
 
+    public String getAllSequence(int length){
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i ++)
+            sb.append(allCandidates.charAt(this.rnd.nextInt(allCandidates.length())));
+        return sb.toString();
+    }
 }
