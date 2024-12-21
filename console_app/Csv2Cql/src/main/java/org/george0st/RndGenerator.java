@@ -37,32 +37,41 @@ public class RndGenerator {
                 .getBytes();
 
         try {
-            this.rnd = SecureRandom.getInstance("SHA1PRNG");
+            rnd = SecureRandom.getInstance("SHA1PRNG");
         }
         catch (NoSuchAlgorithmException ex) {
-            this.rnd = new SecureRandom();
+            rnd = new SecureRandom();
         }
-        this.rnd.setSeed(init);
+        rnd.setSeed(init);
     }
 
     public String getStringSequence(int length){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i ++)
-            sb.append(stringCandidates.charAt(this.rnd.nextInt(stringCandidates.length())));
+            sb.append(stringCandidates.charAt(rnd.nextInt(stringCandidates.length())));
         return sb.toString();
     }
 
     public String getNumberSequence(int length){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i ++)
-            sb.append(numberCandidates.charAt(this.rnd.nextInt(numberCandidates.length())));
+            sb.append(numberCandidates.charAt(rnd.nextInt(numberCandidates.length())));
         return sb.toString();
     }
 
     public String getAllSequence(int length){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i ++)
-            sb.append(allCandidates.charAt(this.rnd.nextInt(allCandidates.length())));
+            sb.append(allCandidates.charAt(rnd.nextInt(allCandidates.length())));
         return sb.toString();
     }
+
+    public int getNumber(int toNumber){
+        return getNumber(0, toNumber);
+    }
+
+    public int getNumber(int fromNumber, int toNumber){
+        return rnd.nextInt(fromNumber, toNumber);
+    }
+
 }

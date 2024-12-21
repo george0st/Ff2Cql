@@ -48,9 +48,11 @@ class CsvCqlProcessorTest {
         cleanUp();
     }
 
-    private void generateRandomCSV(int csvItems) throws IOException {
+    private void generateRandomCSV(int csvItems, boolean sequenceID) throws IOException {
         // generate random file name
         File file=getRandomFile();
+        int randomSize= csvItems*csvItems;
+
 
         // generate random content
         try (FileWriter writer =new FileWriter(file,false)){
@@ -61,14 +63,14 @@ class CsvCqlProcessorTest {
 //                        CSVWriter.NO_QUOTE_CHARACTER,
 //                        CSVWriter.DEFAULT_ESCAPE_CHARACTER,
 //                        CSVWriter.DEFAULT_LINE_END);
-                int size=100;
+
                 // write header
                 csvWriter.writeNext(new String[]{"colID", "colA", "colB", "colC"});
 
                 // write content
-                for (int i =0;i<size;i++) {
+                for (int i =0;i<csvItems;i++) {
 
-                    csvWriter.writeNext(new String[]{Integer.toString(i),
+                    csvWriter.writeNext(new String[]{sequenceID ? Integer.toString(i) : Integer.toString(rnd.getNumber(randomSize)),
                             rnd.getStringSequence(10),
                             rnd.getStringSequence(10),
                             rnd.getStringSequence(10)});
@@ -83,7 +85,7 @@ class CsvCqlProcessorTest {
     @DisplayName("Sequence 1K items in CSV")
     void csvSequence1K() throws IOException {
 
-        generateRandomCSV(1000);
+        generateRandomCSV(1000, true);
 
 
         // write to CQL
@@ -93,10 +95,8 @@ class CsvCqlProcessorTest {
 
     @RepeatedTest(10)
     @DisplayName("Random 1K items in CSV")
-    void csvRandom1K(){
-        // generate random file
-
-        // generate random content
+    void csvRandom1K() throws IOException {
+        generateRandomCSV(1000, false);
 
         // write to CQL
 
