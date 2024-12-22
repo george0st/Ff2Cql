@@ -37,6 +37,6 @@ build/
 ### Mac OS ###
 .DS_Store
 
-### others ###
+### Others ###
 connection-private.json
 /test_input/test-connection-private.json

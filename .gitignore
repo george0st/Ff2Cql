@@ -24,3 +24,4 @@ hs_err_pid*
 replay_pid*
 console_app/FfCsv2Cql/connection-private.json
 /console_app/FfCsv2Cql/test_output
+console_app/FfCsv2Cql/connection-private.json
