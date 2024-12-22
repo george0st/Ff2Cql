@@ -1,5 +1,6 @@
 package org.george0st;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.net.InetSocketAddress;
 import java.util.Collections;
@@ -19,6 +20,8 @@ import com.opencsv.CSVReaderBuilder;
 import java.io.FileReader;
 
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
+import com.opencsv.exceptions.CsvValidationException;
+import org.george0st.codec.CqlIntToStringCodec;
 
 //import com.datastax.oss.driver.api.core.*;
 //import com.datastax.oss.driver.api.core .Cluster.Builder
@@ -54,6 +57,21 @@ public class CsvCqlProcessor implements CqlProcessor {
         // authorization
         builder.withAuthCredentials(setup.username, setup.pwd);
 
+        // codec registry
+//        CodecRegistry myCodecRegistry = new CodecRegistry();
+//        myCodecRegistry.register(myCodec1, myCodec2, myCodec3);
+//        Cluster cluster = Cluster.builder().withCodecRegistry(myCodecRegistry).build();
+//
+
+        builder.addTypeCodecs(new CqlIntToStringCodec());
+//        MutableCodecRegistry registry =
+//                (MutableCodecRegistry) session.getContext().getCodecRegistry();
+//        registry.register(myCodec);
+//
+//        TypeCodec<DateTime> timestampCodec = ...
+//        CodecRegistry myCodecRegistry = new CodecRegistry().register(timestampCodec);
+//        builder.withCodecRegistry();
+
         // default options (balancing, timeout, CL)
         OptionsMap options = OptionsMap.driverDefaults();
         options.put(TypedDriverOption.LOAD_BALANCING_LOCAL_DATACENTER, setup.localDC);
@@ -63,12 +81,13 @@ public class CsvCqlProcessor implements CqlProcessor {
         //options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "LZ4");
         //options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "SNAPPY");
         options.put(TypedDriverOption.PROTOCOL_VERSION, "V4");
+        //options.put(TypedDriverOption.PROTOCOL_VERSION, "V4");
         builder.withConfigLoader(DriverConfigLoader.fromMap(options));
 
         return builder;
     }
 
-    public void execute(String fileName){
+    public void execute(String fileName) throws CsvValidationException, IOException {
         try (CqlSession session = sessionBuilder.build()) {
             try (Reader reader = new FileReader(fileName)) {
                 CSVParser parser = new CSVParserBuilder()
@@ -100,20 +119,21 @@ public class CsvCqlProcessor implements CqlProcessor {
         }
         catch(Exception ex)
         {
-            System.out.println("err");
+            throw ex;
+            //System.out.println(ex.toString());
         }
     }
 
     private String prepareHeaders(String[] headers){
-        return String.join(",",headers);
+        return String.join(", ",headers);
     }
 
     private String prepareItems(String[] headers){
         StringBuilder prepareItems= new StringBuilder();
 
         for (int i=0;i<headers.length;i++)
-            prepareItems.append("?,");
-        return prepareItems.deleteCharAt(prepareItems.length() - 1).toString();
+            prepareItems.append("?, ");
+        return prepareItems.deleteCharAt(prepareItems.length() - 2).toString();
     }
 
     private PreparedStatement insertStatement(CqlSession session, String prepareHeaders, String prepareItems){

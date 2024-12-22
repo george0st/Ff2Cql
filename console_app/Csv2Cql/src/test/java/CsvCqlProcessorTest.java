@@ -2,6 +2,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.CsvCqlProcessor;
 import org.george0st.Main;
 import org.george0st.RndGenerator;
@@ -55,7 +56,7 @@ class CsvCqlProcessorTest {
 //                        CSVWriter.DEFAULT_LINE_END);
 
                 // write header
-                csvWriter.writeNext(new String[]{"colID", "colA", "colB", "colC"});
+                csvWriter.writeNext(new String[]{"colid", "cola", "colb", "colc"});
 
                 // write content
                 for (int i=0;i<csvItems;i++) {
@@ -71,7 +72,7 @@ class CsvCqlProcessorTest {
 
     @Test
     @DisplayName("Sequence, 1. 100 items in CSV")
-    void csvSequence100() throws IOException {
+    void csvSequence100() throws IOException, CsvValidationException {
         File randomFile = generateRandomCSV(100, true);
 
         // write to CQL
