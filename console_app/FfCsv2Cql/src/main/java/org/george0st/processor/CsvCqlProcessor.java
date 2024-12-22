@@ -1,4 +1,4 @@
-package org.george0st;
+package org.george0st.processor;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -21,6 +21,7 @@ import java.io.FileReader;
 
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
 import com.opencsv.exceptions.CsvValidationException;
+import org.george0st.Setup;
 import org.george0st.codec.CqlIntToStringCodec;
 
 //import com.datastax.oss.driver.api.core.*;

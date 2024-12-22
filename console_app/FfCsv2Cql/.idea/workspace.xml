@@ -4,7 +4,42 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="331f2e70-ec0f-43a6-971e-37d563f58d86" name="Changes" comment="" />
+    <list default="true" id="331f2e70-ec0f-43a6-971e-37d563f58d86" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/connection.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/george0st/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/george0st/RndGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/george0st/Setup.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/george0st/codec/CqlIntToStringCodec.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/george0st/processor/CqlProcessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/george0st/processor/CsvCqlProcessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/CsvCqlProcessorTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test_input/test-connection.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/connection.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/docs/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/docs/todo-list.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/src/main/java/org/george0st/CqlProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/src/main/java/org/george0st/CsvCqlProcessor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/src/main/java/org/george0st/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/src/main/java/org/george0st/RndGenerator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/src/main/java/org/george0st/Setup.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/src/main/java/org/george0st/codec/CqlIntToStringCodec.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/src/test/java/CsvCqlProcessorTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/test.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Csv2Cql/test_input/test-connection.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,23 +48,26 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2qaICrinAfIfEKL4rmfL1zf3FA3" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JUnit.CsvCqlProcessorTest.csvSequence100.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Java/FfCsv2Cql/console_app/FfCsv2Cql"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;JUnit.CsvCqlProcessorTest.csvSequence100.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;change&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Java/FfCsv2Cql/console_app/FfCsv2Cql&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="CsvCqlProcessorTest.csvSequence100" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FfCsv2Cql" />
@@ -40,17 +78,6 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="FfCsv2Cql" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="FfCsv2Cql" />
-      <option name="filePath" />
-      <method v="2" />
     </configuration>
     <recent_temporary>
       <list>

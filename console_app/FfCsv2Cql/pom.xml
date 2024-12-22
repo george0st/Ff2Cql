@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.george0st</groupId>
-    <artifactId>Csv2Cql</artifactId>
+    <artifactId>FfCsv2Cql</artifactId>
     <version>1.1-SNAPSHOT</version>
 
     <build>
