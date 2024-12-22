@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.processor.CsvCqlProcessor;
-import org.george0st.RndGenerator;
-import org.george0st.Setup;
+import org.george0st.helper.RndGenerator;
+import org.george0st.helper.Setup;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -41,7 +41,7 @@ class CsvCqlProcessorTest {
         cleanUp();
     }
 
-    private File generateRandomCSV(int csvItems, boolean sequenceID) throws IOException {
+    private File generateRndCSVFile(int csvItems, boolean sequenceID) throws IOException {
         // generate random file name
         File randomFile=getRandomFile();
         int randomIDRange = csvItems * csvItems;
@@ -72,19 +72,13 @@ class CsvCqlProcessorTest {
     @Test
     @DisplayName("Sequence, 1. 100 items in CSV")
     void csvSequence100() throws IOException, CsvValidationException {
-        File randomFile = generateRandomCSV(100, true);
+        File randomFile = generateRndCSVFile(100, true);
 
         // write to CQL
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-
-        Setup testSetup = Setup.getInstance(testSetupFile);
-        CsvCqlProcessor processor=new CsvCqlProcessor(testSetup);
-//        System.out.println(randomFile.getName());
-//        System.out.println(randomFile.getAbsoluteFile());
-//        System.out.println(randomFile.getAbsolutePath());
-//        System.out.println(randomFile.getPath());
+        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
         processor.execute(randomFile.getPath());
 
         // validation, read from CQL
@@ -93,30 +87,45 @@ class CsvCqlProcessorTest {
     //@RepeatedTest(3)
     @Test
     @DisplayName("Sequence, 2. 1K items in CSV")
-    void csvSequence1K() throws IOException {
-        generateRandomCSV(1000, true);
+    void csvSequence1K() throws IOException, CsvValidationException {
+        File randomFile = generateRndCSVFile(1000, true);
 
         // write to CQL
+        String testSetupFile = Setup.getSetupFile(new String[]{
+                String.format("%s/test-connection-private.json", testInput),
+                String.format("%s/test-connection.json", testInput)});
+        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        processor.execute(randomFile.getPath());
 
         // validation, read from CQL
     }
 
     @Test
     @DisplayName("Sequence, 3. 10K items in CSV")
-    void csvSequence10K() throws IOException {
-        generateRandomCSV(10000, true);
+    void csvSequence10K() throws IOException, CsvValidationException {
+        File randomFile=generateRndCSVFile(10000, true);
 
         // write to CQL
+        String testSetupFile = Setup.getSetupFile(new String[]{
+                String.format("%s/test-connection-private.json", testInput),
+                String.format("%s/test-connection.json", testInput)});
+        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        processor.execute(randomFile.getPath());
 
         // validation, read from CQL
     }
 
     @Test
     @DisplayName("Random, 1. 100 items in CSV")
-    void csvRandom100() throws IOException {
-        generateRandomCSV(100, false);
+    void csvRandom100() throws IOException, CsvValidationException {
+        File randomFile = generateRndCSVFile(100, false);
 
         // write to CQL
+        String testSetupFile = Setup.getSetupFile(new String[]{
+                String.format("%s/test-connection-private.json", testInput),
+                String.format("%s/test-connection.json", testInput)});
+        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        processor.execute(randomFile.getPath());
 
         // validation, read from CQL
     }
@@ -124,20 +133,30 @@ class CsvCqlProcessorTest {
     //@RepeatedTest(10)
     @Test
     @DisplayName("Random, 2. 1K items in CSV")
-    void csvRandom1K() throws IOException {
-        generateRandomCSV(1000, false);
+    void csvRandom1K() throws IOException, CsvValidationException {
+        File randomFile=generateRndCSVFile(1000, false);
 
         // write to CQL
+        String testSetupFile = Setup.getSetupFile(new String[]{
+                String.format("%s/test-connection-private.json", testInput),
+                String.format("%s/test-connection.json", testInput)});
+        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        processor.execute(randomFile.getPath());
 
         // validation, read from CQL
     }
 
     @Test
     @DisplayName("Random, 3. 10K items in CSV")
-    void csvRandom10K() throws IOException {
-        generateRandomCSV(10000, false);
+    void csvRandom10K() throws IOException, CsvValidationException {
+        File randomFile=generateRndCSVFile(10000, false);
 
         // write to CQL
+        String testSetupFile = Setup.getSetupFile(new String[]{
+                String.format("%s/test-connection-private.json", testInput),
+                String.format("%s/test-connection.json", testInput)});
+        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        processor.execute(randomFile.getPath());
 
         // validation, read from CQL
     }

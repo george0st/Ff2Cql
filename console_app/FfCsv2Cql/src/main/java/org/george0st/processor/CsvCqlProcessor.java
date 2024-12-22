@@ -21,7 +21,8 @@ import java.io.FileReader;
 
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
 import com.opencsv.exceptions.CsvValidationException;
-import org.george0st.Setup;
+import org.george0st.helper.Setup;
+import org.george0st.codec.CqlBigIntToStringCodec;
 import org.george0st.codec.CqlIntToStringCodec;
 
 //import com.datastax.oss.driver.api.core.*;
@@ -35,12 +36,10 @@ import org.george0st.codec.CqlIntToStringCodec;
 
 public class CsvCqlProcessor implements CqlProcessor {
 
-
     private Setup setup;
     private CqlSessionBuilder sessionBuilder;
 
     public CsvCqlProcessor(Setup setup) {
-
         this.setup = setup;
         this.sessionBuilder = createBuilder();
     }
@@ -58,20 +57,8 @@ public class CsvCqlProcessor implements CqlProcessor {
         // authorization
         builder.withAuthCredentials(setup.username, setup.pwd);
 
-        // codec registry
-//        CodecRegistry myCodecRegistry = new CodecRegistry();
-//        myCodecRegistry.register(myCodec1, myCodec2, myCodec3);
-//        Cluster cluster = Cluster.builder().withCodecRegistry(myCodecRegistry).build();
-//
-
-        builder.addTypeCodecs(new CqlIntToStringCodec());
-//        MutableCodecRegistry registry =
-//                (MutableCodecRegistry) session.getContext().getCodecRegistry();
-//        registry.register(myCodec);
-//
-//        TypeCodec<DateTime> timestampCodec = ...
-//        CodecRegistry myCodecRegistry = new CodecRegistry().register(timestampCodec);
-//        builder.withCodecRegistry();
+        // add codecs
+        builder.addTypeCodecs(new CqlIntToStringCodec(), new CqlBigIntToStringCodec());
 
         // default options (balancing, timeout, CL)
         OptionsMap options = OptionsMap.driverDefaults();
@@ -82,7 +69,6 @@ public class CsvCqlProcessor implements CqlProcessor {
         //options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "LZ4");
         //options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "SNAPPY");
         options.put(TypedDriverOption.PROTOCOL_VERSION, "V4");
-        //options.put(TypedDriverOption.PROTOCOL_VERSION, "V4");
         builder.withConfigLoader(DriverConfigLoader.fromMap(options));
 
         return builder;
@@ -107,21 +93,23 @@ public class CsvCqlProcessor implements CqlProcessor {
 
                     BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.UNLOGGED);
                     String[] line= null;
+                    int count=0;
 
-                    // https://www.baeldung.com/java-cql-cassandra-batch
                     while ((line = csvReader.readNext()) != null) {
-                        //BoundStatement bound=stm.bind(line);
-                        batch=batch.addAll(stm.bind(line));
+                        batch = batch.addAll(stm.bind(line));
+                        count++;
+
+                        if (count==setup.bulk) {
+                            session.execute(batch);
+                            batch = batch.clear();
+                            count = 0;
+                        }
                     }
-                    // execute cql
-                    session.execute(batch);
+
+                    if (count > 0)
+                        session.execute(batch);
                 }
             }
-        }
-        catch(Exception ex)
-        {
-            throw ex;
-            //System.out.println(ex.toString());
         }
     }
 
