@@ -1,4 +1,4 @@
-package org.george0st;
+package org.george0st.codec;
 
 import com.datastax.oss.driver.api.core.ProtocolVersion;
 import com.datastax.oss.driver.api.core.type.DataType;
