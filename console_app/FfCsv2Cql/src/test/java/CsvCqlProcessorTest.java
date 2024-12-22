@@ -3,8 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import org.george0st.CsvCqlProcessor;
-import org.george0st.Main;
+import org.george0st.processor.CsvCqlProcessor;
 import org.george0st.RndGenerator;
 import org.george0st.Setup;
 import org.junit.jupiter.api.*;
