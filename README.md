@@ -1,7 +1,5 @@
 # Csv2Cql
 
-
-![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/assets/work-in-progress2.png?raw=true)
 ![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/assets/nifi_cassandra.png?raw=true)
 
 A simple transfer data from CSV/FileFlow to CQL. The implementation details:
@@ -14,4 +12,6 @@ A simple transfer data from CSV/FileFlow to CQL. The implementation details:
    support for Cassandra v3)
 
 ### Current state:
+
+![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/assets/work-in-progress2.png?raw=true)
  - under development (unstable)
