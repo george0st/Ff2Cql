@@ -42,6 +42,13 @@ class CsvCqlProcessorTest {
         cleanUp();
     }
 
+    private void createCqlSchema(){
+
+        // prepare statement
+
+        // create statement
+    }
+
     private File generateRndCSVFile(int csvItems, boolean sequenceID) throws IOException {
         // generate random file name
         File randomFile=getRandomFile();
@@ -72,7 +79,7 @@ class CsvCqlProcessorTest {
 
     @Test
     @DisplayName("Sequence, 1. 100 items in CSV")
-    void csvSequence100() throws IOException, CsvValidationException, InterruptedException {
+    void csvSequence100() throws Exception {
         File randomFile = generateRndCSVFile(100, true);
 
         // write to CQL

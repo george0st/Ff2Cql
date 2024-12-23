@@ -24,7 +24,6 @@ public class Setup {
     public String consistencyLevel;
     public int bulk;
     public String table;
-    public String []readWhere;
 
     private Setup(){
     }

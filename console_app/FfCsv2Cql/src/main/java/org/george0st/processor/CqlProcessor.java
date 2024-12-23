@@ -9,6 +9,7 @@ import org.george0st.codec.CqlBigIntToStringCodec;
 import org.george0st.codec.CqlIntToStringCodec;
 import org.george0st.helper.Setup;
 
+import javax.management.InvalidAttributeValueException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
@@ -75,5 +76,5 @@ abstract class CqlProcessor {
         return prepareItems.toString();
     }
 
-    abstract void execute(String fileName) throws CsvValidationException, IOException;
+    abstract void execute(String fileName) throws CsvValidationException, IOException, InvalidAttributeValueException;
 }
