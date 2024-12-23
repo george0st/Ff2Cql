@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import org.george0st.processor.CsvCqlProcessor;
+import org.george0st.processor.CsvCqlWrite;
 import org.george0st.helper.RndGenerator;
 import org.george0st.helper.Setup;
 import org.junit.jupiter.api.*;
@@ -78,7 +78,7 @@ class CsvCqlProcessorTest {
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        CsvCqlWrite processor=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         processor.execute(randomFile.getPath());
 
         // validation, read from CQL
@@ -94,7 +94,7 @@ class CsvCqlProcessorTest {
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        CsvCqlWrite processor=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         processor.execute(randomFile.getPath());
 
         // validation, read from CQL
@@ -109,7 +109,7 @@ class CsvCqlProcessorTest {
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        CsvCqlWrite processor=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         processor.execute(randomFile.getPath());
 
         // validation, read from CQL
@@ -124,7 +124,7 @@ class CsvCqlProcessorTest {
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        CsvCqlWrite processor=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         processor.execute(randomFile.getPath());
 
         // validation, read from CQL
@@ -140,7 +140,7 @@ class CsvCqlProcessorTest {
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        CsvCqlWrite processor=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         processor.execute(randomFile.getPath());
 
         // validation, read from CQL
@@ -155,7 +155,7 @@ class CsvCqlProcessorTest {
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        CsvCqlWrite processor=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         processor.execute(randomFile.getPath());
 
         // validation, read from CQL
