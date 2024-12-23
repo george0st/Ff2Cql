@@ -5,14 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="331f2e70-ec0f-43a6-971e-37d563f58d86" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/test/java/PrepareTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/george0st/processor/CsvCqlRead.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/george0st/processor/CsvCqlRead.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/CsvCqlProcessorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/CsvCqlProcessorTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
@@ -31,7 +38,7 @@
     "JUnit.CsvCqlProcessorTest.csvRandom100.executor": "Run",
     "JUnit.CsvCqlProcessorTest.csvRandom10K.executor": "Run",
     "JUnit.CsvCqlProcessorTest.csvRandom1K.executor": "Run",
-    "JUnit.CsvCqlProcessorTest.csvSequence100.executor": "Debug",
+    "JUnit.CsvCqlProcessorTest.csvSequence100.executor": "Run",
     "JUnit.CsvCqlProcessorTest.csvSequence10K.executor": "Run",
     "JUnit.CsvCqlProcessorTest.csvSequence1K.executor": "Debug",
     "JUnit.CsvCqlProcessorTest.executor": "Run",
@@ -49,7 +56,7 @@
       <recent name="org.george0st.codec" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.CsvCqlProcessorTest">
+  <component name="RunManager" selected="JUnit.CsvCqlProcessorTest.csvSequence100">
     <configuration name="CsvCqlProcessorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FfCsv2Cql" />
       <option name="PACKAGE_NAME" value="" />
@@ -102,8 +109,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.CsvCqlProcessorTest" />
         <item itemvalue="JUnit.CsvCqlProcessorTest.csvSequence100" />
+        <item itemvalue="JUnit.CsvCqlProcessorTest" />
         <item itemvalue="JUnit.CsvCqlProcessorTest.csvRandom10K" />
         <item itemvalue="JUnit.CsvCqlProcessorTest.csvRandom1K" />
         <item itemvalue="JUnit.CsvCqlProcessorTest.csvRandom100" />
@@ -128,11 +135,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/org/george0st/processor/CsvCqlWrite.java</url>
           <line>98</line>
           <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/CsvCqlProcessorTest.java</url>
-          <line>75</line>
-          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
