@@ -6,8 +6,10 @@ import java.net.InetSocketAddress;
 import java.util.Collections;
 
 
+import com.datastax.oss.driver.api.core.ConsistencyLevel;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.CqlSessionBuilder;
+import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.config.OptionsMap;
 import com.datastax.oss.driver.api.core.config.TypedDriverOption;
 //import com.datastax.oss.driver.api.core.config.TypedDriverOption;
@@ -86,7 +88,11 @@ public class CsvCqlWrite extends CqlProcessor {
                 .append(String.format(" (%s) ",prepareHeaders))
                 .append("VALUES ")
                 .append(String.format("(%s);",prepareItems)).toString();
-        return session.prepare(insertQuery);
+
+        return session.prepare(SimpleStatement.newInstance(insertQuery)
+                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
+
+//        return session.prepare(insertQuery);
     }
 
     public void connect(){

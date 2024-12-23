@@ -1,6 +1,8 @@
 package org.george0st.processor;
 
+import com.datastax.oss.driver.api.core.ConsistencyLevel;
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
 import com.datastax.oss.driver.api.core.config.OptionsMap;
 import com.datastax.oss.driver.api.core.config.TypedDriverOption;
@@ -96,7 +98,8 @@ public class CsvCqlRead extends CqlProcessor {
                 .append("FROM ")
                 .append(this.setup.table)
                 .append(String.format(" WHERE %s", whereItems)).toString();
-        return session.prepare(selectQuery);
+        return session.prepare(SimpleStatement.newInstance(selectQuery)
+                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
     }
 
 }
