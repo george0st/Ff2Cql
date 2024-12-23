@@ -3,7 +3,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import org.george0st.processor.CsvCqlProcessor;
+import org.george0st.processor.CsvCqlRead;
+import org.george0st.processor.CsvCqlWrite;
 import org.george0st.helper.RndGenerator;
 import org.george0st.helper.Setup;
 import org.junit.jupiter.api.*;
@@ -71,17 +72,22 @@ class CsvCqlProcessorTest {
 
     @Test
     @DisplayName("Sequence, 1. 100 items in CSV")
-    void csvSequence100() throws IOException, CsvValidationException {
+    void csvSequence100() throws IOException, CsvValidationException, InterruptedException {
         File randomFile = generateRndCSVFile(100, true);
 
         // write to CQL
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
-        processor.execute(randomFile.getPath());
+        CsvCqlWrite write=new CsvCqlWrite(Setup.getInstance(testSetupFile));
+        write.execute(randomFile.getPath());
+
+        // delay, before read
+        Thread.sleep(3000);
 
         // validation, read from CQL
+        CsvCqlRead read = new CsvCqlRead(Setup.getInstance(testSetupFile), new String[]{"colid", "cola"});
+        read.execute(randomFile.getPath());
     }
 
     //@RepeatedTest(3)
@@ -94,7 +100,7 @@ class CsvCqlProcessorTest {
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        CsvCqlWrite processor=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         processor.execute(randomFile.getPath());
 
         // validation, read from CQL
@@ -109,7 +115,7 @@ class CsvCqlProcessorTest {
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        CsvCqlWrite processor=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         processor.execute(randomFile.getPath());
 
         // validation, read from CQL
@@ -124,7 +130,7 @@ class CsvCqlProcessorTest {
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        CsvCqlWrite processor=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         processor.execute(randomFile.getPath());
 
         // validation, read from CQL
@@ -140,7 +146,7 @@ class CsvCqlProcessorTest {
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        CsvCqlWrite processor=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         processor.execute(randomFile.getPath());
 
         // validation, read from CQL
@@ -155,7 +161,7 @@ class CsvCqlProcessorTest {
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-        CsvCqlProcessor processor=new CsvCqlProcessor(Setup.getInstance(testSetupFile));
+        CsvCqlWrite processor=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         processor.execute(randomFile.getPath());
 
         // validation, read from CQL

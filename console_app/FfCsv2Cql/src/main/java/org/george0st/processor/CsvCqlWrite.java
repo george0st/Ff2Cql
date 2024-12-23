@@ -6,8 +6,10 @@ import java.net.InetSocketAddress;
 import java.util.Collections;
 
 
+import com.datastax.oss.driver.api.core.ConsistencyLevel;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.CqlSessionBuilder;
+import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.config.OptionsMap;
 import com.datastax.oss.driver.api.core.config.TypedDriverOption;
 //import com.datastax.oss.driver.api.core.config.TypedDriverOption;
@@ -34,44 +36,10 @@ import org.george0st.codec.CqlIntToStringCodec;
 
 
 
-public class CsvCqlProcessor implements CqlProcessor {
+public class CsvCqlWrite extends CqlProcessor {
 
-    private Setup setup;
-    private CqlSessionBuilder sessionBuilder;
-
-    public CsvCqlProcessor(Setup setup) {
-        this.setup = setup;
-        this.sessionBuilder = createBuilder();
-    }
-
-    private CqlSessionBuilder createBuilder(){
-        CqlSessionBuilder builder = new CqlSessionBuilder();
-
-        // IP addresses
-        for (String ipAddress : this.setup.ipAddresses)
-            builder.addContactPoint(new InetSocketAddress(ipAddress.strip(), setup.port));
-
-        // data center
-        builder.withLocalDatacenter(setup.localDC);
-
-        // authorization
-        builder.withAuthCredentials(setup.username, setup.pwd);
-
-        // add codecs
-        builder.addTypeCodecs(new CqlIntToStringCodec(), new CqlBigIntToStringCodec());
-
-        // default options (balancing, timeout, CL)
-        OptionsMap options = OptionsMap.driverDefaults();
-        options.put(TypedDriverOption.LOAD_BALANCING_LOCAL_DATACENTER, setup.localDC);
-        options.put(TypedDriverOption.CONNECTION_CONNECT_TIMEOUT, java.time.Duration.ofSeconds(setup.connectionTimeout));
-        options.put(TypedDriverOption.REQUEST_TIMEOUT, java.time.Duration.ofSeconds(setup.requestTimeout));
-        options.put(TypedDriverOption.REQUEST_CONSISTENCY, setup.consistencyLevel);
-        //options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "LZ4");
-        //options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "SNAPPY");
-        options.put(TypedDriverOption.PROTOCOL_VERSION, "V4");
-        builder.withConfigLoader(DriverConfigLoader.fromMap(options));
-
-        return builder;
+    public CsvCqlWrite(Setup setup) {
+        super(setup);
     }
 
     public void execute(String fileName) throws CsvValidationException, IOException {
@@ -105,24 +73,11 @@ public class CsvCqlProcessor implements CqlProcessor {
                             count = 0;
                         }
                     }
-
                     if (count > 0)
                         session.execute(batch);
                 }
             }
         }
-    }
-
-    private String prepareHeaders(String[] headers){
-        return String.join(", ",headers);
-    }
-
-    private String prepareItems(String[] headers){
-        StringBuilder prepareItems= new StringBuilder();
-
-        for (int i=0;i<headers.length;i++)
-            prepareItems.append("?, ");
-        return prepareItems.deleteCharAt(prepareItems.length() - 2).toString();
     }
 
     private PreparedStatement insertStatement(CqlSession session, String prepareHeaders, String prepareItems){
@@ -133,7 +88,11 @@ public class CsvCqlProcessor implements CqlProcessor {
                 .append(String.format(" (%s) ",prepareHeaders))
                 .append("VALUES ")
                 .append(String.format("(%s);",prepareItems)).toString();
-        return session.prepare(insertQuery);
+
+        return session.prepare(SimpleStatement.newInstance(insertQuery)
+                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
+
+//        return session.prepare(insertQuery);
     }
 
     public void connect(){
@@ -200,23 +159,5 @@ public class CsvCqlProcessor implements CqlProcessor {
 
         CqlSession session = CqlSession.builder().withConfigLoader(DriverConfigLoader.fromMap(options)).build();
     }
-//    public void Test(){
-//        try (CqlSession session = CqlSession.builder().build()) {
-//
-//            Metadata metadata = session.getMetadata();
-//            System.out.printf("Connected session: %s%n", session.getName());
-//
-//            for (Node node : metadata.getNodes().values()) {
-//                System.out.printf(
-//                        "Datatacenter: %s; Host: %s; Rack: %s%n",
-//                        node.getDatacenter(), node.getEndPoint(), node.getRack());
-//            }
-//
-//            for (KeyspaceMetadata keyspace : metadata.getKeyspaces().values()) {
-//                for (TableMetadata table : keyspace.getTables().values()) {
-//                    System.out.printf("Keyspace: %s; Table: %s%n", keyspace.getName(), table.getName());
-//                }
-//            }
-//        }
-//    }
+
 }
