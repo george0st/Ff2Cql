@@ -1,4 +1,4 @@
-package org.george0st;
+package org.george0st.helper;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

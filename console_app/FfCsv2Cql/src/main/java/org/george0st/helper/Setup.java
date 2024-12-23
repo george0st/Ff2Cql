@@ -1,4 +1,4 @@
-package org.george0st;
+package org.george0st.helper;
 
 import com.google.gson.Gson;
 
