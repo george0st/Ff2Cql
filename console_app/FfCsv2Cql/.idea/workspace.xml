@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="331f2e70-ec0f-43a6-971e-37d563f58d86" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/todo-list.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/todo-list.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/george0st/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/george0st/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/george0st/RndGenerator.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/george0st/Setup.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/george0st/processor/CsvCqlProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/george0st/processor/CsvCqlProcessor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/CsvCqlProcessorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/CsvCqlProcessorTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="331f2e70-ec0f-43a6-971e-37d563f58d86" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

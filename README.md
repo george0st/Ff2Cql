@@ -1,8 +1,9 @@
-# Csv2Cql
+# FfCsv2Cql
 
 ![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/assets/nifi_cassandra.png?raw=true)
 
-A simple transfer data from CSV/FileFlow to CQL. The implementation details:
+A simple transfer data from FileFlow/CSV to CQL (support Apache Cassandra, 
+ScyllaDB, AstraDB). The implementation details:
  - development as console application and NiFi processor/extension (support Java 17 and 21)
  - support Apache Cassandra v4/v5, ScyllaDB, AstraDB based on CQL
 
@@ -13,5 +14,5 @@ A simple transfer data from CSV/FileFlow to CQL. The implementation details:
 
 ### Current state:
 
-![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/assets/work-in-progress2.png?raw=true)
+![Work in progress](https://github.com/george0st/Csv2Cql/blob/main/assets/work-in-progress2.png?raw=true)
  - under development (unstable)
