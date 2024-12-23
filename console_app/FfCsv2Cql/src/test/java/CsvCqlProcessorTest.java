@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
+import org.george0st.processor.CsvCqlRead;
 import org.george0st.processor.CsvCqlWrite;
 import org.george0st.helper.RndGenerator;
 import org.george0st.helper.Setup;
@@ -78,10 +79,15 @@ class CsvCqlProcessorTest {
         String testSetupFile = Setup.getSetupFile(new String[]{
                 String.format("%s/test-connection-private.json", testInput),
                 String.format("%s/test-connection.json", testInput)});
-        CsvCqlWrite processor=new CsvCqlWrite(Setup.getInstance(testSetupFile));
-        processor.execute(randomFile.getPath());
+        CsvCqlWrite write=new CsvCqlWrite(Setup.getInstance(testSetupFile));
+        write.execute(randomFile.getPath());
 
         // validation, read from CQL
+        CsvCqlRead read = new CsvCqlRead(
+                Setup.getInstance(testSetupFile),
+                new String[]{"colid", "cola"});
+        read.execute(randomFile.getPath());
+
     }
 
     //@RepeatedTest(3)

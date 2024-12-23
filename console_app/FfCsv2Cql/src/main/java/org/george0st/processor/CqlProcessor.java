@@ -64,5 +64,16 @@ abstract class CqlProcessor {
         return prepareItems.deleteCharAt(prepareItems.length() - 2).toString();
     }
 
+    protected String whereItems(String[] whereItems){
+        StringBuilder prepareItems= new StringBuilder();
+
+        for (int i=0;i<whereItems.length;i++){
+            if (prepareItems.length()>0)
+                prepareItems.append(" AND ");
+            prepareItems.append(String.format("%s = ?", whereItems[i]));
+        }
+        return prepareItems.toString();
+    }
+
     abstract void execute(String fileName) throws CsvValidationException, IOException;
 }
