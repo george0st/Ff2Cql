@@ -72,7 +72,7 @@ class CsvCqlProcessorTest {
 
     @Test
     @DisplayName("Sequence, 1. 100 items in CSV")
-    void csvSequence100() throws IOException, CsvValidationException {
+    void csvSequence100() throws IOException, CsvValidationException, InterruptedException {
         File randomFile = generateRndCSVFile(100, true);
 
         // write to CQL
@@ -82,12 +82,12 @@ class CsvCqlProcessorTest {
         CsvCqlWrite write=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         write.execute(randomFile.getPath());
 
-        // validation, read from CQL
-        CsvCqlRead read = new CsvCqlRead(
-                Setup.getInstance(testSetupFile),
-                new String[]{"colid", "cola"});
-        read.execute(randomFile.getPath());
+        // delay, before read
+        Thread.sleep(3000);
 
+        // validation, read from CQL
+        CsvCqlRead read = new CsvCqlRead(Setup.getInstance(testSetupFile), new String[]{"colid", "cola"});
+        read.execute(randomFile.getPath());
     }
 
     //@RepeatedTest(3)
