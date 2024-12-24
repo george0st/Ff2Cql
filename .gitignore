@@ -1,3 +1,14 @@
+### IntelliJ IDEA ###
+console_app/FfCsv2Cql/.idea/modules.xml
+console_app/FfCsv2Cql/.idea/jarRepositories.xml
+console_app/FfCsv2Cql/.idea/compiler.xml
+console_app/FfCsv2Cql/.idea/libraries/
+/console_app/FfCsv2Cql/.idea/
+
+*.iws
+*.iml
+*.ipr
+
 # Compiled class file
 *.class
 
@@ -26,4 +37,5 @@ replay_pid*
 console_app/FfCsv2Cql/connection-private.json
 console_app/FfCsv2Cql/.idea/workspace.xml
 
+console_app/FfCsv2Cql/.idea/workspace.xml
 console_app/FfCsv2Cql/.idea/workspace.xml
