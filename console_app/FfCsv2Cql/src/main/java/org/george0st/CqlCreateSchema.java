@@ -1,6 +1,7 @@
 package org.george0st;
 
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.internal.core.type.codec.DecimalCodec;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.helper.RndGenerator;
@@ -34,7 +35,8 @@ public class CqlCreateSchema extends CqlAccess {
             "coluuid", "uuid",
             "colsmallint", "smallint",
             "coltinyint", "tinyint",
-            "coltimeuuid", "timeuuid"};
+            "coltimeuuid", "timeuuid",
+            "colvarchar", "varchar"};
 
     public CqlCreateSchema(Setup setup) throws InterruptedException {
         super(setup);
@@ -58,12 +60,9 @@ public class CqlCreateSchema extends CqlAccess {
         return bld.toArray(new String[0]);
     }
 
-
     protected File getRandomFile(){
         return new File(String.format("%s/CsvToCql_%s.csv.tmp",testOutput, rnd.getStringSequence(10)));
     }
-
-
 
     public void Create() throws CsvValidationException, IOException, InvalidAttributeValueException {
         try (CqlSession session = sessionBuilder.build()) {
@@ -83,9 +82,7 @@ public class CqlCreateSchema extends CqlAccess {
             // CREATE TABLE
             String createTable = new StringBuilder()
                     .append(String.format("CREATE TABLE IF NOT EXISTS %s ", setup.table))
-                    //.append("(colbigint BIGINT, colint INT, coltext TEXT, ")
                     .append(String.format("(%s ", getColumnDefinitions()))
-                    //.append("PRIMARY KEY(colbigint, colint)) ")
                     .append(String.format("PRIMARY KEY (%s)) ", String.join(",",primaryKeys)))
                     .append("WITH compaction = {'class': 'UnifiedCompactionStrategy', 'scaling_parameters': 'L10, T10'}")
                     .toString();
@@ -123,7 +120,8 @@ public class CqlCreateSchema extends CqlAccess {
                             "49d59e61-961b-11e8-9854-134d5b3f9cf8",
                             Integer.toString(rnd.getInt(0, 32767)),
                             Integer.toString(rnd.getInt(0, 127)),
-                            "49d59e61-961b-11e8-9854-134d5b3f9cf8"});
+                            "49d59e61-961b-11e8-9854-134d5b3f9cf8",
+                            rnd.getStringSequence(5)});
                 }
             }
         }
