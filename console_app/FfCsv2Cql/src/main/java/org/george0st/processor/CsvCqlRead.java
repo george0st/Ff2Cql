@@ -8,8 +8,10 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
+import org.george0st.CqlAccess;
 import org.george0st.helper.Setup;
 
+import javax.management.InvalidAttributeValueException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -31,7 +33,7 @@ public class CsvCqlRead extends CqlProcessor {
         this.readWhere=readWhere;
     }
 
-    public void execute(String fileName) throws CsvValidationException, IOException {
+    public void execute(String fileName) throws CsvValidationException, IOException, InvalidAttributeValueException {
         try (CqlSession session = sessionBuilder.build()) {
             try (Reader reader = new FileReader(fileName)) {
                 CSVParser parser = new CSVParserBuilder()
@@ -68,8 +70,9 @@ public class CsvCqlRead extends CqlProcessor {
                         //  check values from query
                         for (int i=0;i<headers.length; i++) {
                             itm = row.getString(i);
-                            if (!itm.equals(line[i]))
-                                System.out.println("ERR");
+                            if (itm!=null)
+                                if (!itm.equals(line[i]))
+                                    throw new InvalidAttributeValueException("Check: Irrelevant values");
                         }
                     }
                 }
@@ -90,7 +93,6 @@ public class CsvCqlRead extends CqlProcessor {
     }
 
     private PreparedStatement selectStatement(CqlSession session, String prepareHeaders, String whereItems){
-
         String selectQuery = new StringBuilder("")
                 .append(String.format("SELECT %s ", prepareHeaders))
                 .append("FROM ")

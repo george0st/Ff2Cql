@@ -81,7 +81,6 @@ public class CsvCqlWrite extends CqlProcessor {
     }
 
     private PreparedStatement insertStatement(CqlSession session, String prepareHeaders, String prepareItems){
-
         String insertQuery = new StringBuilder("")
                 .append("INSERT INTO ")
                 .append(this.setup.table)
@@ -91,8 +90,6 @@ public class CsvCqlWrite extends CqlProcessor {
 
         return session.prepare(SimpleStatement.newInstance(insertQuery)
                 .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
-
-//        return session.prepare(insertQuery);
     }
 
     public void connect(){

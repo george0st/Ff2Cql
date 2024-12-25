@@ -4,10 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="331f2e70-ec0f-43a6-971e-37d563f58d86" name="Changes" comment="">
+    <list default="true" id="0d37b311-8c9f-490c-aa20-7ec9c9ebaa67" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/george0st/CqlAccess.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/george0st/CqlCreateSchema.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/george0st/codec/CqlDateToStringCodec.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/george0st/codec/CqlDoubleToStringCodec.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/george0st/codec/CqlFloatToStringCodec.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/george0st/helper/RndGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/george0st/helper/RndGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/george0st/helper/Setup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/george0st/helper/Setup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/george0st/processor/CqlProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/george0st/processor/CqlProcessor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/george0st/processor/CsvCqlRead.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/george0st/processor/CsvCqlRead.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/CsvCqlProcessorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/CsvCqlProcessorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/PrepareTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/PrepareTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,78 +30,33 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 2
 }</component>
-  <component name="ProjectId" id="2qaICrinAfIfEKL4rmfL1zf3FA3" />
+  <component name="ProjectId" id="2qhPIXT8Y8xkhSKUv1UtvsVwlgl" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "JUnit.CsvCqlProcessorTest.csvRandom100.executor": "Run",
-    "JUnit.CsvCqlProcessorTest.csvRandom10K.executor": "Run",
-    "JUnit.CsvCqlProcessorTest.csvRandom1K.executor": "Run",
-    "JUnit.CsvCqlProcessorTest.csvSequence100.executor": "Debug",
-    "JUnit.CsvCqlProcessorTest.csvSequence10K.executor": "Run",
+    "JUnit.CsvCqlProcessorTest.csvSequence100.executor": "Run",
     "JUnit.CsvCqlProcessorTest.csvSequence1K.executor": "Debug",
-    "JUnit.CsvCqlProcessorTest.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "change",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Java/FfCsv2Cql/console_app/FfCsv2Cql"
+    "project.structure.last.edited": "Problems",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "vcs.Subversion"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="org.george0st.processor" />
       <recent name="org.george0st.codec" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.CsvCqlProcessorTest">
-    <configuration name="CsvCqlProcessorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FfCsv2Cql" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="CsvCqlProcessorTest" />
-      <option name="METHOD_NAME" value="csvSequence100" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CsvCqlProcessorTest.csvRandom100" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FfCsv2Cql" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="CsvCqlProcessorTest" />
-      <option name="METHOD_NAME" value="csvRandom100" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CsvCqlProcessorTest.csvRandom10K" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FfCsv2Cql" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="CsvCqlProcessorTest" />
-      <option name="METHOD_NAME" value="csvRandom10K" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CsvCqlProcessorTest.csvRandom1K" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="FfCsv2Cql" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="CsvCqlProcessorTest" />
-      <option name="METHOD_NAME" value="csvRandom1K" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.CsvCqlProcessorTest.csvSequence100">
     <configuration name="CsvCqlProcessorTest.csvSequence100" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="FfCsv2Cql" />
       <option name="PACKAGE_NAME" value="" />
@@ -100,24 +67,34 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="CsvCqlProcessorTest.csvSequence1K" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="FfCsv2Cql" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="CsvCqlProcessorTest" />
+      <option name="METHOD_NAME" value="csvSequence1K" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.CsvCqlProcessorTest" />
         <item itemvalue="JUnit.CsvCqlProcessorTest.csvSequence100" />
-        <item itemvalue="JUnit.CsvCqlProcessorTest.csvRandom10K" />
-        <item itemvalue="JUnit.CsvCqlProcessorTest.csvRandom1K" />
-        <item itemvalue="JUnit.CsvCqlProcessorTest.csvRandom100" />
+        <item itemvalue="JUnit.CsvCqlProcessorTest.csvSequence1K" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\jiri.steuer\AppData\Roaming\Subversion</configuration>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="331f2e70-ec0f-43a6-971e-37d563f58d86" name="Changes" comment="" />
-      <created>1734894136479</created>
+      <changelist id="0d37b311-8c9f-490c-aa20-7ec9c9ebaa67" name="Changes" comment="" />
+      <created>1735111757540</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1734894136479</updated>
+      <updated>1735111757540</updated>
     </task>
     <servers />
   </component>
@@ -125,14 +102,33 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/george0st/processor/CsvCqlWrite.java</url>
-          <line>98</line>
-          <option name="timeStamp" value="7" />
+          <url>file://$PROJECT_DIR$/src/main/java/org/george0st/processor/CsvCqlRead.java</url>
+          <line>52</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/CsvCqlProcessorTest.java</url>
-          <line>75</line>
+          <url>file://$PROJECT_DIR$/src/main/java/org/george0st/codec/CqlDateToStringCodec.java</url>
+          <line>31</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/george0st/codec/CqlDateToStringCodec.java</url>
+          <line>38</line>
           <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/george0st/codec/CqlDateToStringCodec.java</url>
+          <line>44</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/org/george0st/helper/RndGenerator.java</url>
+          <line>70</line>
+          <properties class="org.george0st.helper.RndGenerator" method="getInt">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

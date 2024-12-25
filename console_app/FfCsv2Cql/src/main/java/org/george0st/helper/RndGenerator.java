@@ -67,6 +67,7 @@ public class RndGenerator {
         return getInt(0, toNumber);
     }
 
+
     public int getInt(int fromNumber, int toNumber){
         return rnd.nextInt(fromNumber, toNumber);
     }
@@ -77,6 +78,14 @@ public class RndGenerator {
 
     public float getFloat(float fromNumber, float toNumber){
         return rnd.nextFloat(fromNumber, toNumber);
+    }
+
+    public double getDouble(double toNumber){
+        return getDouble(0, toNumber);
+    }
+
+    public double getDouble(double fromNumber, double toNumber){
+        return rnd.nextDouble(fromNumber, toNumber);
     }
 
 }

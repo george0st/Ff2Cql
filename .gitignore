@@ -1,3 +1,14 @@
+### IntelliJ IDEA ###
+console_app/FfCsv2Cql/.idea/modules.xml
+console_app/FfCsv2Cql/.idea/jarRepositories.xml
+console_app/FfCsv2Cql/.idea/compiler.xml
+console_app/FfCsv2Cql/.idea/libraries/
+/console_app/FfCsv2Cql/.idea/
+
+*.iws
+*.iml
+*.ipr
+
 # Compiled class file
 *.class
 
@@ -22,8 +33,10 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
-console_app/FfCsv2Cql/connection-private.json
 /console_app/FfCsv2Cql/test_output
 console_app/FfCsv2Cql/connection-private.json
-console_app/FfCsv2Cql/connection-private.json
+console_app/FfCsv2Cql/.idea/workspace.xml
+
+console_app/FfCsv2Cql/.idea/workspace.xml
+console_app/FfCsv2Cql/.idea/workspace.xml
 console_app/FfCsv2Cql/.idea/workspace.xml

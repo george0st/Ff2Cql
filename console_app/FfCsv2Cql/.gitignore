@@ -40,3 +40,6 @@ build/
 ### Others ###
 connection-private.json
 /test_input/test-connection-private.json
+/.idea/workspace.xml
+/.idea/
+
