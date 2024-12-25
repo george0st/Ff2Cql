@@ -8,11 +8,9 @@ import com.datastax.oss.driver.api.core.type.codec.TypeCodecs;
 import com.datastax.oss.driver.api.core.type.reflect.GenericType;
 
 import java.nio.ByteBuffer;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 //  https://docs.datastax.com/en/developer/java-driver/4.17/manual/core/custom_codecs/index.html
-public class CqlTimeToStringCodec implements TypeCodec<String> {
+public class CqlSmallintToStringCodec implements TypeCodec<String> {
 
     @Override
     public GenericType<String> getJavaType() {
@@ -21,7 +19,7 @@ public class CqlTimeToStringCodec implements TypeCodec<String> {
 
     @Override
     public DataType getCqlType() {
-        return DataTypes.TIME;
+        return DataTypes.SMALLINT;
     }
 
     @Override
@@ -29,27 +27,27 @@ public class CqlTimeToStringCodec implements TypeCodec<String> {
         if (value == null) {
             return null;
         } else {
-            LocalTime timeValue = LocalTime.parse(value);
-            return TypeCodecs.TIME.encode(timeValue, protocolVersion);
+            short shortValue = Short.parseShort(value);
+            return TypeCodecs.SMALLINT.encode(shortValue, protocolVersion);
         }
     }
 
     @Override
     public String decode(ByteBuffer bytes, ProtocolVersion protocolVersion) {
-        LocalTime timeValue = TypeCodecs.TIME.decode(bytes, protocolVersion);
-        return timeValue.toString();
+        Short shortValue = TypeCodecs.SMALLINT.decode(bytes, protocolVersion);
+        return shortValue.toString();
     }
 
     @Override
     public String format(String value) {
-        LocalTime timeValue = LocalTime.parse(value);
-        return TypeCodecs.TIME.format(timeValue);
+        short shortValue = Short.parseShort(value);
+        return TypeCodecs.SMALLINT.format(shortValue);
     }
 
     @Override
     public String parse(String value) {
-        LocalTime timeValue = TypeCodecs.TIME.parse(value);
-        return timeValue == null ? null : timeValue.toString();
+        Short shortValue = TypeCodecs.SMALLINT.parse(value);
+        return shortValue == null ? null : shortValue.toString();
     }
 }
 

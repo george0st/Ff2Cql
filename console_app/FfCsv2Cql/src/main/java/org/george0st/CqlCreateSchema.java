@@ -28,7 +28,13 @@ public class CqlCreateSchema extends CqlAccess {
             "colfloat", "FLOAT",
             "coldouble", "DOUBLE",
             "coldate", "DATE",
-            "coltime", "TIME"};
+            "coltime", "TIME",
+            "coltimestamp", "timestamp",
+            "colboolean", "boolean",
+            "coluuid", "uuid",
+            "colsmallint", "smallint",
+            "coltinyint", "tinyint",
+            "coltimeuuid", "timeuuid"};
 
     public CqlCreateSchema(Setup setup) throws InterruptedException {
         super(setup);
@@ -111,7 +117,13 @@ public class CqlCreateSchema extends CqlAccess {
                             Float.toString(rnd.getFloat(1000)),
                             Double.toString(rnd.getDouble(1000)),
                             "2024-12-24",
-                            "17:45:30"});
+                            "17:45:30",
+                            "2024-12-24T17:45:30",
+                            "false",
+                            "49d59e61-961b-11e8-9854-134d5b3f9cf8",
+                            Integer.toString(rnd.getInt(0, 32767)),
+                            Integer.toString(rnd.getInt(0, 127)),
+                            "49d59e61-961b-11e8-9854-134d5b3f9cf8"});
                 }
             }
         }
