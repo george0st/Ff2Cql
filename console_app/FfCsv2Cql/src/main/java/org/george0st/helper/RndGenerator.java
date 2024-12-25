@@ -15,15 +15,20 @@ public class RndGenerator {
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
             "1234567890"+
             " ()_-,.";
+
     private static String stringCandidates = "abcdefghijklmnopqrstuvwxyz" +
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
             "1234567890";
+
     private static String numberCandidates = "1234567890";
 
     private SecureRandom rnd=null;
 
     public RndGenerator() throws InterruptedException {
+        init();
+    }
 
+    private void init() throws InterruptedException {
         // calc based on current CPU speed
         long startTime = System.nanoTime();
         Thread.sleep(3);
@@ -66,7 +71,6 @@ public class RndGenerator {
     public int getInt(int toNumber){
         return getInt(0, toNumber);
     }
-
 
     public int getInt(int fromNumber, int toNumber){
         return rnd.nextInt(fromNumber, toNumber);
