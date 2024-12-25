@@ -16,3 +16,11 @@ ScyllaDB, AstraDB). The implementation details:
 
 ![Work in progress](https://github.com/george0st/Csv2Cql/blob/main/assets/work-in-progress2.png?raw=true)
  - under development (unstable)
+
+### Supported conversions
+
+The solution supports conversion from String to these CQL types:
+ - Boolean, TinyInt, SmallInt, Int, BigInt, Float, Double
+ - Date, Time, TimeStamp 
+ - TimeUUID, UUID
+ - Text, varchar (by default)

@@ -5,11 +5,11 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+
 /**
  * The pseudo-random number generator with extra seed (local datetime, cpu speed, UUID version 4)
  */
 public class RndGenerator {
-
 
     private static String allCandidates = "abcdefghijklmnopqrstuvwxyz" +
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +

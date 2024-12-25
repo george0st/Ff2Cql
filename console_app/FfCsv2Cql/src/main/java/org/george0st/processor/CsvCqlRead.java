@@ -8,20 +8,12 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
-import org.george0st.CqlAccess;
 import org.george0st.helper.Setup;
 
 import javax.management.InvalidAttributeValueException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-
-//import com.datastax.oss.driver.api.core.*;
-//import com.datastax.oss.driver.api.core .Cluster.Builder
-
-//import com.datastax.oss.driver.api.core.policies.DCAwareRoundRobinPolicy;
-//import com.datastax.oss.driver.api.core.policies.HostFilterPolicy;
-//import com.datastax.oss.driver.api.core.policies.RoundRobinPolicy;
 
 
 public class CsvCqlRead extends CqlProcessor {

@@ -2,7 +2,6 @@ package org.george0st.processor;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.net.InetSocketAddress;
 import java.util.Collections;
 
 
@@ -12,27 +11,15 @@ import com.datastax.oss.driver.api.core.CqlSessionBuilder;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.config.OptionsMap;
 import com.datastax.oss.driver.api.core.config.TypedDriverOption;
-//import com.datastax.oss.driver.api.core.config.TypedDriverOption;
-//import com.datastax.oss.driver.api.core.config.
 import com.datastax.oss.driver.api.core.cql.*;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
 import java.io.FileReader;
-
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.helper.Setup;
-import org.george0st.codec.CqlBigIntToStringCodec;
-import org.george0st.codec.CqlIntToStringCodec;
-
-//import com.datastax.oss.driver.api.core.*;
-//import com.datastax.oss.driver.api.core .Cluster.Builder
-
-//import com.datastax.oss.driver.api.core.policies.DCAwareRoundRobinPolicy;
-//import com.datastax.oss.driver.api.core.policies.HostFilterPolicy;
-//import com.datastax.oss.driver.api.core.policies.RoundRobinPolicy;
 
 
 
