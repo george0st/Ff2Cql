@@ -8,11 +8,9 @@ import com.datastax.oss.driver.api.core.type.codec.TypeCodecs;
 import com.datastax.oss.driver.api.core.type.reflect.GenericType;
 
 import java.nio.ByteBuffer;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 //  https://docs.datastax.com/en/developer/java-driver/4.17/manual/core/custom_codecs/index.html
-public class CqlTimeToStringCodec implements TypeCodec<String> {
+public class CqlBooleanToStringCodec implements TypeCodec<String> {
 
     @Override
     public GenericType<String> getJavaType() {
@@ -21,7 +19,7 @@ public class CqlTimeToStringCodec implements TypeCodec<String> {
 
     @Override
     public DataType getCqlType() {
-        return DataTypes.TIME;
+        return DataTypes.BOOLEAN;
     }
 
     @Override
@@ -29,27 +27,27 @@ public class CqlTimeToStringCodec implements TypeCodec<String> {
         if (value == null) {
             return null;
         } else {
-            LocalTime timeValue = LocalTime.parse(value);
-            return TypeCodecs.TIME.encode(timeValue, protocolVersion);
+            boolean booleanValue = Boolean.parseBoolean(value);
+            return TypeCodecs.BOOLEAN.encode(booleanValue, protocolVersion);
         }
     }
 
     @Override
     public String decode(ByteBuffer bytes, ProtocolVersion protocolVersion) {
-        LocalTime timeValue = TypeCodecs.TIME.decode(bytes, protocolVersion);
-        return timeValue.toString();
+        Boolean booleanValue = TypeCodecs.BOOLEAN.decode(bytes, protocolVersion);
+        return booleanValue.toString();
     }
 
     @Override
     public String format(String value) {
-        LocalTime timeValue = LocalTime.parse(value);
-        return TypeCodecs.TIME.format(timeValue);
+        boolean booleanValue = Boolean.parseBoolean(value);
+        return TypeCodecs.BOOLEAN.format(booleanValue);
     }
 
     @Override
     public String parse(String value) {
-        LocalTime timeValue = TypeCodecs.TIME.parse(value);
-        return timeValue == null ? null : timeValue.toString();
+        Boolean booleanValue = TypeCodecs.BOOLEAN.parse(value);
+        return booleanValue == null ? null : booleanValue.toString();
     }
 }
 

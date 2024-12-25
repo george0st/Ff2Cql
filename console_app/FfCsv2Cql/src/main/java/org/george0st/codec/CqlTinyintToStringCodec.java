@@ -8,11 +8,9 @@ import com.datastax.oss.driver.api.core.type.codec.TypeCodecs;
 import com.datastax.oss.driver.api.core.type.reflect.GenericType;
 
 import java.nio.ByteBuffer;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 //  https://docs.datastax.com/en/developer/java-driver/4.17/manual/core/custom_codecs/index.html
-public class CqlTimeToStringCodec implements TypeCodec<String> {
+public class CqlTinyintToStringCodec implements TypeCodec<String> {
 
     @Override
     public GenericType<String> getJavaType() {
@@ -21,7 +19,7 @@ public class CqlTimeToStringCodec implements TypeCodec<String> {
 
     @Override
     public DataType getCqlType() {
-        return DataTypes.TIME;
+        return DataTypes.TINYINT;
     }
 
     @Override
@@ -29,27 +27,27 @@ public class CqlTimeToStringCodec implements TypeCodec<String> {
         if (value == null) {
             return null;
         } else {
-            LocalTime timeValue = LocalTime.parse(value);
-            return TypeCodecs.TIME.encode(timeValue, protocolVersion);
+            Byte byteValue = Byte.parseByte(value);
+            return TypeCodecs.TINYINT.encode(byteValue, protocolVersion);
         }
     }
 
     @Override
     public String decode(ByteBuffer bytes, ProtocolVersion protocolVersion) {
-        LocalTime timeValue = TypeCodecs.TIME.decode(bytes, protocolVersion);
-        return timeValue.toString();
+        Byte byteValue = TypeCodecs.TINYINT.decode(bytes, protocolVersion);
+        return byteValue.toString();
     }
 
     @Override
     public String format(String value) {
-        LocalTime timeValue = LocalTime.parse(value);
-        return TypeCodecs.TIME.format(timeValue);
+        byte byteValue = Byte.parseByte(value);
+        return TypeCodecs.TINYINT.format(byteValue);
     }
 
     @Override
     public String parse(String value) {
-        LocalTime timeValue = TypeCodecs.TIME.parse(value);
-        return timeValue == null ? null : timeValue.toString();
+        Byte byteValue = TypeCodecs.TINYINT.parse(value);
+        return byteValue == null ? null : byteValue.toString();
     }
 }
 
