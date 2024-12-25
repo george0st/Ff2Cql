@@ -27,7 +27,8 @@ public class CqlCreateSchema extends CqlAccess {
             "coltext", "TEXT",
             "colfloat", "FLOAT",
             "coldouble", "DOUBLE",
-            "coldate", "DATE"};
+            "coldate", "DATE",
+            "coltime", "TIME"};
 
     public CqlCreateSchema(Setup setup) throws InterruptedException {
         super(setup);
@@ -109,7 +110,8 @@ public class CqlCreateSchema extends CqlAccess {
                             rnd.getStringSequence(10),
                             Float.toString(rnd.getFloat(1000)),
                             Double.toString(rnd.getDouble(1000)),
-                            "2024-12-24"});
+                            "2024-12-24",
+                            "17:45:30"});
                 }
             }
         }

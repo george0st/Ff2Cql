@@ -37,7 +37,8 @@ public class CqlAccess {
                 new CqlBigIntToStringCodec(),
                 new CqlFloatToStringCodec(),
                 new CqlDoubleToStringCodec(),
-                new CqlDateToStringCodec());
+                new CqlDateToStringCodec(),
+                new CqlTimeToStringCodec());
 
         // default options (balancing, timeout, CL)
         OptionsMap options = OptionsMap.driverDefaults();
