@@ -1,3 +1,5 @@
+import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
+import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.opencsv.CSVWriter;
 import org.george0st.helper.RndGenerator;
 
@@ -19,9 +21,9 @@ public class PrepareTests {
 
     protected void createCqlSchema(String table, String[] columns){
 
-        // prepare statement
 
-        // create statement
+
+
     }
 
     protected File generateRndCSVFile(int csvItems, boolean sequenceID) throws IOException {

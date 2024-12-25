@@ -8,6 +8,7 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
+import org.george0st.CqlAccess;
 import org.george0st.helper.Setup;
 
 import javax.management.InvalidAttributeValueException;
@@ -69,8 +70,9 @@ public class CsvCqlRead extends CqlProcessor {
                         //  check values from query
                         for (int i=0;i<headers.length; i++) {
                             itm = row.getString(i);
-                            if (!itm.equals(line[i]))
-                                throw new InvalidAttributeValueException("Check: Irrelevant values");
+                            if (itm!=null)
+                                if (!itm.equals(line[i]))
+                                    throw new InvalidAttributeValueException("Check: Irrelevant values");
                         }
                     }
                 }

@@ -60,10 +60,18 @@ public class Setup {
      * @param files List of setup file names for check.
      * @return Setup file name.
      */
+    public static String getSetupFile(String path, String[] files){
+        for (String file: files)
+            if (new File(String.format("%s/%s", path, file)).exists())
+                return String.format("%s/%s", path, file);
+        return null;
+    }
+
     public static String getSetupFile(String[] files){
         for (String file: files)
             if (new File(file).exists())
                 return file;
         return null;
     }
+
 }
