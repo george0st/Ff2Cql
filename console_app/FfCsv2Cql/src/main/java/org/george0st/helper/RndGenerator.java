@@ -1,8 +1,15 @@
 package org.george0st.helper;
 
+import com.fasterxml.uuid.Generators;
+
+import javax.xml.crypto.Data;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.UUID;
 
 
@@ -21,6 +28,9 @@ public class RndGenerator {
             "1234567890";
 
     private static String numberCandidates = "1234567890";
+
+    private static long dateTimeEpochMin = LocalDateTime.parse("1970-01-01T00:00:00").toEpochSecond(ZoneOffset.UTC);
+    private static long dateTimeEpochMax = LocalDateTime.parse("2030-12-31T23:59:59").toEpochSecond(ZoneOffset.UTC);
 
     private SecureRandom rnd=null;
 
@@ -90,6 +100,35 @@ public class RndGenerator {
 
     public double getDouble(double fromNumber, double toNumber){
         return rnd.nextDouble(fromNumber, toNumber);
+    }
+
+    public UUID getUUID(boolean timeBased){
+        return timeBased ? Generators.timeBasedGenerator().generate() : UUID.randomUUID();
+    }
+
+    public Boolean getBoolean() {
+        return rnd.nextBoolean();
+    }
+
+    public Date getDate(Date fromDate, Date toDate){
+        return new Date(rnd.nextLong(fromDate.getTime(), toDate.getTime()));
+    }
+
+    public LocalTime getLocalTime(){
+        //return getLocalTime(LocalTime.parse("00:00:00"),LocalTime.parse("23:59:59"));
+        return getLocalTime(LocalTime.MIN,LocalTime.MAX);
+    }
+
+    public LocalTime getLocalTime(LocalTime fromTime, LocalTime toTime){
+        return LocalTime.ofSecondOfDay(rnd.nextInt(fromTime.toSecondOfDay(), toTime.toSecondOfDay()));
+    }
+
+    public LocalDateTime getLocalDateTime(){
+        return LocalDateTime.ofEpochSecond(rnd.nextLong(dateTimeEpochMin, dateTimeEpochMax), 0, ZoneOffset.UTC);
+    }
+
+    public LocalDateTime getLocalDateTime(LocalDateTime fromDateTime, LocalDateTime toDateTime){
+        return LocalDateTime.ofEpochSecond(rnd.nextLong(fromDateTime.toEpochSecond(ZoneOffset.UTC), toDateTime.toEpochSecond(ZoneOffset.UTC)), 0,ZoneOffset.UTC);
     }
 
 }

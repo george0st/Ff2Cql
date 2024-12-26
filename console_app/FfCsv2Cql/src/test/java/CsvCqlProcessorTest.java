@@ -1,11 +1,9 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
-import org.george0st.CqlAccess;
 import org.george0st.CqlCreateSchema;
-import org.george0st.processor.CsvCqlRead;
+import org.george0st.processor.CsvCqlValidate;
 import org.george0st.processor.CsvCqlWrite;
 import org.george0st.helper.RndGenerator;
 import org.george0st.helper.Setup;
@@ -14,7 +12,6 @@ import org.junit.jupiter.api.*;
 import javax.management.InvalidAttributeValueException;
 import java.io.IOException;
 import java.io.File;
-import java.io.FileWriter;
 
 //  https://www.vogella.com/tutorials/JUnit/article.html#junitsetup
 class CsvCqlProcessorTest{
@@ -64,7 +61,7 @@ class CsvCqlProcessorTest{
         Thread.sleep(3000);
 
         // read/validate
-        CsvCqlRead read = new CsvCqlRead(Setup.getInstance(testSetupFile), schema.getPrimaryKeys());
+        CsvCqlValidate read = new CsvCqlValidate(Setup.getInstance(testSetupFile), schema.getPrimaryKeys());
         read.execute(randomFile.getPath());
     }
 
@@ -83,19 +80,26 @@ class CsvCqlProcessorTest{
         Thread.sleep(3000);
 
         // read/validate
-        CsvCqlRead read = new CsvCqlRead(Setup.getInstance(testSetupFile), schema.getPrimaryKeys());
+        CsvCqlValidate read = new CsvCqlValidate(Setup.getInstance(testSetupFile), schema.getPrimaryKeys());
         read.execute(randomFile.getPath());
     }
 
     @Test
-    @DisplayName("Sequence W, 3. 10K items in CSV")
-    void csvWSequence10K() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
+    @DisplayName("Sequence WR, 3. 10K items in CSV")
+    void csvWRSequence10K() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
         //  generate random data
         File randomFile=schema.generateRndCSVFile(10000, true);
 
         // write
         CsvCqlWrite write=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         write.execute(randomFile.getPath());
+
+        // delay (before read)
+        Thread.sleep(3000);
+
+        // read/validate
+        CsvCqlValidate read = new CsvCqlValidate(Setup.getInstance(testSetupFile), schema.getPrimaryKeys());
+        read.execute(randomFile.getPath());
     }
 
     @Test
@@ -112,7 +116,7 @@ class CsvCqlProcessorTest{
         Thread.sleep(3000);
 
         // read/validate
-        CsvCqlRead read = new CsvCqlRead(Setup.getInstance(testSetupFile), schema.getPrimaryKeys());
+        CsvCqlValidate read = new CsvCqlValidate(Setup.getInstance(testSetupFile), schema.getPrimaryKeys());
         read.execute(randomFile.getPath());
     }
 
@@ -131,7 +135,7 @@ class CsvCqlProcessorTest{
         Thread.sleep(3000);
 
         // read/validate
-        CsvCqlRead read = new CsvCqlRead(Setup.getInstance(testSetupFile), schema.getPrimaryKeys());
+        CsvCqlValidate read = new CsvCqlValidate(Setup.getInstance(testSetupFile), schema.getPrimaryKeys());
         read.execute(randomFile.getPath());
     }
 

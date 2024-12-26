@@ -3,6 +3,8 @@ package org.george0st.processor;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.*;
+import com.datastax.oss.driver.api.core.type.DataType;
+import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
@@ -14,13 +16,16 @@ import javax.management.InvalidAttributeValueException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 
 
-public class CsvCqlRead extends CqlProcessor {
+public class CsvCqlValidate extends CqlProcessor {
 
     private String[] readWhere;
 
-    public CsvCqlRead(Setup setup, String []readWhere) {
+    public CsvCqlValidate(Setup setup, String []readWhere) {
         super(setup);
         this.readWhere=readWhere;
     }
@@ -49,6 +54,7 @@ public class CsvCqlRead extends CqlProcessor {
                     String[] line= null;
                     String[] newLine= new String[this.readWhere.length];
                     Row row;
+                    com.datastax.oss.driver.api.core.type.DataType itmType;
 
                     while ((line = csvReader.readNext()) != null) {
                         //  bind items for query
@@ -61,10 +67,27 @@ public class CsvCqlRead extends CqlProcessor {
 
                         //  check values from query
                         for (int i=0;i<headers.length; i++) {
+                            itmType = row.getType(i);
                             itm = row.getString(i);
-                            if (itm!=null)
-                                if (!itm.equals(line[i]))
-                                    throw new InvalidAttributeValueException("Check: Irrelevant values");
+                            if (itm!=null) {
+                                if (itmType == DataTypes.TIME) {
+                                    if (!LocalTime.parse(itm).equals(LocalTime.parse(line[i])))
+                                        throw new InvalidAttributeValueException("Check: Irrelevant values");
+                                } else {
+                                    if (itmType == DataTypes.TIMESTAMP) {
+                                        if (!LocalDateTime.parse(itm).equals(LocalDateTime.parse(line[i]))) {
+                                            LocalDateTime iii= LocalDateTime.parse(itm);
+                                            LocalDateTime iii2=iii.atZone(ZoneId.of("Europe/London")).toLocalDateTime();
+
+                                            throw new InvalidAttributeValueException("Check: Irrelevant values");
+
+                                        }
+                                    } else {
+                                        if (!itm.equals(line[i]))
+                                            throw new InvalidAttributeValueException("Check: Irrelevant values");
+                                    }
+                                }
+                            }
                         }
                     }
                 }
