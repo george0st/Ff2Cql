@@ -115,13 +115,13 @@ public class CqlCreateSchema extends CqlAccess {
                             Double.toString(rnd.getDouble(1000)),                   //  double
                             rnd.getLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE),    //  date
                             rnd.getLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME),    //  time
-                            rnd.getInstant().toString(),// .ISO_LOCAL_DATE_TIME),//"2024-12-24T17:45:30",                                          //  timestamp
-                            rnd.getBoolean().toString(),                                    //  boolean
+                            rnd.getInstant().toString(),                                     //  timestamp
+                            rnd.getBoolean().toString(),                                     //  boolean
                             rnd.getUUID(false).toString(),                          //  uuid
-                            Integer.toString(rnd.getInt(0, 32767)),                         //  smallint
-                            Integer.toString(rnd.getInt(0, 127)),                           //  tinyint
+                            Integer.toString(rnd.getInt(0, Short.MAX_VALUE)),                //  smallint
+                            Integer.toString(rnd.getInt(0, Byte.MAX_VALUE)),                 //  tinyint
                             rnd.getUUID(true).toString(),                           //  timeuuid
-                            rnd.getStringSequence(5)});                                 //  varchar
+                            rnd.getStringSequence(5)});                                //  varchar
                 }
             }
         }
