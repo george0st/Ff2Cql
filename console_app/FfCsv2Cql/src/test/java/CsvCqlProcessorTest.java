@@ -140,14 +140,21 @@ class CsvCqlProcessorTest{
     }
 
     @Test
-    @DisplayName("Random W, 3. 10K items in CSV")
-    void csvWRandom10K() throws IOException, CsvValidationException {
+    @DisplayName("Random WR, 3. 10K items in CSV")
+    void csvWRRandom10K() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
         //  generate random data
         File randomFile=schema.generateRndCSVFile(10000, false);
 
         // write
         CsvCqlWrite write=new CsvCqlWrite(Setup.getInstance(testSetupFile));
         write.execute(randomFile.getPath());
+
+        // delay (before read)
+        Thread.sleep(3000);
+
+        // read/validate
+        CsvCqlValidate read = new CsvCqlValidate(Setup.getInstance(testSetupFile), schema.getPrimaryKeys());
+        read.execute(randomFile.getPath());
     }
 
 }
