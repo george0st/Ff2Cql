@@ -115,7 +115,7 @@ public class CqlCreateSchema extends CqlAccess {
                             Double.toString(rnd.getDouble(1000)),                   //  double
                             "2024-12-24",                                                   //  date
                             rnd.getLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME),    //  time
-                            rnd.getLocalDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),//"2024-12-24T17:45:30",                                          //  timestamp
+                            rnd.getInstant().toString(),// .ISO_LOCAL_DATE_TIME),//"2024-12-24T17:45:30",                                          //  timestamp
                             rnd.getBoolean().toString(),                                    //  boolean
                             rnd.getUUID(false).toString(),                          //  uuid
                             Integer.toString(rnd.getInt(0, 32767)),                         //  smallint

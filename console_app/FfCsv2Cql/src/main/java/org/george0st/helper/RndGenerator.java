@@ -5,10 +5,7 @@ import com.fasterxml.uuid.Generators;
 import javax.xml.crypto.Data;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.util.Date;
 import java.util.UUID;
 
@@ -31,6 +28,9 @@ public class RndGenerator {
 
     private static long dateTimeEpochMin = LocalDateTime.parse("1970-01-01T00:00:00").toEpochSecond(ZoneOffset.UTC);
     private static long dateTimeEpochMax = LocalDateTime.parse("2030-12-31T23:59:59").toEpochSecond(ZoneOffset.UTC);
+
+    private static long instantEpochMin= Instant.parse("1970-01-01T00:00:00Z").getEpochSecond();
+    private static long instantEpochMax= Instant.parse("2030-12-31T23:59:59Z").getEpochSecond();
 
     private SecureRandom rnd=null;
 
@@ -125,6 +125,10 @@ public class RndGenerator {
 
     public LocalDateTime getLocalDateTime(){
         return LocalDateTime.ofEpochSecond(rnd.nextLong(dateTimeEpochMin, dateTimeEpochMax), 0, ZoneOffset.UTC);
+    }
+
+    public Instant getInstant(){
+        return Instant.ofEpochSecond(rnd.nextLong(instantEpochMin, instantEpochMax));
     }
 
     public LocalDateTime getLocalDateTime(LocalDateTime fromDateTime, LocalDateTime toDateTime){

@@ -16,6 +16,8 @@ import javax.management.InvalidAttributeValueException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.rmi.UnexpectedException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -72,19 +74,15 @@ public class CsvCqlValidate extends CqlProcessor {
                             if (itm!=null) {
                                 if (itmType == DataTypes.TIME) {
                                     if (!LocalTime.parse(itm).equals(LocalTime.parse(line[i])))
-                                        throw new InvalidAttributeValueException("Check: Irrelevant values");
+                                        throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
                                 } else {
                                     if (itmType == DataTypes.TIMESTAMP) {
-                                        if (!LocalDateTime.parse(itm).equals(LocalDateTime.parse(line[i]))) {
-                                            LocalDateTime iii= LocalDateTime.parse(itm);
-                                            LocalDateTime iii2=iii.atZone(ZoneId.of("Europe/London")).toLocalDateTime();
-
-                                            throw new InvalidAttributeValueException("Check: Irrelevant values");
-
+                                        if (!Instant.parse(itm).equals(Instant.parse(line[i]))) {
+                                            throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
                                         }
                                     } else {
                                         if (!itm.equals(line[i]))
-                                            throw new InvalidAttributeValueException("Check: Irrelevant values");
+                                            throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
                                     }
                                 }
                             }
