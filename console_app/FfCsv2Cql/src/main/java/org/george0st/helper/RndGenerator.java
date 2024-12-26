@@ -140,5 +140,4 @@ public class RndGenerator {
     public LocalDateTime getLocalDateTime(LocalDateTime fromDateTime, LocalDateTime toDateTime){
         return LocalDateTime.ofEpochSecond(rnd.nextLong(fromDateTime.toEpochSecond(ZoneOffset.UTC), toDateTime.toEpochSecond(ZoneOffset.UTC)), 0,ZoneOffset.UTC);
     }
-
 }
