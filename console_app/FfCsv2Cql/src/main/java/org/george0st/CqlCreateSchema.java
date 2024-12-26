@@ -113,7 +113,7 @@ public class CqlCreateSchema extends CqlAccess {
                             rnd.getStringSequence(10),                              // text
                             Float.toString(rnd.getFloat(1000)),                     // float
                             Double.toString(rnd.getDouble(1000)),                   //  double
-                            "2024-12-24",                                                   //  date
+                            rnd.getLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE),    //  date
                             rnd.getLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME),    //  time
                             rnd.getInstant().toString(),// .ISO_LOCAL_DATE_TIME),//"2024-12-24T17:45:30",                                          //  timestamp
                             rnd.getBoolean().toString(),                                    //  boolean

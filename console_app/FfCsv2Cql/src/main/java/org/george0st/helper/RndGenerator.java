@@ -32,6 +32,9 @@ public class RndGenerator {
     private static long instantEpochMin= Instant.parse("1970-01-01T00:00:00Z").getEpochSecond();
     private static long instantEpochMax= Instant.parse("2030-12-31T23:59:59Z").getEpochSecond();
 
+    private static long localDateEpochMin= LocalDate.parse("1970-01-01").toEpochDay();
+    private static long localDateEpochMax= LocalDate.parse("2030-12-31").toEpochDay();
+
     private SecureRandom rnd=null;
 
     public RndGenerator() throws InterruptedException {
@@ -110,12 +113,15 @@ public class RndGenerator {
         return rnd.nextBoolean();
     }
 
-    public Date getDate(Date fromDate, Date toDate){
-        return new Date(rnd.nextLong(fromDate.getTime(), toDate.getTime()));
+    public LocalDate getLocalDate(LocalDate fromDate, LocalDate toDate){
+        return LocalDate.ofEpochDay(rnd.nextLong(fromDate.toEpochDay(), toDate.toEpochDay()));
+    }
+
+    public LocalDate getLocalDate(){
+        return LocalDate.ofEpochDay(rnd.nextLong(localDateEpochMin, localDateEpochMax));
     }
 
     public LocalTime getLocalTime(){
-        //return getLocalTime(LocalTime.parse("00:00:00"),LocalTime.parse("23:59:59"));
         return getLocalTime(LocalTime.MIN,LocalTime.MAX);
     }
 
