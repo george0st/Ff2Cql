@@ -11,6 +11,9 @@ import javax.management.InvalidAttributeValueException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -90,8 +93,6 @@ public class CqlCreateSchema extends CqlAccess {
         }
     }
 
-
-
     public File generateRndCSVFile(int csvItems, boolean sequenceID) throws IOException {
         // generate random file name
         File randomFile=getRandomFile();
@@ -102,26 +103,25 @@ public class CqlCreateSchema extends CqlAccess {
             try (CSVWriter csvWriter = new CSVWriter(writer)){
 
                 // write header
-                String[] aa=getColumns();
-                csvWriter.writeNext(aa);
+                csvWriter.writeNext(getColumns());
 
                 // write content
                 for (int i=0;i<csvItems;i++) {
                     csvWriter.writeNext(new String[]{
-                            sequenceID ? Integer.toString(i) : Integer.toString(rnd.getInt(randomIDRange)),
-                            Integer.toString(rnd.getInt(randomIDRange)),
-                            rnd.getStringSequence(10),
-                            Float.toString(rnd.getFloat(1000)),
-                            Double.toString(rnd.getDouble(1000)),
-                            "2024-12-24",
-                            "17:45:30",
-                            "2024-12-24T17:45:30",
-                            "false",
-                            "49d59e61-961b-11e8-9854-134d5b3f9cf8",
-                            Integer.toString(rnd.getInt(0, 32767)),
-                            Integer.toString(rnd.getInt(0, 127)),
-                            "49d59e61-961b-11e8-9854-134d5b3f9cf8",
-                            rnd.getStringSequence(5)});
+                            sequenceID ? Integer.toString(i) : Integer.toString(rnd.getInt(randomIDRange)), //  bigint
+                            Integer.toString(rnd.getInt(randomIDRange)),                    //  int
+                            rnd.getStringSequence(10),                              // text
+                            Float.toString(rnd.getFloat(1000)),                     // float
+                            Double.toString(rnd.getDouble(1000)),                   //  double
+                            rnd.getLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE),    //  date
+                            rnd.getLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME),    //  time
+                            rnd.getInstant().toString(),// .ISO_LOCAL_DATE_TIME),//"2024-12-24T17:45:30",                                          //  timestamp
+                            rnd.getBoolean().toString(),                                    //  boolean
+                            rnd.getUUID(false).toString(),                          //  uuid
+                            Integer.toString(rnd.getInt(0, 32767)),                         //  smallint
+                            Integer.toString(rnd.getInt(0, 127)),                           //  tinyint
+                            rnd.getUUID(true).toString(),                           //  timeuuid
+                            rnd.getStringSequence(5)});                                 //  varchar
                 }
             }
         }

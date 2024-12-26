@@ -1,29 +1,47 @@
 package org.george0st.helper;
 
+import com.fasterxml.uuid.Generators;
+
+import javax.xml.crypto.Data;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
+import java.time.*;
+import java.util.Date;
 import java.util.UUID;
+
 
 /**
  * The pseudo-random number generator with extra seed (local datetime, cpu speed, UUID version 4)
  */
 public class RndGenerator {
 
-
     private static String allCandidates = "abcdefghijklmnopqrstuvwxyz" +
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
             "1234567890"+
             " ()_-,.";
+
     private static String stringCandidates = "abcdefghijklmnopqrstuvwxyz" +
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
             "1234567890";
+
     private static String numberCandidates = "1234567890";
+
+    private static long dateTimeEpochMin = LocalDateTime.parse("1970-01-01T00:00:00").toEpochSecond(ZoneOffset.UTC);
+    private static long dateTimeEpochMax = LocalDateTime.parse("2030-12-31T23:59:59").toEpochSecond(ZoneOffset.UTC);
+
+    private static long instantEpochMin= Instant.parse("1970-01-01T00:00:00Z").getEpochSecond();
+    private static long instantEpochMax= Instant.parse("2030-12-31T23:59:59Z").getEpochSecond();
+
+    private static long localDateEpochMin= LocalDate.parse("1970-01-01").toEpochDay();
+    private static long localDateEpochMax= LocalDate.parse("2030-12-31").toEpochDay();
 
     private SecureRandom rnd=null;
 
     public RndGenerator() throws InterruptedException {
+        init();
+    }
 
+    private void init() throws InterruptedException {
         // calc based on current CPU speed
         long startTime = System.nanoTime();
         Thread.sleep(3);
@@ -67,7 +85,6 @@ public class RndGenerator {
         return getInt(0, toNumber);
     }
 
-
     public int getInt(int fromNumber, int toNumber){
         return rnd.nextInt(fromNumber, toNumber);
     }
@@ -86,6 +103,42 @@ public class RndGenerator {
 
     public double getDouble(double fromNumber, double toNumber){
         return rnd.nextDouble(fromNumber, toNumber);
+    }
+
+    public UUID getUUID(boolean timeBased){
+        return timeBased ? Generators.timeBasedGenerator().generate() : UUID.randomUUID();
+    }
+
+    public Boolean getBoolean() {
+        return rnd.nextBoolean();
+    }
+
+    public LocalDate getLocalDate(LocalDate fromDate, LocalDate toDate){
+        return LocalDate.ofEpochDay(rnd.nextLong(fromDate.toEpochDay(), toDate.toEpochDay()));
+    }
+
+    public LocalDate getLocalDate(){
+        return LocalDate.ofEpochDay(rnd.nextLong(localDateEpochMin, localDateEpochMax));
+    }
+
+    public LocalTime getLocalTime(){
+        return getLocalTime(LocalTime.MIN,LocalTime.MAX);
+    }
+
+    public LocalTime getLocalTime(LocalTime fromTime, LocalTime toTime){
+        return LocalTime.ofSecondOfDay(rnd.nextInt(fromTime.toSecondOfDay(), toTime.toSecondOfDay()));
+    }
+
+    public LocalDateTime getLocalDateTime(){
+        return LocalDateTime.ofEpochSecond(rnd.nextLong(dateTimeEpochMin, dateTimeEpochMax), 0, ZoneOffset.UTC);
+    }
+
+    public Instant getInstant(){
+        return Instant.ofEpochSecond(rnd.nextLong(instantEpochMin, instantEpochMax));
+    }
+
+    public LocalDateTime getLocalDateTime(LocalDateTime fromDateTime, LocalDateTime toDateTime){
+        return LocalDateTime.ofEpochSecond(rnd.nextLong(fromDateTime.toEpochSecond(ZoneOffset.UTC), toDateTime.toEpochSecond(ZoneOffset.UTC)), 0,ZoneOffset.UTC);
     }
 
 }

@@ -8,10 +8,13 @@ import com.datastax.oss.driver.api.core.type.codec.TypeCodecs;
 import com.datastax.oss.driver.api.core.type.reflect.GenericType;
 
 import java.nio.ByteBuffer;
-import java.time.*;
+import java.time.Instant;
+import java.time.ZoneId;
 
 //  https://docs.datastax.com/en/developer/java-driver/4.17/manual/core/custom_codecs/index.html
 public class CqlTimestampToStringCodec implements TypeCodec<String> {
+
+    private static ZoneId zone=ZoneId.of("Europe/London");
 
     @Override
     public GenericType<String> getJavaType() {
@@ -28,31 +31,27 @@ public class CqlTimestampToStringCodec implements TypeCodec<String> {
         if (value == null) {
             return null;
         } else {
-            //https://stackoverflow.com/questions/77017326/unable-to-obtain-instant-from-temporalaccessor-2023-08-31t203749-005832800-of
-
-            LocalDateTime datetimeValue = LocalDateTime.parse(value);
-            return TypeCodecs.TIMESTAMP.encode(datetimeValue.atZone(ZoneId.of("Europe/London")).toInstant(),
-                    protocolVersion);
-            //return TypeCodecs.TIMESTAMP.encode(Instant.from(datetimeValue), protocolVersion);
+            Instant instantValue = Instant.parse(value);
+            return TypeCodecs.TIMESTAMP.encode(instantValue, protocolVersion);
         }
     }
 
     @Override
     public String decode(ByteBuffer bytes, ProtocolVersion protocolVersion) {
-        LocalDateTime datetimeValue=LocalDateTime.ofInstant(TypeCodecs.TIMESTAMP.decode(bytes, protocolVersion),
-                ZoneId.of("Europe/London"));
-        return datetimeValue.toString();
+        Instant instantValue = TypeCodecs.TIMESTAMP.decode(bytes, protocolVersion);
+        return instantValue.toString();
     }
 
     @Override
     public String format(String value) {
-        LocalDateTime datetimeValue = LocalDateTime.parse(value);
-        return TypeCodecs.TIMESTAMP.format(datetimeValue.atZone(ZoneId.of("Europe/London")).toInstant());
+        Instant instantValue = Instant.parse(value);
+        return TypeCodecs.TIMESTAMP.format(instantValue);
     }
 
     @Override
     public String parse(String value) {
-        return value;
+        Instant instantValue = TypeCodecs.TIMESTAMP.parse(value);
+        return instantValue == null ? null : instantValue.toString();
     }
 }
 

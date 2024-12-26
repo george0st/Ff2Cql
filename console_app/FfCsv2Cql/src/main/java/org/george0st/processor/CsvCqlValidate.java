@@ -3,32 +3,31 @@ package org.george0st.processor;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.*;
+import com.datastax.oss.driver.api.core.type.DataType;
+import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
-import org.george0st.CqlAccess;
 import org.george0st.helper.Setup;
 
 import javax.management.InvalidAttributeValueException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-
-//import com.datastax.oss.driver.api.core.*;
-//import com.datastax.oss.driver.api.core .Cluster.Builder
-
-//import com.datastax.oss.driver.api.core.policies.DCAwareRoundRobinPolicy;
-//import com.datastax.oss.driver.api.core.policies.HostFilterPolicy;
-//import com.datastax.oss.driver.api.core.policies.RoundRobinPolicy;
+import java.rmi.UnexpectedException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 
 
-public class CsvCqlRead extends CqlProcessor {
+public class CsvCqlValidate extends CqlProcessor {
 
     private String[] readWhere;
 
-    public CsvCqlRead(Setup setup, String []readWhere) {
+    public CsvCqlValidate(Setup setup, String []readWhere) {
         super(setup);
         this.readWhere=readWhere;
     }
@@ -57,6 +56,7 @@ public class CsvCqlRead extends CqlProcessor {
                     String[] line= null;
                     String[] newLine= new String[this.readWhere.length];
                     Row row;
+                    com.datastax.oss.driver.api.core.type.DataType itmType;
 
                     while ((line = csvReader.readNext()) != null) {
                         //  bind items for query
@@ -69,10 +69,23 @@ public class CsvCqlRead extends CqlProcessor {
 
                         //  check values from query
                         for (int i=0;i<headers.length; i++) {
+                            itmType = row.getType(i);
                             itm = row.getString(i);
-                            if (itm!=null)
-                                if (!itm.equals(line[i]))
-                                    throw new InvalidAttributeValueException("Check: Irrelevant values");
+                            if (itm!=null) {
+                                if (itmType == DataTypes.TIME) {
+                                    if (!LocalTime.parse(itm).equals(LocalTime.parse(line[i])))
+                                        throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
+                                } else {
+                                    if (itmType == DataTypes.TIMESTAMP) {
+                                        if (!Instant.parse(itm).equals(Instant.parse(line[i]))) {
+                                            throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
+                                        }
+                                    } else {
+                                        if (!itm.equals(line[i]))
+                                            throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
+                                    }
+                                }
+                            }
                         }
                     }
                 }
