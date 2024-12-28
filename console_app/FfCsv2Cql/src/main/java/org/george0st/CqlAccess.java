@@ -19,6 +19,11 @@ public class CqlAccess {
         this.sessionBuilder = createBuilder();
     }
 
+    public CqlAccess(CqlAccess access) {
+        this.setup = access.setup;
+        this.sessionBuilder = access.sessionBuilder;
+    }
+
     private CqlSessionBuilder createBuilder(){
         CqlSessionBuilder builder = new CqlSessionBuilder();
 

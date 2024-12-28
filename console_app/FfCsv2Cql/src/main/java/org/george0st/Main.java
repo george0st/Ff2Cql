@@ -1,57 +1,64 @@
 package org.george0st;
 
-
-import com.datastax.oss.driver.api.core.ProtocolVersion;
-import com.datastax.oss.driver.api.core.type.codec.TypeCodecs;
 import com.opencsv.exceptions.CsvValidationException;
+import org.george0st.helper.ReadableTime;
 import org.george0st.helper.Setup;
 import org.george0st.processor.CsvCqlWrite;
-
+import picocli.CommandLine;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Parameters;
 
-public class Main {
+
+@Command(name = "example", mixinStandardHelpOptions = true, version = "FfCsv2Cql 1.2", description = "A simple transfer data from NiFi FileFlow to CQL.")
+public class Main implements Runnable {
+
+    @Option(names = { "-c", "--config" },
+            description = "Config file (default is 'connection.json').",
+            defaultValue = "connection-private.json", paramLabel = "")
+    private String config;
+
+    @Option(names = { "-b", "--bulk" },
+            description = "Bulk size (default is 200).", defaultValue = "200")
+    private long bulk;
+
+    @Parameters(arity = "1..*", paramLabel = "INPUT", description = "Input file(s) for processing.")
+    private String[] inputFiles;
+
+    @Override
+    public void run() {
+
+        try {
+            // define setup
+            Setup setup = Setup.getInstance(config);
+            setup.setBulk(bulk);
+
+            // general access
+            CqlAccess access=new CqlAccess(setup);
+            long finish, start;
+
+            //  processing files
+            for (String inputFile : inputFiles) {
+                start = System.currentTimeMillis();
+
+                //  write file
+                CsvCqlWrite write = new CsvCqlWrite(access);
+                write.execute(inputFile);
+
+                finish = System.currentTimeMillis();
+                System.out.println("File '" + inputFile + "': "+ ReadableTime.fromMillisec(finish - start) +
+                        "(" + (finish-start) +" ms)");
+            }
+        }
+        catch(Exception ex) {
+            System.out.println(ex.toString());
+        }
+    }
 
     public static void main(String[] args) throws CsvValidationException, IOException {
-
-
-        byte[] data = new byte[]{0, 0, 1, -109, -7, -58, 26, -112};
-        ByteBuffer bytes = ByteBuffer.wrap(data);
-
-        LocalDateTime aa=LocalDateTime.ofInstant(TypeCodecs.TIMESTAMP.decode(bytes, ProtocolVersion.V4),
-                ZoneId.of("Europe/London"));
-        //LocalDateTime aa= LocalDateTime.from(TypeCodecs.TIMESTAMP.decode(bytes, ProtocolVersion.V4));
-
-
-
-//        LocalDateTime datetimeValue = LocalDateTime.from(TypeCodecs.TIMESTAMP.decode(bytes, protocolVersion));
-//        String value="2024-12-24T17:45:30";
-//        LocalDateTime datetimeValue = LocalDateTime.parse(value);
-//        Instant bb= datetimeValue.atZone(ZoneId.of("Europe/London")).toInstant();
-//        ByteBuffer buff=TypeCodecs.TIMESTAMP.encode(bb, ProtocolVersion.V4);
-//
-//        value="2024-12-24T17:45:31";
-//        datetimeValue = LocalDateTime.parse(value);
-//        bb= datetimeValue.atZone(ZoneId.of("Europe/London")).toInstant();
-//        ByteBuffer buff2=TypeCodecs.TIMESTAMP.encode(bb, ProtocolVersion.V4);
-
-
-//        ZonedDateTime zdt;
-//
-//        zdt =  datetimeValue.atZone(ZoneId.of("Europe/London"));
-//        Instant aaa= Instant.from(zdt.toLocalDateTime());
-
-        //return TypeCodecs.TIMESTAMP.encode(Instant.from(zdt.toLocalDateTime()), protocolVersion);
-
-
-//        String setupFile= Setup.getSetupFile(new String[]{"connection-private.json","connection.json"});
-//        CsvCqlWrite aa = new CsvCqlWrite(Setup.getInstance(setupFile));
-//        aa.execute("test.csv");
-
-        System.out.printf("! DONE !");
+        int exitCode = new CommandLine(new Main()).execute(args);
+        System.exit(exitCode);
     }
+
 }

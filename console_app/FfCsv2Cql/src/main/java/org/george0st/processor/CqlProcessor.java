@@ -11,7 +11,10 @@ abstract class CqlProcessor extends CqlAccess {
 
     public CqlProcessor(Setup setup) {
         super(setup);
+    }
 
+    public CqlProcessor(CqlAccess access) {
+        super(access);
     }
 
     protected String prepareHeaders(String[] headers){
