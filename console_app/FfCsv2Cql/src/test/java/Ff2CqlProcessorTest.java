@@ -83,7 +83,7 @@ class Ff2CqlProcessorTest {
 
     @Test
     @DisplayName("Sequence W, 3. 10K items in CSV")
-    void csvWRSequence10K() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
+    void csvWSequence10K() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
         File randomFile=schema.generateRndCSVFile(10000, true);
         coreTest(randomFile, false);
     }
@@ -105,7 +105,7 @@ class Ff2CqlProcessorTest {
 
     @Test
     @DisplayName("Random W, 3. 10K items in CSV")
-    void csvWRRandom10K() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
+    void csvWRandom10K() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
         File randomFile=schema.generateRndCSVFile(10000, false);
         coreTest(randomFile, false);
     }
