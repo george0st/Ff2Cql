@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 import java.util.UUID;
 
 //  https://docs.datastax.com/en/developer/java-driver/4.17/manual/core/custom_codecs/index.html
-public class CqlTimeuuidToStringCodec implements TypeCodec<String> {
+public class CqlTimeUUIDToStringCodec implements TypeCodec<String> {
 
     @Override
     public GenericType<String> getJavaType() {

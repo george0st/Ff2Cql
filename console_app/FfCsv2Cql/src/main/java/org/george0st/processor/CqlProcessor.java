@@ -33,7 +33,7 @@ abstract class CqlProcessor extends CqlAccess {
         StringBuilder prepareItems= new StringBuilder();
 
         for (int i=0;i<whereItems.length;i++){
-            if (prepareItems.length()>0)
+            if (!prepareItems.isEmpty())
                 prepareItems.append(" AND ");
             prepareItems.append(String.format("%s = ?", whereItems[i]));
         }
