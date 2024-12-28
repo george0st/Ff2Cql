@@ -26,13 +26,13 @@ public class CqlCreateSchema extends CqlAccess {
 
     private String[] primaryKeys=new String[]{"colbigint", "colint"};
     private String[] columns=new String[]{
-            "colbigint","BIGINT",
-            "colint", "INT",
-            "coltext", "TEXT",
-            "colfloat", "FLOAT",
-            "coldouble", "DOUBLE",
-            "coldate", "DATE",
-            "coltime", "TIME",
+            "colbigint", "bigint",
+            "colint", "int",
+            "coltext", "text",
+            "colfloat", "float",
+            "coldouble", "double",
+            "coldate", "date",
+            "coltime", "time",
             "coltimestamp", "timestamp",
             "colboolean", "boolean",
             "coluuid", "uuid",

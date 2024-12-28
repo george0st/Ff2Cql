@@ -1,5 +1,6 @@
 package org.george0st.helper;
 
+import com.fasterxml.jackson.annotation.JsonEnumDefaultValue;
 import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileReader;
@@ -21,8 +22,11 @@ public class Setup {
     public long connectionTimeout;
     public long requestTimeout;
     public String consistencyLevel;
-    public int bulk;
+    private long bulk;
     public String table;
+
+    public void setBulk(long bulk) { this.bulk = bulk; }
+    public long getBulk() { return bulk > 0 ? bulk : 200 ; }
 
     private Setup(){
     }
@@ -49,6 +53,7 @@ public class Setup {
                 instances.put(connectionFile, (new Gson()).fromJson(fileReader, Setup.class));
             } catch (IOException ex) {
                 instances.put(connectionFile, new Setup());
+                System.out.println("INVALID config");
             }
         }
         return instances.get(connectionFile);
