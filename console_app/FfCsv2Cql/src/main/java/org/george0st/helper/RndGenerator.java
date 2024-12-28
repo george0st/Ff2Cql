@@ -1,12 +1,9 @@
 package org.george0st.helper;
 
 import com.fasterxml.uuid.Generators;
-
-import javax.xml.crypto.Data;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.*;
-import java.util.Date;
 import java.util.UUID;
 
 
@@ -15,25 +12,25 @@ import java.util.UUID;
  */
 public class RndGenerator {
 
-    private static String allCandidates = "abcdefghijklmnopqrstuvwxyz" +
+    private final static String allCandidates = "abcdefghijklmnopqrstuvwxyz" +
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
             "1234567890"+
             " ()_-,.";
 
-    private static String stringCandidates = "abcdefghijklmnopqrstuvwxyz" +
+    private final static String stringCandidates = "abcdefghijklmnopqrstuvwxyz" +
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
             "1234567890";
 
-    private static String numberCandidates = "1234567890";
+    private final static String numberCandidates = "1234567890";
 
-    private static long dateTimeEpochMin = LocalDateTime.parse("1970-01-01T00:00:00").toEpochSecond(ZoneOffset.UTC);
-    private static long dateTimeEpochMax = LocalDateTime.parse("2030-12-31T23:59:59").toEpochSecond(ZoneOffset.UTC);
+    private final static long dateTimeEpochMin = LocalDateTime.parse("1970-01-01T00:00:00").toEpochSecond(ZoneOffset.UTC);
+    private final static long dateTimeEpochMax = LocalDateTime.parse("2030-12-31T23:59:59").toEpochSecond(ZoneOffset.UTC);
 
-    private static long instantEpochMin= Instant.parse("1970-01-01T00:00:00Z").getEpochSecond();
-    private static long instantEpochMax= Instant.parse("2030-12-31T23:59:59Z").getEpochSecond();
+    private final static long instantEpochMin = Instant.parse("1970-01-01T00:00:00Z").getEpochSecond();
+    private final static long instantEpochMax = Instant.parse("2030-12-31T23:59:59Z").getEpochSecond();
 
-    private static long localDateEpochMin= LocalDate.parse("1970-01-01").toEpochDay();
-    private static long localDateEpochMax= LocalDate.parse("2030-12-31").toEpochDay();
+    private final static long localDateEpochMin = LocalDate.parse("1970-01-01").toEpochDay();
+    private final static long localDateEpochMax = LocalDate.parse("2030-12-31").toEpochDay();
 
     private SecureRandom rnd=null;
 

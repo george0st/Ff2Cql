@@ -49,7 +49,7 @@ public class CqlAccess {
                 new CqlUUIDToStringCodec(),
                 new CqlSmallintToStringCodec(),
                 new CqlTinyintToStringCodec(),
-                new CqlTimeuuidToStringCodec());
+                new CqlTimeUUIDToStringCodec());
 
         // default options (balancing, timeout, CL)
         OptionsMap options = OptionsMap.driverDefaults();

@@ -3,7 +3,6 @@ package org.george0st.processor;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.*;
-import com.datastax.oss.driver.api.core.type.DataType;
 import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -12,27 +11,24 @@ import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.helper.Setup;
 
-import javax.management.InvalidAttributeValueException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.rmi.UnexpectedException;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 
 
 public class CsvCqlValidate extends CqlProcessor {
 
-    private String[] readWhere;
+    private final String[] readWhere;
 
     public CsvCqlValidate(Setup setup, String []readWhere) {
         super(setup);
         this.readWhere=readWhere;
     }
 
-    public void execute(String fileName) throws CsvValidationException, IOException, InvalidAttributeValueException {
+    public void execute(String fileName) throws CsvValidationException, IOException {
         try (CqlSession session = sessionBuilder.build()) {
             try (Reader reader = new FileReader(fileName)) {
                 CSVParser parser = new CSVParserBuilder()
@@ -50,10 +46,10 @@ public class CsvCqlValidate extends CqlProcessor {
                     int[] mapIndexes = mapIndexes(headers);
 
                     PreparedStatement stm = selectStatement(session, prepareHeaders, whereItems);
-                    BoundStatement bound=null;
+                    BoundStatement bound;
 
                     String itm;
-                    String[] line= null;
+                    String[] line;
                     String[] newLine= new String[this.readWhere.length];
                     Row row;
                     com.datastax.oss.driver.api.core.type.DataType itmType;
@@ -62,10 +58,11 @@ public class CsvCqlValidate extends CqlProcessor {
                         //  bind items for query
                         for (int i: mapIndexes)
                             newLine[i]=line[i];
-                        bound=stm.bind(newLine);
+                        bound=stm.bind((Object[]) newLine);
 
                         // execute query
-                        row=session.execute(bound).one();
+                        row = session.execute(bound).one();
+                        if (row==null) continue;
 
                         //  check values from query
                         for (int i=0;i<headers.length; i++) {
@@ -106,11 +103,9 @@ public class CsvCqlValidate extends CqlProcessor {
     }
 
     private PreparedStatement selectStatement(CqlSession session, String prepareHeaders, String whereItems){
-        String selectQuery = new StringBuilder("")
-                .append(String.format("SELECT %s ", prepareHeaders))
-                .append("FROM ")
-                .append(this.setup.table)
-                .append(String.format(" WHERE %s", whereItems)).toString();
+
+        String selectQuery = "SELECT " + prepareHeaders + " FROM " + this.setup.table +
+                " WHERE " + whereItems + ";";
         return session.prepare(SimpleStatement.newInstance(selectQuery)
                 .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
     }

@@ -1,22 +1,20 @@
 package org.george0st;
 
-import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.helper.ReadableTime;
 import org.george0st.helper.Setup;
 import org.george0st.processor.CsvCqlWrite;
 import picocli.CommandLine;
-import java.io.IOException;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 
-@Command(name = "example", mixinStandardHelpOptions = true, version = "FfCsv2Cql 1.2", description = "A simple transfer data from NiFi FileFlow to CQL.")
+@Command(name = "example", mixinStandardHelpOptions = true, version = "FfCsv2Cql 1.2", description = "Simple transfer data from NiFi FileFlow to CQL.")
 public class Main implements Runnable {
 
     @Option(names = { "-c", "--config" },
             description = "Config file (default is 'connection.json').",
-            defaultValue = "connection-private.json", paramLabel = "")
+            defaultValue = "connection-private.json")
     private String config;
 
     @Option(names = { "-b", "--bulk" },
@@ -47,7 +45,7 @@ public class Main implements Runnable {
                 write.execute(inputFile);
 
                 finish = System.currentTimeMillis();
-                System.out.println("File '" + inputFile + "': "+ ReadableTime.fromMillisec(finish - start) +
+                System.out.println("File '" + inputFile + "': "+ ReadableTime.fromMillisecond(finish - start) +
                         "(" + (finish-start) +" ms)");
             }
         }
@@ -56,7 +54,7 @@ public class Main implements Runnable {
         }
     }
 
-    public static void main(String[] args) throws CsvValidationException, IOException {
+    public static void main(String[] args) {
         int exitCode = new CommandLine(new Main()).execute(args);
         System.exit(exitCode);
     }

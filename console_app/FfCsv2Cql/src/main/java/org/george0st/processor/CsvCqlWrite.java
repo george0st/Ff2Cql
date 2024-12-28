@@ -2,26 +2,17 @@ package org.george0st.processor;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Collections;
-
-
-import com.datastax.oss.driver.api.core.ConsistencyLevel;
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.core.CqlSessionBuilder;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
-import com.datastax.oss.driver.api.core.config.OptionsMap;
-import com.datastax.oss.driver.api.core.config.TypedDriverOption;
 import com.datastax.oss.driver.api.core.cql.*;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
 import java.io.FileReader;
-import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.CqlAccess;
 import org.george0st.helper.Setup;
-
 
 
 public class CsvCqlWrite extends CqlProcessor {
@@ -52,11 +43,11 @@ public class CsvCqlWrite extends CqlProcessor {
                     PreparedStatement stm = insertStatement(session,prepareHeaders, prepareItems);
 
                     BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.UNLOGGED);
-                    String[] line= null;
+                    String[] line;
                     int count=0;
 
                     while ((line = csvReader.readNext()) != null) {
-                        batch = batch.addAll(stm.bind(line));
+                        batch = batch.addAll(stm.bind((Object[]) line));
                         count++;
 
                         if (count==setup.getBulk()) {
@@ -73,13 +64,8 @@ public class CsvCqlWrite extends CqlProcessor {
     }
 
     private PreparedStatement insertStatement(CqlSession session, String prepareHeaders, String prepareItems){
-        String insertQuery = new StringBuilder("")
-                .append("INSERT INTO ")
-                .append(this.setup.table)
-                .append(String.format(" (%s) ",prepareHeaders))
-                .append("VALUES ")
-                .append(String.format("(%s);",prepareItems)).toString();
-
+        String insertQuery = "INSERT INTO " + this.setup.table + " (" + prepareHeaders+") " +
+                "VALUES (" + prepareItems + ");";
         return session.prepare(SimpleStatement.newInstance(insertQuery)
                 .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
     }
