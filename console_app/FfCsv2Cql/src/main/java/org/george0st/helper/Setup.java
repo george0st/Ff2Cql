@@ -34,7 +34,7 @@ public class Setup {
      * Provide class instance for default connection file 'connection.json'
      * @return class instance
      */
-    public static Setup getInstance() {
+    public static Setup getInstance() throws IOException {
         return Setup.getInstance("connection.json");
     }
 
@@ -43,16 +43,13 @@ public class Setup {
      * @param connectionFile JSON connection file
      * @return class instance
      */
-    public static Setup getInstance(String connectionFile) {
+    public static Setup getInstance(String connectionFile) throws IOException {
         if (instances==null)
             instances=new HashMap<>();
 
         if (!instances.containsKey(connectionFile)) {
             try (FileReader fileReader = new FileReader(connectionFile)) {
                 instances.put(connectionFile, (new Gson()).fromJson(fileReader, Setup.class));
-            } catch (IOException ex) {
-                instances.put(connectionFile, new Setup());
-                System.out.println("INVALID config");
             }
         }
         return instances.get(connectionFile);

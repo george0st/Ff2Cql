@@ -57,8 +57,8 @@ public class CqlAccess {
         options.put(TypedDriverOption.CONNECTION_CONNECT_TIMEOUT, java.time.Duration.ofSeconds(setup.connectionTimeout));
         options.put(TypedDriverOption.REQUEST_TIMEOUT, java.time.Duration.ofSeconds(setup.requestTimeout));
         options.put(TypedDriverOption.REQUEST_CONSISTENCY, setup.consistencyLevel);
-        //options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "LZ4");
-        //options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "SNAPPY");
+//        options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "LZ4");
+//        options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "SNAPPY");
         options.put(TypedDriverOption.PROTOCOL_VERSION, "V4");
         builder.withConfigLoader(DriverConfigLoader.fromMap(options));
 
