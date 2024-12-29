@@ -94,10 +94,7 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.6</version>
         </dependency>
-
-
-
-
+        
         <!-- logging v2. -->
 <!--        <dependency>-->
 <!--            <groupId>org.slf4j</groupId>-->
