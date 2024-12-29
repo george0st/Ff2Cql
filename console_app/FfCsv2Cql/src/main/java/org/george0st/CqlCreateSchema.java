@@ -1,31 +1,26 @@
 package org.george0st;
 
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.internal.core.type.codec.DecimalCodec;
 import com.opencsv.CSVWriter;
-import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.helper.RndGenerator;
 import org.george0st.helper.Setup;
 
-import javax.management.InvalidAttributeValueException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
 
 public class CqlCreateSchema extends CqlAccess {
 
-    private RndGenerator rnd=new RndGenerator();
-    private static String testOutput="./test_output";
-    private static String testInput="./test_input";
+    private final RndGenerator rnd=new RndGenerator();
+    private final static String testOutput="./test_output";
+    private final static String testInput="./test_input";
 
-    private String[] primaryKeys=new String[]{"colbigint", "colint"};
-    private String[] columns=new String[]{
+    private final String[] primaryKeys=new String[]{"colbigint", "colint"};
+    private final String[] columns=new String[]{
             "colbigint", "bigint",
             "colint", "int",
             "coltext", "text",
@@ -67,7 +62,7 @@ public class CqlCreateSchema extends CqlAccess {
         return new File(String.format("%s/CsvToCql_%s.csv.tmp",testOutput, rnd.getStringSequence(10)));
     }
 
-    public void Create() throws CsvValidationException, IOException, InvalidAttributeValueException {
+    public void Create() {
         try (CqlSession session = sessionBuilder.build()) {
 //            // Drop key space
 //            session.execute(f"DROP KEYSPACE IF EXISTS {self._run_setup['keyspace']};");
