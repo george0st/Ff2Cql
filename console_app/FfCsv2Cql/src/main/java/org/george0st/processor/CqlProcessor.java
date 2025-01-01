@@ -9,12 +9,16 @@ import java.io.IOException;
 
 abstract class CqlProcessor extends CqlAccess {
 
-    public CqlProcessor(Setup setup) {
+    protected boolean dryRun;
+
+    public CqlProcessor(Setup setup, boolean dryRun) {
         super(setup);
+        this.dryRun=dryRun;
     }
 
-    public CqlProcessor(CqlAccess access) {
+    public CqlProcessor(CqlAccess access, boolean dryRun) {
         super(access);
+        this.dryRun=dryRun;
     }
 
     protected String prepareHeaders(String[] headers){

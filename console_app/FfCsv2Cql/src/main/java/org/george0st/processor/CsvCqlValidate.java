@@ -24,7 +24,7 @@ public class CsvCqlValidate extends CqlProcessor {
     private final String[] readWhere;
 
     public CsvCqlValidate(Setup setup, String []readWhere) {
-        super(setup);
+        super(setup, false);
         this.readWhere=readWhere;
     }
 

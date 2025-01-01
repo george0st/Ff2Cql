@@ -17,15 +17,15 @@ public class Main implements Runnable {
     @Option(names = { "-c", "--config" },
             description = "Config file (default is 'connection.json').",
             defaultValue = "connection-private.json")
-    private String config;
+    private String config = "connection-private.json";
 
     @Option(names = { "-b", "--bulk" },
             description = "Bulk size (default is 200).", defaultValue = "200")
-    private long bulk;
+    private long bulk = 200;
 
     @Option(names = { "-d", "--dryRun" },
             description = "Dry run, whole processing without write to CQL.")
-    private Boolean dryRun;
+    private boolean dryRun = false;
 
     @Parameters(arity = "1..*", paramLabel = "INPUT", description = "Input file(s) for processing.")
     private String[] inputFiles;
@@ -48,7 +48,7 @@ public class Main implements Runnable {
                     start = System.currentTimeMillis();
 
                     //  write file
-                    CsvCqlWrite write = new CsvCqlWrite(access);
+                    CsvCqlWrite write = new CsvCqlWrite(access, dryRun);
                     write.execute(inputFile);
 
                     finish = System.currentTimeMillis();

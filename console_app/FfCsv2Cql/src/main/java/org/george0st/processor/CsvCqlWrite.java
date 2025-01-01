@@ -17,12 +17,12 @@ import org.george0st.helper.Setup;
 
 public class CsvCqlWrite extends CqlProcessor {
 
-    public CsvCqlWrite(Setup setup) {
-        super(setup);
+    public CsvCqlWrite(Setup setup, boolean dryRun) {
+        super(setup, dryRun);
     }
 
-    public CsvCqlWrite(CqlAccess access) {
-        super(access);
+    public CsvCqlWrite(CqlAccess access, boolean dryRun) {
+        super(access, dryRun);
     }
 
     public void execute(String fileName) throws CsvValidationException, IOException {
@@ -51,13 +51,15 @@ public class CsvCqlWrite extends CqlProcessor {
                         count++;
 
                         if (count==setup.getBulk()) {
-                            session.execute(batch);
+                            if (!dryRun)
+                                session.execute(batch);
                             batch = batch.clear();
                             count = 0;
                         }
                     }
                     if (count > 0)
-                        session.execute(batch);
+                        if (!dryRun)
+                            session.execute(batch);
                 }
             }
         }

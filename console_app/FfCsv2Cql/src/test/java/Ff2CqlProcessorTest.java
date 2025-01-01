@@ -50,7 +50,7 @@ class Ff2CqlProcessorTest {
 
         // write
         start = System.currentTimeMillis();
-        new CsvCqlWrite(Setup.getInstance(testSetupFile)).execute(randomFile.getPath());
+        new CsvCqlWrite(Setup.getInstance(testSetupFile), false).execute(randomFile.getPath());
         finish = System.currentTimeMillis();
         System.out.println("WRITE duration: " + ReadableTime.fromMillisecond(finish - start));
 
