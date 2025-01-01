@@ -23,6 +23,10 @@ public class Main implements Runnable {
             description = "Bulk size (default is 200).", defaultValue = "200")
     private long bulk;
 
+    @Option(names = { "-d", "--dryRun" },
+            description = "Dry run, whole processing without write to CQL.")
+    private Boolean dryRun;
+
     @Parameters(arity = "1..*", paramLabel = "INPUT", description = "Input file(s) for processing.")
     private String[] inputFiles;
 
@@ -64,18 +68,6 @@ public class Main implements Runnable {
     public static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-//
-//        logger.debug("This is a debug message");
-//        logger.info("This is an info message");
-//        logger.warn("This is a warn message");
-//        logger.error("This is an error message");
-
-
-//        // Cesta k souboru log4j.properties
-//        String log4jConfigFile = "log4j.properties";
-//        // Načtení konfigurace Log4j Property
-//        Configurator.configure(log4jConfigFile);
-//
         int exitCode = new CommandLine(new Main()).execute(args);
         System.exit(exitCode);
     }
