@@ -35,7 +35,7 @@ public class CqlAccess {
         builder.withLocalDatacenter(setup.localDC);
 
         // authorization
-        builder.withAuthCredentials(setup.username, setup.pwd);
+        builder.withAuthCredentials(setup.username, setup.getPwd());
 
         // add codecs
         builder.addTypeCodecs(new CqlIntToStringCodec(),
