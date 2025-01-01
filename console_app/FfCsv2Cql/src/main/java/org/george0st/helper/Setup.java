@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.HashMap;
 
 
@@ -16,7 +17,7 @@ public class Setup {
     public String []ipAddresses;
     public int port;
     public String username;
-    public String pwd;
+    private String pwd;
     public String localDC;
     public long connectionTimeout;
     public long requestTimeout;
@@ -26,6 +27,9 @@ public class Setup {
 
     public void setBulk(long bulk) { this.bulk = bulk; }
     public long getBulk() { return bulk > 0 ? bulk : 200 ; }
+
+    public void setPwd(String pwd) { this.pwd = Base64.getEncoder().encodeToString(pwd.getBytes()); }
+    public String getPwd() { return  new String((byte[])Base64.getDecoder().decode(this.pwd)); }
 
     private Setup(){
     }
