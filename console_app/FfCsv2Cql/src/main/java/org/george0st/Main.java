@@ -32,7 +32,7 @@ public class Main implements Runnable {
     private boolean dryRun = false;
 
     @Option(names = { "-s", "--stdIn" },
-            description = "Consume input from stdin")
+            description = "Use input from stdin")
     private boolean stdIn = false;
 
     @Parameters(arity = "1..*", paramLabel = "INPUT", description = "Input file(s) for processing.")
