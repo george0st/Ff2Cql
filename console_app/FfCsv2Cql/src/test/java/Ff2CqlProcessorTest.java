@@ -1,6 +1,3 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.CqlCreateSchema;
 import org.george0st.helper.ReadableTime;
