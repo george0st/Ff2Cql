@@ -2,6 +2,10 @@ package org.george0st.helper;
 
 import java.util.Locale;
 
+/**
+ * Transform value to readable forms e.g. duration in milliseconds to the readable
+ * units (number of hours, minutes, seconds, milliseconds, etc.)
+ */
 public class ReadableValue {
 
     public static String fromSeconds(long durationSeconds){

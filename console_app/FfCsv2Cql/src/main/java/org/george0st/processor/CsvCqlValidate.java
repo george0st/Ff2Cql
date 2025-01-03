@@ -19,6 +19,9 @@ import java.time.Instant;
 import java.time.LocalTime;
 
 
+/**
+ * CSV validation processor for checking, if content of CSV is the same as content in table in CQL
+ */
 public class CsvCqlValidate extends CqlProcessor {
 
     private final String[] readWhere;

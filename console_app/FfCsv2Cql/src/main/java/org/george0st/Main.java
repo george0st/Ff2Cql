@@ -46,7 +46,6 @@ public class Main implements Callable<Integer> {
     @Parameters(arity = "1..*", paramLabel = "INPUT", description = "Input file(s) for processing.")
     private String[] inputFiles=null;
 
-
     @Override
     public Integer call() {
         try {

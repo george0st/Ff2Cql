@@ -7,6 +7,9 @@ import javax.management.InvalidAttributeValueException;
 import java.io.IOException;
 
 
+/**
+ * Basic abstract class for processor
+ */
 abstract class CqlProcessor extends CqlAccess {
 
     protected boolean dryRun;

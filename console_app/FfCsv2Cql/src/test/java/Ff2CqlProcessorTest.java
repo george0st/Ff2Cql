@@ -11,7 +11,7 @@ import javax.management.InvalidAttributeValueException;
 import java.io.IOException;
 import java.io.File;
 
-//  https://www.vogella.com/tutorials/JUnit/article.html#junitsetup
+
 class Ff2CqlProcessorTest {
 
     private RndGenerator rnd=new RndGenerator();

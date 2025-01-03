@@ -1,5 +1,8 @@
 package org.george0st.helper;
 
+/**
+ * Expected exit codes
+ */
 public final class ExitCodes {
     public static final int SUCCESS = 0;
     public static final int GENERAL_ERROR = 10;
