@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Create test table in CQL for complex testing of all supported types.
+ */
 public class CqlCreateSchema extends CqlAccess {
 
     private final RndGenerator rnd=new RndGenerator();

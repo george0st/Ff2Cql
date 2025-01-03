@@ -15,6 +15,9 @@ import org.george0st.CqlAccess;
 import org.george0st.helper.Setup;
 
 
+/**
+ * CSV write processor for writing data from CSV to the table in CQL.
+ */
 public class CsvCqlWrite extends CqlProcessor {
 
     public CsvCqlWrite(Setup setup, boolean dryRun) {

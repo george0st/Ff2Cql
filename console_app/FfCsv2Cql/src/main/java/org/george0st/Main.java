@@ -1,6 +1,8 @@
 package org.george0st;
 
-import org.george0st.helper.ReadableTime;
+import com.opencsv.exceptions.CsvValidationException;
+import org.george0st.helper.ExitCodes;
+import org.george0st.helper.ReadableValue;
 import org.george0st.helper.Setup;
 import org.george0st.processor.CsvCqlWrite;
 import picocli.CommandLine;
@@ -11,12 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 
 @Command(name = "example", mixinStandardHelpOptions = true, version = "FfCsv2Cql 1.2", description = "Simple transfer data from NiFi FileFlow to CQL.")
-public class Main implements Runnable {
+public class Main implements Callable<Integer> {
 
     @Option(names = { "-c", "--config" },
             description = "Config file (default is 'connection.json').",
@@ -32,15 +36,18 @@ public class Main implements Runnable {
     private boolean dryRun = false;
 
     @Option(names = { "-s", "--stdIn" },
-            description = "Use input from stdin")
+            description = "Use input from stdin.")
     private boolean stdIn = false;
+
+    @Option(names = { "-e", "--errorStop" },
+            description = "Stop processing in case an error.")
+    private boolean errorStop = false;
 
     @Parameters(arity = "1..*", paramLabel = "INPUT", description = "Input file(s) for processing.")
     private String[] inputFiles=null;
 
     @Override
-    public void run() {
-
+    public Integer call() {
         try {
             // define setup
             Setup setup = Setup.getInstance(config);
@@ -48,29 +55,44 @@ public class Main implements Runnable {
 
             // general access
             CqlAccess access=new CqlAccess(setup);
-            long finish, start;
+            long finish, start, count;
 
             //  processing files
             for (String inputFile : inputFiles) {
                 try {
-                    start = System.currentTimeMillis();
-
                     //  write file
+                    start = System.currentTimeMillis();
                     CsvCqlWrite write = new CsvCqlWrite(access, dryRun);
-                    write.execute(inputFile);
-
+                    count = write.execute(inputFile);
                     finish = System.currentTimeMillis();
-                    System.out.println("File '" + inputFile + "': " + ReadableTime.fromMillisecond(finish - start) +
-                            "(" + (finish - start) + " ms)");
+
+                    //  print processing detail
+                    System.out.println("'" + inputFile + "': " + ReadableValue.fromMillisecond(finish - start) +
+                            "(" + (finish - start) + " ms), " +
+                            "Items: " + count + ", " +
+                            String.format("Perf: %d [calls/sec], ", count/((finish-start)/1000)));
+                }
+                catch (CsvValidationException ex){
+                    logger.error(String.format("CSV error '%s', exception '%s'.", inputFile, ex));
+                    if (errorStop)
+                        return ExitCodes.CSV_ERROR;
                 }
                 catch(Exception ex) {
-                    logger.error(String.format("Processing '%s', Exception '%s'.", inputFile, ex));
+                    logger.error(String.format("Processing error '%s', exception '%s'.", inputFile, ex));
+                    if (errorStop)
+                        return ExitCodes.PROCESSING_ERROR;
                 }
             }
         }
-        catch(Exception ex) {
-            logger.error(String.format("General '%s'",ex));
+        catch(IOException ex) {
+            logger.error(String.format("Config error '%s'",ex));
+            return ExitCodes.CONFIG_ERROR;
         }
+        catch(Exception ex) {
+            logger.error(String.format("General error '%s'",ex));
+            return ExitCodes.GENERAL_ERROR;
+        }
+        return ExitCodes.SUCCESS;
     }
 
     public static final Logger logger = LoggerFactory.getLogger(Main.class);

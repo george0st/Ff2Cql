@@ -9,6 +9,10 @@ import org.george0st.helper.Setup;
 
 import java.net.InetSocketAddress;
 
+/**
+ * Access to the CQL source/engine with default setting such as
+ * IP addresses, authorization, codecs, timeouts, consistency level, etc.).
+ */
 public class CqlAccess {
 
     protected Setup setup;
@@ -34,10 +38,10 @@ public class CqlAccess {
         // data center
         builder.withLocalDatacenter(setup.localDC);
 
-        // authorization
+        // basic authorization
         builder.withAuthCredentials(setup.username, setup.getPwd());
 
-        // add codecs
+        // add supported codecs
         builder.addTypeCodecs(new CqlIntToStringCodec(),
                 new CqlBigIntToStringCodec(),
                 new CqlFloatToStringCodec(),
