@@ -25,7 +25,9 @@ public class CsvCqlWrite extends CqlProcessor {
         super(access, dryRun);
     }
 
-    public void execute(String fileName) throws CsvValidationException, IOException {
+    public long execute(String fileName) throws CsvValidationException, IOException {
+        long totalCount=0;
+
         try (CqlSession session = sessionBuilder.build()) {
             try (Reader reader = new FileReader(fileName)) {
                 CSVParser parser = new CSVParserBuilder()
@@ -49,6 +51,7 @@ public class CsvCqlWrite extends CqlProcessor {
                     while ((line = csvReader.readNext()) != null) {
                         batch = batch.addAll(stm.bind((Object[]) line));
                         count++;
+                        totalCount++;
 
                         if (count==setup.getBulk()) {
                             if (!dryRun)
@@ -63,6 +66,7 @@ public class CsvCqlWrite extends CqlProcessor {
                 }
             }
         }
+        return totalCount;
     }
 
     private PreparedStatement insertStatement(CqlSession session, String prepareHeaders, String prepareItems){

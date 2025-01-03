@@ -44,5 +44,5 @@ abstract class CqlProcessor extends CqlAccess {
         return prepareItems.toString();
     }
 
-    abstract void execute(String fileName) throws CsvValidationException, IOException, InvalidAttributeValueException;
+    abstract long execute(String fileName) throws CsvValidationException, IOException, InvalidAttributeValueException;
 }

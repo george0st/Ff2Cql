@@ -10,6 +10,10 @@ import picocli.CommandLine.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
+
 
 @Command(name = "example", mixinStandardHelpOptions = true, version = "FfCsv2Cql 1.2", description = "Simple transfer data from NiFi FileFlow to CQL.")
 public class Main implements Runnable {
@@ -27,8 +31,12 @@ public class Main implements Runnable {
             description = "Dry run, whole processing without write to CQL.")
     private boolean dryRun = false;
 
+    @Option(names = { "-s", "--stdIn" },
+            description = "Use input from stdin")
+    private boolean stdIn = false;
+
     @Parameters(arity = "1..*", paramLabel = "INPUT", description = "Input file(s) for processing.")
-    private String[] inputFiles;
+    private String[] inputFiles=null;
 
     @Override
     public void run() {
@@ -66,6 +74,11 @@ public class Main implements Runnable {
     }
 
     public static final Logger logger = LoggerFactory.getLogger(Main.class);
+
+    private static String getInput() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        return reader.lines().collect(Collectors.joining("\n"));
+    }
 
     public static void main(String[] args) {
         int exitCode = new CommandLine(new Main()).execute(args);

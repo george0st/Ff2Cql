@@ -28,7 +28,9 @@ public class CsvCqlValidate extends CqlProcessor {
         this.readWhere=readWhere;
     }
 
-    public void execute(String fileName) throws CsvValidationException, IOException {
+    public long execute(String fileName) throws CsvValidationException, IOException {
+        long totalCount=0;
+
         try (CqlSession session = sessionBuilder.build()) {
             try (Reader reader = new FileReader(fileName)) {
                 CSVParser parser = new CSVParserBuilder()
@@ -59,6 +61,7 @@ public class CsvCqlValidate extends CqlProcessor {
                         for (int i: mapIndexes)
                             newLine[i]=line[i];
                         bound=stm.bind((Object[]) newLine);
+                        totalCount++;
 
                         // execute query
                         row = session.execute(bound).one();
@@ -88,6 +91,7 @@ public class CsvCqlValidate extends CqlProcessor {
                 }
             }
         }
+        return totalCount;
     }
 
     protected int[] mapIndexes(String[] headers){

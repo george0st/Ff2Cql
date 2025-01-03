@@ -91,7 +91,6 @@ public class CqlCreateSchema extends CqlAccess {
     public File generateRndCSVFile(int csvItems, boolean sequenceID) throws IOException {
         // generate random file name
         File randomFile=getRandomFile();
-        int randomIDRange = csvItems * csvItems;
 
         // generate random content
         try (FileWriter writer =new FileWriter(randomFile,false)){
@@ -103,8 +102,8 @@ public class CqlCreateSchema extends CqlAccess {
                 // write content
                 for (int i=0;i<csvItems;i++) {
                     csvWriter.writeNext(new String[]{
-                            sequenceID ? Integer.toString(i) : Integer.toString(rnd.getInt(randomIDRange)), //  bigint
-                            Integer.toString(rnd.getInt(randomIDRange)),                    //  int
+                            sequenceID ? Integer.toString(i) : Integer.toString(rnd.getInt(Integer.MAX_VALUE)), //  bigint
+                            Integer.toString(rnd.getInt(Integer.MAX_VALUE)),                    //  int
                             rnd.getStringSequence(10),                              // text
                             Float.toString(rnd.getFloat(1000)),                     // float
                             Double.toString(rnd.getDouble(1000)),                   //  double
