@@ -2,7 +2,7 @@ package org.george0st;
 
 import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.helper.ExitCodes;
-import org.george0st.helper.ReadableTime;
+import org.george0st.helper.ReadableValue;
 import org.george0st.helper.Setup;
 import org.george0st.processor.CsvCqlWrite;
 import picocli.CommandLine;
@@ -56,20 +56,22 @@ public class Main implements Callable<Integer> {
 
             // general access
             CqlAccess access=new CqlAccess(setup);
-            long finish, start;
+            long finish, start, count;
 
             //  processing files
             for (String inputFile : inputFiles) {
                 try {
-                    start = System.currentTimeMillis();
-
                     //  write file
+                    start = System.currentTimeMillis();
                     CsvCqlWrite write = new CsvCqlWrite(access, dryRun);
-                    write.execute(inputFile);
-
+                    count = write.execute(inputFile);
                     finish = System.currentTimeMillis();
-                    System.out.println("File '" + inputFile + "': " + ReadableTime.fromMillisecond(finish - start) +
-                            "(" + (finish - start) + " ms)");
+
+                    //  print processing detail
+                    System.out.println("'" + inputFile + "': " + ReadableValue.fromMillisecond(finish - start) +
+                            "(" + (finish - start) + " ms), " +
+                            "Items: " + count + ", " +
+                            String.format("Perf: %d [calls/sec], ", count/((finish-start)/1000)));
                 }
                 catch (CsvValidationException ex){
                     logger.error(String.format("CSV error '%s', exception '%s'.", inputFile, ex));

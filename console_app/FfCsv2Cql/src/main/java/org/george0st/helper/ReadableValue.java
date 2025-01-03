@@ -1,6 +1,8 @@
 package org.george0st.helper;
 
-public class ReadableTime {
+import java.util.Locale;
+
+public class ReadableValue {
 
     public static String fromSeconds(long durationSeconds){
         if (durationSeconds<0)
@@ -62,5 +64,37 @@ public class ReadableTime {
             details.append(String.format("%d ms ", durationMillisecond));
 
         return details.toString();
+    }
+
+    public static String fromNumber(long number) {
+        return ReadableValue.fromNumber(number,0);
+    }
+
+    public static String fromNumber(long number, int precision){
+        if (number >= 1_000_000_000) {
+            return String.format(Locale.ENGLISH, "%." + precision + "fG", number / 1_000_000_000.0);
+        } else if (number >= 1_000_000) {
+            return String.format(Locale.ENGLISH, "%." + precision + "fM", number / 1_000_000.0);
+        } else if (number >= 1_000) {
+            return String.format(Locale.ENGLISH, "%." + precision + "fK", number / 1_000.0);
+        } else {
+            return String.valueOf(number);
+        }
+    }
+
+    public static String fromNumberBytes(long number) {
+        return ReadableValue.fromNumberBytes(number,0);
+    }
+
+    public static String fromNumberBytes(long number, int precision) {
+        if (number >= 1_073_741_824) {
+            return String.format(Locale.ENGLISH, "%." + precision + "fGB", number / 1_073_741_824.0);
+        } else if (number >= 1_048_576) {
+            return String.format(Locale.ENGLISH, "%." + precision + "fMB", number / 1_048_576.0);
+        } else if (number >= 1_024) {
+            return String.format(Locale.ENGLISH, "%." + precision + "fKB", number / 1_024.0);
+        } else {
+            return String.format("%dB", number);
+        }
     }
 }

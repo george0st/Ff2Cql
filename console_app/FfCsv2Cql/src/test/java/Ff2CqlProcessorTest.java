@@ -1,6 +1,6 @@
 import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.CqlCreateSchema;
-import org.george0st.helper.ReadableTime;
+import org.george0st.helper.ReadableValue;
 import org.george0st.processor.CsvCqlValidate;
 import org.george0st.processor.CsvCqlWrite;
 import org.george0st.helper.RndGenerator;
@@ -43,15 +43,15 @@ class Ff2CqlProcessorTest {
     }
 
     void coreTest(File randomFile, boolean validateAlso) throws CsvValidationException, IOException, InterruptedException, InvalidAttributeValueException {
-        long finish, start, totalCount;
+        long finish, start, count;
 
         // write
         start = System.currentTimeMillis();
-        totalCount = (new CsvCqlWrite(Setup.getInstance(testSetupFile), false)).execute(randomFile.getPath());
+        count = (new CsvCqlWrite(Setup.getInstance(testSetupFile), false)).execute(randomFile.getPath());
         finish = System.currentTimeMillis();
-        System.out.println("WRITE, Items: " + totalCount + ", " +
-                String.format("Perf: %d [calls/sec], ", totalCount/((finish-start)/1000)) +
-                "Duration: " + ReadableTime.fromMillisecond(finish - start));
+        System.out.println("WRITE, Items: " + ReadableValue.fromNumber(count) + ", " +
+                String.format("Perf: %d [calls/sec], ", count /((finish-start)/1000)) +
+                "Duration: " + ReadableValue.fromMillisecond(finish - start));
 
 
         if (validateAlso) {
@@ -60,11 +60,11 @@ class Ff2CqlProcessorTest {
 
             // validate
             start = System.currentTimeMillis();
-            totalCount = (new CsvCqlValidate(Setup.getInstance(testSetupFile), schema.getPrimaryKeys())).execute(randomFile.getPath());
+            count = (new CsvCqlValidate(Setup.getInstance(testSetupFile), schema.getPrimaryKeys())).execute(randomFile.getPath());
             finish = System.currentTimeMillis();
-            System.out.println("VALIDATE, Items: " + totalCount + ", " +
-                    String.format("Perf: %d [calls/sec], ", totalCount/((finish-start)/1000)) +
-                    "Duration: " + ReadableTime.fromMillisecond(finish - start));
+            System.out.println("VALIDATE, Items: " + ReadableValue.fromNumber(count) + ", " +
+                    String.format("Perf: %d [calls/sec], ", count /((finish-start)/1000)) +
+                    "Duration: " + ReadableValue.fromMillisecond(finish - start));
         }
     }
 
@@ -78,28 +78,28 @@ class Ff2CqlProcessorTest {
     @Test
     @DisplayName("Sequence WR, 2. 1K items in CSV")
     void csvWRSequence1K() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
-        File randomFile=schema.generateRndCSVFile(1000, true);
+        File randomFile=schema.generateRndCSVFile(1_000, true);
         coreTest(randomFile, true);
     }
 
     @Test
     @DisplayName("Sequence W, 3. 10K items in CSV")
     void csvWSequence10K() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
-        File randomFile=schema.generateRndCSVFile(10000, true);
+        File randomFile=schema.generateRndCSVFile(10_000, true);
         coreTest(randomFile, false);
     }
 
     @Test
     @DisplayName("Sequence W, 4. 100K items in CSV")
     void csvWSequence100K() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
-        File randomFile=schema.generateRndCSVFile(100000, true);
+        File randomFile=schema.generateRndCSVFile(100_000, true);
         coreTest(randomFile, false);
     }
 
     @Test
     @DisplayName("Sequence W, 5. 1M items in CSV")
     void csvWSequence1M() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
-        File randomFile=schema.generateRndCSVFile(1000000, true);
+        File randomFile=schema.generateRndCSVFile(1_000_000, true);
         coreTest(randomFile, false);
     }
 
@@ -113,28 +113,28 @@ class Ff2CqlProcessorTest {
     @Test
     @DisplayName("Random WR, 2. 1K items in CSV")
     void csvWRRandom1K() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
-        File randomFile=schema.generateRndCSVFile(1000, false);
+        File randomFile=schema.generateRndCSVFile(1_000, false);
         coreTest(randomFile, true);
     }
 
     @Test
     @DisplayName("Random W, 3. 10K items in CSV")
     void csvWRandom10K() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
-        File randomFile=schema.generateRndCSVFile(10000, false);
+        File randomFile=schema.generateRndCSVFile(10_000, false);
         coreTest(randomFile, false);
     }
 
     @Test
     @DisplayName("Random W, 4. 100K items in CSV")
     void csvWRandom100K() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
-        File randomFile=schema.generateRndCSVFile(100000, false);
+        File randomFile=schema.generateRndCSVFile(100_000, false);
         coreTest(randomFile, false);
     }
 
     @Test
     @DisplayName("Random W, 5. 1M items in CSV")
     void csvWRandom1M() throws IOException, CsvValidationException, InterruptedException, InvalidAttributeValueException {
-        File randomFile=schema.generateRndCSVFile(1000000, false);
+        File randomFile=schema.generateRndCSVFile(1_000_000, false);
         coreTest(randomFile, false);
     }
 
