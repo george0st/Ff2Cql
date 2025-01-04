@@ -7,6 +7,5 @@
   "connectionTimeout": "900",
   "requestTimeout": "60",
   "consistencyLevel": "LOCAL_ONE",
-  "table": "<add keyspace.table>",
-  "bulk": 200
+  "table": "<add keyspace.table>"
 }
