@@ -45,7 +45,7 @@ public class RndGenerator {
         long calcClock = System. nanoTime() - startTime;
 
         // define sequence for seed init
-        byte[] init = String.format("%s,%d,%s", LocalDateTime.now().toString(), calcClock, UUID.randomUUID().toString())
+        byte[] init = String.format("%s,%d,%s", LocalDateTime.now(), calcClock, UUID.randomUUID())
                 .getBytes();
 
         try {

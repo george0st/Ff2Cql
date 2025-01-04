@@ -29,7 +29,7 @@ public class Setup {
     public long getBulk() { return bulk > 0 ? bulk : 200 ; }
 
     public void setPwd(String pwd) { this.pwd = Base64.getEncoder().encodeToString(pwd.getBytes()); }
-    public String getPwd() { return  new String((byte[])Base64.getDecoder().decode(this.pwd)); }
+    public String getPwd() { return  new String(Base64.getDecoder().decode(this.pwd)); }
 
     private Setup(){
     }
@@ -61,6 +61,7 @@ public class Setup {
 
     /**
      * Choose the first existing setup file name.
+     * @param path Path for setup file location.
      * @param files List of setup file names for check.
      * @return Setup file name.
      */

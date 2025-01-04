@@ -8,6 +8,11 @@ import java.util.Locale;
  */
 public class ReadableValue {
 
+    /**
+     * Transformation from seconds to days, hours, minutes and seconds.
+     * @param durationSeconds value in seconds
+     * @return readable value
+     */
     public static String fromSeconds(long durationSeconds){
         if (durationSeconds<0)
             return "n/a";
@@ -36,6 +41,11 @@ public class ReadableValue {
         return details.toString();
     }
 
+    /**
+     * Transformation from milliseconds to days, hours, minutes, seconds and milliseconds.
+     * @param durationMillisecond value for transformation
+     * @return readable value
+     */
     public static String fromMillisecond(long durationMillisecond){
 
         if (durationMillisecond <0)
@@ -70,10 +80,21 @@ public class ReadableValue {
         return details.toString();
     }
 
+    /**
+     * Transformation from number to value in Giga (G), Mega (M), Kilo (K) and original value.
+     * @param number value for transformation
+     * @return readable value
+     */
     public static String fromNumber(long number) {
         return ReadableValue.fromNumber(number,0);
     }
 
+    /**
+     * Transformation from number to value in Giga (G), Mega (M), Kilo (K) and original value.
+     * @param number value for transformation
+     * @param precision requested precision
+     * @return readable value
+     */
     public static String fromNumber(long number, int precision){
         if (number >= 1_000_000_000) {
             return String.format(Locale.ENGLISH, "%." + precision + "fG", number / 1_000_000_000.0);
@@ -86,10 +107,21 @@ public class ReadableValue {
         }
     }
 
+    /**
+     * Transformation from number in bytes to value in Giga (GB), Mega (MB), Kilo (KB) and original value.
+     * @param number value for transformation
+     * @return readable value
+     */
     public static String fromNumberBytes(long number) {
         return ReadableValue.fromNumberBytes(number,0);
     }
 
+    /**
+     * Transformation from number in bytes to value in Giga (GB), Mega (MB), Kilo (KB) and original value.
+     * @param number value for transformation
+     * @param precision requested precision
+     * @return readable value
+     */
     public static String fromNumberBytes(long number, int precision) {
         if (number >= 1_073_741_824) {
             return String.format(Locale.ENGLISH, "%." + precision + "fGB", number / 1_073_741_824.0);
