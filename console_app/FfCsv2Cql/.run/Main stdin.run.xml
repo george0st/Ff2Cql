@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Main stdin" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="org.george0st.Main" />
+    <module name="FfCsv2Cql" />
+    <option name="PROGRAM_PARAMETERS" value="-s &lt; CsvToCql_test.csv" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
