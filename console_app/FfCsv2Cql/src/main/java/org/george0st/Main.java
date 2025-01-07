@@ -43,12 +43,17 @@ public class Main implements Callable<Integer> {
             description = "Stop processing in case an error.")
     private boolean errorStop = false;
 
-    @Parameters(arity = "1..*", paramLabel = "INPUT", description = "Input file(s) for processing.")
+    @Parameters(arity = "0..*", paramLabel = "INPUT", description = "Input file(s) for processing.")
     private String[] inputFiles=null;
 
     @Override
     public Integer call() {
         try {
+
+            // experimental
+            if (stdIn)
+                getInput();
+
             // define setup
             Setup setup = Setup.getInstance(config);
             setup.setBulk(bulk);
@@ -97,9 +102,16 @@ public class Main implements Callable<Integer> {
 
     public static final Logger logger = LoggerFactory.getLogger(Main.class);
 
-    private static String getInput() {
+    private static String getInput() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        return reader.lines().collect(Collectors.joining("\n"));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+            sb.append(line);
+        }
+        return sb.toString();
+        //return reader.lines().collect(Collectors.joining("\n"));
     }
 
     public static void main(String[] args) {
