@@ -43,7 +43,7 @@ public class Main implements Callable<Integer> {
             description = "Stop processing in case an error.")
     private boolean errorStop = false;
 
-    @Parameters(arity = "0..*", paramLabel = "INPUT", description = "Input file(s) for processing (optional in case -s).")
+    @Parameters(arity = "0..*", paramLabel = "INPUT", description = "Input file(s) for processing (optional in case '-s').")
     private String[] inputFiles=null;
 
     @Override
@@ -54,7 +54,7 @@ public class Main implements Callable<Integer> {
                 // experimental
                 getInput();
             else
-                if ((inputFiles==null) || (inputFiles.length>0)){
+                if ((inputFiles==null) || (inputFiles.length==0)){
                     logger.error(String.format("Missing parameters 'INPUT'."));
                     return ExitCodes.PARAMETR_ERROR;
             }
