@@ -12,9 +12,7 @@ import picocli.CommandLine.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
@@ -46,13 +44,45 @@ public class Main implements Callable<Integer> {
     @Parameters(arity = "0..*", paramLabel = "INPUT", description = "Input file(s) for processing (optional in case '-s').")
     private String[] inputFiles=null;
 
+    private Integer callCore(CqlAccess access, String inputFile) {
+
+        try {
+            long finish, start, count;
+
+            start = System.currentTimeMillis();
+            CsvCqlWrite write = new CsvCqlWrite(access, dryRun);
+            count = write.execute(inputFile);
+            finish = System.currentTimeMillis();
+
+            //  print processing detail
+            System.out.println("'" + inputFile + "': " + ReadableValue.fromMillisecond(finish - start) +
+                    "(" + (finish - start) + " ms), " +
+                    "Items: " + count + ", " +
+                    String.format("Perf: %d [calls/sec], ", count / ((finish - start) / 1000)));
+        }
+        catch (CsvValidationException ex){
+            logger.error(String.format("CSV error '%s', exception '%s'.", inputFile, ex));
+            if (errorStop)
+                return ExitCodes.CSV_ERROR;
+        }
+        catch(Exception ex) {
+            logger.error(String.format("Processing error '%s', exception '%s'.", inputFile, ex));
+            if (errorStop)
+                return ExitCodes.PROCESSING_ERROR;
+        }
+        return ExitCodes.SUCCESS;
+    }
+
     @Override
     public Integer call() {
         try {
 
-            if (stdIn)
+            if (stdIn){
                 // experimental
                 getInput();
+                // TODO: remove
+                return ExitCodes.SUCCESS;
+            }
             else
                 if ((inputFiles==null) || (inputFiles.length==0)){
                     logger.error(String.format("Missing parameters 'INPUT'."));
@@ -69,29 +99,32 @@ public class Main implements Callable<Integer> {
 
             //  processing files
             for (String inputFile : inputFiles) {
-                try {
-                    //  write file
-                    start = System.currentTimeMillis();
-                    CsvCqlWrite write = new CsvCqlWrite(access, dryRun);
-                    count = write.execute(inputFile);
-                    finish = System.currentTimeMillis();
+                //  write file
+                callCore(access, inputFile);
 
-                    //  print processing detail
-                    System.out.println("'" + inputFile + "': " + ReadableValue.fromMillisecond(finish - start) +
-                            "(" + (finish - start) + " ms), " +
-                            "Items: " + count + ", " +
-                            String.format("Perf: %d [calls/sec], ", count/((finish-start)/1000)));
-                }
-                catch (CsvValidationException ex){
-                    logger.error(String.format("CSV error '%s', exception '%s'.", inputFile, ex));
-                    if (errorStop)
-                        return ExitCodes.CSV_ERROR;
-                }
-                catch(Exception ex) {
-                    logger.error(String.format("Processing error '%s', exception '%s'.", inputFile, ex));
-                    if (errorStop)
-                        return ExitCodes.PROCESSING_ERROR;
-                }
+//                try {
+//                    //  write file
+//                    start = System.currentTimeMillis();
+//                    CsvCqlWrite write = new CsvCqlWrite(access, dryRun);
+//                    count = write.execute(inputFile);
+//                    finish = System.currentTimeMillis();
+//
+//                    //  print processing detail
+//                    System.out.println("'" + inputFile + "': " + ReadableValue.fromMillisecond(finish - start) +
+//                            "(" + (finish - start) + " ms), " +
+//                            "Items: " + count + ", " +
+//                            String.format("Perf: %d [calls/sec], ", count/((finish-start)/1000)));
+//                }
+//                catch (CsvValidationException ex){
+//                    logger.error(String.format("CSV error '%s', exception '%s'.", inputFile, ex));
+//                    if (errorStop)
+//                        return ExitCodes.CSV_ERROR;
+//                }
+//                catch(Exception ex) {
+//                    logger.error(String.format("Processing error '%s', exception '%s'.", inputFile, ex));
+//                    if (errorStop)
+//                        return ExitCodes.PROCESSING_ERROR;
+//                }
             }
         }
         catch(IOException ex) {
@@ -108,6 +141,7 @@ public class Main implements Callable<Integer> {
     public static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     private static String getInput() throws IOException {
+        System.out.println("stdin-start");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
         String line;
@@ -115,6 +149,7 @@ public class Main implements Callable<Integer> {
             System.out.println(line);
             sb.append(line);
         }
+        System.out.println("stdin-stop");
         return sb.toString();
         //return reader.lines().collect(Collectors.joining("\n"));
     }
