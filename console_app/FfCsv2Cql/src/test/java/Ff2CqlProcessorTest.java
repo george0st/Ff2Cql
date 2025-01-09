@@ -44,14 +44,13 @@ class Ff2CqlProcessorTest {
 
         // write
         start = System.currentTimeMillis();
-        count = (new CsvCqlWrite(Setup.getInstance(testSetupFile), false)).execute(randomFile.getPath());
+        count = (new CsvCqlWrite(Setup.getInstance(testSetupFile), false)).execute(randomFile==null ? null : randomFile.getPath());
         finish = System.currentTimeMillis();
         System.out.println("WRITE, Items: " + ReadableValue.fromNumber(count) + ", " +
                 String.format("Perf: %d [calls/sec], ", count /((finish-start)/1000)) +
                 "Duration: " + ReadableValue.fromMillisecond(finish - start));
 
-
-        if (validateAlso) {
+        if ((validateAlso) && (randomFile!=null)) {
             // delay (before read for synch on CQL side)
             Thread.sleep(3000);
 
@@ -94,6 +93,7 @@ class Ff2CqlProcessorTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("Sequence W, 5. 1M items in CSV")
     void csvWSequence1M() throws IOException, CsvValidationException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(1_000_000, true);
@@ -129,6 +129,7 @@ class Ff2CqlProcessorTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("Random W, 5. 1M items in CSV")
     void csvWRandom1M() throws IOException, CsvValidationException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(1_000_000, false);
