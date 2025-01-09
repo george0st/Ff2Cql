@@ -54,24 +54,29 @@ public class Main implements Callable<Integer> {
         try {
             long finish, start, count;
 
+            //  main processing
             start = System.currentTimeMillis();
             CsvCqlWrite write = new CsvCqlWrite(access, dryRun);
             count = write.execute(inputFile);
             finish = System.currentTimeMillis();
 
             //  print processing detail
-            System.out.println("'" + inputFile == null ? "stdin" : inputFile + "': " +
-                    ReadableValue.fromMillisecond(finish - start) + "(" + (finish - start) + " ms), " +
-                    "Items: " + count + ", " +
-                    String.format("Perf: %d [calls/sec], ", count / ((finish - start) / 1000)));
+            System.out.printf("'%s': %s (%d ms), Items: %d, Perf: %d [calls/sec]%s",
+                    inputFile == null ? "stdin" : inputFile,
+                    ReadableValue.fromMillisecond(finish - start),
+                    finish-start,
+                    count,
+                    count / ((finish - start) / 1000),
+                    System.lineSeparator());
+
         }
         catch (CsvValidationException ex){
-            logger.error(String.format("CSV error '%s', exception '%s'.", inputFile == null ? "stdin" : inputFile, ex));
+            logger.error("CSV error '{}', exception '{}'.", inputFile == null ? "stdin" : inputFile, ex.toString());
             if (errorStop)
                 return ExitCodes.CSV_ERROR;
         }
         catch(Exception ex) {
-            logger.error(String.format("Processing error '%s', exception '%s'.", inputFile == null ? "stdin" : inputFile, ex));
+            logger.error("Processing error '{}', exception '{}'.", inputFile == null ? "stdin" : inputFile, ex.toString());
             if (errorStop)
                 return ExitCodes.PROCESSING_ERROR;
         }
@@ -85,7 +90,7 @@ public class Main implements Callable<Integer> {
             //  check parameter setting
             if (!stdIn)
                 if ((inputFiles==null) || (inputFiles.length==0)){
-                    logger.error(String.format("Missing parameters 'INPUT' or parameter '-s'."));
+                    logger.error("Missing parameters 'INPUT' or parameter '-s'.");
                     return ExitCodes.PARAMETR_ERROR;
                 }
 
@@ -108,31 +113,17 @@ public class Main implements Callable<Integer> {
                         return exitCode;
         }
         catch(IOException ex) {
-            logger.error(String.format("Config error '%s'",ex));
+            logger.error("Config error '{}'",ex.toString());
             return ExitCodes.CONFIG_ERROR;
         }
         catch(Exception ex) {
-            logger.error(String.format("General error '%s'",ex));
+            logger.error("General error '{}'",ex.toString());
             return ExitCodes.GENERAL_ERROR;
         }
         return ExitCodes.SUCCESS;
     }
 
     public static final Logger logger = LoggerFactory.getLogger(Main.class);
-
-    private static String getInput() throws IOException {
-        System.out.println("stdin-start");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            System.out.println(line);
-            sb.append(line);
-        }
-        System.out.println("stdin-stop");
-        return sb.toString();
-        //return reader.lines().collect(Collectors.joining("\n"));
-    }
 
     public static void main(String[] args) {
         int exitCode = new CommandLine(new Main()).execute(args);
