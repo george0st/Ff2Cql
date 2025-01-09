@@ -48,25 +48,25 @@ public class Main implements Callable<Integer> {
 
         try {
             long finish, start, count;
-
+            
             start = System.currentTimeMillis();
             CsvCqlWrite write = new CsvCqlWrite(access, dryRun);
             count = write.execute(inputFile);
             finish = System.currentTimeMillis();
 
             //  print processing detail
-            System.out.println("'" + inputFile + "': " + ReadableValue.fromMillisecond(finish - start) +
-                    "(" + (finish - start) + " ms), " +
+            System.out.println("'" + inputFile == null ? "stdin" : inputFile + "': " +
+                    ReadableValue.fromMillisecond(finish - start) + "(" + (finish - start) + " ms), " +
                     "Items: " + count + ", " +
                     String.format("Perf: %d [calls/sec], ", count / ((finish - start) / 1000)));
         }
         catch (CsvValidationException ex){
-            logger.error(String.format("CSV error '%s', exception '%s'.", inputFile, ex));
+            logger.error(String.format("CSV error '%s', exception '%s'.", inputFile == null ? "stdin" : inputFile, ex));
             if (errorStop)
                 return ExitCodes.CSV_ERROR;
         }
         catch(Exception ex) {
-            logger.error(String.format("Processing error '%s', exception '%s'.", inputFile, ex));
+            logger.error(String.format("Processing error '%s', exception '%s'.", inputFile == null ? "stdin" : inputFile, ex));
             if (errorStop)
                 return ExitCodes.PROCESSING_ERROR;
         }
@@ -82,7 +82,7 @@ public class Main implements Callable<Integer> {
                 if ((inputFiles==null) || (inputFiles.length==0)){
                     logger.error(String.format("Missing parameters 'INPUT' or parameter '-s'."));
                     return ExitCodes.PARAMETR_ERROR;
-            }
+                }
 
             // define setup
             Setup setup = Setup.getInstance(config);
@@ -90,15 +90,17 @@ public class Main implements Callable<Integer> {
 
             // general access
             CqlAccess access=new CqlAccess(setup);
-//            long finish, start, count;
+            int exitCode;
 
             //  main processing
-            if (stdIn)
-                callCore(access, null);
+            if (stdIn) {
+                if ((exitCode = callCore(access, null)) != ExitCodes.SUCCESS)
+                    return exitCode;
+            }
             else
                 for (String inputFile : inputFiles)
-                    callCore(access, inputFile);
-
+                    if ((exitCode = callCore(access, inputFile)) != ExitCodes.SUCCESS)
+                        return exitCode;
 //                try {
 //                    //  write file
 //                    start = System.currentTimeMillis();
