@@ -77,15 +77,10 @@ public class Main implements Callable<Integer> {
     public Integer call() {
         try {
 
-            if (stdIn){
-                // experimental
-                getInput();
-                // TODO: remove
-                return ExitCodes.SUCCESS;
-            }
-            else
+            //  check parameters
+            if (!stdIn)
                 if ((inputFiles==null) || (inputFiles.length==0)){
-                    logger.error(String.format("Missing parameters 'INPUT'."));
+                    logger.error(String.format("Missing parameters 'INPUT' or parameter '-s'."));
                     return ExitCodes.PARAMETR_ERROR;
             }
 
@@ -95,12 +90,14 @@ public class Main implements Callable<Integer> {
 
             // general access
             CqlAccess access=new CqlAccess(setup);
-            long finish, start, count;
+//            long finish, start, count;
 
-            //  processing files
-            for (String inputFile : inputFiles) {
-                //  write file
-                callCore(access, inputFile);
+            //  main processing
+            if (stdIn)
+                callCore(access, null);
+            else
+                for (String inputFile : inputFiles)
+                    callCore(access, inputFile);
 
 //                try {
 //                    //  write file
@@ -125,7 +122,6 @@ public class Main implements Callable<Integer> {
 //                    if (errorStop)
 //                        return ExitCodes.PROCESSING_ERROR;
 //                }
-            }
         }
         catch(IOException ex) {
             logger.error(String.format("Config error '%s'",ex));
