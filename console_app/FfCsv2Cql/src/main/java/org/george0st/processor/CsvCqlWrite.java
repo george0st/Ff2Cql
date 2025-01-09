@@ -1,7 +1,7 @@
 package org.george0st.processor;
 
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
+
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.*;
@@ -9,7 +9,6 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
-import java.io.FileReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.CqlAccess;
 import org.george0st.helper.Setup;
@@ -28,45 +27,94 @@ public class CsvCqlWrite extends CqlProcessor {
         super(access, dryRun);
     }
 
+    private long executeCore(CqlSession session, Reader reader) throws IOException, CsvValidationException {
+        long totalCount=0;
+
+        CSVParser parser = new CSVParserBuilder()
+                .withSeparator(',')
+                .build();
+
+        try (CSVReader csvReader = new CSVReaderBuilder(reader)
+                .withSkipLines(0)
+                .withCSVParser(parser)
+                .build()){
+
+            String[] headers = csvReader.readNext();
+            String prepareHeaders = prepareHeaders(headers);
+            String prepareItems = prepareItems(headers);
+            PreparedStatement stm = insertStatement(session,prepareHeaders, prepareItems);
+
+            BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.UNLOGGED);
+            String[] line;
+            int count=0;
+
+            while ((line = csvReader.readNext()) != null) {
+                batch = batch.addAll(stm.bind((Object[]) line));
+                count++;
+                totalCount++;
+
+                if (count==setup.getBulk()) {
+                    if (!dryRun)
+                        session.execute(batch);
+                    batch = batch.clear();
+                    count = 0;
+                }
+            }
+            if (count > 0)
+                if (!dryRun)
+                    session.execute(batch);
+        }
+        return totalCount;
+    }
+
     public long execute(String fileName) throws CsvValidationException, IOException {
         long totalCount=0;
 
         try (CqlSession session = sessionBuilder.build()) {
-            try (Reader reader = new FileReader(fileName)) {
-                CSVParser parser = new CSVParserBuilder()
-                        .withSeparator(',')
-                        .build();
 
-                try (CSVReader csvReader = new CSVReaderBuilder(reader)
-                        .withSkipLines(0)
-                        .withCSVParser(parser)
-                        .build()){
-
-                    String[] headers = csvReader.readNext();
-                    String prepareHeaders = prepareHeaders(headers);
-                    String prepareItems = prepareItems(headers);
-                    PreparedStatement stm = insertStatement(session,prepareHeaders, prepareItems);
-
-                    BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.UNLOGGED);
-                    String[] line;
-                    int count=0;
-
-                    while ((line = csvReader.readNext()) != null) {
-                        batch = batch.addAll(stm.bind((Object[]) line));
-                        count++;
-                        totalCount++;
-
-                        if (count==setup.getBulk()) {
-                            if (!dryRun)
-                                session.execute(batch);
-                            batch = batch.clear();
-                            count = 0;
-                        }
-                    }
-                    if (count > 0)
-                        if (!dryRun)
-                            session.execute(batch);
+            if (fileName==null){
+                // add stdin
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
+                    totalCount = this.executeCore(session, reader);
                 }
+            }
+            else
+                try (Reader reader = new FileReader(fileName)) {
+                    totalCount = this.executeCore(session, reader);
+//                CSVParser parser = new CSVParserBuilder()
+//                        .withSeparator(',')
+//                        .build();
+//
+//                try (CSVReader csvReader = new CSVReaderBuilder(reader)
+//                        .withSkipLines(0)
+//                        .withCSVParser(parser)
+//                        .build()){
+//
+//                    String[] headers = csvReader.readNext();
+//                    String prepareHeaders = prepareHeaders(headers);
+//                    String prepareItems = prepareItems(headers);
+//                    PreparedStatement stm = insertStatement(session,prepareHeaders, prepareItems);
+//
+//                    BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.UNLOGGED);
+//                    String[] line;
+//                    int count=0;
+//
+//                    while ((line = csvReader.readNext()) != null) {
+//                        batch = batch.addAll(stm.bind((Object[]) line));
+//                        count++;
+//                        totalCount++;
+//
+//                        if (count==setup.getBulk()) {
+//                            if (!dryRun)
+//                                session.execute(batch);
+//                            batch = batch.clear();
+//                            count = 0;
+//                        }
+//                    }
+//                    if (count > 0)
+//                        if (!dryRun)
+//                            session.execute(batch);
+//                }
             }
         }
         return totalCount;
