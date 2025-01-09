@@ -7,17 +7,58 @@ ScyllaDB, AstraDB). The implementation details:
  - development as console application and NiFi processor/extension (support Java 17 and 21)
  - support Apache Cassandra v4/v5, ScyllaDB, AstraDB based on CQL
 
-### The main motivations:
+## 1. The main motivations:
  - support integration between Apache NiFi and Apache Cassandra
  - the Apache NiFi 2 does not support Apache Cassandra v4/v5 (NiFi 2 deprecated 
    support for Cassandra v3)
 
-### Current state:
+## 2. Current state
 
-![Work in progress](https://github.com/george0st/Csv2Cql/blob/main/assets/work-in-progress2.png?raw=true)
- - under development (unstable)
+ - ✅ Console application
+   - ✅ Tested with NiFi v2.x
+   - ✅ Test in processors **ExecuteProcess** & **ExecuteStreamCommand**
+     - Supported two main inputs: *.csv files and FlowFile/CSV via stdin
+ - ❌ Processor
+   - ❌ Under development
 
-### Supported conversions
+## 3. NiFi usage
+
+### 3.1 ExecuteProcess
+
+![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/assets/nifi_executeprocess_2.png?raw=true)
+
+#### Input:
+ 1. **connection.json** file 
+ 2. **CSV file(s) with header** for import, where the CSV content is based on
+    keyspace.table definition in CQL
+
+#### ExecuteProcess setting:
+ - **Command:** 
+   - java
+ - **Command Argument:**
+   - -jar FfCsv2Cql.jar import.csv
+   - -jar FfCsv2Cql.jar import.csv import2.csv
+   - -jar FfCsv2Cql.jar -c connection-private.json import.csv
+ - **Working Directory:** 
+   - /opt/nifi/nifi-current/bin/test2/
+ - **Argument Delimiter:** 
+   - ' '
+
+### 3.2 ExecuteStreamCommand
+
+![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/assets/nifi_executestreamcommand_2.png?raw=true)
+
+#### Input:
+1. **connection.json** file
+2. **FlowFile/CSV file with header**, where the CSV content is based on
+   keyspace.table definition in CQL
+
+#### ExecuteStreamCommand setting:
+TBD.
+
+### 3.3 Processor
+
+## 4. Supported conversions
 
 The solution supports conversion from String to these CQL types:
  - Boolean, TinyInt, SmallInt, Int, BigInt, Float, Double
@@ -25,7 +66,7 @@ The solution supports conversion from String to these CQL types:
  - TimeUUID, UUID
  - Text, varchar (by default)
 
-### Expected content/format
+### 4.1 Expected content/format
 
 ```csv
 "colbigint","colint","coltext","colfloat","coldouble","coldate","coltime","coltimestamp","colboolean","coluuid","colsmallint","coltinyint","coltimeuuid","colvarchar"
@@ -35,9 +76,10 @@ The solution supports conversion from String to these CQL types:
 "3","6998","lXQ69C5HOZ","715.1224","236.7994939033784","1992-02-01","08:07:34","1998-04-09T23:19:18Z","true","84a7395c-94fd-43f5-84c6-4152f0407e93","22123","39","f45e8008-c3b7-11ef-8d19-0376318d55df","jyZo8"
 ...
 ```
-- CQL DATE 
-  - ISO_LOCAL_DATE (format "yyyy-MM-dd"), example '2013-12-17'
-- CQL TIME
-  - ISO_LOCAL_TIME (format "HH:mm:ss"), example '08:43:09'
-- CQL TIMESTAMP
-  - ISO 8601 (format "yyyy-MM-dd'T'HH:mm:ss'Z'"), example '2001-01-01T00:00:00Z'
+### 4.2 Format details:
+  - CQL DATE 
+    - ISO_LOCAL_DATE (format "yyyy-MM-dd"), example '2013-12-17'
+  - CQL TIME
+    - ISO_LOCAL_TIME (format "HH:mm:ss"), example '08:43:09'
+  - CQL TIMESTAMP
+    - ISO 8601 (format "yyyy-MM-dd'T'HH:mm:ss'Z'"), example '2001-01-01T00:00:00Z'
