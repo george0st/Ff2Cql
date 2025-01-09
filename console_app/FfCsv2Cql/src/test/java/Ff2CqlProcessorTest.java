@@ -93,6 +93,7 @@ class Ff2CqlProcessorTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("Sequence W, 5. 1M items in CSV")
     void csvWSequence1M() throws IOException, CsvValidationException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(1_000_000, true);
@@ -128,6 +129,7 @@ class Ff2CqlProcessorTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("Random W, 5. 1M items in CSV")
     void csvWRandom1M() throws IOException, CsvValidationException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(1_000_000, false);

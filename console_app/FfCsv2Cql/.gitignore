@@ -7,6 +7,7 @@ target/
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
+.idea/workspace.xml
 .idea/libraries/
 *.iws
 *.iml
@@ -40,6 +41,5 @@ build/
 ### Others ###
 connection-private.json
 /test_input/test-connection-private.json
-/.idea/workspace.xml
 /.idea/
 

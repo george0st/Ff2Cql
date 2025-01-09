@@ -9,6 +9,7 @@
     <version>1.5</version>
     <packaging>jar</packaging>
 
+
     <build>
         <plugins>
             <plugin>
@@ -34,6 +35,8 @@
                             <outputDirectory>
                                 ${project.build.directory}/libs
                             </outputDirectory>
+                            <excludeGroupIds>org.junit.jupiter</excludeGroupIds>
+                            <excludeArtifactIds>junit-platform-commons</excludeArtifactIds>
                         </configuration>
                     </execution>
                 </executions>
