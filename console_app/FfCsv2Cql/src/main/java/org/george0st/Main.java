@@ -45,10 +45,9 @@ public class Main implements Callable<Integer> {
     private String[] inputFiles=null;
 
     private Integer callCore(CqlAccess access, String inputFile) {
-
         try {
             long finish, start, count;
-            
+
             start = System.currentTimeMillis();
             CsvCqlWrite write = new CsvCqlWrite(access, dryRun);
             count = write.execute(inputFile);
@@ -77,7 +76,7 @@ public class Main implements Callable<Integer> {
     public Integer call() {
         try {
 
-            //  check parameters
+            //  check parameter setting
             if (!stdIn)
                 if ((inputFiles==null) || (inputFiles.length==0)){
                     logger.error(String.format("Missing parameters 'INPUT' or parameter '-s'."));
@@ -88,7 +87,7 @@ public class Main implements Callable<Integer> {
             Setup setup = Setup.getInstance(config);
             setup.setBulk(bulk);
 
-            // general access
+            // access to CQL engine
             CqlAccess access=new CqlAccess(setup);
             int exitCode;
 
@@ -101,29 +100,6 @@ public class Main implements Callable<Integer> {
                 for (String inputFile : inputFiles)
                     if ((exitCode = callCore(access, inputFile)) != ExitCodes.SUCCESS)
                         return exitCode;
-//                try {
-//                    //  write file
-//                    start = System.currentTimeMillis();
-//                    CsvCqlWrite write = new CsvCqlWrite(access, dryRun);
-//                    count = write.execute(inputFile);
-//                    finish = System.currentTimeMillis();
-//
-//                    //  print processing detail
-//                    System.out.println("'" + inputFile + "': " + ReadableValue.fromMillisecond(finish - start) +
-//                            "(" + (finish - start) + " ms), " +
-//                            "Items: " + count + ", " +
-//                            String.format("Perf: %d [calls/sec], ", count/((finish-start)/1000)));
-//                }
-//                catch (CsvValidationException ex){
-//                    logger.error(String.format("CSV error '%s', exception '%s'.", inputFile, ex));
-//                    if (errorStop)
-//                        return ExitCodes.CSV_ERROR;
-//                }
-//                catch(Exception ex) {
-//                    logger.error(String.format("Processing error '%s', exception '%s'.", inputFile, ex));
-//                    if (errorStop)
-//                        return ExitCodes.PROCESSING_ERROR;
-//                }
         }
         catch(IOException ex) {
             logger.error(String.format("Config error '%s'",ex));
