@@ -5,5 +5,4 @@
  instead of OpenCSV
   - use *.csv.gz
 4. Improve documentation with NiFi samples
-5. Add unit test with stdin stream
 
