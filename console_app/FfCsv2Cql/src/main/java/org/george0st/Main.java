@@ -44,6 +44,12 @@ public class Main implements Callable<Integer> {
     @Parameters(arity = "0..*", paramLabel = "INPUT", description = "Input file(s) for processing (optional in case '-s').")
     private String[] inputFiles=null;
 
+    /**
+     * Processing *.csv file or stdin stream.
+     * @param access    Access for CQL
+     * @param inputFile Specific input file (*.csv) or null (for processing stdin)
+     * @return Relevant exit code
+     */
     private Integer callCore(CqlAccess access, String inputFile) {
         try {
             long finish, start, count;
