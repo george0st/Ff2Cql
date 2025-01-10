@@ -7,17 +7,73 @@ ScyllaDB, AstraDB). The implementation details:
  - development as console application and NiFi processor/extension (support Java 17 and 21)
  - support Apache Cassandra v4/v5, ScyllaDB, AstraDB based on CQL
 
-### The main motivations:
+## 1. The main motivations:
  - support integration between Apache NiFi and Apache Cassandra
  - the Apache NiFi 2 does not support Apache Cassandra v4/v5 (NiFi 2 deprecated 
    support for Cassandra v3)
 
-### Current state:
+## 2. Current state
 
-![Work in progress](https://github.com/george0st/Csv2Cql/blob/main/assets/work-in-progress2.png?raw=true)
- - under development (unstable)
+ - ✅ Console application
+   - ✅ Tested with NiFi v2.x
+   - ✅ Test in processors **ExecuteProcess** & **ExecuteStreamCommand**
+     - Supported two main inputs: *.csv files and FlowFile/CSV via stdin
+ - ❌ Processor
+   - ❌ Under development
 
-### Supported conversions
+## 3. NiFi usage
+
+### 3.1 ExecuteProcess (console application)
+
+![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/assets/nifi_executeprocess_2.png?raw=true)
+
+#### Input:
+ 1. **connection.json** file, see [chapter 5.2 (Connection setting)](#52-connection-setting)
+ 2. **CSV file(s) with header** for import, where the CSV content is based on
+    keyspace.table definition in CQL
+
+#### ExecuteProcess setting (key items):
+ - **Command:** 
+   - java
+ - **Command Argument:**
+   - -jar FfCsv2Cql-1.5.jar import.csv
+   - -jar FfCsv2Cql-1.5.jar import.csv import2.csv
+   - -jar FfCsv2Cql-1.5.jar -c connection-private.json import.csv
+   - etc. see [chapter 5.1 (Command line)](#51-command-line)
+ - **Working Directory:** 
+   - /opt/nifi/nifi-current/bin/test2/
+ - **Argument Delimiter:** 
+   - ' '
+
+### 3.2 ExecuteStreamCommand (console application)
+
+![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/assets/nifi_executestreamcommand_2.png?raw=true)
+
+#### Input:
+ 1. **connection.json** file, see [chapter 5.2 (Connection setting)](#52-connection-setting)
+ 2. **FlowFile/CSV with header**, where the FlowFile/CSV content is based on
+    keyspace.table definition in CQL (the integration is via stdin)
+
+#### ExecuteStreamCommand setting (key items):
+ - **Working Directory:**
+   - /opt/nifi/nifi-current/bin/test2/
+ - **Command Part:**
+   - java
+ - **Command Argument Strategy:**
+   - Command Arguments Property
+ - **Command Arguments:**
+   - -jar FfCsv2Cql-1.5.jar -s
+   - -jar FfCsv2Cql-1.5.jar -c connection-private.json -s
+   - etc. see [chapter 5.1 (Command line)](#51-command-line)
+ - **Argument Delimiter:**
+   - ' '
+ - **Ignore STDIN:**
+   - false
+
+### 3.3 Processor
+TBD.
+
+## 4. Supported conversions
 
 The solution supports conversion from String to these CQL types:
  - Boolean, TinyInt, SmallInt, Int, BigInt, Float, Double
@@ -25,7 +81,7 @@ The solution supports conversion from String to these CQL types:
  - TimeUUID, UUID
  - Text, varchar (by default)
 
-### Expected content/format
+### 4.1 Expected content/format
 
 ```csv
 "colbigint","colint","coltext","colfloat","coldouble","coldate","coltime","coltimestamp","colboolean","coluuid","colsmallint","coltinyint","coltimeuuid","colvarchar"
@@ -35,9 +91,67 @@ The solution supports conversion from String to these CQL types:
 "3","6998","lXQ69C5HOZ","715.1224","236.7994939033784","1992-02-01","08:07:34","1998-04-09T23:19:18Z","true","84a7395c-94fd-43f5-84c6-4152f0407e93","22123","39","f45e8008-c3b7-11ef-8d19-0376318d55df","jyZo8"
 ...
 ```
-- CQL DATE 
-  - ISO_LOCAL_DATE (format "yyyy-MM-dd"), example '2013-12-17'
-- CQL TIME
-  - ISO_LOCAL_TIME (format "HH:mm:ss"), example '08:43:09'
-- CQL TIMESTAMP
-  - ISO 8601 (format "yyyy-MM-dd'T'HH:mm:ss'Z'"), example '2001-01-01T00:00:00Z'
+The content will be in FlowFile/CSV or direcly in CSV file(s).
+
+### 4.2 Format details for CSV:
+  - **DATE** 
+    - ISO_LOCAL_DATE (format "yyyy-MM-dd"), example '2013-12-17'
+  - **TIME**
+    - ISO_LOCAL_TIME (format "HH:mm:ss"), example '08:43:09'
+  - **TIMESTAMP**
+    - ISO 8601 (format "yyyy-MM-dd'T'HH:mm:ss'Z'"), example '2001-01-01T00:00:00Z'
+
+## 5. Others
+
+### 5.1 Command line
+
+The commnad line description:
+```
+java -jar FfCsv2Cql-1.5.jar -h
+```
+Typical output:
+```
+Usage: example [-dehsV] [-b=<bulk>] [-c=<config>] [INPUT...]
+Simple transfer data from NiFi FileFlow to CQL.
+[INPUT...]          Input file(s) for processing (optional in case '-s').
+-b, --bulk=<bulk>       Bulk size (default is 200).
+-c, --config=<config>   Config file (default is 'connection.json').
+-d, --dryRun            Dry run, whole processing without write to CQL.
+-e, --errorStop         Stop processing in case an error.
+-h, --help              Show this help message and exit.
+-s, --stdIn             Use input from stdin.
+-V, --version           Print version information and exit.
+```
+
+### 5.2 Connection setting
+
+The default template with description:
+```
+{
+  "ipAddresses": ["<add ip>","<add ip2>","..."],
+  "port": 9042,
+  "username": "<add username>",
+  "pwd": "<add pwd in base64>",
+  "localDC": "<local data center>",
+  "connectionTimeout": "<timeout in seconds>",
+  "requestTimeout": "<timeout in seconds>",
+  "consistencyLevel": "<consistency level e.g. LOCAL_ONE, LOCAL_QUORUM, etc.>",
+  "table": "<add keyspace.table in CQL>"
+}
+```
+The real config content:
+```
+{
+  "ipAddresses": ["10.129.53.10","10.129.53.11","10.129.53.12"],
+  "port": 9042,
+  "username": "app_w4c",
+  "pwd": "bXkgcGFzc3dvcmQ=",
+  "localDC": "dc1",
+  "connectionTimeout": "900",
+  "requestTimeout": "60",
+  "consistencyLevel": "LOCAL_ONE",
+  "table": "app_w4c_main.dynamic_party"
+}
+```
+NOTE:
+ - you can use for base64 e.g. https://www.base64encode.org/

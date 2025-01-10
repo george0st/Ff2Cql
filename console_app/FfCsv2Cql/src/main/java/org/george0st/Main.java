@@ -17,7 +17,7 @@ import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 
-@Command(name = "example", mixinStandardHelpOptions = true, version = "FfCsv2Cql 1.2", description = "Simple transfer data from NiFi FileFlow to CQL.")
+@Command(name = "example", mixinStandardHelpOptions = true, version = "FfCsv2Cql 1.5", description = "Simple transfer data from NiFi FileFlow to CQL.")
 public class Main implements Callable<Integer> {
 
     @Option(names = { "-c", "--config" },
@@ -26,7 +26,7 @@ public class Main implements Callable<Integer> {
     private String config = "connection-private.json";
 
     @Option(names = { "-b", "--bulk" },
-            description = "Bulk size (default is 200).", defaultValue = "200")
+            description = "Bulk size for mass upserts (default is 200).", defaultValue = "200")
     private long bulk = 200;
 
     @Option(names = { "-d", "--dryRun" },
@@ -34,7 +34,7 @@ public class Main implements Callable<Integer> {
     private boolean dryRun = false;
 
     @Option(names = { "-s", "--stdIn" },
-            description = "Use input from stdin.")
+            description = "Use input from stdin (without 'INPUT' file(s)).")
     private boolean stdIn = false;
 
     @Option(names = { "-e", "--errorStop" },
@@ -86,7 +86,6 @@ public class Main implements Callable<Integer> {
     @Override
     public Integer call() {
         try {
-
             //  check parameter setting
             if (!stdIn)
                 if ((inputFiles==null) || (inputFiles.length==0)){
