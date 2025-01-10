@@ -1,11 +1,11 @@
 {
-  "ipAddresses": ["<add ip>","<add ip2>","<add ip3>","..."],
+  "ipAddresses": ["<add ip>","<add ip2>","..."],
   "port": 9042,
   "username": "<add username>",
   "pwd": "<add pwd in base64>",
-  "localDC": "datacenter1",
-  "connectionTimeout": "900",
-  "requestTimeout": "60",
-  "consistencyLevel": "LOCAL_ONE",
-  "table": "<add keyspace.table>"
+  "localDC": "<local data center>",
+  "connectionTimeout": "<timeout in seconds>",
+  "requestTimeout": "<timeout in seconds>",
+  "consistencyLevel": "<consistency level e.g. LOCAL_ONE, LOCAL_QUORUM, etc.>",
+  "table": "<add keyspace.table in CQL>"
 }
