@@ -32,7 +32,7 @@ ScyllaDB, AstraDB). The implementation details:
  2. **CSV file(s) with header** for import, where the CSV content is based on
     keyspace.table definition in CQL
 
-#### ExecuteProcess setting:
+#### ExecuteProcess setting (key items):
  - **Command:** 
    - java
  - **Command Argument:**
@@ -50,14 +50,28 @@ ScyllaDB, AstraDB). The implementation details:
 ![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/assets/nifi_executestreamcommand_2.png?raw=true)
 
 #### Input:
-1. **connection.json** file
-2. **FlowFile/CSV file with header**, where the CSV content is based on
-   keyspace.table definition in CQL
+ 1. **connection.json** file, see [chapter 5.2 (Connection setting)](#52-connection-setting)
+ 2. **FlowFile/CSV with header**, where the FlowFile/CSV content is based on
+    keyspace.table definition in CQL (the integration is via stdin)
 
-#### ExecuteStreamCommand setting:
-TBD.
+#### ExecuteStreamCommand setting (key items):
+ - **Working Directory:**
+   - /opt/nifi/nifi-current/bin/test2/
+ - **Command Part:**
+   - java
+ - **Command Argument Strategy:**
+   - Command Arguments Property
+ - **Command Arguments:**
+   - -jar FfCsv2Cql-1.5.jar -s
+   - -jar FfCsv2Cql-1.5.jar -c connection-private.json -s
+   - etc. see [chapter 5.1 (Command line)](#51-command-line)
+ - **Argument Delimiter:**
+   - ' '
+ - **Ignore STDIN:**
+   - false
 
 ### 3.3 Processor
+TBD.
 
 ## 4. Supported conversions
 
@@ -77,12 +91,14 @@ The solution supports conversion from String to these CQL types:
 "3","6998","lXQ69C5HOZ","715.1224","236.7994939033784","1992-02-01","08:07:34","1998-04-09T23:19:18Z","true","84a7395c-94fd-43f5-84c6-4152f0407e93","22123","39","f45e8008-c3b7-11ef-8d19-0376318d55df","jyZo8"
 ...
 ```
-### 4.2 Format details:
-  - CQL DATE 
+The content will be in FlowFile/CSV or direcly in CSV file(s).
+
+### 4.2 Format details for CSV:
+  - **DATE** 
     - ISO_LOCAL_DATE (format "yyyy-MM-dd"), example '2013-12-17'
-  - CQL TIME
+  - **TIME**
     - ISO_LOCAL_TIME (format "HH:mm:ss"), example '08:43:09'
-  - CQL TIMESTAMP
+  - **TIMESTAMP**
     - ISO 8601 (format "yyyy-MM-dd'T'HH:mm:ss'Z'"), example '2001-01-01T00:00:00Z'
 
 ## 5. Others
