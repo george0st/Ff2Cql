@@ -13,7 +13,7 @@ ScyllaDB, AstraDB). The implementation details:
    support for Cassandra v3)
 
 ## 2. Current state
- - 
+
  - ✅ Console application
    - ✅ Tested with NiFi v2.x
    - ✅ Test in processors **ExecuteProcess** and **ExecuteStreamCommand**
