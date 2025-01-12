@@ -114,7 +114,7 @@ or directly in CSV file(s).
 
 ### 5.1 Command line
 
-The commnad line description:
+The command line description:
 ```
 java -jar Ff2Cql-1.5.jar -h
 ```
