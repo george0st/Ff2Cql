@@ -112,14 +112,14 @@ Typical output:
 ```
 Usage: example [-dehsV] [-b=<bulk>] [-c=<config>] [INPUT...]
 Simple transfer data from NiFi FlowFile to CQL.
-[INPUT...]          Input file(s) for processing (optional in case '-s').
--b, --bulk=<bulk>       Bulk size (default is 200).
--c, --config=<config>   Config file (default is 'connection.json').
--d, --dryRun            Dry run, whole processing without write to CQL.
--e, --errorStop         Stop processing in case an error.
--h, --help              Show this help message and exit.
--s, --stdIn             Use input from stdin.
--V, --version           Print version information and exit.
+      [INPUT...]          Input file(s) for processing (optional in case '-s').
+  -b, --bulk=<bulk>       Bulk size for mass upserts (default is 200).
+  -c, --config=<config>   Config file (default is 'connection.json').
+  -d, --dryRun            Dry run, whole processing without write to CQL.
+  -e, --errorStop         Stop processing in case an error.
+  -h, --help              Show this help message and exit.
+  -s, --stdIn             Use input from stdin (without 'INPUT' file(s)).
+  -V, --version           Print version information and exit.
 ```
 
 ### 5.2 Connection setting
