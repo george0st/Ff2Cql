@@ -8,6 +8,9 @@ import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermissions;
 
 
 class Ff2CqlProcessorTest {
@@ -20,6 +23,11 @@ class Ff2CqlProcessorTest {
     Ff2CqlProcessorTest() throws InterruptedException, IOException {
         // select valid config/json file
         testSetupFile = Setup.getSetupFile(testInput, new String[]{"test-connection-private.json", "test-connection.json"});
+
+        // create outputPath
+        File outputPath=new File(testOutput);
+        if (!outputPath.exists())
+            outputPath.mkdir();
 
         // create schema for testing
         schema=new CqlCreateSchema(Setup.getInstance(testSetupFile));
