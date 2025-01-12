@@ -8,17 +8,17 @@ ScyllaDB, AstraDB). The implementation details:
  - support Apache Cassandra v4/v5, ScyllaDB, AstraDB based on CQL
 
 ## 1. The main motivations:
- - support integration between Apache NiFi and Apache Cassandra
+
  - the Apache NiFi 2 does not support Apache Cassandra v4/v5 (NiFi 2 deprecated 
    support for Cassandra v3)
 
 ## 2. Current state
-
+ - 
  - ✅ Console application
    - ✅ Tested with NiFi v2.x
    - ✅ Test in processors **ExecuteProcess** & **ExecuteStreamCommand**
  - ❌ Processor
-   - ❌ Under development
+   - ❌ development in progress
 
 ## 3. NiFi usage
 
@@ -28,8 +28,8 @@ ScyllaDB, AstraDB). The implementation details:
 
 #### Input:
  1. **connection.json** file, see [chapter 5.2 (Connection setting)](#52-connection-setting)
- 2. **CSV file(s) with header** for import, where the CSV content is based on
-    keyspace.table definition in CQL
+ 2. **CSV file(s) with header** for import (content see [chapter 4.1](#41-expected-contentformat)),
+    where the CSV content is based on 'keyspace.table' definition in CQL
 
 #### ExecuteProcess setting (key items):
  - **Command:** 
@@ -50,8 +50,9 @@ ScyllaDB, AstraDB). The implementation details:
 
 #### Input:
  1. **connection.json** file, see [chapter 5.2 (Connection setting)](#52-connection-setting)
- 2. **FlowFile/CSV with header**, where the FlowFile/CSV content is based on
-    keyspace.table definition in CQL (the integration is via stdin)
+ 2. **FlowFile/CSV with header** (content see [chapter 4.1](#41-expected-contentformat)),
+    where the FlowFile/CSV content is based on 'keyspace.table' definition in CQL
+    (the integration is via stdin)
 
 #### ExecuteStreamCommand setting (key items):
  - **Working Directory:**
