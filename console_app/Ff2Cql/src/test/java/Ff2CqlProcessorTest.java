@@ -8,9 +8,7 @@ import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.attribute.PosixFilePermissions;
+
 
 
 class Ff2CqlProcessorTest {
