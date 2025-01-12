@@ -18,14 +18,14 @@ import java.util.concurrent.Callable;
 
 @Command(name = "example",
         mixinStandardHelpOptions = true,
-        version = "FfCsv2Cql 1.5",
+        version = "Ff2Cql 1.5",
         description = "Simple transfer data from NiFi FlowFile to CQL.")
 public class Main implements Callable<Integer> {
 
     @Option(names = { "-c", "--config" },
             description = "Config file (default is 'connection.json').",
-            defaultValue = "connection-private.json")
-    private String config = "connection-private.json";
+            defaultValue = "connection.json")
+    private String config = "connection.json";
 
     @Option(names = { "-b", "--bulk" },
             description = "Bulk size for mass upserts (default is 200).", defaultValue = "200")

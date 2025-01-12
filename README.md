@@ -13,20 +13,20 @@ ScyllaDB, AstraDB). The implementation details:
    support for Cassandra v3)
 
 ## 2. Current state
- - 
+
  - ✅ Console application
    - ✅ Tested with NiFi v2.x
    - ✅ Test in processors **ExecuteProcess** and **ExecuteStreamCommand**
  - ❌ Processor
-   - ❌ development in progress
+   - ❌ Development in progress
 
 ## 3. Usage in NiFi
 
 You can use three options:
- - run console application (Ff2Cql-*.*.jar)
-   - with **ExecuteProcess**, where input are CSV files, [see](#31-executeprocess-console-application) 
-   - with **ExecuteStreamCommand**, where input is FlowFile/CSV file, [see](#32-executestreamcommand-console-application) 
- - run processor (*.nar) [see](#33-processor)
+ - ✅ run console application (Ff2Cql-*.*.jar)
+   - ✅ with **ExecuteProcess**, where input are CSV files, [see](#31-executeprocess-console-application) 
+   - ✅ with **ExecuteStreamCommand**, where input is FlowFile/CSV file, [see](#32-executestreamcommand-console-application) 
+ - ❌ use NiFi processor (*.nar) [see](#33-processor)
 
 ### 3.1 ExecuteProcess (console application)
 
@@ -114,7 +114,7 @@ or directly in CSV file(s).
 
 ### 5.1 Command line
 
-The commnad line description:
+The command line description:
 ```
 java -jar Ff2Cql-1.5.jar -h
 ```
@@ -163,4 +163,4 @@ The real config content:
 }
 ```
 NOTE:
- - you can use for base64 e.g. https://www.base64encode.org/
+ - you can use for base64 e.g. https://www.base64encode.org/ or https://www.base64decode.org/
