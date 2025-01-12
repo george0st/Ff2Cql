@@ -14,10 +14,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
 
 
-@Command(name = "example", mixinStandardHelpOptions = true, version = "FfCsv2Cql 1.5", description = "Simple transfer data from NiFi FileFlow to CQL.")
+@Command(name = "example",
+        mixinStandardHelpOptions = true,
+        version = "FfCsv2Cql 1.5",
+        description = "Simple transfer data from NiFi FlowFile to CQL.")
 public class Main implements Callable<Integer> {
 
     @Option(names = { "-c", "--config" },

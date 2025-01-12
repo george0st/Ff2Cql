@@ -1,8 +1,8 @@
-# FfCsv2Cql
+# Ff2Cql
 
 ![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/assets/nifi_cassandra.png?raw=true)
 
-A simple transfer data from FileFlow/CSV to CQL (support Apache Cassandra, 
+A simple transfer data from FlowFile to CQL (support Apache Cassandra, 
 ScyllaDB, AstraDB). The implementation details:
  - development as console application and NiFi processor/extension (support Java 17 and 21)
  - support Apache Cassandra v4/v5, ScyllaDB, AstraDB based on CQL
@@ -17,7 +17,6 @@ ScyllaDB, AstraDB). The implementation details:
  - ✅ Console application
    - ✅ Tested with NiFi v2.x
    - ✅ Test in processors **ExecuteProcess** & **ExecuteStreamCommand**
-     - Supported two main inputs: *.csv files and FlowFile/CSV via stdin
  - ❌ Processor
    - ❌ Under development
 
@@ -36,9 +35,9 @@ ScyllaDB, AstraDB). The implementation details:
  - **Command:** 
    - java
  - **Command Argument:**
-   - -jar FfCsv2Cql-1.5.jar import.csv
-   - -jar FfCsv2Cql-1.5.jar import.csv import2.csv
-   - -jar FfCsv2Cql-1.5.jar -c connection-private.json import.csv
+   - -jar Ff2Cql-1.5.jar import.csv
+   - -jar Ff2Cql-1.5.jar import.csv import2.csv
+   - -jar Ff2Cql-1.5.jar -c connection-private.json import.csv
    - etc. see [chapter 5.1 (Command line)](#51-command-line)
  - **Working Directory:** 
    - /opt/nifi/nifi-current/bin/test2/
@@ -62,8 +61,8 @@ ScyllaDB, AstraDB). The implementation details:
  - **Command Argument Strategy:**
    - Command Arguments Property
  - **Command Arguments:**
-   - -jar FfCsv2Cql-1.5.jar -s
-   - -jar FfCsv2Cql-1.5.jar -c connection-private.json -s
+   - -jar Ff2Cql-1.5.jar -s
+   - -jar Ff2Cql-1.5.jar -c connection-private.json -s
    - etc. see [chapter 5.1 (Command line)](#51-command-line)
  - **Argument Delimiter:**
    - ' '
@@ -107,12 +106,12 @@ The content will be in FlowFile/CSV or direcly in CSV file(s).
 
 The commnad line description:
 ```
-java -jar FfCsv2Cql-1.5.jar -h
+java -jar Ff2Cql-1.5.jar -h
 ```
 Typical output:
 ```
 Usage: example [-dehsV] [-b=<bulk>] [-c=<config>] [INPUT...]
-Simple transfer data from NiFi FileFlow to CQL.
+Simple transfer data from NiFi FlowFile to CQL.
 [INPUT...]          Input file(s) for processing (optional in case '-s').
 -b, --bulk=<bulk>       Bulk size (default is 200).
 -c, --config=<config>   Config file (default is 'connection.json').
