@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Main -help" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="org.george0st.Main" />
-    <module name="FfCsv2Cql" />
+    <module name="Ff2Cql" />
     <option name="PROGRAM_PARAMETERS" value="-h" />
     <method v="2">
       <option name="Make" enabled="true" />

@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Main -version" type="Application" factoryName="Application">
+  <configuration default="false" name="Main" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="org.george0st.Main" />
-    <module name="FfCsv2Cql" />
-    <option name="PROGRAM_PARAMETERS" value="-V" />
+    <module name="Ff2Cql" />
+    <option name="PROGRAM_PARAMETERS" value="CsvToCql_test.csv CsvToCql_test2.csv" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
