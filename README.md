@@ -15,7 +15,7 @@ ScyllaDB, AstraDB). The implementation details:
 ## 2. Usage in NiFi
 
 You can use three options:
- - ✅ run console application (Ff2Cql-*.*.jar)
+ - ✅ run console application (Ff2Cql-*.jar)
    - ✅ with **ExecuteProcess**, where input are CSV files, [see](#21-executeprocess-console-application) 
    - ✅ with **ExecuteStreamCommand**, where input is FlowFile/CSV file, [see](#22-executestreamcommand-console-application) 
  - ❌ use NiFi processor (*.nar) [see](#23-processor)
