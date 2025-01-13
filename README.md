@@ -12,29 +12,21 @@ ScyllaDB, AstraDB). The implementation details:
  - the Apache NiFi v2 does not support Apache Cassandra v4/v5 (NiFi 2 deprecated 
    support for Cassandra v3)
 
-## 2. Current state
-
- - ✅ Console application
-   - ✅ Tested with NiFi v2.x
-   - ✅ Test in processors **ExecuteProcess** and **ExecuteStreamCommand**
- - ❌ Processor
-   - ❌ Development in progress
-
-## 3. Usage in NiFi
+## 2. Usage in NiFi
 
 You can use three options:
  - ✅ run console application (Ff2Cql-*.*.jar)
-   - ✅ with **ExecuteProcess**, where input are CSV files, [see](#31-executeprocess-console-application) 
-   - ✅ with **ExecuteStreamCommand**, where input is FlowFile/CSV file, [see](#32-executestreamcommand-console-application) 
- - ❌ use NiFi processor (*.nar) [see](#33-processor)
+   - ✅ with **ExecuteProcess**, where input are CSV files, [see](#21-executeprocess-console-application) 
+   - ✅ with **ExecuteStreamCommand**, where input is FlowFile/CSV file, [see](#22-executestreamcommand-console-application) 
+ - ❌ use NiFi processor (*.nar) [see](#23-processor)
 
-### 3.1 ExecuteProcess (console application)
+### 2.1 ExecuteProcess (console application)
 
 ![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/assets/nifi_executeprocess_2.png?raw=true)
 
 #### Input:
- 1. **connection.json** file to CQL, see [chapter 5.2 (Connection setting)](#52-connection-setting)
- 2. **CSV file(s) with header** for import (content see [chapter 4.1](#41-expected-contentformat)),
+ 1. **connection.json** file to CQL, see [chapter 4.2 (Connection setting)](#42-connection-setting-to-cql)
+ 2. **CSV file(s) with header** for import (content see [chapter 3.1](#31-expected-contentformat)),
     where the CSV content is based on 'keyspace.table' definition in CQL
 
 #### ExecuteProcess setting (key items):
@@ -44,42 +36,42 @@ You can use three options:
    - -jar Ff2Cql-1.5.jar import.csv
    - -jar Ff2Cql-1.5.jar import.csv import2.csv
    - -jar Ff2Cql-1.5.jar -c connection-private.json import.csv
-   - etc. see [chapter 5.1 (Command line)](#51-command-line)
+   - etc. see [chapter 4.1 (Command line)](#41-command-line)
  - **Working Directory:** 
    - /opt/nifi/nifi-current/bin/test2/
  - **Argument Delimiter:** 
    - ' ' (space)
 
-### 3.2 ExecuteStreamCommand (console application)
+### 2.2 ExecuteStreamCommand (console application)
 
 ![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/assets/nifi_executestreamcommand_2.png?raw=true)
 
 #### Input:
- 1. **connection.json** file to CQL, see [chapter 5.2 (Connection setting)](#52-connection-setting)
- 2. **FlowFile/CSV with header** (content see [chapter 4.1](#41-expected-contentformat)),
+ 1. **connection.json** file to CQL, see [chapter 4.2 (Connection setting)](#42-connection-setting-to-cql)
+ 2. **FlowFile/CSV with header** (content see [chapter 3.1](#31-expected-contentformat)),
     where the FlowFile/CSV content is based on 'keyspace.table' definition in CQL
     (the integration is via stdin)
 
 #### ExecuteStreamCommand setting (key items):
  - **Working Directory:**
    - /opt/nifi/nifi-current/bin/test2/
- - **Command Part:**
+ - **Command Path:**
    - java
  - **Command Argument Strategy:**
    - Command Arguments Property
  - **Command Arguments:**
    - -jar Ff2Cql-1.5.jar -s
    - -jar Ff2Cql-1.5.jar -c connection-private.json -s
-   - etc. see [chapter 5.1 (Command line)](#51-command-line)
+   - etc. see [chapter 4.1 (Command line)](#41-command-line)
  - **Argument Delimiter:**
    - ' ' (space)
  - **Ignore STDIN:**
    - false
 
-### 3.3 Processor
+### 2.3 Processor
 TBD.
 
-## 4. Supported conversions
+## 3. Supported conversions
 
 The solution supports conversion from String to these CQL types:
  - Boolean, TinyInt, SmallInt, Int, BigInt, Float, Double
@@ -87,7 +79,7 @@ The solution supports conversion from String to these CQL types:
  - TimeUUID, UUID
  - Text, varchar (by default)
 
-### 4.1 Expected content/format
+### 3.1 Expected content/format
 
 The content is CSV with header and comma delimiter and will be use in FlowFile/CSV
 or directly in CSV file(s).
@@ -102,7 +94,7 @@ or directly in CSV file(s).
 ...
 ```
 
-### 4.2 Format details for CSV:
+### 3.2 Format details for CSV:
   - **DATE** 
     - ISO_LOCAL_DATE (format "yyyy-MM-dd"), example '2013-12-17'
   - **TIME**
@@ -110,9 +102,9 @@ or directly in CSV file(s).
   - **TIMESTAMP**
     - ISO 8601 (format "yyyy-MM-dd'T'HH:mm:ss'Z'"), example '2001-01-01T00:00:00Z'
 
-## 5. Others
+## 4. Others
 
-### 5.1 Command line
+### 4.1 Command line
 
 The command line description:
 ```
@@ -132,7 +124,7 @@ Simple transfer data from NiFi FlowFile to CQL.
   -V, --version           Print version information and exit.
 ```
 
-### 5.2 Connection setting to CQL
+### 4.2 Connection setting to CQL
 
 The default template with description:
 ```
