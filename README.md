@@ -18,7 +18,7 @@ You can use three options:
  - ✅ run console application (Ff2Cql-*.jar)
    - ✅ with **ExecuteProcess**, where input are CSV files, [see](#21-executeprocess-console-application) 
    - ✅ with **ExecuteStreamCommand**, where input is FlowFile/CSV file, [see](#22-executestreamcommand-console-application) 
- - ❌ use NiFi processor (*.nar) [see](#23-processor)
+ - ❌ use NiFi processor (nifi-cql-nar-*.nar) [see](#23-processor)
 
 ### 2.1 ExecuteProcess (console application)
 
@@ -68,8 +68,16 @@ You can use three options:
  - **Ignore STDIN:**
    - false
 
-### 2.3 Processor
+### 2.3 CqlProcessor
+
 TBD.
+
+#### Input:
+1. TBD.
+
+#### CqlProcessor setting (key items):
+- **Batch Size:**
+    - 200
 
 ## 3. Supported conversions
 
