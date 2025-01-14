@@ -53,6 +53,15 @@ public class CqlProcessor extends AbstractProcessor {
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
+    public static final PropertyDescriptor MY_BATCH_SIZE = new PropertyDescriptor
+            .Builder()
+            .name("Batch Size")
+            .displayName("My Property")
+            .description("Example Property")
+            .required(true)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .build();
+
     public static final Relationship REL_SUCCESS = new Relationship.Builder()
             .name("success")
             .description("Success processing")
@@ -69,7 +78,7 @@ public class CqlProcessor extends AbstractProcessor {
 
     @Override
     protected void init(final ProcessorInitializationContext context) {
-        descriptors = List.of(MY_PROPERTY);
+        descriptors = List.of(MY_PROPERTY, MY_BATCH_SIZE);
 
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
     }
