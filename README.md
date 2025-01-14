@@ -70,7 +70,14 @@ You can use three options:
 
 ### 2.3 CqlProcessor
 
+TBD.
 
+#### Input:
+1. TBD.
+
+#### CqlProcessor setting (key items):
+- **Batch Size:**
+    - 200
 
 ## 3. Supported conversions
 
