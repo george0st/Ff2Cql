@@ -16,6 +16,7 @@
  */
 package org.george0st.processors.cql;
 
+import org.apache.nifi.components.DescribedValue;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.annotation.behavior.ReadsAttribute;
@@ -36,30 +37,32 @@ import org.apache.nifi.processor.util.StandardValidators;
 import java.util.List;
 import java.util.Set;
 
-@Tags({"Cassandra", "ScyllaDB", "AstraDB", "CQL"})
-@CapabilityDescription("Transfer data from FlowFile to CQL (support Apache Cassandra, " +
+@Tags({"Cassandra", "ScyllaDB", "AstraDB", "CQL", "YugabyteDB"})
+@CapabilityDescription("Transfer data from FlowFile to CQL engine (support Apache Cassandra, " +
         "ScyllaDB, AstraDB).")
 @SeeAlso({})
 @ReadsAttributes({@ReadsAttribute(attribute="", description="")})
 @WritesAttributes({@WritesAttribute(attribute="", description="")})
 public class CqlProcessor extends AbstractProcessor {
 
-    public static final PropertyDescriptor MY_PROPERTY = new PropertyDescriptor
+    public static final PropertyDescriptor BATCH_SIZE = new PropertyDescriptor
             .Builder()
-            .name("My Property")
-            .displayName("My Property")
-            .description("Example Property")
-            .required(true)
-            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .name("batch_size")
+            .displayName("Batch Size")
+            .description("Size of batch for data ingest.")
+            .required(false)
+            .defaultValue("200")
+            .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)   //  StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
-    public static final PropertyDescriptor MY_BATCH_SIZE = new PropertyDescriptor
+    public static final PropertyDescriptor DRY_RUN = new PropertyDescriptor
             .Builder()
-            .name("Batch Size")
-            .displayName("My Property")
-            .description("Example Property")
-            .required(true)
-            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .name("dry_run")
+            .displayName("Dry Run")
+            .description("Dry run for processing (without final write to CQL engine).")
+            .required(false)
+            .defaultValue("false")
+            .addValidator(StandardValidators.BOOLEAN_VALIDATOR)
             .build();
 
     public static final Relationship REL_SUCCESS = new Relationship.Builder()
@@ -78,7 +81,7 @@ public class CqlProcessor extends AbstractProcessor {
 
     @Override
     protected void init(final ProcessorInitializationContext context) {
-        descriptors = List.of(MY_PROPERTY, MY_BATCH_SIZE);
+        descriptors = List.of(BATCH_SIZE, DRY_RUN);
 
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
     }
@@ -105,6 +108,12 @@ public class CqlProcessor extends AbstractProcessor {
             return;
         }
         // TODO implement
+
+        // TODO: add whole config to Controller used in Processor
+
+        // Helpers:
+        //  https://medium.com/@tomerdayan168/build-your-processors-in-nifi-7bb0f217ed75
+        //  https://help.hcl-software.com/commerce/9.1.0/search/tasks/t_createcustomnifi.html
 
         session.transfer(flowFile, REL_SUCCESS);
     }
