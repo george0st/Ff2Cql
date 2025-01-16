@@ -34,6 +34,7 @@ import org.apache.nifi.processor.ProcessorInitializationContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -47,7 +48,7 @@ public class CqlProcessor extends AbstractProcessor {
 
     public static final PropertyDescriptor BATCH_SIZE = new PropertyDescriptor
             .Builder()
-            .name("batch_size")
+            .name("Batch Size")
             .displayName("Batch Size")
             .description("Size of batch for data ingest.")
             .required(false)
@@ -57,12 +58,13 @@ public class CqlProcessor extends AbstractProcessor {
 
     public static final PropertyDescriptor DRY_RUN = new PropertyDescriptor
             .Builder()
-            .name("dry_run")
+            .name("Dry Run")
             .displayName("Dry Run")
             .description("Dry run for processing (without final write to CQL engine).")
             .required(false)
             .defaultValue("false")
             .addValidator(StandardValidators.BOOLEAN_VALIDATOR)
+            .allowableValues("true", "false")
             .build();
 
     public static final Relationship REL_SUCCESS = new Relationship.Builder()
@@ -82,7 +84,6 @@ public class CqlProcessor extends AbstractProcessor {
     @Override
     protected void init(final ProcessorInitializationContext context) {
         descriptors = List.of(BATCH_SIZE, DRY_RUN);
-
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
     }
 
@@ -108,6 +109,16 @@ public class CqlProcessor extends AbstractProcessor {
             return;
         }
         // TODO implement
+
+
+//        //  get property
+//        context.getProperty("");
+//
+//        //  read attribute
+//        flowFile.getAttribute("");
+
+        //  write attribute
+        session.putAttribute(flowFile, "newprop_jirka","value steuer");
 
         // TODO: add whole config to Controller used in Processor
 
