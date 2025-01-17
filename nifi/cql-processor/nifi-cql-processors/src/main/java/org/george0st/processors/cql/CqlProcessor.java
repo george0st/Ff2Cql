@@ -34,6 +34,9 @@ import org.apache.nifi.processor.ProcessorInitializationContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -100,6 +103,29 @@ public class CqlProcessor extends AbstractProcessor {
     @OnScheduled
     public void onScheduled(final ProcessContext context) {
 
+    }
+
+    /**
+     * Get flow file content
+     * @param flowFile  The Flow file
+     * @param session   The client session
+     * @return The flow file as string
+     */
+    private String getContent(FlowFile flowFile, ProcessSession session){
+        final var byteArrayOutputStream = new ByteArrayOutputStream();
+        session.exportTo(flowFile, byteArrayOutputStream);
+        return byteArrayOutputStream.toString();
+    }
+
+    /**
+     * Set flow file content based on string
+     * @param flowFile  The flow file
+     * @param session   The client session
+     * @param content   The content for write to flow file
+     */
+    private void updateContent(FlowFile flowFile, ProcessSession session, String content){
+        InputStream inputStream = new ByteArrayInputStream(content.getBytes());
+        session.importFrom(inputStream, flowFile);
     }
 
     @Override
