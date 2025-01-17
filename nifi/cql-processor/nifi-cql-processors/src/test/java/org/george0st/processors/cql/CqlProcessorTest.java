@@ -21,8 +21,9 @@ import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.HashMap;
 
@@ -54,11 +55,9 @@ public class CqlProcessorTest {
         testRunner.run();
 
         FlowFile result = testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS).get(0);
+        assertTrue(result.getAttribute("newprop_jirka")!=null);
 
         // https://medium.com/@mr.sinchan.banerjee/nifi-custom-processor-series-part-3-junit-test-with-nifi-mock-a935a1a4e3e5
-        // TODO: add assert
-        //testRunner.
-
     }
 
 }
