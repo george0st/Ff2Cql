@@ -33,6 +33,7 @@ import org.apache.nifi.processor.ProcessSession;
 import org.apache.nifi.processor.ProcessorInitializationContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
+import org.george0st.processors.cql.helper.Setup;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,6 +41,7 @@ import java.io.InputStream;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Tags({"Cassandra", "ScyllaDB", "AstraDB", "CQL", "YugabyteDB"})
 @CapabilityDescription("Transfer data from FlowFile to CQL engine (support Apache Cassandra, " +
@@ -48,6 +50,8 @@ import java.util.Set;
 @ReadsAttributes({@ReadsAttribute(attribute="", description="")})
 @WritesAttributes({@WritesAttribute(attribute="", description="")})
 public class CqlProcessor extends AbstractProcessor {
+
+    private AtomicInteger counter=new AtomicInteger(0);
 
     public static final PropertyDescriptor BATCH_SIZE = new PropertyDescriptor
             .Builder()
@@ -84,10 +88,13 @@ public class CqlProcessor extends AbstractProcessor {
 
     private Set<Relationship> relationships;
 
+    private Setup setup;
+
     @Override
     protected void init(final ProcessorInitializationContext context) {
         descriptors = List.of(BATCH_SIZE, DRY_RUN);
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
+        setup=new Setup();
     }
 
     @Override
@@ -102,7 +109,7 @@ public class CqlProcessor extends AbstractProcessor {
 
     @OnScheduled
     public void onScheduled(final ProcessContext context) {
-
+        counter.set(0);
     }
 
     /**
@@ -136,6 +143,26 @@ public class CqlProcessor extends AbstractProcessor {
         }
         // TODO implement
 
+        boolean dryRun=context.getProperty("Dry Run").asBoolean();
+
+        // define Setup
+        setup.ipAddresses=new String[]{"10.129.53.159","10.129.53.154","10.129.53.153"};
+        setup.port=9042;
+        setup.username="perf";
+        setup.setPwd("cGVyZg==");
+        setup.localDC="datacenter1";
+        setup.connectionTimeout=900;
+        setup.requestTimeout=60;
+        setup.consistencyLevel="LOCAL_ONE";
+        setup.table="prftest.csv2cql_test3";
+        setup.setBulk(context.getProperty("Batch Size").asLong());
+
+        CqlAccess access=new CqlAccess(setup);
+
+
+
+
+
 
 //        //  get property
 //        context.getProperty("");
@@ -144,7 +171,9 @@ public class CqlProcessor extends AbstractProcessor {
 //        flowFile.getAttribute("");
 
         //  write attribute
+        counter.addAndGet(1);
         session.putAttribute(flowFile, "newprop_jirka","value steuer");
+        session.putAttribute(flowFile, "mycounter", counter.toString());
 
         // TODO: add whole config to Controller used in Processor
 
