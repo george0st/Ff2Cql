@@ -157,6 +157,10 @@ public class CqlProcessor extends AbstractProcessor {
         setup.table="prftest.csv2cql_test3";
         setup.setBulk(context.getProperty("Batch Size").asLong());
 
+        CqlAccess access=new CqlAccess(setup);
+
+
+
 
 
 
