@@ -35,4 +35,24 @@ public class Setup {
     public Setup(){
     }
 
+    // Overriding equals() to compare two Setup objects
+    @Override
+    public boolean equals(Object o) {
+
+        // If the object is compared with itself then return true
+        if (o == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of Setup or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Setup)) {
+            return false;
+        }
+
+        //  TODO: compare
+
+        return true;
+    }
+
 }
