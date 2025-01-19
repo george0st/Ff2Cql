@@ -157,6 +157,9 @@ public class CqlProcessor extends AbstractProcessor {
         setup.table="prftest.csv2cql_test3";
         setup.setBulk(context.getProperty("Batch Size").asLong());
 
+
+        // TODO: compare setup (old and new)
+        // if same then use old CqlAccess else new CqlAccess
         CqlAccess access=new CqlAccess(setup);
 
 

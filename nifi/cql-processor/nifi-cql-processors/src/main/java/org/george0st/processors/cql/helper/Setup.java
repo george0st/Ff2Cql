@@ -1,10 +1,6 @@
 package org.george0st.processors.cql.helper;
 
-//import com.google.gson.Gson;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 
@@ -40,17 +36,22 @@ public class Setup {
     public boolean equals(Object o) {
 
         // If the object is compared with itself then return true
-        if (o == this) {
-            return true;
-        }
+        if (o == this) return true;
 
-        /* Check if o is an instance of Setup or not
-          "null instanceof [type]" also returns false */
-        if (!(o instanceof Setup)) {
-            return false;
-        }
+        // Check if o is an instance of Setup or not "null instanceof [type]" also returns false
+        if (!(o instanceof Setup)) return false;
 
-        //  TODO: compare
+        //  own compare
+        if (!Arrays.equals(((Setup) o).ipAddresses, ipAddresses)) return false;
+        if (((Setup) o).port != port) return false;
+        if (!((Setup) o).username.equals(username)) return false;
+        if (!((Setup) o).pwd.equals(pwd)) return false;
+        if (!((Setup) o).localDC.equalsIgnoreCase(localDC)) return false;
+        if (((Setup) o).connectionTimeout != connectionTimeout) return false;
+        if (((Setup) o).requestTimeout != requestTimeout) return false;
+        if (!((Setup) o).consistencyLevel.equals(consistencyLevel)) return false;
+        if (((Setup) o).bulk != bulk) return false;
+        if (!((Setup) o).table.equalsIgnoreCase(table)) return false;
 
         return true;
     }
