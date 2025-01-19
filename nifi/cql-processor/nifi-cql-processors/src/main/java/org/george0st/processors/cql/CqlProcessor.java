@@ -88,14 +88,14 @@ public class CqlProcessor extends AbstractProcessor {
 
     private Set<Relationship> relationships;
 
-    private Setup setup;
+    private Setup setup = null;
     private CqlAccess cqlAccess;
 
     @Override
     protected void init(final ProcessorInitializationContext context) {
         descriptors = List.of(BATCH_SIZE, DRY_RUN);
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
-        setup=new Setup();
+//        setup=new Setup();
     }
 
     @Override
