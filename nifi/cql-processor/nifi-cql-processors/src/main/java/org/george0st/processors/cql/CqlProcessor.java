@@ -88,13 +88,14 @@ public class CqlProcessor extends AbstractProcessor {
 
     private Set<Relationship> relationships;
 
-    private Setup setup;
+    private Setup setup = null;
+    private CqlAccess cqlAccess;
 
     @Override
     protected void init(final ProcessorInitializationContext context) {
         descriptors = List.of(BATCH_SIZE, DRY_RUN);
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
-        setup=new Setup();
+//        setup=new Setup();
     }
 
     @Override
@@ -146,18 +147,25 @@ public class CqlProcessor extends AbstractProcessor {
         boolean dryRun=context.getProperty("Dry Run").asBoolean();
 
         // define Setup
-        setup.ipAddresses=new String[]{"10.129.53.159","10.129.53.154","10.129.53.153"};
-        setup.port=9042;
-        setup.username="perf";
-        setup.setPwd("cGVyZg==");
-        setup.localDC="datacenter1";
-        setup.connectionTimeout=900;
-        setup.requestTimeout=60;
-        setup.consistencyLevel="LOCAL_ONE";
-        setup.table="prftest.csv2cql_test3";
-        setup.setBulk(context.getProperty("Batch Size").asLong());
+        Setup newSetup= new Setup();
+        newSetup.ipAddresses=new String[]{"10.129.53.159","10.129.53.154","10.129.53.153"};
+        newSetup.port=9042;
+        newSetup.username="perf";
+        newSetup.setPwd("cGVyZg==");
+        newSetup.localDC="datacenter1";
+        newSetup.connectionTimeout=900;
+        newSetup.requestTimeout=60;
+        newSetup.consistencyLevel="LOCAL_ONE";
+        newSetup.table="prftest.csv2cql_test3";
+        newSetup.setBulk(context.getProperty("Batch Size").asLong());
 
-        CqlAccess access=new CqlAccess(setup);
+        //  if setup is different then use new setup and cqlAccess
+        //      or cqlAccess will be still the same
+        if ((setup == null) || (!setup.equals(newSetup))){
+            setup = newSetup;
+            cqlAccess = new CqlAccess(setup);
+        }
+
 
 
 
