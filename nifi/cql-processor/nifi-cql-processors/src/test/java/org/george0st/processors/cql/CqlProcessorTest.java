@@ -17,6 +17,7 @@
 package org.george0st.processors.cql;
 
 import org.apache.nifi.flowfile.FlowFile;
+import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class CqlProcessorTest {
 
@@ -81,18 +83,21 @@ public class CqlProcessorTest {
                 "\"13\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"1998-04-09T23:19:18Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
 
         testRunner.enqueue(content, attributes);
+        testRunner.setProperty("Batch Size", "350");
+        testRunner.setProperty("Dry Run", "false");
+        testRunner.run();
+
+        FlowFile result=testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS).getLast();
+        assertTrue(result.getAttribute("newprop_jirka")!=null);
+
         testRunner.enqueue(content2, attributes);
         testRunner.setProperty("Batch Size", "350");
         testRunner.setProperty("Dry Run", "false");
         testRunner.run();
 
-        FlowFile result = testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS).get(0);
+        result=testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS).getLast();
         assertTrue(result.getAttribute("newprop_jirka")!=null);
 
-        FlowFile result2 = testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS).get(1);
-        assertTrue(result2.getAttribute("newprop_jirka")!=null);
-
-        // https://medium.com/@mr.sinchan.banerjee/nifi-custom-processor-series-part-3-junit-test-with-nifi-mock-a935a1a4e3e5
     }
 
     @Test
@@ -119,16 +124,27 @@ public class CqlProcessorTest {
         testRunner.setProperty("Batch Size", "350");
         testRunner.setProperty("Dry Run", "false");
         testRunner.run();
+
+        List<MockFlowFile> results=testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS);
+        FlowFile result = testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS).get(0);
+        assertTrue(result.getAttribute("newprop_jirka")!=null);
+
+        testRunner.enqueue(content, attributes);
+        testRunner.setProperty("Batch Size", "350");
+        testRunner.setProperty("Dry Run", "false");
+        testRunner.run();
+
+        results=testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS);
+        result = testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS).get(0);
+        assertTrue(result.getAttribute("newprop_jirka")!=null);
+
         testRunner.enqueue(content2, attributes);
         testRunner.setProperty("Batch Size", "150");
         testRunner.setProperty("Dry Run", "false");
         testRunner.run();
 
-        FlowFile result = testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS).get(0);
+        result = testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS).get(0);
         assertTrue(result.getAttribute("newprop_jirka")!=null);
-
-        FlowFile result2 = testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS).get(1);
-        assertTrue(result2.getAttribute("newprop_jirka")!=null);
 
         // https://medium.com/@mr.sinchan.banerjee/nifi-custom-processor-series-part-3-junit-test-with-nifi-mock-a935a1a4e3e5
     }

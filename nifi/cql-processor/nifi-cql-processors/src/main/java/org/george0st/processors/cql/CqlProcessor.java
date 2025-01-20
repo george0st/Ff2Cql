@@ -164,7 +164,9 @@ public class CqlProcessor extends AbstractProcessor {
         if ((setup == null) || (!setup.equals(newSetup))){
             setup = newSetup;
             cqlAccess = new CqlAccess(setup);
+            session.putAttribute(flowFile, "CQLAccess","NEW");
         }
+        else session.putAttribute(flowFile, "CQLAccess","REUSE");
 
 
 
