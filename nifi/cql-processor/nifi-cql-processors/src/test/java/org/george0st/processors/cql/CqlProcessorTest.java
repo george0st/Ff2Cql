@@ -101,7 +101,7 @@ public class CqlProcessorTest {
     }
 
     @Test
-    public void testBasicTwoItemsDifferentSetup() {
+    public void testBasicThreeItemsDifferentSetup() {
 
         HashMap<String, String> attributes= new HashMap<String, String>(){{
             put("xxxx", "yyyy");

@@ -168,7 +168,10 @@ public class CqlProcessor extends AbstractProcessor {
         }
         else session.putAttribute(flowFile, "CQLAccess","REUSE");
 
+        //  get CSV
+        String csv = this.getContent(flowFile,session);
 
+        //  write CSV
 
 
 
@@ -181,11 +184,9 @@ public class CqlProcessor extends AbstractProcessor {
 //        flowFile.getAttribute("");
 
         //  write attribute
-        counter.addAndGet(1);
-        session.putAttribute(flowFile, "newprop_jirka","value steuer");
-        session.putAttribute(flowFile, "mycounter", counter.toString());
-
-        // TODO: add whole config to Controller used in Processor
+//        counter.addAndGet(1);
+//        session.putAttribute(flowFile, "newprop_jirka","value steuer");
+//        session.putAttribute(flowFile, "mycounter", counter.toString());
 
         // Helpers:
         //  https://medium.com/@tomerdayan168/build-your-processors-in-nifi-7bb0f217ed75
