@@ -16,6 +16,7 @@
  */
 package org.george0st.processors.cql;
 
+import com.opencsv.exceptions.CsvValidationException;
 import org.apache.nifi.components.DescribedValue;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.flowfile.FlowFile;
@@ -34,9 +35,11 @@ import org.apache.nifi.processor.ProcessorInitializationContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.george0st.processors.cql.helper.Setup;
+import org.george0st.processors.cql.processor.CsvCqlWrite;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.EnumSet;
 import java.util.List;
@@ -171,10 +174,15 @@ public class CqlProcessor extends AbstractProcessor {
         //  get CSV
         String csv = this.getContent(flowFile,session);
 
+        CsvCqlWrite write=new CsvCqlWrite(cqlAccess, dryRun);
+//        try {
+//            write.execute(null);
+//        } catch (CsvValidationException e) {
+//            throw new RuntimeException(e);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
         //  write CSV
-
-
-
 
 
 //        //  get property
