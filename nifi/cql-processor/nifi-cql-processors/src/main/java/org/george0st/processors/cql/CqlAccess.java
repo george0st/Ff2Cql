@@ -4,7 +4,7 @@ import com.datastax.oss.driver.api.core.CqlSessionBuilder;
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
 import com.datastax.oss.driver.api.core.config.OptionsMap;
 import com.datastax.oss.driver.api.core.config.TypedDriverOption;
-//import org.george0st.codec.*;
+import org.george0st.processors.cql.codec.*;
 import org.george0st.processors.cql.helper.Setup;
 
 import java.net.InetSocketAddress;
@@ -42,18 +42,18 @@ public class CqlAccess {
         builder.withAuthCredentials(setup.username, setup.getPwd());
 
         // add supported codecs
-//        builder.addTypeCodecs(new CqlIntToStringCodec(),
-//                new CqlBigIntToStringCodec(),
-//                new CqlFloatToStringCodec(),
-//                new CqlDoubleToStringCodec(),
-//                new CqlDateToStringCodec(),
-//                new CqlTimeToStringCodec(),
-//                new CqlTimestampToStringCodec(),
-//                new CqlBooleanToStringCodec(),
-//                new CqlUUIDToStringCodec(),
-//                new CqlSmallintToStringCodec(),
-//                new CqlTinyintToStringCodec(),
-//                new CqlTimeUUIDToStringCodec());
+        builder.addTypeCodecs(new CqlIntToStringCodec(),
+                new CqlBigIntToStringCodec(),
+                new CqlFloatToStringCodec(),
+                new CqlDoubleToStringCodec(),
+                new CqlDateToStringCodec(),
+                new CqlTimeToStringCodec(),
+                new CqlTimestampToStringCodec(),
+                new CqlBooleanToStringCodec(),
+                new CqlUUIDToStringCodec(),
+                new CqlSmallintToStringCodec(),
+                new CqlTinyintToStringCodec(),
+                new CqlTimeUUIDToStringCodec());
 
         // default options (balancing, timeout, CL)
         OptionsMap options = OptionsMap.driverDefaults();

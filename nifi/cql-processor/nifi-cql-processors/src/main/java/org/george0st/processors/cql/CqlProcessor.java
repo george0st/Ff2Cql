@@ -16,6 +16,7 @@
  */
 package org.george0st.processors.cql;
 
+import com.opencsv.exceptions.CsvValidationException;
 import org.apache.nifi.components.DescribedValue;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.flowfile.FlowFile;
@@ -34,9 +35,11 @@ import org.apache.nifi.processor.ProcessorInitializationContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.george0st.processors.cql.helper.Setup;
+import org.george0st.processors.cql.processor.CsvCqlWrite;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.EnumSet;
 import java.util.List;
@@ -164,12 +167,22 @@ public class CqlProcessor extends AbstractProcessor {
         if ((setup == null) || (!setup.equals(newSetup))){
             setup = newSetup;
             cqlAccess = new CqlAccess(setup);
+            session.putAttribute(flowFile, "CQLAccess","NEW");
         }
+        else session.putAttribute(flowFile, "CQLAccess","REUSE");
 
+        //  get CSV
+        String csv = this.getContent(flowFile,session);
 
-
-
-
+        CsvCqlWrite write=new CsvCqlWrite(cqlAccess, dryRun);
+//        try {
+//            write.execute(null);
+//        } catch (CsvValidationException e) {
+//            throw new RuntimeException(e);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+        //  write CSV
 
 
 //        //  get property
@@ -179,11 +192,9 @@ public class CqlProcessor extends AbstractProcessor {
 //        flowFile.getAttribute("");
 
         //  write attribute
-        counter.addAndGet(1);
-        session.putAttribute(flowFile, "newprop_jirka","value steuer");
-        session.putAttribute(flowFile, "mycounter", counter.toString());
-
-        // TODO: add whole config to Controller used in Processor
+//        counter.addAndGet(1);
+//        session.putAttribute(flowFile, "newprop_jirka","value steuer");
+//        session.putAttribute(flowFile, "mycounter", counter.toString());
 
         // Helpers:
         //  https://medium.com/@tomerdayan168/build-your-processors-in-nifi-7bb0f217ed75
