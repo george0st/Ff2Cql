@@ -10,11 +10,8 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.exceptions.CsvValidationException;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
 import org.george0st.CqlAccess;
 import org.george0st.helper.Setup;
 
@@ -35,11 +32,15 @@ public class CsvCqlWrite extends CqlProcessor {
     private long executeCore(CqlSession session, Reader reader) throws IOException, CsvValidationException {
         long totalCount=0;
 
-//        Reader in = new FileReader("path/to/file.csv");
-//        Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
+//        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+//                .setSkipHeaderRecord(true)
+//                .build();
+//
+//        Iterable<CSVRecord> records = csvFormat.parse(reader);
+//
 //        for (CSVRecord record : records) {
-//            String lastName = record.get("Last Name");
-//            String firstName = record.get("First Name");
+//            String author = record.get("author");
+//            String title = record.get("title");
 //        }
 
 
@@ -55,7 +56,7 @@ public class CsvCqlWrite extends CqlProcessor {
             String[] headers = csvReader.readNext();
             String prepareHeaders = prepareHeaders(headers);
             String prepareItems = prepareItems(headers);
-            PreparedStatement stm = insertStatement(session,prepareHeaders, prepareItems);
+            PreparedStatement stm = insertStatement(session, prepareHeaders, prepareItems);
 
             BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.UNLOGGED);
             String[] line;
