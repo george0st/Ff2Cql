@@ -16,7 +16,6 @@
  */
 package org.george0st.processors.cql;
 
-import com.opencsv.exceptions.CsvValidationException;
 import org.apache.nifi.components.DescribedValue;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.flowfile.FlowFile;

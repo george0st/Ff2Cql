@@ -4,7 +4,6 @@ import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.*;
 import com.datastax.oss.driver.api.core.type.DataTypes;
-import com.opencsv.exceptions.CsvValidationException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.george0st.helper.Setup;
@@ -29,14 +28,14 @@ public class CsvCqlValidate extends CqlProcessor {
         this.readWhere=readWhere;
     }
 
-    public long execute(String fileName) throws CsvValidationException, IOException {
+    public long execute(String fileName) throws IOException {
         long totalCount=0;
 
         try (CqlSession session = sessionBuilder.build()) {
             try (Reader reader = new FileReader(fileName)) {
                 CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
                         .setSkipHeaderRecord(true)
-                        .build();
+                        .get();
                 Iterator<CSVRecord> iterator = csvFormat.parse(reader).iterator();
 
                 String[] headers = iterator.next().values();

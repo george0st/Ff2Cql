@@ -5,7 +5,6 @@ import java.util.Iterator;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.*;
-import com.opencsv.exceptions.CsvValidationException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.george0st.CqlAccess;
@@ -25,12 +24,12 @@ public class CsvCqlWrite extends CqlProcessor {
         super(access, dryRun);
     }
 
-    private long executeCore(CqlSession session, Reader reader) throws IOException, CsvValidationException {
+    private long executeCore(CqlSession session, Reader reader) throws IOException {
         long totalCount=0;
 
         CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
                 .setSkipHeaderRecord(true)
-                .build();
+                .get();
         Iterator<CSVRecord> iterator = csvFormat.parse(reader).iterator();
 
         String[] headers = iterator.next().values();
@@ -61,7 +60,7 @@ public class CsvCqlWrite extends CqlProcessor {
         return totalCount;
     }
 
-    public long execute(String fileName) throws CsvValidationException, IOException {
+    public long execute(String fileName) throws IOException {
         long totalCount=0;
 
         try (CqlSession session = sessionBuilder.build()) {
