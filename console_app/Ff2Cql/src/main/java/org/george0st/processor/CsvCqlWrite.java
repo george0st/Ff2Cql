@@ -2,7 +2,6 @@ package org.george0st.processor;
 
 import java.io.*;
 import java.util.Iterator;
-
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.*;
