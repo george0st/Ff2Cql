@@ -10,6 +10,11 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.CqlAccess;
 import org.george0st.helper.Setup;
 
@@ -29,6 +34,14 @@ public class CsvCqlWrite extends CqlProcessor {
 
     private long executeCore(CqlSession session, Reader reader) throws IOException, CsvValidationException {
         long totalCount=0;
+
+//        Reader in = new FileReader("path/to/file.csv");
+//        Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);
+//        for (CSVRecord record : records) {
+//            String lastName = record.get("Last Name");
+//            String firstName = record.get("First Name");
+//        }
+
 
         CSVParser parser = new CSVParserBuilder()
                 .withSeparator(',')
@@ -81,40 +94,6 @@ public class CsvCqlWrite extends CqlProcessor {
             else
                 try (Reader reader = new FileReader(fileName)) {
                     totalCount = this.executeCore(session, reader);
-//                CSVParser parser = new CSVParserBuilder()
-//                        .withSeparator(',')
-//                        .build();
-//
-//                try (CSVReader csvReader = new CSVReaderBuilder(reader)
-//                        .withSkipLines(0)
-//                        .withCSVParser(parser)
-//                        .build()){
-//
-//                    String[] headers = csvReader.readNext();
-//                    String prepareHeaders = prepareHeaders(headers);
-//                    String prepareItems = prepareItems(headers);
-//                    PreparedStatement stm = insertStatement(session,prepareHeaders, prepareItems);
-//
-//                    BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.UNLOGGED);
-//                    String[] line;
-//                    int count=0;
-//
-//                    while ((line = csvReader.readNext()) != null) {
-//                        batch = batch.addAll(stm.bind((Object[]) line));
-//                        count++;
-//                        totalCount++;
-//
-//                        if (count==setup.getBulk()) {
-//                            if (!dryRun)
-//                                session.execute(batch);
-//                            batch = batch.clear();
-//                            count = 0;
-//                        }
-//                    }
-//                    if (count > 0)
-//                        if (!dryRun)
-//                            session.execute(batch);
-//                }
             }
         }
         return totalCount;
