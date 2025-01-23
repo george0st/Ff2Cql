@@ -47,7 +47,7 @@ public class CsvCqlWrite extends CqlProcessor {
             count++;
             totalCount++;
 
-            if (count==setup.getBulk()) {
+            if (count==setup.getBatch()) {
                 if (!dryRun)
                     session.execute(batch);
                 batch = batch.clear();

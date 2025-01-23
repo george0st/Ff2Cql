@@ -22,11 +22,11 @@ public class Setup {
     public long connectionTimeout;
     public long requestTimeout;
     public String consistencyLevel;
-    private long bulk;
+    private long batch;
     public String table;
 
-    public void setBulk(long bulk) { this.bulk = bulk; }
-    public long getBulk() { return bulk > 0 ? bulk : 200 ; }
+    public void setBatch(long batch) { this.batch = batch; }
+    public long getBatch() { return batch > 0 ? batch : 200; }
 
     public void setPwd(String pwd) { this.pwd = Base64.getEncoder().encodeToString(pwd.getBytes()); }
     public String getPwd() { return  new String(Base64.getDecoder().decode(this.pwd)); }
