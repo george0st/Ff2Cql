@@ -1,7 +1,8 @@
 package org.george0st;
 
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.opencsv.CSVWriter;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.george0st.helper.RndGenerator;
 import org.george0st.helper.Setup;
 
@@ -98,13 +99,14 @@ public class CqlCreateSchema extends CqlAccess {
             // generate random content
         try (FileWriter writer = new FileWriter(randomFile, false)) {
             if (csvItems>=0) {
-                try (CSVWriter csvWriter = new CSVWriter(writer)) {
-                    // write header
-                    csvWriter.writeNext(getColumns());
+                CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+                        .setHeader(getColumns())
+                        .get();
 
+                try (final CSVPrinter csvWriter = new CSVPrinter(writer, csvFormat)) {
                     // write content
                     for (int i = 0; i < csvItems; i++) {
-                        csvWriter.writeNext(new String[]{
+                        csvWriter.printRecord(
                                 sequenceID ? Integer.toString(i) : Integer.toString(rnd.getInt(Integer.MAX_VALUE)), //  bigint
                                 Integer.toString(rnd.getInt(Integer.MAX_VALUE)),                    //  int
                                 rnd.getStringSequence(10),                              // text
@@ -118,7 +120,7 @@ public class CqlCreateSchema extends CqlAccess {
                                 Integer.toString(rnd.getInt(0, Short.MAX_VALUE)),                //  smallint
                                 Integer.toString(rnd.getInt(0, Byte.MAX_VALUE)),                 //  tinyint
                                 rnd.getUUID(true).toString(),                           //  timeuuid
-                                rnd.getStringSequence(5)});                                //  varchar
+                                rnd.getStringSequence(5));                                //  varchar
                     }
                 }
             }
