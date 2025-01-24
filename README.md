@@ -33,9 +33,9 @@ You can use three options:
  - **Command:** 
    - java
  - **Command Argument:**
-   - -jar Ff2Cql-1.5.jar import.csv
-   - -jar Ff2Cql-1.5.jar import.csv import2.csv
-   - -jar Ff2Cql-1.5.jar -c connection-private.json import.csv
+   - -jar Ff2Cql-1.7.jar import.csv
+   - -jar Ff2Cql-1.7.jar import.csv import2.csv
+   - -jar Ff2Cql-1.7.jar -c connection-private.json import.csv
    - etc. see [chapter 4.1 (Command line)](#41-command-line)
  - **Working Directory:** 
    - /opt/nifi/nifi-current/bin/test2/
@@ -60,8 +60,8 @@ You can use three options:
  - **Command Argument Strategy:**
    - Command Arguments Property
  - **Command Arguments:**
-   - -jar Ff2Cql-1.5.jar -s
-   - -jar Ff2Cql-1.5.jar -c connection-private.json -s
+   - -jar Ff2Cql-1.7.jar -s
+   - -jar Ff2Cql-1.7.jar -c connection-private.json -s
    - etc. see [chapter 4.1 (Command line)](#41-command-line)
  - **Argument Delimiter:**
    - ' ' (space)
@@ -116,14 +116,14 @@ or directly in CSV file(s).
 
 The command line description:
 ```
-java -jar Ff2Cql-1.5.jar -h
+java -jar Ff2Cql-1.7.jar -h
 ```
 Typical output:
 ```
 Usage: example [-dehsV] [-b=<bulk>] [-c=<config>] [INPUT...]
 Simple transfer data from NiFi FlowFile to CQL.
       [INPUT...]          Input file(s) for processing (optional in case '-s').
-  -b, --bulk=<bulk>       Bulk size for mass upserts (default is 200).
+  -b, --batch=<batch>     Batch size for mass upserts (default is 200).
   -c, --config=<config>   Config file (default is 'connection.json').
   -d, --dryRun            Dry run, whole processing without write to CQL.
   -e, --errorStop         Stop processing in case an error.
