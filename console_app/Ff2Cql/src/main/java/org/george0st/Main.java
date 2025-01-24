@@ -1,6 +1,5 @@
 package org.george0st;
 
-import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.helper.ExitCodes;
 import org.george0st.helper.ReadableValue;
 import org.george0st.helper.Setup;
@@ -18,7 +17,7 @@ import java.util.concurrent.Callable;
 
 @Command(name = "example",
         mixinStandardHelpOptions = true,
-        version = "Ff2Cql 1.5",
+        version = "Ff2Cql 1.6",
         description = "Simple transfer data from NiFi FlowFile to CQL.")
 public class Main implements Callable<Integer> {
 
@@ -27,9 +26,9 @@ public class Main implements Callable<Integer> {
             defaultValue = "connection.json")
     private String config = "connection.json";
 
-    @Option(names = { "-b", "--bulk" },
-            description = "Bulk size for mass upserts (default is 200).", defaultValue = "200")
-    private long bulk = 200;
+    @Option(names = { "-b", "--batch" },
+            description = "Batch size for mass upserts (default is 200).", defaultValue = "200")
+    private long batch = 200;
 
     @Option(names = { "-d", "--dryRun" },
             description = "Dry run, whole processing without write to CQL.")
@@ -72,11 +71,11 @@ public class Main implements Callable<Integer> {
                     System.lineSeparator());
 
         }
-        catch (CsvValidationException ex){
-            logger.error("CSV error '{}', exception '{}'.", inputFile == null ? "stdin" : inputFile, ex.toString());
-            if (errorStop)
-                return ExitCodes.CSV_ERROR;
-        }
+//        catch (CsvValidationException ex){
+//            logger.error("CSV error '{}', exception '{}'.", inputFile == null ? "stdin" : inputFile, ex.toString());
+//            if (errorStop)
+//                return ExitCodes.CSV_ERROR;
+//        }
         catch(Exception ex) {
             logger.error("Processing error '{}', exception '{}'.", inputFile == null ? "stdin" : inputFile, ex.toString());
             if (errorStop)
@@ -97,7 +96,7 @@ public class Main implements Callable<Integer> {
 
             // define setup
             Setup setup = Setup.getInstance(config);
-            setup.setBulk(bulk);
+            setup.setBatch(batch);
 
             // access to CQL engine
             CqlAccess access=new CqlAccess(setup);

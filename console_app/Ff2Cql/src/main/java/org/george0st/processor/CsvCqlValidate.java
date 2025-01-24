@@ -4,7 +4,6 @@ import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.*;
 import com.datastax.oss.driver.api.core.type.DataTypes;
-import com.opencsv.exceptions.CsvValidationException;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.george0st.helper.Setup;
@@ -29,58 +28,60 @@ public class CsvCqlValidate extends CqlProcessor {
         this.readWhere=readWhere;
     }
 
-    public long execute(String fileName) throws CsvValidationException, IOException {
+    public long execute(String fileName) throws IOException {
         long totalCount=0;
 
         try (CqlSession session = sessionBuilder.build()) {
             try (Reader reader = new FileReader(fileName)) {
                 CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
                         .setSkipHeaderRecord(true)
-                        .build();
+                        .get();
                 Iterator<CSVRecord> iterator = csvFormat.parse(reader).iterator();
 
-                String[] headers = iterator.next().values();
-                String prepareHeaders = prepareHeaders(headers);
-                String whereItems = whereItems(this.readWhere);
-                int[] mapIndexes = mapIndexes(headers);
+                if (iterator.hasNext()) {
+                    String[] headers = iterator.next().values();
+                    String prepareHeaders = prepareHeaders(headers);
+                    String whereItems = whereItems(this.readWhere);
+                    int[] mapIndexes = mapIndexes(headers);
 
-                PreparedStatement stm = selectStatement(session, prepareHeaders, whereItems);
-                BoundStatement bound;
+                    PreparedStatement stm = selectStatement(session, prepareHeaders, whereItems);
+                    BoundStatement bound;
 
-                String itm;
-                String[] line;
-                String[] newLine= new String[this.readWhere.length];
-                Row row;
-                com.datastax.oss.driver.api.core.type.DataType itmType;
-                for (;iterator.hasNext();) {
-                    line = iterator.next().values();
+                    String itm;
+                    String[] line;
+                    String[] newLine = new String[this.readWhere.length];
+                    Row row;
+                    com.datastax.oss.driver.api.core.type.DataType itmType;
+                    for (; iterator.hasNext(); ) {
+                        line = iterator.next().values();
 
-                    //  bind items for query
-                    for (int i: mapIndexes)
-                        newLine[i]=line[i];
-                    bound=stm.bind((Object[]) newLine);
-                    totalCount++;
+                        //  bind items for query
+                        for (int i : mapIndexes)
+                            newLine[i] = line[i];
+                        bound = stm.bind((Object[]) newLine);
+                        totalCount++;
 
-                    // execute query
-                    row = session.execute(bound).one();
-                    if (row==null) continue;
+                        // execute query
+                        row = session.execute(bound).one();
+                        if (row == null) continue;
 
-                    //  check values from query
-                    for (int i=0;i<headers.length; i++) {
-                        itmType = row.getType(i);
-                        itm = row.getString(i);
-                        if (itm!=null) {
-                            if (itmType == DataTypes.TIME) {
-                                if (!LocalTime.parse(itm).equals(LocalTime.parse(line[i])))
-                                    throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
-                            } else {
-                                if (itmType == DataTypes.TIMESTAMP) {
-                                    if (!Instant.parse(itm).equals(Instant.parse(line[i]))) {
+                        //  check values from query
+                        for (int i = 0; i < headers.length; i++) {
+                            itmType = row.getType(i);
+                            itm = row.getString(i);
+                            if (itm != null) {
+                                if (itmType == DataTypes.TIME) {
+                                    if (!LocalTime.parse(itm).equals(LocalTime.parse(line[i])))
                                         throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
-                                    }
                                 } else {
-                                    if (!itm.equals(line[i]))
-                                        throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
+                                    if (itmType == DataTypes.TIMESTAMP) {
+                                        if (!Instant.parse(itm).equals(Instant.parse(line[i]))) {
+                                            throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
+                                        }
+                                    } else {
+                                        if (!itm.equals(line[i]))
+                                            throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
+                                    }
                                 }
                             }
                         }

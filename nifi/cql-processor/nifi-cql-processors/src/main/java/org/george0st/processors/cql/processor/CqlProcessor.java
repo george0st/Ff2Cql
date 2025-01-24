@@ -1,11 +1,7 @@
 package org.george0st.processors.cql.processor;
 
-import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.processors.cql.CqlAccess;
 import org.george0st.processors.cql.helper.Setup;
-import org.george0st.processors.cql.CqlAccess;
-import org.george0st.processors.cql.helper.Setup;
-
 import javax.management.InvalidAttributeValueException;
 import java.io.IOException;
 
@@ -50,5 +46,5 @@ abstract class CqlProcessor extends CqlAccess {
         return prepareItems.toString();
     }
 
-    abstract long execute(String fileName) throws CsvValidationException, IOException, InvalidAttributeValueException;
+    abstract long execute(String fileName) throws IOException, InvalidAttributeValueException;
 }

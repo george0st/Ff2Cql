@@ -95,30 +95,31 @@ public class CqlCreateSchema extends CqlAccess {
         // generate random file name
         File randomFile=getRandomFile();
 
-        // generate random content
-        try (FileWriter writer =new FileWriter(randomFile,false)){
-            try (CSVWriter csvWriter = new CSVWriter(writer)){
+            // generate random content
+        try (FileWriter writer = new FileWriter(randomFile, false)) {
+            if (csvItems>=0) {
+                try (CSVWriter csvWriter = new CSVWriter(writer)) {
+                    // write header
+                    csvWriter.writeNext(getColumns());
 
-                // write header
-                csvWriter.writeNext(getColumns());
-
-                // write content
-                for (int i=0;i<csvItems;i++) {
-                    csvWriter.writeNext(new String[]{
-                            sequenceID ? Integer.toString(i) : Integer.toString(rnd.getInt(Integer.MAX_VALUE)), //  bigint
-                            Integer.toString(rnd.getInt(Integer.MAX_VALUE)),                    //  int
-                            rnd.getStringSequence(10),                              // text
-                            Float.toString(rnd.getFloat(1000)),                     // float
-                            Double.toString(rnd.getDouble(1000)),                   //  double
-                            rnd.getLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE),    //  date
-                            rnd.getLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME),    //  time
-                            rnd.getInstant().toString(),                                     //  timestamp
-                            rnd.getBoolean().toString(),                                     //  boolean
-                            rnd.getUUID(false).toString(),                          //  uuid
-                            Integer.toString(rnd.getInt(0, Short.MAX_VALUE)),                //  smallint
-                            Integer.toString(rnd.getInt(0, Byte.MAX_VALUE)),                 //  tinyint
-                            rnd.getUUID(true).toString(),                           //  timeuuid
-                            rnd.getStringSequence(5)});                                //  varchar
+                    // write content
+                    for (int i = 0; i < csvItems; i++) {
+                        csvWriter.writeNext(new String[]{
+                                sequenceID ? Integer.toString(i) : Integer.toString(rnd.getInt(Integer.MAX_VALUE)), //  bigint
+                                Integer.toString(rnd.getInt(Integer.MAX_VALUE)),                    //  int
+                                rnd.getStringSequence(10),                              // text
+                                Float.toString(rnd.getFloat(1000)),                     // float
+                                Double.toString(rnd.getDouble(1000)),                   //  double
+                                rnd.getLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE),    //  date
+                                rnd.getLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME),    //  time
+                                rnd.getInstant().toString(),                                     //  timestamp
+                                rnd.getBoolean().toString(),                                     //  boolean
+                                rnd.getUUID(false).toString(),                          //  uuid
+                                Integer.toString(rnd.getInt(0, Short.MAX_VALUE)),                //  smallint
+                                Integer.toString(rnd.getInt(0, Byte.MAX_VALUE)),                 //  tinyint
+                                rnd.getUUID(true).toString(),                           //  timeuuid
+                                rnd.getStringSequence(5)});                                //  varchar
+                    }
                 }
             }
         }

@@ -142,4 +142,18 @@ class Ff2CqlProcessorTest {
         coreTest(randomFile, false);
     }
 
+    @Test
+    @DisplayName("Only header WR, O items in CSV")
+    void csvWROnlyCSVHeader() throws IOException, CsvValidationException, InterruptedException {
+        File randomFile=schema.generateRndCSVFile(0, true);
+        coreTest(randomFile, true);
+    }
+
+    @Test
+    @DisplayName("Empty file WR, O items in CSV")
+    void csvWREmptyCSV() throws IOException, CsvValidationException, InterruptedException {
+        File randomFile=schema.generateRndCSVFile(-1, true);
+        coreTest(randomFile, true);
+    }
+
 }

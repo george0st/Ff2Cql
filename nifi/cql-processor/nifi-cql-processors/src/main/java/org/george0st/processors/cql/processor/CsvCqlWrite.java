@@ -1,21 +1,19 @@
 package org.george0st.processors.cql.processor;
 
+
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.BatchStatement;
 import com.datastax.oss.driver.api.core.cql.DefaultBatchType;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.exceptions.CsvValidationException;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
 import org.george0st.processors.cql.CqlAccess;
 import org.george0st.processors.cql.helper.Setup;
-import org.george0st.processors.cql.CqlAccess;
 
 import java.io.*;
+import java.util.Iterator;
 
 
 /**
@@ -31,47 +29,43 @@ public class CsvCqlWrite extends CqlProcessor {
         super(access, dryRun);
     }
 
-    private long executeCore(CqlSession session, Reader reader) throws IOException, CsvValidationException {
+    private long executeCore(CqlSession session, Reader reader) throws IOException {
         long totalCount=0;
 
-        CSVParser parser = new CSVParserBuilder()
-                .withSeparator(',')
-                .build();
+        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+                .setSkipHeaderRecord(true)
+                .get();
+        Iterator<CSVRecord> iterator = csvFormat.parse(reader).iterator();
 
-        try (CSVReader csvReader = new CSVReaderBuilder(reader)
-                .withSkipLines(0)
-                .withCSVParser(parser)
-                .build()){
+        String[] headers = iterator.next().values();
+        String prepareHeaders = prepareHeaders(headers);
+        String prepareItems = prepareItems(headers);
+        PreparedStatement stm = insertStatement(session, prepareHeaders, prepareItems);
 
-            String[] headers = csvReader.readNext();
-            String prepareHeaders = prepareHeaders(headers);
-            String prepareItems = prepareItems(headers);
-            PreparedStatement stm = insertStatement(session,prepareHeaders, prepareItems);
+        BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.UNLOGGED);
+        String[] line;
+        int count=0;
 
-            BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.UNLOGGED);
-            String[] line;
-            int count=0;
+        for (;iterator.hasNext();) {
+            line = iterator.next().values();
+            batch = batch.addAll(stm.bind((Object[]) line));
+            count++;
+            totalCount++;
 
-            while ((line = csvReader.readNext()) != null) {
-                batch = batch.addAll(stm.bind((Object[]) line));
-                count++;
-                totalCount++;
-
-                if (count==setup.getBulk()) {
-                    if (!dryRun)
-                        session.execute(batch);
-                    batch = batch.clear();
-                    count = 0;
-                }
-            }
-            if (count > 0)
+            if (count==setup.getBatch()) {
                 if (!dryRun)
                     session.execute(batch);
+                batch = batch.clear();
+                count = 0;
+            }
         }
+        if (count > 0)
+            if (!dryRun)
+                session.execute(batch);
         return totalCount;
     }
 
-    public long execute(String fileName) throws CsvValidationException, IOException {
+    public long execute(String fileName) throws IOException {
         long totalCount=0;
 
         try (CqlSession session = sessionBuilder.build()) {
@@ -85,40 +79,6 @@ public class CsvCqlWrite extends CqlProcessor {
             else
                 try (Reader reader = new FileReader(fileName)) {
                     totalCount = this.executeCore(session, reader);
-//                CSVParser parser = new CSVParserBuilder()
-//                        .withSeparator(',')
-//                        .build();
-//
-//                try (CSVReader csvReader = new CSVReaderBuilder(reader)
-//                        .withSkipLines(0)
-//                        .withCSVParser(parser)
-//                        .build()){
-//
-//                    String[] headers = csvReader.readNext();
-//                    String prepareHeaders = prepareHeaders(headers);
-//                    String prepareItems = prepareItems(headers);
-//                    PreparedStatement stm = insertStatement(session,prepareHeaders, prepareItems);
-//
-//                    BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.UNLOGGED);
-//                    String[] line;
-//                    int count=0;
-//
-//                    while ((line = csvReader.readNext()) != null) {
-//                        batch = batch.addAll(stm.bind((Object[]) line));
-//                        count++;
-//                        totalCount++;
-//
-//                        if (count==setup.getBulk()) {
-//                            if (!dryRun)
-//                                session.execute(batch);
-//                            batch = batch.clear();
-//                            count = 0;
-//                        }
-//                    }
-//                    if (count > 0)
-//                        if (!dryRun)
-//                            session.execute(batch);
-//                }
             }
         }
         return totalCount;

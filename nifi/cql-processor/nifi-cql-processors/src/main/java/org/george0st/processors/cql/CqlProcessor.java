@@ -16,8 +16,6 @@
  */
 package org.george0st.processors.cql;
 
-import com.opencsv.exceptions.CsvValidationException;
-import org.apache.nifi.components.DescribedValue;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.annotation.behavior.ReadsAttribute;
@@ -39,9 +37,7 @@ import org.george0st.processors.cql.processor.CsvCqlWrite;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -60,7 +56,7 @@ public class CqlProcessor extends AbstractProcessor {
             .Builder()
             .name("Batch Size")
             .displayName("Batch Size")
-            .description("Size of batch for data ingest.")
+            .description("Size of bulk for data ingest.")
             .required(false)
             .defaultValue("200")
             .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)   //  StandardValidators.NON_EMPTY_VALIDATOR)
@@ -154,13 +150,14 @@ public class CqlProcessor extends AbstractProcessor {
         newSetup.ipAddresses=new String[]{"10.129.53.159","10.129.53.154","10.129.53.153"};
         newSetup.port=9042;
         newSetup.username="perf";
+        // TODO: get password from secure property
         newSetup.setPwd("cGVyZg==");
         newSetup.localDC="datacenter1";
         newSetup.connectionTimeout=900;
         newSetup.requestTimeout=60;
         newSetup.consistencyLevel="LOCAL_ONE";
         newSetup.table="prftest.csv2cql_test3";
-        newSetup.setBulk(context.getProperty("Batch Size").asLong());
+        newSetup.setBatch(context.getProperty("Batch Size").asLong());
 
         //  if setup is different then use new setup and cqlAccess
         //      or cqlAccess will be still the same

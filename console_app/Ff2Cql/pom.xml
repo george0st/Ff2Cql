@@ -6,7 +6,7 @@
 
     <groupId>org.george0st</groupId>
     <artifactId>Ff2Cql</artifactId>
-    <version>1.5</version>
+    <version>1.6</version>
     <packaging>jar</packaging>
 
     <build>
