@@ -17,7 +17,7 @@ import java.util.concurrent.Callable;
 
 @Command(name = "example",
         mixinStandardHelpOptions = true,
-        version = "Ff2Cql 1.6",
+        version = "Ff2Cql 1.7",
         description = "Simple transfer data from NiFi FlowFile to CQL.")
 public class Main implements Callable<Integer> {
 
