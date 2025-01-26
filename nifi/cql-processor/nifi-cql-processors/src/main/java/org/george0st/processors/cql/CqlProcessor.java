@@ -155,7 +155,7 @@ public class CqlProcessor extends AbstractProcessor {
         newSetup.port=9042;
         newSetup.username="perf";
         // TODO: get password from secure property
-        newSetup.setPwd("cGVyZg==");
+        newSetup.pwd="cGVyZg==";
         newSetup.localDC="datacenter1";
         newSetup.connectionTimeout=900;
         newSetup.requestTimeout=60;
@@ -174,11 +174,13 @@ public class CqlProcessor extends AbstractProcessor {
 
         //  get CSV
         byte[] csv = this.getByteContent(flowFile,session);
+        Long count;
 
         //  write CSV
         CsvCqlWrite write=new CsvCqlWrite(cqlAccess, dryRun);
         try {
-            write.executeContent(csv);
+            count=write.executeContent(csv);
+            session.putAttribute(flowFile, "CQLCount", count.toString());
         } catch (IOException e) {
             session.transfer(flowFile, REL_FAILURE);
             return;

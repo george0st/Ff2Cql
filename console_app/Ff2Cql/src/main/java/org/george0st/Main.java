@@ -71,11 +71,6 @@ public class Main implements Callable<Integer> {
                     System.lineSeparator());
 
         }
-//        catch (CsvValidationException ex){
-//            logger.error("CSV error '{}', exception '{}'.", inputFile == null ? "stdin" : inputFile, ex.toString());
-//            if (errorStop)
-//                return ExitCodes.CSV_ERROR;
-//        }
         catch(Exception ex) {
             logger.error("Processing error '{}', exception '{}'.", inputFile == null ? "stdin" : inputFile, ex.toString());
             if (errorStop)

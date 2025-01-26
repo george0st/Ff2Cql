@@ -1,4 +1,3 @@
-import com.opencsv.exceptions.CsvValidationException;
 import org.george0st.CqlCreateSchema;
 import org.george0st.helper.ReadableValue;
 import org.george0st.processor.CsvCqlValidate;
@@ -45,15 +44,15 @@ class Ff2CqlProcessorTest {
         cleanUp();
     }
 
-    void coreTest(File randomFile, boolean validateAlso) throws CsvValidationException, IOException, InterruptedException {
+    void coreTest(File randomFile, boolean validateAlso) throws IOException, InterruptedException {
         long finish, start, count;
 
         // write
         start = System.currentTimeMillis();
         count = (new CsvCqlWrite(Setup.getInstance(testSetupFile), false)).execute(randomFile==null ? null : randomFile.getPath());
         finish = System.currentTimeMillis();
-        System.out.println("WRITE, Items: " + ReadableValue.fromNumber(count) + ", " +
-                String.format("Perf: %d [calls/sec], ", count /((finish-start)/1000)) +
+        System.out.println("WRITE; Items: " + ReadableValue.fromNumber(count) + "; " +
+                String.format("Perf: %.1f [calls/sec]; ", count / ((finish-start) / 1000.0)) +
                 "Duration: " + ReadableValue.fromMillisecond(finish - start));
 
         if ((validateAlso) && (randomFile!=null)) {
@@ -64,8 +63,8 @@ class Ff2CqlProcessorTest {
             start = System.currentTimeMillis();
             count = (new CsvCqlValidate(Setup.getInstance(testSetupFile), schema.getPrimaryKeys())).execute(randomFile.getPath());
             finish = System.currentTimeMillis();
-            System.out.println("VALIDATE, Items: " + ReadableValue.fromNumber(count) + ", " +
-                    String.format("Perf: %d [calls/sec], ", count /((finish-start)/1000)) +
+            System.out.println("VALIDATE; Items: " + ReadableValue.fromNumber(count) + "; " +
+                    String.format("Perf: %.1f [calls/sec]; ", count / ((finish-start) / 1000.0)) +
                     "Duration: " + ReadableValue.fromMillisecond(finish - start));
         }
     }
@@ -79,21 +78,21 @@ class Ff2CqlProcessorTest {
 
     @Test
     @DisplayName("Sequence WR, 2. 1K items in CSV")
-    void csvWRSequence1K() throws IOException, CsvValidationException, InterruptedException {
+    void csvWRSequence1K() throws IOException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(1_000, true);
         coreTest(randomFile, true);
     }
 
     @Test
     @DisplayName("Sequence W, 3. 10K items in CSV")
-    void csvWSequence10K() throws IOException, CsvValidationException, InterruptedException {
+    void csvWSequence10K() throws IOException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(10_000, true);
         coreTest(randomFile, false);
     }
 
     @Test
     @DisplayName("Sequence W, 4. 100K items in CSV")
-    void csvWSequence100K() throws IOException, CsvValidationException, InterruptedException {
+    void csvWSequence100K() throws IOException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(100_000, true);
         coreTest(randomFile, false);
     }
@@ -101,35 +100,35 @@ class Ff2CqlProcessorTest {
     @Test
     @Disabled
     @DisplayName("Sequence W, 5. 1M items in CSV")
-    void csvWSequence1M() throws IOException, CsvValidationException, InterruptedException {
+    void csvWSequence1M() throws IOException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(1_000_000, true);
         coreTest(randomFile, false);
     }
 
     @Test
     @DisplayName("Random WR, 1. 100 items in CSV")
-    void csvWRRandom100() throws IOException, CsvValidationException, InterruptedException {
+    void csvWRRandom100() throws IOException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(100, false);
         coreTest(randomFile, true);
     }
 
     @Test
     @DisplayName("Random WR, 2. 1K items in CSV")
-    void csvWRRandom1K() throws IOException, CsvValidationException, InterruptedException {
+    void csvWRRandom1K() throws IOException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(1_000, false);
         coreTest(randomFile, true);
     }
 
     @Test
     @DisplayName("Random W, 3. 10K items in CSV")
-    void csvWRandom10K() throws IOException, CsvValidationException, InterruptedException {
+    void csvWRandom10K() throws IOException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(10_000, false);
         coreTest(randomFile, false);
     }
 
     @Test
     @DisplayName("Random W, 4. 100K items in CSV")
-    void csvWRandom100K() throws IOException, CsvValidationException, InterruptedException {
+    void csvWRandom100K() throws IOException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(100_000, false);
         coreTest(randomFile, false);
     }
@@ -137,21 +136,21 @@ class Ff2CqlProcessorTest {
     @Test
     @Disabled
     @DisplayName("Random W, 5. 1M items in CSV")
-    void csvWRandom1M() throws IOException, CsvValidationException, InterruptedException {
+    void csvWRandom1M() throws IOException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(1_000_000, false);
         coreTest(randomFile, false);
     }
 
     @Test
     @DisplayName("Only header WR, O items in CSV")
-    void csvWROnlyCSVHeader() throws IOException, CsvValidationException, InterruptedException {
+    void csvWROnlyCSVHeader() throws IOException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(0, true);
         coreTest(randomFile, true);
     }
 
     @Test
     @DisplayName("Empty file WR, O items in CSV")
-    void csvWREmptyCSV() throws IOException, CsvValidationException, InterruptedException {
+    void csvWREmptyCSV() throws IOException, InterruptedException {
         File randomFile=schema.generateRndCSVFile(-1, true);
         coreTest(randomFile, true);
     }
