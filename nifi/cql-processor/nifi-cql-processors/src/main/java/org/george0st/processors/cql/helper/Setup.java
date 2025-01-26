@@ -14,7 +14,7 @@ public class Setup {
     public String []ipAddresses;
     public int port;
     public String username;
-    private String pwd;
+    public String pwd;
     public String localDC;
     public long connectionTimeout;
     public long requestTimeout;
