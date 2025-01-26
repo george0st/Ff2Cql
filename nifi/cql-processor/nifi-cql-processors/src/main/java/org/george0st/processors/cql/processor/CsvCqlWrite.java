@@ -1,6 +1,5 @@
 package org.george0st.processors.cql.processor;
 
-
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.BatchStatement;
@@ -37,31 +36,61 @@ public class CsvCqlWrite extends CqlProcessor {
                 .get();
         Iterator<CSVRecord> iterator = csvFormat.parse(reader).iterator();
 
-        String[] headers = iterator.next().values();
-        String prepareHeaders = prepareHeaders(headers);
-        String prepareItems = prepareItems(headers);
-        PreparedStatement stm = insertStatement(session, prepareHeaders, prepareItems);
+        if (iterator.hasNext()) {
+            String[] headers = iterator.next().values();
+            String prepareHeaders = prepareHeaders(headers);
+            String prepareItems = prepareItems(headers);
+            PreparedStatement stm = insertStatement(session, prepareHeaders, prepareItems);
 
-        BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.UNLOGGED);
-        String[] line;
-        int count=0;
+            BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.UNLOGGED);
+            String[] line;
+            int count = 0;
 
-        for (;iterator.hasNext();) {
-            line = iterator.next().values();
-            batch = batch.addAll(stm.bind((Object[]) line));
-            count++;
-            totalCount++;
+            while (iterator.hasNext()) {
+                line = iterator.next().values();
+                batch = batch.addAll(stm.bind((Object[]) line));
+                count++;
+                totalCount++;
 
-            if (count==setup.getBatch()) {
+                if (count == setup.getBatch()) {
+                    if (!dryRun)
+                        session.execute(batch);
+                    batch = batch.clear();
+                    count = 0;
+                }
+            }
+            if (count > 0)
                 if (!dryRun)
                     session.execute(batch);
-                batch = batch.clear();
-                count = 0;
+        }
+        return totalCount;
+    }
+
+    public long executeContent(String data) throws IOException {
+        long totalCount=0;
+
+        try (CqlSession session = sessionBuilder.build()) {
+            if (data!=null) {
+                try (Reader reader = new StringReader(data)) {
+                    totalCount = this.executeCore(session, reader);
+                }
             }
         }
-        if (count > 0)
-            if (!dryRun)
-                session.execute(batch);
+        return totalCount;
+    }
+
+    public long executeContent(byte[] byteArray) throws IOException {
+        long totalCount=0;
+
+        try (CqlSession session = sessionBuilder.build()) {
+            if (byteArray!=null) {
+                try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray)) {
+                    try (Reader reader = new InputStreamReader(byteArrayInputStream)) {
+                        totalCount = this.executeCore(session, reader);
+                    }
+                }
+            }
+        }
         return totalCount;
     }
 
@@ -79,7 +108,7 @@ public class CsvCqlWrite extends CqlProcessor {
             else
                 try (Reader reader = new FileReader(fileName)) {
                     totalCount = this.executeCore(session, reader);
-            }
+                }
         }
         return totalCount;
     }

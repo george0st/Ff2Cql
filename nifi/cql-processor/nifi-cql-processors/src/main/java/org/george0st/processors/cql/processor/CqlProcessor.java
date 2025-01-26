@@ -4,6 +4,7 @@ import org.george0st.processors.cql.CqlAccess;
 import org.george0st.processors.cql.helper.Setup;
 import javax.management.InvalidAttributeValueException;
 import java.io.IOException;
+import java.io.Reader;
 
 
 /**
@@ -46,5 +47,8 @@ abstract class CqlProcessor extends CqlAccess {
         return prepareItems.toString();
     }
 
-    abstract long execute(String fileName) throws IOException, InvalidAttributeValueException;
+    abstract long execute(String fileName) throws IOException;
+    abstract long executeContent(String data) throws IOException;
+    abstract long executeContent(byte[] byteArray) throws IOException;
+
 }
