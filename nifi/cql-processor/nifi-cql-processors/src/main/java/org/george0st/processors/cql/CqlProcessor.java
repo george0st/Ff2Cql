@@ -35,9 +35,7 @@ import org.apache.nifi.processor.util.StandardValidators;
 import org.george0st.processors.cql.helper.Setup;
 import org.george0st.processors.cql.processor.CsvCqlWrite;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -124,6 +122,12 @@ public class CqlProcessor extends AbstractProcessor {
         return byteArrayOutputStream.toString();
     }
 
+    private byte[] getByteContent(FlowFile flowFile, ProcessSession session){
+        final var byteArrayOutputStream = new ByteArrayOutputStream();
+        session.exportTo(flowFile, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
+    }
+
     /**
      * Set flow file content based on string
      * @param flowFile  The flow file
@@ -172,6 +176,11 @@ public class CqlProcessor extends AbstractProcessor {
         String csv = this.getContent(flowFile,session);
 
         CsvCqlWrite write=new CsvCqlWrite(cqlAccess, dryRun);
+        try {
+            write.execute(null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 //        try {
 //            write.execute(null);
 //        } catch (CsvValidationException e) {

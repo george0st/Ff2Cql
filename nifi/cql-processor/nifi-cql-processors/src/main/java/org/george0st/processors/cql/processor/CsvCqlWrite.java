@@ -46,7 +46,7 @@ public class CsvCqlWrite extends CqlProcessor {
             String[] line;
             int count = 0;
 
-            for (; iterator.hasNext(); ) {
+            while (iterator.hasNext()) {
                 line = iterator.next().values();
                 batch = batch.addAll(stm.bind((Object[]) line));
                 count++;
@@ -62,6 +62,34 @@ public class CsvCqlWrite extends CqlProcessor {
             if (count > 0)
                 if (!dryRun)
                     session.execute(batch);
+        }
+        return totalCount;
+    }
+
+    public long executeContent(String data) throws IOException {
+        long totalCount=0;
+
+        try (CqlSession session = sessionBuilder.build()) {
+            if (data!=null) {
+                try (Reader reader = new StringReader(data)) {
+                    totalCount = this.executeCore(session, reader);
+                }
+            }
+        }
+        return totalCount;
+    }
+
+    public long executeContent(byte[] byteArray) throws IOException {
+        long totalCount=0;
+
+        try (CqlSession session = sessionBuilder.build()) {
+            if (byteArray!=null) {
+                try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray)) {
+                    try (Reader reader = new InputStreamReader(byteArrayInputStream)) {
+                        totalCount = this.executeCore(session, reader);
+                    }
+                }
+            }
         }
         return totalCount;
     }
