@@ -173,23 +173,17 @@ public class CqlProcessor extends AbstractProcessor {
         else session.putAttribute(flowFile, "CQLAccess","REUSE");
 
         //  get CSV
-        String csv = this.getContent(flowFile,session);
+        byte[] csv = this.getByteContent(flowFile,session);
 
+        //  write CSV
         CsvCqlWrite write=new CsvCqlWrite(cqlAccess, dryRun);
         try {
-            write.execute(null);
+            write.executeContent(csv);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            session.transfer(flowFile, REL_FAILURE);
+            return;
+            //throw new RuntimeException(e);
         }
-//        try {
-//            write.execute(null);
-//        } catch (CsvValidationException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-        //  write CSV
-
 
 //        //  get property
 //        context.getProperty("");
