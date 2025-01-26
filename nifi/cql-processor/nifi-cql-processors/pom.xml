@@ -96,25 +96,6 @@
             <artifactId>commons-csv</artifactId>
             <version>1.13.0</version>
         </dependency>
-        <!-- TODO: temporary dependency-->
-<!--        <dependency>-->
-<!--            <groupId>com.opencsv</groupId>-->
-<!--            <artifactId>opencsv</artifactId>-->
-<!--            <version>5.10</version>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>commons-beanutils</groupId>-->
-<!--            <artifactId>commons-beanutils</artifactId>-->
-<!--            <version>1.9.4</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>commons-logging</groupId>-->
-<!--            <artifactId>commons-logging</artifactId>-->
-<!--            <version>1.2</version>-->
-<!--        </dependency>-->
-
-
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-mock</artifactId>
