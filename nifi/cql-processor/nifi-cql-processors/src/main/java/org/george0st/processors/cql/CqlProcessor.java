@@ -52,7 +52,7 @@ public class CqlProcessor extends AbstractProcessor {
 
     private AtomicInteger counter=new AtomicInteger(0);
 
-    public static final PropertyDescriptor BATCH_SIZE = new PropertyDescriptor
+    public static final PropertyDescriptor MY_BATCH_SIZE = new PropertyDescriptor
             .Builder()
             .name("Batch Size")
             .displayName("Batch Size")
@@ -62,7 +62,7 @@ public class CqlProcessor extends AbstractProcessor {
             .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)   //  StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
-    public static final PropertyDescriptor DRY_RUN = new PropertyDescriptor
+    public static final PropertyDescriptor MY_DRY_RUN = new PropertyDescriptor
             .Builder()
             .name("Dry Run")
             .displayName("Dry Run")
@@ -73,27 +73,34 @@ public class CqlProcessor extends AbstractProcessor {
             .allowableValues("true", "false")
             .build();
 
-    public static final PropertyDescriptor USERNAME = new PropertyDescriptor
+    public static final PropertyDescriptor MY_PORT = new PropertyDescriptor
+            .Builder()
+            .name("Port")
+            .displayName("Port")
+            .description("Port for communication.")
+            .required(false)
+            .defaultValue("9042")
+            .addValidator(StandardValidators.POSITIVE_INTEGER_VALIDATOR)
+            .build();
+
+    public static final PropertyDescriptor MY_USERNAME = new PropertyDescriptor
             .Builder()
             .name("Username")
             .displayName("Username")
             .description("Username for the CQL connection.")
             .required(true)
-            .defaultValue("cassandra")
-            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
-    public static final PropertyDescriptor PASSWORD = new PropertyDescriptor
+    public static final PropertyDescriptor MY_PASSWORD = new PropertyDescriptor
             .Builder()
             .name("Password")
             .displayName("Password")
             .description("Password for the CQL connection.")
             .required(true)
-            .defaultValue("cassandra")
-            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .sensitive(true)
             .build();
 
@@ -116,7 +123,7 @@ public class CqlProcessor extends AbstractProcessor {
 
     @Override
     protected void init(final ProcessorInitializationContext context) {
-        descriptors = List.of(BATCH_SIZE, DRY_RUN, USERNAME, PASSWORD);
+        descriptors = List.of(MY_BATCH_SIZE, MY_DRY_RUN, MY_PORT, MY_USERNAME, MY_PASSWORD);
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
 //        setup=new Setup();
     }
@@ -179,15 +186,15 @@ public class CqlProcessor extends AbstractProcessor {
         Setup newSetup= new Setup();
 
         newSetup.ipAddresses=new String[]{"10.129.53.159","10.129.53.154","10.129.53.153"};
-        newSetup.port=9042;
-        newSetup.username=context.getProperty("Username").getValue();;
-        newSetup.setPwd(context.getProperty("Password").getValue());
+        newSetup.port=context.getProperty(MY_PORT.getName()).asInteger();
+        newSetup.username=context.getProperty(MY_USERNAME.getName()).getValue();
+        newSetup.setPwd(context.getProperty(MY_PASSWORD.getName()).getValue());
         newSetup.localDC="datacenter1";
         newSetup.connectionTimeout=900;
         newSetup.requestTimeout=60;
         newSetup.consistencyLevel="LOCAL_ONE";
         newSetup.table="prftest.csv2cql_test3";
-        newSetup.setBatch(context.getProperty("Batch Size").asLong());
+        newSetup.setBatch(context.getProperty(MY_BATCH_SIZE.getName()).asLong());
 
         //  if setup is different then use new setup and cqlAccess
         //      or cqlAccess will be still the same
