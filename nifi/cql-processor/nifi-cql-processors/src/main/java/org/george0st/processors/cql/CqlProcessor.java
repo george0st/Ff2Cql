@@ -17,6 +17,8 @@
 package org.george0st.processors.cql;
 
 import org.apache.nifi.components.PropertyDescriptor;
+import org.apache.nifi.components.PropertyValue;
+import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.annotation.behavior.ReadsAttribute;
 import org.apache.nifi.annotation.behavior.ReadsAttributes;
@@ -71,6 +73,30 @@ public class CqlProcessor extends AbstractProcessor {
             .allowableValues("true", "false")
             .build();
 
+    public static final PropertyDescriptor USERNAME = new PropertyDescriptor
+            .Builder()
+            .name("Username")
+            .displayName("Username")
+            .description("Username for the CQL connection.")
+            .required(true)
+            .defaultValue("cassandra")
+            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
+            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .build();
+
+    public static final PropertyDescriptor PASSWORD = new PropertyDescriptor
+            .Builder()
+            .name("Password")
+            .displayName("Password")
+            .description("Password for the CQL connection.")
+            .required(true)
+            .defaultValue("cassandra")
+            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
+            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            .sensitive(true)
+            .build();
+
     public static final Relationship REL_SUCCESS = new Relationship.Builder()
             .name("success")
             .description("Success processing")
@@ -90,7 +116,7 @@ public class CqlProcessor extends AbstractProcessor {
 
     @Override
     protected void init(final ProcessorInitializationContext context) {
-        descriptors = List.of(BATCH_SIZE, DRY_RUN);
+        descriptors = List.of(BATCH_SIZE, DRY_RUN, USERNAME, PASSWORD);
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
 //        setup=new Setup();
     }
@@ -151,11 +177,11 @@ public class CqlProcessor extends AbstractProcessor {
 
         // define Setup
         Setup newSetup= new Setup();
+
         newSetup.ipAddresses=new String[]{"10.129.53.159","10.129.53.154","10.129.53.153"};
         newSetup.port=9042;
-        newSetup.username="perf";
-        // TODO: get password from secure property
-        newSetup.pwd="cGVyZg==";
+        newSetup.username=context.getProperty("Username").getValue();;
+        newSetup.pwd=context.getProperty("Password").getValue();
         newSetup.localDC="datacenter1";
         newSetup.connectionTimeout=900;
         newSetup.requestTimeout=60;
@@ -181,6 +207,7 @@ public class CqlProcessor extends AbstractProcessor {
         try {
             count=write.executeContent(csv);
             session.putAttribute(flowFile, "CQLCount", count.toString());
+            session.putAttribute(flowFile, "CQLPwd", context.getProperty("Password").toString());
         } catch (IOException e) {
             session.transfer(flowFile, REL_FAILURE);
             return;
