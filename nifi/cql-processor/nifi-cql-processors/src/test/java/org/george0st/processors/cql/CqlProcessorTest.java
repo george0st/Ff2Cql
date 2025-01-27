@@ -46,6 +46,8 @@ public class CqlProcessorTest {
         long finish, start, count;
         FlowFile result;
 
+        testRunner.setProperty("Username", "perf");
+        testRunner.setProperty("Password", "perf");
         start = System.currentTimeMillis();
         testRunner.run();
         result = testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS).getLast();
