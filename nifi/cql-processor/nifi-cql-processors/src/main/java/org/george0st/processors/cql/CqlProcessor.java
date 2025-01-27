@@ -181,7 +181,7 @@ public class CqlProcessor extends AbstractProcessor {
         newSetup.ipAddresses=new String[]{"10.129.53.159","10.129.53.154","10.129.53.153"};
         newSetup.port=9042;
         newSetup.username=context.getProperty("Username").getValue();;
-        newSetup.pwd=context.getProperty("Password").getValue();
+        newSetup.setPwd(context.getProperty("Password").getValue());
         newSetup.localDC="datacenter1";
         newSetup.connectionTimeout=900;
         newSetup.requestTimeout=60;
