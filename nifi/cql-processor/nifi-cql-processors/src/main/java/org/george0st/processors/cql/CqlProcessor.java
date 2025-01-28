@@ -104,6 +104,37 @@ public class CqlProcessor extends AbstractProcessor {
             .sensitive(true)
             .build();
 
+    public static final PropertyDescriptor MY_LOCALDC = new PropertyDescriptor
+            .Builder()
+            .name("Local Data Center")
+            .displayName("Local Data Center")
+            .description("Name of local data center e.g. 'dc1', 'datacenter1', etc.")
+            .required(true)
+            .defaultValue("datacenter1")
+            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .build();
+
+    public static final PropertyDescriptor MY_CONNECTION_TIMEOUT = new PropertyDescriptor
+            .Builder()
+            .name("Connection Timeout")
+            .displayName("Connection Timeout")
+            .description("Timeout for connection to CQL engine.")
+            .required(true)
+            .defaultValue("900")
+            .addValidator(StandardValidators.LONG_VALIDATOR)
+            .build();
+
+    public static final PropertyDescriptor MY_REQUEST_TIMEOUT = new PropertyDescriptor
+            .Builder()
+            .name("Request Timeout")
+            .displayName("Request Timeout")
+            .description("Timeout for request to CQL engine.")
+            .required(true)
+            .defaultValue("60")
+            .addValidator(StandardValidators.LONG_VALIDATOR)
+            .build();
+
     public static final Relationship REL_SUCCESS = new Relationship.Builder()
             .name("success")
             .description("Success processing")
@@ -123,7 +154,14 @@ public class CqlProcessor extends AbstractProcessor {
 
     @Override
     protected void init(final ProcessorInitializationContext context) {
-        descriptors = List.of(MY_BATCH_SIZE, MY_DRY_RUN, MY_PORT, MY_USERNAME, MY_PASSWORD);
+        descriptors = List.of(MY_BATCH_SIZE,
+                MY_DRY_RUN,
+                MY_PORT,
+                MY_USERNAME,
+                MY_PASSWORD,
+                MY_LOCALDC,
+                MY_CONNECTION_TIMEOUT,
+                MY_REQUEST_TIMEOUT);
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
 //        setup=new Setup();
     }
@@ -189,9 +227,9 @@ public class CqlProcessor extends AbstractProcessor {
         newSetup.port=context.getProperty(MY_PORT.getName()).asInteger();
         newSetup.username=context.getProperty(MY_USERNAME.getName()).getValue();
         newSetup.setPwd(context.getProperty(MY_PASSWORD.getName()).getValue());
-        newSetup.localDC="datacenter1";
-        newSetup.connectionTimeout=900;
-        newSetup.requestTimeout=60;
+        newSetup.localDC=context.getProperty(MY_LOCALDC.getName()).getValue();
+        newSetup.connectionTimeout=context.getProperty(MY_CONNECTION_TIMEOUT.getName()).asLong();
+        newSetup.requestTimeout=context.getProperty(MY_REQUEST_TIMEOUT.getName()).asLong();
         newSetup.consistencyLevel="LOCAL_ONE";
         newSetup.table="prftest.csv2cql_test3";
         newSetup.setBatch(context.getProperty(MY_BATCH_SIZE.getName()).asLong());
