@@ -254,21 +254,8 @@ public class CqlProcessor extends AbstractProcessor {
             return;
         }
 
-        try{
-
-            // define Setup
+        try {
             Setup newSetup = new Setup(context);
-
-//            newSetup.setIPAddresses(context.getProperty(MY_IP_ADDRESSES.getName()).getValue());
-//            newSetup.port=context.getProperty(MY_PORT.getName()).asInteger();
-//            newSetup.username=context.getProperty(MY_USERNAME.getName()).getValue();
-//            newSetup.setPwd(context.getProperty(MY_PASSWORD.getName()).getValue());
-//            newSetup.localDC=context.getProperty(MY_LOCALDC.getName()).getValue();
-//            newSetup.connectionTimeout=context.getProperty(MY_CONNECTION_TIMEOUT.getName()).asLong();
-//            newSetup.requestTimeout=context.getProperty(MY_REQUEST_TIMEOUT.getName()).asLong();
-//            newSetup.consistencyLevel=context.getProperty(MY_CONSISTENCY_LEVEL.getName()).getValue();
-//            newSetup.table=context.getProperty(MY_TABLE.getName()).getValue();
-//            newSetup.setBatch(context.getProperty(MY_BATCH_SIZE.getName()).asLong());
 
             //  synch evaluation
             synchronized (this) {
