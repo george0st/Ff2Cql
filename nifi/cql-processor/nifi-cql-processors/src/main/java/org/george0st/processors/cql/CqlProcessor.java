@@ -50,27 +50,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 @WritesAttributes({@WritesAttribute(attribute="", description="")})
 public class CqlProcessor extends AbstractProcessor {
 
-    private AtomicInteger counter=new AtomicInteger(0);
+    //  region All Properties
 
-    public static final PropertyDescriptor MY_BATCH_SIZE = new PropertyDescriptor
+    public static final PropertyDescriptor MY_IP_ADDRESSES = new PropertyDescriptor
             .Builder()
-            .name("Batch Size")
-            .displayName("Batch Size")
-            .description("Size of bulk for data ingest.")
-            .required(false)
-            .defaultValue("200")
-            .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)   //  StandardValidators.NON_EMPTY_VALIDATOR)
-            .build();
-
-    public static final PropertyDescriptor MY_DRY_RUN = new PropertyDescriptor
-            .Builder()
-            .name("Dry Run")
-            .displayName("Dry Run")
-            .description("Dry run for processing (without final write to CQL engine).")
-            .required(false)
-            .defaultValue("false")
-            .addValidator(StandardValidators.BOOLEAN_VALIDATOR)
-            .allowableValues("true", "false")
+            .name("IP Addresses")
+            .displayName("IP Addresses")
+            .description("List of IP addresses for CQL connection, the addresses are splitted by comma (e.g. '192.168.0.1, 192.168.0.2').")
+            .required(true)
+            .defaultValue("")
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
     public static final PropertyDescriptor MY_PORT = new PropertyDescriptor
@@ -135,6 +124,51 @@ public class CqlProcessor extends AbstractProcessor {
             .addValidator(StandardValidators.LONG_VALIDATOR)
             .build();
 
+    public static final PropertyDescriptor MY_CONSISTENCY_LEVEL = new PropertyDescriptor
+            .Builder()
+            .name("Consistency Level")
+            .displayName("Consistency Level")
+            .description("Consistency Level for CQL operations.")
+            .required(true)
+            .defaultValue("LOCAL_ONE")
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .allowableValues("LOCAL_ONE", "LOCAL_QUORUM", "LOCAL_SERIAL", "EACH_QUORUM", "ANY", "ONE", "TWO", "THREE", "QUORUM", "ALL", "SERIAL")
+            .build();
+
+    public static final PropertyDescriptor MY_TABLE = new PropertyDescriptor
+            .Builder()
+            .name("Table")
+            .displayName("Table")
+            .description("Table and schema in CQL.")
+            .required(true)
+            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .build();
+
+    public static final PropertyDescriptor MY_BATCH_SIZE = new PropertyDescriptor
+            .Builder()
+            .name("Batch Size")
+            .displayName("Batch Size")
+            .description("Size of bulk for data ingest.")
+            .required(false)
+            .defaultValue("200")
+            .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)   //  StandardValidators.NON_EMPTY_VALIDATOR)
+            .build();
+
+    public static final PropertyDescriptor MY_DRY_RUN = new PropertyDescriptor
+            .Builder()
+            .name("Dry Run")
+            .displayName("Dry Run")
+            .description("Dry run for processing (without final write to CQL engine).")
+            .required(false)
+            .defaultValue("false")
+            .addValidator(StandardValidators.BOOLEAN_VALIDATOR)
+            .allowableValues("true", "false")
+            .build();
+
+    //  endregion All Properties
+
+    //  region All Relationships
     public static final Relationship REL_SUCCESS = new Relationship.Builder()
             .name("success")
             .description("Success processing")
@@ -145,6 +179,8 @@ public class CqlProcessor extends AbstractProcessor {
             .description("Failed processing")
             .build();
 
+    //  endregion All Relationships
+
     private List<PropertyDescriptor> descriptors;
 
     private Set<Relationship> relationships;
@@ -154,14 +190,17 @@ public class CqlProcessor extends AbstractProcessor {
 
     @Override
     protected void init(final ProcessorInitializationContext context) {
-        descriptors = List.of(MY_BATCH_SIZE,
-                MY_DRY_RUN,
+        descriptors = List.of(MY_IP_ADDRESSES,
                 MY_PORT,
                 MY_USERNAME,
                 MY_PASSWORD,
                 MY_LOCALDC,
                 MY_CONNECTION_TIMEOUT,
-                MY_REQUEST_TIMEOUT);
+                MY_REQUEST_TIMEOUT,
+                MY_CONSISTENCY_LEVEL,
+                MY_TABLE,
+                MY_BATCH_SIZE,
+                MY_DRY_RUN);
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
 //        setup=new Setup();
     }
@@ -178,7 +217,6 @@ public class CqlProcessor extends AbstractProcessor {
 
     @OnScheduled
     public void onScheduled(final ProcessContext context) {
-        counter.set(0);
     }
 
     /**
@@ -216,57 +254,49 @@ public class CqlProcessor extends AbstractProcessor {
         if (flowFile == null) {
             return;
         }
-        // TODO implement
 
-        boolean dryRun=context.getProperty("Dry Run").asBoolean();
+        try{
 
-        // define Setup
-        Setup newSetup= new Setup();
+            // define Setup
+            Setup newSetup = new Setup(context);
 
-        newSetup.ipAddresses=new String[]{"10.129.53.159","10.129.53.154","10.129.53.153"};
-        newSetup.port=context.getProperty(MY_PORT.getName()).asInteger();
-        newSetup.username=context.getProperty(MY_USERNAME.getName()).getValue();
-        newSetup.setPwd(context.getProperty(MY_PASSWORD.getName()).getValue());
-        newSetup.localDC=context.getProperty(MY_LOCALDC.getName()).getValue();
-        newSetup.connectionTimeout=context.getProperty(MY_CONNECTION_TIMEOUT.getName()).asLong();
-        newSetup.requestTimeout=context.getProperty(MY_REQUEST_TIMEOUT.getName()).asLong();
-        newSetup.consistencyLevel="LOCAL_ONE";
-        newSetup.table="prftest.csv2cql_test3";
-        newSetup.setBatch(context.getProperty(MY_BATCH_SIZE.getName()).asLong());
+//            newSetup.setIPAddresses(context.getProperty(MY_IP_ADDRESSES.getName()).getValue());
+//            newSetup.port=context.getProperty(MY_PORT.getName()).asInteger();
+//            newSetup.username=context.getProperty(MY_USERNAME.getName()).getValue();
+//            newSetup.setPwd(context.getProperty(MY_PASSWORD.getName()).getValue());
+//            newSetup.localDC=context.getProperty(MY_LOCALDC.getName()).getValue();
+//            newSetup.connectionTimeout=context.getProperty(MY_CONNECTION_TIMEOUT.getName()).asLong();
+//            newSetup.requestTimeout=context.getProperty(MY_REQUEST_TIMEOUT.getName()).asLong();
+//            newSetup.consistencyLevel=context.getProperty(MY_CONSISTENCY_LEVEL.getName()).getValue();
+//            newSetup.table=context.getProperty(MY_TABLE.getName()).getValue();
+//            newSetup.setBatch(context.getProperty(MY_BATCH_SIZE.getName()).asLong());
 
-        //  if setup is different then use new setup and cqlAccess
-        //      or cqlAccess will be still the same
-        if ((setup == null) || (!setup.equals(newSetup))){
-            setup = newSetup;
-            cqlAccess = new CqlAccess(setup);
-            session.putAttribute(flowFile, "CQLAccess","NEW");
-        }
-        else session.putAttribute(flowFile, "CQLAccess","REUSE");
+            //  synch evaluation
+            synchronized (this) {
+                //  if setup is null or different then current setup then use new setup and new cqlAccess
+                //      else use existing setup and cqlAccess
+                if ((setup == null) || (!setup.equals(newSetup))) {
+                    setup = newSetup;
+                    cqlAccess = new CqlAccess(setup);
+                }
+                session.putAttribute(flowFile, "CQLAccess", setup==newSetup ? "NEW" : "REUSE");
+            }
 
-        //  get CSV
-        byte[] csv = this.getByteContent(flowFile,session);
-        Long count;
+            //  write CSV
+            CsvCqlWrite write=new CsvCqlWrite(cqlAccess, context.getProperty(MY_DRY_RUN.getName()).asBoolean());
+            Long count=write.executeContent(this.getByteContent(flowFile,session));
 
-        //  write CSV
-        CsvCqlWrite write=new CsvCqlWrite(cqlAccess, dryRun);
-        try {
-            count=write.executeContent(csv);
             session.putAttribute(flowFile, "CQLCount", count.toString());
-            session.putAttribute(flowFile, "CQLPwd", context.getProperty("Password").toString());
         } catch (IOException e) {
+            getLogger().error("CQLProcessor, Processing error", e);
             session.transfer(flowFile, REL_FAILURE);
             return;
-            //throw new RuntimeException(e);
         }
 
-//        //  get property
-//        context.getProperty("");
-//
-//        //  read attribute
+        //  read attribute
 //        flowFile.getAttribute("");
 
         //  write attribute
-//        counter.addAndGet(1);
 //        session.putAttribute(flowFile, "newprop_jirka","value steuer");
 //        session.putAttribute(flowFile, "mycounter", counter.toString());
 
