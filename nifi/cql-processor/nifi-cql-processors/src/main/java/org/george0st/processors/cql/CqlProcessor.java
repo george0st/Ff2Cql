@@ -202,7 +202,6 @@ public class CqlProcessor extends AbstractProcessor {
                 MY_BATCH_SIZE,
                 MY_DRY_RUN);
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
-//        setup=new Setup();
     }
 
     @Override

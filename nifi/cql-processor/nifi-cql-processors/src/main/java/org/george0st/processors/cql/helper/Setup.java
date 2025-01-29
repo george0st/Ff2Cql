@@ -42,6 +42,11 @@ public class Setup {
     public Setup(){
     }
 
+    /**
+     * Constructor with process context setting
+     *
+     * @param context   definition of process context
+     */
     public Setup(ProcessContext context){
         setIPAddresses(context.getProperty(CqlProcessor.MY_IP_ADDRESSES.getName()).getValue());
         port=context.getProperty(CqlProcessor.MY_PORT.getName()).asInteger();
