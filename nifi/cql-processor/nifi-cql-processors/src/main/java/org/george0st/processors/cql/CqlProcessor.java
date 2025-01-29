@@ -17,8 +17,6 @@
 package org.george0st.processors.cql;
 
 import org.apache.nifi.components.PropertyDescriptor;
-import org.apache.nifi.components.PropertyValue;
-import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.annotation.behavior.ReadsAttribute;
 import org.apache.nifi.annotation.behavior.ReadsAttributes;
@@ -40,7 +38,6 @@ import org.george0st.processors.cql.processor.CsvCqlWrite;
 import java.io.*;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Tags({"Cassandra", "ScyllaDB", "AstraDB", "CQL", "YugabyteDB"})
 @CapabilityDescription("Transfer data from FlowFile to CQL engine (support Apache Cassandra, " +
@@ -257,22 +254,22 @@ public class CqlProcessor extends AbstractProcessor {
         try {
             Setup newSetup = new Setup(context);
 
-            //  synch evaluation
             synchronized (this) {
-                //  if setup is null or different then current setup then use new setup and new cqlAccess
-                //      else use existing setup and cqlAccess
-                if ((setup == null) || (!setup.equals(newSetup))) {
+                Setup.CompareStatus status;
+
+                if ((status=newSetup.compare(setup)) != Setup.CompareStatus.SAME) {
                     setup = newSetup;
-                    cqlAccess = new CqlAccess(setup);
+                    if (status == Setup.CompareStatus.CHANGE_ACCESS)
+                        cqlAccess = new CqlAccess(setup);
                 }
-                session.putAttribute(flowFile, "CQLAccess", setup==newSetup ? "NEW" : "REUSE");
+                session.putAttribute(flowFile, "CQLAccess", setup == newSetup ? "NEW" : "REUSE");
             }
 
             //  write CSV
-            CsvCqlWrite write=new CsvCqlWrite(cqlAccess, context.getProperty(MY_DRY_RUN.getName()).asBoolean());
-            Long count=write.executeContent(this.getByteContent(flowFile,session));
+            CsvCqlWrite write=new CsvCqlWrite(cqlAccess, setup.dryRun);
+            long count=write.executeContent(this.getByteContent(flowFile,session));
 
-            session.putAttribute(flowFile, "CQLCount", count.toString());
+            session.putAttribute(flowFile, "CQLCount", Long.toString(count));
         } catch (IOException e) {
             getLogger().error("CQLProcessor, Processing error", e);
             session.transfer(flowFile, REL_FAILURE);
