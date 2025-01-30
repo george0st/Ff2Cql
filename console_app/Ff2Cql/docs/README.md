@@ -2,9 +2,9 @@
 
 You can use java application (Ff2Cql-*.jar) directly in NiFi:
 - ✅ **ExecuteProcess**, where input are CSV files, [see](#11-executeprocess-console-application)
-- ✅ **ExecuteStreamCommand**, where input is FlowFile/CSV file, [see](#12-executestreamcommand-console-application)
+- ✅ **ExecuteStreamCommand**, where input are FlowFiles, [see](#12-executestreamcommand-console-application)
 
-### 1.1 ExecuteProcess (console application)
+### 1.1 ExecuteProcess (java application)
 
 ![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/console_app/Ff2Cql/docs/assets/nifi_executeprocess_2.png?raw=true)
 
@@ -26,7 +26,7 @@ You can use java application (Ff2Cql-*.jar) directly in NiFi:
 - **Argument Delimiter:**
     - ' ' (space)
 
-### 1.2 ExecuteStreamCommand (console application)
+### 1.2 ExecuteStreamCommand (java application)
 
 ![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/console_app/Ff2Cql/docs/assets/nifi_executestreamcommand_2.png?raw=true)
 

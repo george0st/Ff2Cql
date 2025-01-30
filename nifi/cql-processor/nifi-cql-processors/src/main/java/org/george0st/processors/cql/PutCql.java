@@ -40,12 +40,12 @@ import java.util.List;
 import java.util.Set;
 
 @Tags({"Cassandra", "ScyllaDB", "AstraDB", "CQL", "YugabyteDB"})
-@CapabilityDescription("Transfer data from FlowFile to CQL engine (support Apache Cassandra, " +
-        "ScyllaDB, AstraDB).")
+@CapabilityDescription("Writes the contents of FlowFile to an CQL engine (support Apache Cassandra, " +
+        "ScyllaDB, AstraDB). The processor expects content in FlowFile/CSV with header.")
 @SeeAlso({})
 @ReadsAttributes({@ReadsAttribute(attribute="", description="")})
 @WritesAttributes({@WritesAttribute(attribute="", description="")})
-public class CqlProcessor extends AbstractProcessor {
+public class PutCql extends AbstractProcessor {
 
     //  region All Properties
 
@@ -136,7 +136,7 @@ public class CqlProcessor extends AbstractProcessor {
             .Builder()
             .name("Table")
             //.displayName("Table")
-            .description("Table and schema in CQL.")
+            .description("Table and schema name in CQL (expected format <schema>.<table>).")
             .required(true)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)

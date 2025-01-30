@@ -15,9 +15,9 @@ ScyllaDB, AstraDB). The implementation details:
 ## 2. Usage in NiFi
 
 You can use three options:
- - ✅ **ExecuteProcess** with java application (Ff2Cql-*.jar), where input are CSV files, [see](./console_app/Ff2Cql/docs/README.md#11-executeprocess-console-application) 
- - ✅ **ExecuteStreamCommand** with java application (Ff2Cql-*.jar), where input is FlowFile/CSV file, [see](./console_app/Ff2Cql/docs/README.md#12-executestreamcommand-console-application)
- - ❌ **CqlProcessor** (nifi-cql-nar-*.nar), where input are CSV files [see](./nifi/cql-processor/docs/README.md)
+ - ✅ **PutCql** as NiFi processor (see 'nifi-cql-nar-*.nar'), where input are FlowFiles [see](./nifi/cql-processor/docs/README.md) 
+ - ✅ **ExecuteProcess** as java application (see 'Ff2Cql-*.jar'), where input are CSV files, [see](./console_app/Ff2Cql/docs/README.md#11-executeprocess-console-application) 
+ - ✅ **ExecuteStreamCommand** as java application (see 'Ff2Cql-*.jar'), where input are FlowFiles, [see](./console_app/Ff2Cql/docs/README.md#12-executestreamcommand-console-application)
 
 ## 3. Supported conversions
 
@@ -49,3 +49,4 @@ or directly in CSV file(s).
     - ISO_LOCAL_TIME (format "HH:mm:ss"), example '08:43:09'
   - **TIMESTAMP**
     - ISO 8601 (format "yyyy-MM-dd'T'HH:mm:ss'Z'"), example '2001-01-01T00:00:00Z'
+  - etc.

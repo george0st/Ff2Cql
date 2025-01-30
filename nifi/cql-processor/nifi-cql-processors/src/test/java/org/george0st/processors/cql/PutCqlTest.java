@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class CqlProcessorTest {
+public class PutCqlTest {
 
     private TestRunner testRunner;
     private TestProperty testProperty;
@@ -41,7 +41,7 @@ public class CqlProcessorTest {
     public void init() throws IOException {
         testProperty = TestProperty.getInstance(TestProperty.getTestPropertyFile(
                 new String []{"test-properties-private.json", "test-properties.json"}));
-        testRunner = TestRunners.newTestRunner(CqlProcessor.class);
+        testRunner = TestRunners.newTestRunner(PutCql.class);
     }
 
     private FlowFile coreTest(){
@@ -49,15 +49,15 @@ public class CqlProcessorTest {
         FlowFile result;
 
         //"10.129.53.159,10.129.53.154,10.129.53.153"
-        testRunner.setProperty(CqlProcessor.MY_IP_ADDRESSES.getName(), String.join(",", testProperty.ipAddresses));
-        testRunner.setProperty(CqlProcessor.MY_LOCALDC.getName(),testProperty.localDC);
-        testRunner.setProperty(CqlProcessor.MY_USERNAME.getName(), testProperty.username);
-        testRunner.setProperty(CqlProcessor.MY_PASSWORD.getName(), testProperty.pwd);
-        testRunner.setProperty(CqlProcessor.MY_TABLE.getName(), testProperty.table);
+        testRunner.setProperty(PutCql.MY_IP_ADDRESSES.getName(), String.join(",", testProperty.ipAddresses));
+        testRunner.setProperty(PutCql.MY_LOCALDC.getName(),testProperty.localDC);
+        testRunner.setProperty(PutCql.MY_USERNAME.getName(), testProperty.username);
+        testRunner.setProperty(PutCql.MY_PASSWORD.getName(), testProperty.pwd);
+        testRunner.setProperty(PutCql.MY_TABLE.getName(), testProperty.table);
 
         start = System.currentTimeMillis();
         testRunner.run();
-        result = testRunner.getFlowFilesForRelationship(CqlProcessor.REL_SUCCESS).getLast();
+        result = testRunner.getFlowFilesForRelationship(PutCql.REL_SUCCESS).getLast();
         finish = System.currentTimeMillis();
 
         count=Long.parseLong(result.getAttribute("CQLCount"));
@@ -89,8 +89,8 @@ public class CqlProcessorTest {
         FlowFile result;
 
         testRunner.enqueue(content, attributes);
-        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        testRunner.setProperty(PutCql.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(PutCql.MY_DRY_RUN.getName(), "false");
 
         result=coreTest();
         assertEquals("NEW", result.getAttribute("CQLAccess"));
@@ -119,14 +119,14 @@ public class CqlProcessorTest {
         FlowFile result;
 
         testRunner.enqueue(content, attributes);
-        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        testRunner.setProperty(PutCql.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(PutCql.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals("NEW", result.getAttribute("CQLAccess"));
 
         testRunner.enqueue(content2, attributes);
-        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        testRunner.setProperty(PutCql.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(PutCql.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals("REUSE", result.getAttribute("CQLAccess"));
     }
@@ -153,20 +153,20 @@ public class CqlProcessorTest {
         FlowFile result;
 
         testRunner.enqueue(content, attributes);
-        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        testRunner.setProperty(PutCql.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(PutCql.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals("NEW", result.getAttribute("CQLAccess"));
 
         testRunner.enqueue(content, attributes);
-        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        testRunner.setProperty(PutCql.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(PutCql.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals("REUSE", result.getAttribute("CQLAccess"));
 
         testRunner.enqueue(content2, attributes);
-        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "150");
-        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        testRunner.setProperty(PutCql.MY_BATCH_SIZE.getName(), "150");
+        testRunner.setProperty(PutCql.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals("NEW", result.getAttribute("CQLAccess"));
     }
@@ -183,26 +183,26 @@ public class CqlProcessorTest {
         FlowFile result;
 
         testRunner.enqueue(content);
-        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        testRunner.setProperty(PutCql.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(PutCql.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals("NEW", result.getAttribute("CQLAccess"));
 
         testRunner.enqueue(content);
-        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        testRunner.setProperty(PutCql.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(PutCql.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals("REUSE", result.getAttribute("CQLAccess"));
 
         testRunner.enqueue(content);
-        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        testRunner.setProperty(PutCql.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(PutCql.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals("REUSE", result.getAttribute("CQLAccess"));
 
         testRunner.enqueue(content);
-        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        testRunner.setProperty(PutCql.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(PutCql.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals("REUSE", result.getAttribute("CQLAccess"));
 
@@ -214,8 +214,8 @@ public class CqlProcessorTest {
         FlowFile result;
 
         testRunner.enqueue(content);
-        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        testRunner.setProperty(PutCql.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(PutCql.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals("NEW", result.getAttribute("CQLAccess"));
     }
@@ -226,8 +226,8 @@ public class CqlProcessorTest {
         FlowFile result;
 
         testRunner.enqueue(content);
-        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        testRunner.setProperty(PutCql.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(PutCql.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals("NEW", result.getAttribute("CQLAccess"));
     }
