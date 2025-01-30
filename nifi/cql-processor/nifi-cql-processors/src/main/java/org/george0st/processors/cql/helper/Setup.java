@@ -1,10 +1,9 @@
 package org.george0st.processors.cql.helper;
 
 import org.apache.nifi.processor.ProcessContext;
-import org.george0st.processors.cql.CqlProcessor;
+import org.george0st.processors.cql.PutCql;
 
 import java.util.Arrays;
-import java.util.Base64;
 
 
 /**
@@ -48,17 +47,17 @@ public class Setup {
      * @param context   definition of process context
      */
     public Setup(ProcessContext context){
-        setIPAddresses(context.getProperty(CqlProcessor.MY_IP_ADDRESSES.getName()).getValue());
-        port=context.getProperty(CqlProcessor.MY_PORT.getName()).asInteger();
-        username=context.getProperty(CqlProcessor.MY_USERNAME.getName()).getValue();
-        pwd=context.getProperty(CqlProcessor.MY_PASSWORD.getName()).getValue();
-        localDC=context.getProperty(CqlProcessor.MY_LOCALDC.getName()).getValue();
-        connectionTimeout=context.getProperty(CqlProcessor.MY_CONNECTION_TIMEOUT.getName()).asLong();
-        requestTimeout=context.getProperty(CqlProcessor.MY_REQUEST_TIMEOUT.getName()).asLong();
-        consistencyLevel=context.getProperty(CqlProcessor.MY_CONSISTENCY_LEVEL.getName()).getValue();
-        table=context.getProperty(CqlProcessor.MY_TABLE.getName()).getValue();
-        setBatch(context.getProperty(CqlProcessor.MY_BATCH_SIZE.getName()).asLong());
-        dryRun=context.getProperty(CqlProcessor.MY_DRY_RUN.getName()).asBoolean();
+        setIPAddresses(context.getProperty(PutCql.MY_IP_ADDRESSES.getName()).getValue());
+        port=context.getProperty(PutCql.MY_PORT.getName()).asInteger();
+        username=context.getProperty(PutCql.MY_USERNAME.getName()).getValue();
+        pwd=context.getProperty(PutCql.MY_PASSWORD.getName()).getValue();
+        localDC=context.getProperty(PutCql.MY_LOCALDC.getName()).getValue();
+        connectionTimeout=context.getProperty(PutCql.MY_CONNECTION_TIMEOUT.getName()).asLong();
+        requestTimeout=context.getProperty(PutCql.MY_REQUEST_TIMEOUT.getName()).asLong();
+        consistencyLevel=context.getProperty(PutCql.MY_CONSISTENCY_LEVEL.getName()).getValue();
+        table=context.getProperty(PutCql.MY_TABLE.getName()).getValue();
+        setBatch(context.getProperty(PutCql.MY_BATCH_SIZE.getName()).asLong());
+        dryRun=context.getProperty(PutCql.MY_DRY_RUN.getName()).asBoolean();
     }
 
     public CompareStatus compare(Setup o){

@@ -43,3 +43,4 @@ console_app/FfCsv2Cql/.idea/workspace.xml
 console_app/FfCsv2Cql/.idea/workspace.xml
 console_app/FfCsv2Cql/CsvToCql_test.csv
 console_app/FfCsv2Cql/CsvToCql_test2.csv
+nifi/cql-processor/nifi-cql-processors/test-properties-private.json
