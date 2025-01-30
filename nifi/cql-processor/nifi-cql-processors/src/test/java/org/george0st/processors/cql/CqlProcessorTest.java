@@ -46,7 +46,8 @@ public class CqlProcessorTest {
         long finish, start, count;
         FlowFile result;
 
-        testRunner.setProperty(CqlProcessor.MY_IP_ADDRESSES.getName(), "   10.129.53.159  ,    10.129.53.154  , 10.129.53.153 ");
+        testRunner.setProperty(CqlProcessor.MY_IP_ADDRESSES.getName(), "10.129.53.159,10.129.53.154,10.129.53.153");
+        testRunner.setProperty(CqlProcessor.MY_LOCALDC.getName(),"datacenter1");
         testRunner.setProperty(CqlProcessor.MY_USERNAME.getName(), "perf");
         testRunner.setProperty(CqlProcessor.MY_PASSWORD.getName(), "perf");
         testRunner.setProperty(CqlProcessor.MY_TABLE.getName(), "prftest.csv2cql_test3");
@@ -93,7 +94,7 @@ public class CqlProcessorTest {
     }
 
     @Test
-    public void testBasicTwoItemsSameSetup() {
+    public void testBasic2ItemsSameSetup() {
 
         HashMap<String, String> attributes = new HashMap<String, String>() {{
             put("xxxx", "yyyy");
@@ -117,20 +118,18 @@ public class CqlProcessorTest {
         testRunner.enqueue(content, attributes);
         testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
         testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
-
         result=coreTest();
         assertEquals("NEW", result.getAttribute("CQLAccess"));
 
         testRunner.enqueue(content2, attributes);
         testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
         testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
-
         result=coreTest();
         assertEquals("REUSE", result.getAttribute("CQLAccess"));
     }
 
     @Test
-    public void testBasicThreeItemsDifferentSetup() {
+    public void testBasic3ItemsDifferentSetup() {
 
         HashMap<String, String> attributes = new HashMap<String, String>() {{
             put("xxxx", "yyyy");
@@ -153,23 +152,57 @@ public class CqlProcessorTest {
         testRunner.enqueue(content, attributes);
         testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
         testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
-
         result=coreTest();
         assertEquals("NEW", result.getAttribute("CQLAccess"));
 
         testRunner.enqueue(content, attributes);
         testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
         testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
-
         result=coreTest();
         assertEquals("REUSE", result.getAttribute("CQLAccess"));
 
         testRunner.enqueue(content2, attributes);
         testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "150");
         testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
-
         result=coreTest();
         assertEquals("NEW", result.getAttribute("CQLAccess"));
+    }
+
+    @Test
+    public void testBasic4ItemsSameSetup() {
+
+        String content = "\"colbigint\",\"colint\",\"coltext\",\"colfloat\",\"coldouble\",\"coldate\",\"coltime\",\"coltimestamp\",\"colboolean\",\"coluuid\",\"colsmallint\",\"coltinyint\",\"coltimeuuid\",\"colvarchar\"\n" +
+                "\"0\",\"1064\",\"zeVOKGnORq\",\"627.6811\",\"395.8522407512559\",\"1971-11-12\",\"03:37:15\",\"2000-09-25T22:18:45Z\",\"false\",\"6080071f-4dd1-4ea5-b711-9ad0716e242a\",\"8966\",\"55\",\"f45e58f5-c3b7-11ef-8d19-97ae87be7c54\",\"Tzxsw\"\n" +
+                "\"1\",\"1709\",\"7By0z5QEXh\",\"652.03955\",\"326.9081263857284\",\"2013-12-17\",\"08:43:09\",\"2010-04-27T07:02:27Z\",\"false\",\"7d511666-2f81-41c4-9d5c-a5fa87f7d1c3\",\"24399\",\"38\",\"f45e8006-c3b7-11ef-8d19-172ff8d0d752\",\"exAbN\"\n" +
+                "\"2\",\"6249\",\"UYI6AgkcBt\",\"939.01556\",\"373.48559413289485\",\"1980-11-05\",\"15:44:43\",\"2023-11-24T05:59:12Z\",\"false\",\"dbd35d1b-38d0-49a4-8069-9efd68314dc5\",\"6918\",\"72\",\"f45e8007-c3b7-11ef-8d19-d784fa8af8e3\",\"IjnDb\"\n" +
+                "\"3\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"1998-04-09T23:19:18Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
+
+        FlowFile result;
+
+        testRunner.enqueue(content);
+        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        result=coreTest();
+        assertEquals("NEW", result.getAttribute("CQLAccess"));
+
+        testRunner.enqueue(content);
+        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        result=coreTest();
+        assertEquals("REUSE", result.getAttribute("CQLAccess"));
+
+        testRunner.enqueue(content);
+        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        result=coreTest();
+        assertEquals("REUSE", result.getAttribute("CQLAccess"));
+
+        testRunner.enqueue(content);
+        testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
+        testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
+        result=coreTest();
+        assertEquals("REUSE", result.getAttribute("CQLAccess"));
+
     }
 
     @Test
@@ -180,7 +213,6 @@ public class CqlProcessorTest {
         testRunner.enqueue(content);
         testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
         testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
-
         result=coreTest();
         assertEquals("NEW", result.getAttribute("CQLAccess"));
     }
@@ -193,7 +225,6 @@ public class CqlProcessorTest {
         testRunner.enqueue(content);
         testRunner.setProperty(CqlProcessor.MY_BATCH_SIZE.getName(), "350");
         testRunner.setProperty(CqlProcessor.MY_DRY_RUN.getName(), "false");
-
         result=coreTest();
         assertEquals("NEW", result.getAttribute("CQLAccess"));
     }
