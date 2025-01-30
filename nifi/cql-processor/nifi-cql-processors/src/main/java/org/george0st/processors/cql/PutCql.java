@@ -52,17 +52,15 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_IP_ADDRESSES = new PropertyDescriptor
             .Builder()
             .name("IP Addresses")
-            //.displayName("IP Addresses")
             .description("List of IP addresses for CQL connection, the addresses are splitted by comma (e.g. '192.168.0.1, 192.168.0.2').")
             .required(true)
-            .defaultValue("")
+            .defaultValue("localhost")
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
     public static final PropertyDescriptor MY_PORT = new PropertyDescriptor
             .Builder()
             .name("Port")
-            //.displayName("Port")
             .description("Port for communication.")
             .required(false)
             .defaultValue("9042")
@@ -72,7 +70,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_USERNAME = new PropertyDescriptor
             .Builder()
             .name("Username")
-            //.displayName("Username")
             .description("Username for the CQL connection.")
             .required(true)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
@@ -82,7 +79,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_PASSWORD = new PropertyDescriptor
             .Builder()
             .name("Password")
-            //.displayName("Password")
             .description("Password for the CQL connection.")
             .required(true)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
@@ -93,7 +89,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_LOCALDC = new PropertyDescriptor
             .Builder()
             .name("Local Data Center")
-            //.displayName("Local Data Center")
             .description("Name of local data center e.g. 'dc1', 'datacenter1', etc.")
             .required(true)
             .defaultValue("dc1")
@@ -104,7 +99,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_CONNECTION_TIMEOUT = new PropertyDescriptor
             .Builder()
             .name("Connection Timeout")
-            //.displayName("Connection Timeout")
             .description("Timeout for connection to CQL engine.")
             .required(true)
             .defaultValue("900")
@@ -114,7 +108,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_REQUEST_TIMEOUT = new PropertyDescriptor
             .Builder()
             .name("Request Timeout")
-            //.displayName("Request Timeout")
             .description("Timeout for request to CQL engine.")
             .required(true)
             .defaultValue("60")
@@ -124,7 +117,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_CONSISTENCY_LEVEL = new PropertyDescriptor
             .Builder()
             .name("Consistency Level")
-            //.displayName("Consistency Level")
             .description("Consistency Level for CQL operations.")
             .required(true)
             .defaultValue("LOCAL_ONE")
@@ -135,7 +127,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_TABLE = new PropertyDescriptor
             .Builder()
             .name("Table")
-            //.displayName("Table")
             .description("Table and schema name in CQL (expected format <schema>.<table>).")
             .required(true)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
@@ -145,7 +136,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_BATCH_SIZE = new PropertyDescriptor
             .Builder()
             .name("Batch Size")
-            //.displayName("Batch Size")
             .description("Size of bulk for data ingest.")
             .required(false)
             .defaultValue("200")
@@ -155,7 +145,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_DRY_RUN = new PropertyDescriptor
             .Builder()
             .name("Dry Run")
-            //.displayName("Dry Run")
             .description("Dry run for processing (without final write to CQL engine).")
             .required(false)
             .defaultValue("false")

@@ -13,7 +13,7 @@ You can use NiFi processor (nifi-cql-nar-*.nar).
 
 #### PutCql setting (key items):
 - **IP Addresses:**
-  - ip addresses e.g. "10.129.53.159, 10.129.53.154, 10.129.53.153"
+  - ip addresses e.g. '10.129.53.159, 10.129.53.154, 10.129.53.153'
 - **Port**
   - 9042 
 - **Username**
@@ -21,7 +21,7 @@ You can use NiFi processor (nifi-cql-nar-*.nar).
 - **Password**
   - password for login to CQL
 - **Local Data Center**
-  - name of local data center e.g. "dc1" or "datacenter1", etc.
+  - name of local data center e.g. 'dc1' or 'datacenter1', etc.
 - **Connection Timeout**
   - 900 (seconds)
 - **Request Timeout**
@@ -29,8 +29,9 @@ You can use NiFi processor (nifi-cql-nar-*.nar).
 - **Consistency Level**
   - e.g. LOCAL_ONE, LOCAL_QUORUM, etc.
 - **Table**
-  - Table and schema name in CQL (expected format <schema>.<table>) e.g. "prfschema.test_table"
+  - Table and schema name in CQL (expected format 'keyspace.table') 
+    e.g. 'prfschema.table' 
 - **Batch Size**
   - size of batch, default is 200
 - **Dry Run**
-  - false - simulation of write to CQL
+  - false - the simulation of write to CQL
