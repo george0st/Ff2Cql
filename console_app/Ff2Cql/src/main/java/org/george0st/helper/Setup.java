@@ -66,9 +66,13 @@ public class Setup {
      * @return Setup file name.
      */
     public static String getSetupFile(String path, String[] files){
-        for (String file: files)
-            if (new File(String.format("%s/%s", path, file)).exists())
-                return String.format("%s/%s", path, file);
+        String fileName;
+
+        for (String file: files) {
+            fileName = String.format("%s/%s", path, file);
+            if (new File(fileName).exists())
+                return fileName;
+        }
         return null;
     }
 

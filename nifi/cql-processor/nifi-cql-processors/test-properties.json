@@ -1,8 +1,8 @@
 {
-  "ipAddresses": ["<add ip>","<add ip2>", "..."],
+  "ipAddresses": ["<add ip>", "<add ip2>", "..."],
   "port": 9042,
   "username": "<add username>",
-  "pwd": "<add pwd in base64>",
+  "pwd": "<add pwd>",
   "localDC": "<local data center>",
   "connectionTimeout": "<timeout in seconds>",
   "requestTimeout": "<timeout in seconds>",

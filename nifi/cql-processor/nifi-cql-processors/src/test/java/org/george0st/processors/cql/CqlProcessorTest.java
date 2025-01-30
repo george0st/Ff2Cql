@@ -17,7 +17,6 @@
 package org.george0st.processors.cql;
 
 import org.apache.nifi.flowfile.FlowFile;
-import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
 import org.george0st.processors.cql.helper.ReadableValue;
@@ -27,18 +26,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 public class CqlProcessorTest {
 
     private TestRunner testRunner;
+    private TestProperty testProperty;
 
     // Helper
     // https://medium.com/@mr.sinchan.banerjee/nifi-custom-processor-series-part-3-junit-test-with-nifi-mock-a935a1a4e3e5
 
     @BeforeEach
-    public void init() {
+    public void init() throws IOException {
+        testProperty = TestProperty.getInstance(TestProperty.getTestPropertyFile(
+                new String []{"test-properties-private.json", "test-properties.json"}));
         testRunner = TestRunners.newTestRunner(CqlProcessor.class);
     }
 
@@ -46,11 +48,12 @@ public class CqlProcessorTest {
         long finish, start, count;
         FlowFile result;
 
-        testRunner.setProperty(CqlProcessor.MY_IP_ADDRESSES.getName(), "10.129.53.159,10.129.53.154,10.129.53.153");
-        testRunner.setProperty(CqlProcessor.MY_LOCALDC.getName(),"datacenter1");
-        testRunner.setProperty(CqlProcessor.MY_USERNAME.getName(), "perf");
-        testRunner.setProperty(CqlProcessor.MY_PASSWORD.getName(), "perf");
-        testRunner.setProperty(CqlProcessor.MY_TABLE.getName(), "prftest.csv2cql_test3");
+        //"10.129.53.159,10.129.53.154,10.129.53.153"
+        testRunner.setProperty(CqlProcessor.MY_IP_ADDRESSES.getName(), String.join(",", testProperty.ipAddresses));
+        testRunner.setProperty(CqlProcessor.MY_LOCALDC.getName(),testProperty.localDC);
+        testRunner.setProperty(CqlProcessor.MY_USERNAME.getName(), testProperty.username);
+        testRunner.setProperty(CqlProcessor.MY_PASSWORD.getName(), testProperty.pwd);
+        testRunner.setProperty(CqlProcessor.MY_TABLE.getName(), testProperty.table);
 
         start = System.currentTimeMillis();
         testRunner.run();
