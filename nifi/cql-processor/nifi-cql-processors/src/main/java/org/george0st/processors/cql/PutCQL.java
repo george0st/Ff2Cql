@@ -36,7 +36,8 @@ import java.io.*;
 import java.util.List;
 import java.util.Set;
 
-@Tags({"Cassandra", "ScyllaDB", "AstraDB", "CQL", "YugabyteDB", "Cassandra Query Language"})
+@Tags({"CQL","Cassandra", "ScyllaDB", "AstraDB", "YugabyteDB", "Cassandra Query Language",
+        "NoSQL", "Write", "Put"})
 @CapabilityDescription("Writes the contents of FlowFile to an CQL engine (support Apache Cassandra, " +
         "ScyllaDB, AstraDB, etc.). The processor expects content in FlowFile/CSV with header.")
 @SeeAlso({})
