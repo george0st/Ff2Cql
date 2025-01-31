@@ -10,7 +10,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.george0st.processors.cql.CqlAccess;
 import org.george0st.processors.cql.helper.Setup;
-
 import java.io.*;
 import java.util.Iterator;
 

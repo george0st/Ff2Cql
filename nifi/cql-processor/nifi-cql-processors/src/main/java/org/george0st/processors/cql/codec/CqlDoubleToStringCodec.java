@@ -6,7 +6,6 @@ import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.core.type.codec.TypeCodec;
 import com.datastax.oss.driver.api.core.type.codec.TypeCodecs;
 import com.datastax.oss.driver.api.core.type.reflect.GenericType;
-
 import java.nio.ByteBuffer;
 
 //  https://docs.datastax.com/en/developer/java-driver/4.17/manual/core/custom_codecs/index.html

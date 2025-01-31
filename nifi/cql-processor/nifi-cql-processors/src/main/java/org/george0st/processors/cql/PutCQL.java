@@ -16,12 +16,9 @@
  */
 package org.george0st.processors.cql;
 
+import org.apache.nifi.annotation.behavior.*;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.flowfile.FlowFile;
-import org.apache.nifi.annotation.behavior.ReadsAttribute;
-import org.apache.nifi.annotation.behavior.ReadsAttributes;
-import org.apache.nifi.annotation.behavior.WritesAttribute;
-import org.apache.nifi.annotation.behavior.WritesAttributes;
 import org.apache.nifi.annotation.lifecycle.OnScheduled;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.SeeAlso;
@@ -39,13 +36,16 @@ import java.io.*;
 import java.util.List;
 import java.util.Set;
 
-@Tags({"Cassandra", "ScyllaDB", "AstraDB", "CQL", "YugabyteDB"})
+@Tags({"Cassandra", "ScyllaDB", "AstraDB", "CQL", "YugabyteDB", "Cassandra Query Language"})
 @CapabilityDescription("Writes the contents of FlowFile to an CQL engine (support Apache Cassandra, " +
-        "ScyllaDB, AstraDB). The processor expects content in FlowFile/CSV with header.")
+        "ScyllaDB, AstraDB, etc.). The processor expects content in FlowFile/CSV with header.")
 @SeeAlso({})
+@InputRequirement(InputRequirement.Requirement.INPUT_REQUIRED)
 @ReadsAttributes({@ReadsAttribute(attribute="", description="")})
-@WritesAttributes({@WritesAttribute(attribute="", description="")})
-public class PutCql extends AbstractProcessor {
+@WritesAttributes({
+        @WritesAttribute(attribute="CQLCount", description="Amount of write rows to CQL."),
+        @WritesAttribute(attribute="CQLCompareStatus", description="View to the internal CQL processing.")})
+public class PutCQL extends AbstractProcessor {
 
     //  region All Properties
 
@@ -139,7 +139,7 @@ public class PutCql extends AbstractProcessor {
             .description("Size of bulk for data ingest.")
             .required(false)
             .defaultValue("200")
-            .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)   //  StandardValidators.NON_EMPTY_VALIDATOR)
+            .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)
             .build();
 
     public static final PropertyDescriptor MY_DRY_RUN = new PropertyDescriptor
@@ -251,7 +251,7 @@ public class PutCql extends AbstractProcessor {
                     if (status == Setup.CompareStatus.CHANGE_ACCESS)
                         cqlAccess = new CqlAccess(setup);
                 }
-                session.putAttribute(flowFile, "CQLAccess", setup == newSetup ? "NEW" : "REUSE");
+                session.putAttribute(flowFile, "CQLCompareStatus", status.name());//setup == newSetup ? "NEW" : "REUSE");
             }
 
             //  write CSV
