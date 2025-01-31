@@ -5,13 +5,23 @@ You can use NiFi processor (nifi-cql-nar-*.nar).
 
 ## 2. PutCQL (NiFi processor)
 
-### 2.1 Select processor
+### 2.1 Preconditions for PutCQL usage
+
+You have to do these steps (it is only one-time action):
+ 1. you need the processor file 'nifi-cql-nar-*.nar'
+    - the last version is [here](./../output/)
+ 2. import the *.nar file to the NiFi lib directory
+    - expected location in Linux e.g. 'opt/nifi/current-nifi/lib'
+ 3. STOP NiFi
+ 4. START NiFi
+ 
+### 2.2 Select processor
 ![PutCQL, add processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_add_processor.png)
 
-### 2.2 Processor
+### 2.3 Processor
 ![PutCQL, processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_processor.png)
 
-### 2.3 Define properties
+### 2.4 Processor detail (input/output, properties)
 ![PutCQL, properties](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_properties.png)
 
 ### Input
