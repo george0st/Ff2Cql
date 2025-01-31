@@ -9,13 +9,14 @@ ScyllaDB, AstraDB, etc.). The implementation details:
 
 ## 1. The main motivation
 
- - the Apache NiFi v2 does not support Apache Cassandra v4/v5 (NiFi 2 deprecated 
-   support for Cassandra v3)
+ - the Apache NiFi v2 does not support Apache Cassandra v4/v5 (NiFi v2 removed 
+   the Cassandra processor due to security vulnerabilities and unmaintained 
+   code. The processor supported only Cassandra v3)
 
 ## 2. Usage in NiFi
 
 You can use three options:
- - ✅ **PutCQL** as NiFi processor (see 'nifi-cql-nar-*.nar'), where input are FlowFiles [see](./nifi/cql-processor/docs/README.md) 
+ - ✅ **PutCQL** as NiFi processor (see 'nifi-cql-nar-*.nar'), where input are FlowFiles, [see](./nifi/cql-processor/docs/README.md) 
  - ✅ **ExecuteProcess** as java application (see 'Ff2Cql-*.jar'), where input are CSV files, [see](./console_app/Ff2Cql/docs/README.md#11-executeprocess-console-application) 
  - ✅ **ExecuteStreamCommand** as java application (see 'Ff2Cql-*.jar'), where input are FlowFiles, [see](./console_app/Ff2Cql/docs/README.md#12-executestreamcommand-console-application)
 

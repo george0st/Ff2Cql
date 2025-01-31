@@ -1,42 +1,42 @@
 ## 1. Usage in NiFi
 
 You can use java application (Ff2Cql-*.jar) directly in NiFi:
-- ✅ **ExecuteProcess**, where input are CSV files, [see](#11-executeprocess-console-application)
-- ✅ **ExecuteStreamCommand**, where input are FlowFiles, [see](#12-executestreamcommand-console-application)
+- ✅ **ExecuteProcess**, where input are CSV files, [see](#2-executeprocess-java-application)
+- ✅ **ExecuteStreamCommand**, where input are FlowFiles, [see](#3-executestreamcommand-java-application)
 
-### 1.1 ExecuteProcess (java application)
+## 2. ExecuteProcess (java application)
 
 ![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/console_app/Ff2Cql/docs/assets/nifi_executeprocess_2.png?raw=true)
 
-#### Input:
-1. **connection.json** file to CQL, [see](#22-connection-setting-to-cql)
-2. **CSV file(s) with header** for import (content [see](../../../README.md#31-expected-contentformat)),
+### Input
+- **connection.json** file to CQL, [see](#42-connection-setting-to-cql)
+- **CSV file(s) with header** for import (content [see](../../../README.md#31-expected-contentformat)),
    where the CSV content is based on 'keyspace.table' definition in CQL
 
-#### ExecuteProcess setting (key items):
+### ExecuteProcess setting (key items)
 - **Command:**
     - java
 - **Command Argument:**
     - -jar Ff2Cql-1.7.jar import.csv
     - -jar Ff2Cql-1.7.jar import.csv import2.csv
     - -jar Ff2Cql-1.7.jar -c connection-private.json import.csv
-    - etc. [see](#21-command-line)
+    - etc. [see](#41-command-line)
 - **Working Directory:**
     - /opt/nifi/nifi-current/bin/test2/
 - **Argument Delimiter:**
     - ' ' (space)
 
-### 1.2 ExecuteStreamCommand (java application)
+## 3. ExecuteStreamCommand (java application)
 
 ![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/console_app/Ff2Cql/docs/assets/nifi_executestreamcommand_2.png?raw=true)
 
-#### Input:
-1. **connection.json** file to CQL, [see](#22-connection-setting-to-cql)
-2. **FlowFile/CSV with header** (content [see](../../../README.md#31-expected-contentformat)),
+#### Input
+- **connection.json** file to CQL, [see](#42-connection-setting-to-cql)
+- **FlowFile/CSV with header** (content [see](../../../README.md#31-expected-contentformat)),
    where the FlowFile/CSV content is based on 'keyspace.table' definition in CQL
    (the integration is via stdin)
 
-#### ExecuteStreamCommand setting (key items):
+### ExecuteStreamCommand setting (key items)
 - **Working Directory:**
     - /opt/nifi/nifi-current/bin/test2/
 - **Command Path:**
@@ -46,15 +46,15 @@ You can use java application (Ff2Cql-*.jar) directly in NiFi:
 - **Command Arguments:**
     - -jar Ff2Cql-1.7.jar -s
     - -jar Ff2Cql-1.7.jar -c connection-private.json -s
-    - etc. [see](#21-command-line)
+    - etc. [see](#41-command-line)
 - **Argument Delimiter:**
     - ' ' (space)
 - **Ignore STDIN:**
     - false
 
-## 2. Others
+## 4. Others
 
-### 2.1 Command line
+## 4.1 Command line
 
 The command line description:
 ```
@@ -74,7 +74,7 @@ Simple transfer data from NiFi FlowFile to CQL.
   -V, --version           Print version information and exit.
 ```
 
-### 2.2 Connection setting to CQL
+## 4.2 Connection setting to CQL
 
 The default template with description:
 ```
