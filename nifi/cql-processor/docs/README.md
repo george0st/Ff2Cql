@@ -15,13 +15,13 @@ You have to do these steps (it is only one-time action):
  3. STOP NiFi
  4. START NiFi
  
-### 2.1 Select processor
+### 2.2 Select processor
 ![PutCQL, add processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_add_processor.png)
 
-### 2.2 Processor
+### 2.3 Processor
 ![PutCQL, processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_processor.png)
 
-### 2.3 Define properties
+### 2.4 Processor detail (input/output, properties)
 ![PutCQL, properties](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_properties.png)
 
 ### Input
