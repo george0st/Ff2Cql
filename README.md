@@ -9,8 +9,9 @@ ScyllaDB, AstraDB, etc.). The implementation details:
 
 ## 1. The main motivation
 
- - the Apache NiFi v2 does not support Apache Cassandra v4/v5 (NiFi 2 deprecated 
-   support for Cassandra v3)
+ - the Apache NiFi v2 does not support Apache Cassandra v4/v5 (NiFi v2 removed the Cassandra 
+   processor due to security vulnerabilities and unmaintained code. The processor supported
+   only Cassandra v3)
 
 ## 2. Usage in NiFi
 
