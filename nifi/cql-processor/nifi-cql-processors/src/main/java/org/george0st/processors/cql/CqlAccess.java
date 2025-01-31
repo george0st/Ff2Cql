@@ -6,7 +6,6 @@ import com.datastax.oss.driver.api.core.config.OptionsMap;
 import com.datastax.oss.driver.api.core.config.TypedDriverOption;
 import org.george0st.processors.cql.codec.*;
 import org.george0st.processors.cql.helper.Setup;
-
 import java.net.InetSocketAddress;
 
 /**

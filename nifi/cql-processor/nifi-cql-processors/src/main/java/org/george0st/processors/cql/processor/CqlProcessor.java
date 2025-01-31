@@ -2,9 +2,7 @@ package org.george0st.processors.cql.processor;
 
 import org.george0st.processors.cql.CqlAccess;
 import org.george0st.processors.cql.helper.Setup;
-import javax.management.InvalidAttributeValueException;
 import java.io.IOException;
-import java.io.Reader;
 
 
 /**

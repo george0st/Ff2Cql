@@ -1,8 +1,7 @@
 package org.george0st.processors.cql.helper;
 
 import org.apache.nifi.processor.ProcessContext;
-import org.george0st.processors.cql.PutCql;
-
+import org.george0st.processors.cql.PutCQL;
 import java.util.Arrays;
 
 
@@ -47,17 +46,17 @@ public class Setup {
      * @param context   definition of process context
      */
     public Setup(ProcessContext context){
-        setIPAddresses(context.getProperty(PutCql.MY_IP_ADDRESSES.getName()).getValue());
-        port=context.getProperty(PutCql.MY_PORT.getName()).asInteger();
-        username=context.getProperty(PutCql.MY_USERNAME.getName()).getValue();
-        pwd=context.getProperty(PutCql.MY_PASSWORD.getName()).getValue();
-        localDC=context.getProperty(PutCql.MY_LOCALDC.getName()).getValue();
-        connectionTimeout=context.getProperty(PutCql.MY_CONNECTION_TIMEOUT.getName()).asLong();
-        requestTimeout=context.getProperty(PutCql.MY_REQUEST_TIMEOUT.getName()).asLong();
-        consistencyLevel=context.getProperty(PutCql.MY_CONSISTENCY_LEVEL.getName()).getValue();
-        table=context.getProperty(PutCql.MY_TABLE.getName()).getValue();
-        setBatch(context.getProperty(PutCql.MY_BATCH_SIZE.getName()).asLong());
-        dryRun=context.getProperty(PutCql.MY_DRY_RUN.getName()).asBoolean();
+        setIPAddresses(context.getProperty(PutCQL.MY_IP_ADDRESSES.getName()).getValue());
+        port=context.getProperty(PutCQL.MY_PORT.getName()).asInteger();
+        username=context.getProperty(PutCQL.MY_USERNAME.getName()).getValue();
+        pwd=context.getProperty(PutCQL.MY_PASSWORD.getName()).getValue();
+        localDC=context.getProperty(PutCQL.MY_LOCALDC.getName()).getValue();
+        connectionTimeout=context.getProperty(PutCQL.MY_CONNECTION_TIMEOUT.getName()).asLong();
+        requestTimeout=context.getProperty(PutCQL.MY_REQUEST_TIMEOUT.getName()).asLong();
+        consistencyLevel=context.getProperty(PutCQL.MY_CONSISTENCY_LEVEL.getName()).getValue();
+        table=context.getProperty(PutCQL.MY_TABLE.getName()).getValue();
+        setBatch(context.getProperty(PutCQL.MY_BATCH_SIZE.getName()).asLong());
+        dryRun=context.getProperty(PutCQL.MY_DRY_RUN.getName()).asBoolean();
     }
 
     public CompareStatus compare(Setup o){

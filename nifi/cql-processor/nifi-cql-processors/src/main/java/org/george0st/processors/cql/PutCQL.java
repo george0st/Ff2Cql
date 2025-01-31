@@ -16,12 +16,9 @@
  */
 package org.george0st.processors.cql;
 
+import org.apache.nifi.annotation.behavior.*;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.flowfile.FlowFile;
-import org.apache.nifi.annotation.behavior.ReadsAttribute;
-import org.apache.nifi.annotation.behavior.ReadsAttributes;
-import org.apache.nifi.annotation.behavior.WritesAttribute;
-import org.apache.nifi.annotation.behavior.WritesAttributes;
 import org.apache.nifi.annotation.lifecycle.OnScheduled;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.SeeAlso;
@@ -39,30 +36,32 @@ import java.io.*;
 import java.util.List;
 import java.util.Set;
 
-@Tags({"Cassandra", "ScyllaDB", "AstraDB", "CQL", "YugabyteDB"})
+@Tags({"CQL","Cassandra", "ScyllaDB", "AstraDB", "YugabyteDB", "Cassandra Query Language",
+        "NoSQL", "Write", "Put"})
 @CapabilityDescription("Writes the contents of FlowFile to an CQL engine (support Apache Cassandra, " +
-        "ScyllaDB, AstraDB). The processor expects content in FlowFile/CSV with header.")
+        "ScyllaDB, AstraDB, etc.). The processor expects content in FlowFile/CSV with header.")
 @SeeAlso({})
+@InputRequirement(InputRequirement.Requirement.INPUT_REQUIRED)
 @ReadsAttributes({@ReadsAttribute(attribute="", description="")})
-@WritesAttributes({@WritesAttribute(attribute="", description="")})
-public class PutCql extends AbstractProcessor {
+@WritesAttributes({
+        @WritesAttribute(attribute="CQLCount", description="Amount of write rows to CQL."),
+        @WritesAttribute(attribute="CQLCompareStatus", description="View to the internal CQL processing.")})
+public class PutCQL extends AbstractProcessor {
 
     //  region All Properties
 
     public static final PropertyDescriptor MY_IP_ADDRESSES = new PropertyDescriptor
             .Builder()
             .name("IP Addresses")
-            //.displayName("IP Addresses")
             .description("List of IP addresses for CQL connection, the addresses are splitted by comma (e.g. '192.168.0.1, 192.168.0.2').")
             .required(true)
-            .defaultValue("")
+            .defaultValue("localhost")
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
     public static final PropertyDescriptor MY_PORT = new PropertyDescriptor
             .Builder()
             .name("Port")
-            //.displayName("Port")
             .description("Port for communication.")
             .required(false)
             .defaultValue("9042")
@@ -72,7 +71,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_USERNAME = new PropertyDescriptor
             .Builder()
             .name("Username")
-            //.displayName("Username")
             .description("Username for the CQL connection.")
             .required(true)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
@@ -82,7 +80,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_PASSWORD = new PropertyDescriptor
             .Builder()
             .name("Password")
-            //.displayName("Password")
             .description("Password for the CQL connection.")
             .required(true)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
@@ -93,7 +90,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_LOCALDC = new PropertyDescriptor
             .Builder()
             .name("Local Data Center")
-            //.displayName("Local Data Center")
             .description("Name of local data center e.g. 'dc1', 'datacenter1', etc.")
             .required(true)
             .defaultValue("dc1")
@@ -104,7 +100,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_CONNECTION_TIMEOUT = new PropertyDescriptor
             .Builder()
             .name("Connection Timeout")
-            //.displayName("Connection Timeout")
             .description("Timeout for connection to CQL engine.")
             .required(true)
             .defaultValue("900")
@@ -114,7 +109,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_REQUEST_TIMEOUT = new PropertyDescriptor
             .Builder()
             .name("Request Timeout")
-            //.displayName("Request Timeout")
             .description("Timeout for request to CQL engine.")
             .required(true)
             .defaultValue("60")
@@ -124,7 +118,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_CONSISTENCY_LEVEL = new PropertyDescriptor
             .Builder()
             .name("Consistency Level")
-            //.displayName("Consistency Level")
             .description("Consistency Level for CQL operations.")
             .required(true)
             .defaultValue("LOCAL_ONE")
@@ -135,7 +128,6 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_TABLE = new PropertyDescriptor
             .Builder()
             .name("Table")
-            //.displayName("Table")
             .description("Table and schema name in CQL (expected format <schema>.<table>).")
             .required(true)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
@@ -145,17 +137,15 @@ public class PutCql extends AbstractProcessor {
     public static final PropertyDescriptor MY_BATCH_SIZE = new PropertyDescriptor
             .Builder()
             .name("Batch Size")
-            //.displayName("Batch Size")
             .description("Size of bulk for data ingest.")
             .required(false)
             .defaultValue("200")
-            .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)   //  StandardValidators.NON_EMPTY_VALIDATOR)
+            .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)
             .build();
 
     public static final PropertyDescriptor MY_DRY_RUN = new PropertyDescriptor
             .Builder()
             .name("Dry Run")
-            //.displayName("Dry Run")
             .description("Dry run for processing (without final write to CQL engine).")
             .required(false)
             .defaultValue("false")
@@ -262,7 +252,7 @@ public class PutCql extends AbstractProcessor {
                     if (status == Setup.CompareStatus.CHANGE_ACCESS)
                         cqlAccess = new CqlAccess(setup);
                 }
-                session.putAttribute(flowFile, "CQLAccess", setup == newSetup ? "NEW" : "REUSE");
+                session.putAttribute(flowFile, "CQLCompareStatus", status.name());//setup == newSetup ? "NEW" : "REUSE");
             }
 
             //  write CSV
