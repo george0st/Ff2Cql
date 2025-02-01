@@ -8,10 +8,10 @@ You can use NiFi processor (nifi-cql-nar-*.nar).
 ### 2.1 Preconditions for PutCQL usage
 
 You have to do these steps (it is only one-time action):
- 1. you need the processor file 'nifi-cql-nar-*.nar'
+ 1. You need the processor file 'nifi-cql-nar-*.nar'
     - the last version is [here](./../output/)
- 2. import the *.nar file to the NiFi lib directory
-    - expected location in Linux e.g. 'opt/nifi/current-nifi/lib'
+ 2. Import the *.nar file to the NiFi lib directory
+    - expected location in Linux e.g. '/opt/nifi/current-nifi/lib'
  3. STOP NiFi
  4. START NiFi
  
@@ -21,7 +21,7 @@ You have to do these steps (it is only one-time action):
 ### 2.3 Processor
 ![PutCQL, processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_processor.png)
 
-### 2.4 Processor detail (input/output, properties)
+### 2.4 Setup processor properties
 ![PutCQL, properties](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_properties.png)
 
 ### Input
@@ -33,11 +33,11 @@ You have to do these steps (it is only one-time action):
 - **CQLCount** (FlowFile attribute)
   - Amount of write rows to CQL.
 - **CQLCompareStatus** (FlowFile attribute)
-  - View to the internal CQL processing.
+  - View to the internal CQL processing (possible states SAME, CHANGE, CHANGE_ACCESS).
 
 ### PutCQL setting (key items):
 - **IP Addresses:**
-  - Ip addresses with comma delimiter e.g. '10.129.53.159, 10.129.53.154, 10.129.53.153'
+  - IP addresses of CQL engine with comma delimiter e.g. '10.129.53.159, 10.129.53.154, 10.129.53.153'
 - **Port:**
   - Port for communication with CQL engine (default is 9042) 
 - **Username:**
@@ -45,7 +45,7 @@ You have to do these steps (it is only one-time action):
 - **Password:**
   - Password for login to CQL
 - **Local Data Center:**
-  - Name of local data center typically e.g. 'dc1' or 'datacenter1', etc.
+  - Name of local data center in CQL typically e.g. 'dc1' or 'datacenter1', etc.
 - **Connection Timeout:**
   - 900 (in seconds)
 - **Request Timeout:**
@@ -56,6 +56,6 @@ You have to do these steps (it is only one-time action):
   - Schema and table name in CQL for write/put a data (expected format 'keyspace.table') 
     e.g. 'cqlschema.cqltable' 
 - **Batch Size:**
-  - Size of batch (default is 200)
+  - Size of batch for write to CQL (default is 200)
 - **Dry Run:**
-  - false (the simulation of write to CQL, default is true)
+  - The simulation of write to CQL (default is false)
