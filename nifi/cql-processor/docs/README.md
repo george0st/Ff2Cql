@@ -16,13 +16,13 @@ You have to do these steps (it is only one-time action):
  4. START NiFi
  
 ### 2.2 Select processor
-![PutCQL, add processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_add_processor.png)
+![PutCQL, select processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_add_processor.png)
 
 ### 2.3 Processor
 ![PutCQL, processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_processor.png)
 
 ### 2.4 Setup processor properties
-![PutCQL, properties](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_properties.png)
+![PutCQL, setup properties](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_properties.png)
 
 ### Input
 - **FlowFile with CSV content** for import (content [see](../../../README.md#31-expected-contentformat)),
@@ -54,7 +54,8 @@ You have to do these steps (it is only one-time action):
   - E.g. LOCAL_ONE, LOCAL_QUORUM, etc.
 - **Table:**
   - Schema and table name in CQL for write/put a data (expected format 'keyspace.table') 
-    e.g. 'cqlschema.cqltable' 
+    e.g. 'cqlschema.cqltable'
+  - The data types defined in the table will be used for value conversions from the CSV file.
 - **Batch Size:**
   - Size of batch for write to CQL (default is 200)
 - **Dry Run:**
