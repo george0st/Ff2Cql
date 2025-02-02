@@ -1,0 +1,9 @@
+{
+  "ipAddresses": ["localhost"],
+  "port": 9042,
+  "localDC": "datacenter1",
+  "connectionTimeout": "900",
+  "requestTimeout": "60",
+  "consistencyLevel": "LOCAL_ONE",
+  "table": "jist6.t02"
+}

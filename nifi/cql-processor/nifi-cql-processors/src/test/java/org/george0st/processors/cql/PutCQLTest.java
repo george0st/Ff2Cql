@@ -21,6 +21,7 @@ import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
 import org.george0st.processors.cql.helper.ReadableValue;
 import org.george0st.processors.cql.helper.Setup;
+import org.george0st.processors.cql.helper.TestSetup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,28 +33,25 @@ import java.util.HashMap;
 public class PutCQLTest {
 
     private TestRunner testRunner;
-    private TestProperty testProperty;
+    private TestSetup cassandraSetup;
+    private TestSetup scyllaSetup;
 
     // Helper
     // https://medium.com/@mr.sinchan.banerjee/nifi-custom-processor-series-part-3-junit-test-with-nifi-mock-a935a1a4e3e5
 
     @BeforeEach
     public void init() throws IOException {
-        testProperty = TestProperty.getInstance(TestProperty.getTestPropertyFile(
-                new String []{"test-properties-private.json", "test-properties.json"}));
         testRunner = TestRunners.newTestRunner(PutCQL.class);
+
+        cassandraSetup = TestSetup.getInstance(testRunner,
+                TestSetup.getTestPropertyFile(new String []{"test-cassandra-private.json", "test-properties.json"}));
+        scyllaSetup = TestSetup.getInstance(testRunner,
+                TestSetup.getTestPropertyFile(new String []{"test-scylla-private.json", "test-properties.json"}));
     }
 
     private FlowFile coreTest(){
         long finish, start, count;
         FlowFile result;
-
-        //"10.129.53.159,10.129.53.154,10.129.53.153"
-        testRunner.setProperty(PutCQL.MY_IP_ADDRESSES.getName(), String.join(",", testProperty.ipAddresses));
-        testRunner.setProperty(PutCQL.MY_LOCALDC.getName(),testProperty.localDC);
-        testRunner.setProperty(PutCQL.MY_USERNAME.getName(), testProperty.username);
-        testRunner.setProperty(PutCQL.MY_PASSWORD.getName(), testProperty.pwd);
-        testRunner.setProperty(PutCQL.MY_TABLE.getName(), testProperty.table);
 
         start = System.currentTimeMillis();
         testRunner.run();
@@ -84,13 +82,13 @@ public class PutCQLTest {
                 "\"0\",\"1064\",\"zeVOKGnORq\",\"627.6811\",\"395.8522407512559\",\"1971-11-12\",\"03:37:15\",\"2000-09-25T22:18:45Z\",\"false\",\"6080071f-4dd1-4ea5-b711-9ad0716e242a\",\"8966\",\"55\",\"f45e58f5-c3b7-11ef-8d19-97ae87be7c54\",\"Tzxsw\"\n" +
                 "\"1\",\"1709\",\"7By0z5QEXh\",\"652.03955\",\"326.9081263857284\",\"2013-12-17\",\"08:43:09\",\"2010-04-27T07:02:27Z\",\"false\",\"7d511666-2f81-41c4-9d5c-a5fa87f7d1c3\",\"24399\",\"38\",\"f45e8006-c3b7-11ef-8d19-172ff8d0d752\",\"exAbN\"\n" +
                 "\"2\",\"6249\",\"UYI6AgkcBt\",\"939.01556\",\"373.48559413289485\",\"1980-11-05\",\"15:44:43\",\"2023-11-24T05:59:12Z\",\"false\",\"dbd35d1b-38d0-49a4-8069-9efd68314dc5\",\"6918\",\"72\",\"f45e8007-c3b7-11ef-8d19-d784fa8af8e3\",\"IjnDb\"\n" +
-                "\"3\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"1998-04-09T23:19:18Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
+                "\"3\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"2024-06-29T21:08:54.463Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
         FlowFile result;
 
         testRunner.enqueue(content, attributes);
-        testRunner.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
-
+        cassandraSetup.setProperty();
+        cassandraSetup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
+        cassandraSetup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
     }
@@ -118,14 +116,16 @@ public class PutCQLTest {
         FlowFile result;
 
         testRunner.enqueue(content, attributes);
-        testRunner.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+        cassandraSetup.setProperty();
+        cassandraSetup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
+        cassandraSetup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
 
         testRunner.enqueue(content2, attributes);
-        testRunner.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+        cassandraSetup.setProperty();
+        cassandraSetup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
+        cassandraSetup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
     }
@@ -152,20 +152,23 @@ public class PutCQLTest {
         FlowFile result;
 
         testRunner.enqueue(content, attributes);
-        testRunner.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+        cassandraSetup.setProperty();
+        cassandraSetup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
+        cassandraSetup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
 
         testRunner.enqueue(content, attributes);
-        testRunner.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+        cassandraSetup.setProperty();
+        cassandraSetup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
+        cassandraSetup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
 
         testRunner.enqueue(content2, attributes);
-        testRunner.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "150");
-        testRunner.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+        cassandraSetup.setProperty();
+        cassandraSetup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "150");
+        cassandraSetup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals(Setup.CompareStatus.CHANGE.name(), result.getAttribute("CQLCompareStatus"));
     }
@@ -182,26 +185,30 @@ public class PutCQLTest {
         FlowFile result;
 
         testRunner.enqueue(content);
-        testRunner.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+        cassandraSetup.setProperty();
+        cassandraSetup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
+        cassandraSetup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
 
         testRunner.enqueue(content);
-        testRunner.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+        cassandraSetup.setProperty();
+        cassandraSetup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
+        cassandraSetup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
 
         testRunner.enqueue(content);
-        testRunner.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+        cassandraSetup.setProperty();
+        cassandraSetup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
+        cassandraSetup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
 
         testRunner.enqueue(content);
-        testRunner.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+        cassandraSetup.setProperty();
+        cassandraSetup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
+        cassandraSetup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
     }
@@ -212,8 +219,9 @@ public class PutCQLTest {
         FlowFile result;
 
         testRunner.enqueue(content);
-        testRunner.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+        cassandraSetup.setProperty();
+        cassandraSetup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
+        cassandraSetup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
     }
@@ -224,8 +232,9 @@ public class PutCQLTest {
         FlowFile result;
 
         testRunner.enqueue(content);
-        testRunner.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-        testRunner.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+        cassandraSetup.setProperty();
+        cassandraSetup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
+        cassandraSetup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
         result=coreTest();
         assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
     }
@@ -242,8 +251,9 @@ public class PutCQLTest {
 
         for (int i=0; i<10;i++) {
             testRunner.enqueue(content);
-            testRunner.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-            testRunner.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+            cassandraSetup.setProperty();
+            cassandraSetup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
+            cassandraSetup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
 
             result = coreTest();
             if (i==0)

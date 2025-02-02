@@ -72,7 +72,7 @@ public class PutCQL extends AbstractProcessor {
             .Builder()
             .name("Username")
             .description("Username for the CQL connection.")
-            .required(true)
+            .required(false)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
@@ -81,7 +81,7 @@ public class PutCQL extends AbstractProcessor {
             .Builder()
             .name("Password")
             .description("Password for the CQL connection.")
-            .required(true)
+            .required(false)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .sensitive(true)
