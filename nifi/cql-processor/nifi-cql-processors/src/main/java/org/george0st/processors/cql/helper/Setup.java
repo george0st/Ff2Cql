@@ -70,9 +70,19 @@ public class Setup {
         //  change in Access level
         if (!Arrays.equals(o.ipAddresses, ipAddresses)) return CompareStatus.CHANGE_ACCESS;
         if (o.port != port) return CompareStatus.CHANGE_ACCESS;
-        if (!o.username.equals(username)) return CompareStatus.CHANGE_ACCESS;
-        if (!o.pwd.equals(pwd)) return CompareStatus.CHANGE_ACCESS;
-        if (!o.localDC.equalsIgnoreCase(localDC)) return CompareStatus.CHANGE_ACCESS;
+
+        if (o.username!=null) {
+            if (!o.username.equals(username)) return CompareStatus.CHANGE_ACCESS;
+        } else if (username!=null) return CompareStatus.CHANGE_ACCESS;
+
+        if (o.pwd!=null) {
+            if (!o.pwd.equals(pwd)) return CompareStatus.CHANGE_ACCESS;
+        } else if (pwd!=null) return CompareStatus.CHANGE_ACCESS;
+
+        if (o.localDC!=null) {
+            if (!o.localDC.equalsIgnoreCase(localDC)) return CompareStatus.CHANGE_ACCESS;
+        } else if (localDC!=null) return CompareStatus.CHANGE_ACCESS;
+
         if (o.connectionTimeout != connectionTimeout) return CompareStatus.CHANGE_ACCESS;
         if (o.requestTimeout != requestTimeout) return CompareStatus.CHANGE_ACCESS;
         if (!o.consistencyLevel.equals(consistencyLevel)) return CompareStatus.CHANGE_ACCESS;
@@ -86,33 +96,33 @@ public class Setup {
     }
 
     // Overriding equals() to compare two Setup objects
-    @Override
-    public boolean equals(Object o) {
-
-        // check null
-        if (o == null) return false;
-
-        // If the object is compared with itself then return true
-        if (o == this) return true;
-
-        // Check if o is an instance of Setup or not "null instanceof [type]" also returns false
-        if (!(o instanceof Setup)) return false;
-
-        //  own compare
-        if (!Arrays.equals(((Setup) o).ipAddresses, ipAddresses)) return false;
-        if (((Setup) o).port != port) return false;
-        if (!((Setup) o).username.equals(username)) return false;
-        if (!((Setup) o).pwd.equals(pwd)) return false;
-        if (!((Setup) o).localDC.equalsIgnoreCase(localDC)) return false;
-        if (((Setup) o).connectionTimeout != connectionTimeout) return false;
-        if (((Setup) o).requestTimeout != requestTimeout) return false;
-        if (!((Setup) o).consistencyLevel.equals(consistencyLevel)) return false;
-        if (!((Setup) o).table.equalsIgnoreCase(table)) return false;
-
-        if (((Setup)o).batch != batch) return false;
-        if (((Setup)o).dryRun != dryRun) return false;
-
-        return true;
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//
+//        // check null
+//        if (o == null) return false;
+//
+//        // If the object is compared with itself then return true
+//        if (o == this) return true;
+//
+//        // Check if o is an instance of Setup or not "null instanceof [type]" also returns false
+//        if (!(o instanceof Setup)) return false;
+//
+//        //  own compare
+//        if (!Arrays.equals(((Setup) o).ipAddresses, ipAddresses)) return false;
+//        if (((Setup) o).port != port) return false;
+//        if (!((Setup) o).username.equals(username)) return false;
+//        if (!((Setup) o).pwd.equals(pwd)) return false;
+//        if (!((Setup) o).localDC.equalsIgnoreCase(localDC)) return false;
+//        if (((Setup) o).connectionTimeout != connectionTimeout) return false;
+//        if (((Setup) o).requestTimeout != requestTimeout) return false;
+//        if (!((Setup) o).consistencyLevel.equals(consistencyLevel)) return false;
+//        if (!((Setup) o).table.equalsIgnoreCase(table)) return false;
+//
+//        if (((Setup)o).batch != batch) return false;
+//        if (((Setup)o).dryRun != dryRun) return false;
+//
+//        return true;
+//    }
 
 }
