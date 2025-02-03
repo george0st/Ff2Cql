@@ -17,9 +17,9 @@ You can use java application (Ff2Cql-*.jar) directly in NiFi:
 - **Command:**
     - java
 - **Command Argument:**
-    - -jar Ff2Cql-1.7.jar import.csv
-    - -jar Ff2Cql-1.7.jar import.csv import2.csv
-    - -jar Ff2Cql-1.7.jar -c connection-private.json import.csv
+    - -jar Ff2Cql-1.7.1.jar import.csv
+    - -jar Ff2Cql-1.7.1.jar import.csv import2.csv
+    - -jar Ff2Cql-1.7.1.jar -c connection-private.json import.csv
     - etc. [see](#41-command-line)
 - **Working Directory:**
     - /opt/nifi/nifi-current/bin/test2/
@@ -44,8 +44,8 @@ You can use java application (Ff2Cql-*.jar) directly in NiFi:
 - **Command Argument Strategy:**
     - Command Arguments Property
 - **Command Arguments:**
-    - -jar Ff2Cql-1.7.jar -s
-    - -jar Ff2Cql-1.7.jar -c connection-private.json -s
+    - -jar Ff2Cql-1.7.1.jar -s
+    - -jar Ff2Cql-1.7.1.jar -c connection-private.json -s
     - etc. [see](#41-command-line)
 - **Argument Delimiter:**
     - ' ' (space)
@@ -58,7 +58,7 @@ You can use java application (Ff2Cql-*.jar) directly in NiFi:
 
 The command line description:
 ```
-java -jar Ff2Cql-1.7.jar -h
+java -jar Ff2Cql-1.7.1.jar -h
 ```
 Typical output:
 ```
