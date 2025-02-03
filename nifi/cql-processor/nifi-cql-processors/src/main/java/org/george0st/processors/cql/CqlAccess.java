@@ -35,7 +35,8 @@ public class CqlAccess {
             builder.addContactPoint(new InetSocketAddress(ipAddress.strip(), setup.port));
 
         // data center
-        builder.withLocalDatacenter(setup.localDC);
+        if (setup.localDC!=null)
+            builder.withLocalDatacenter(setup.localDC);
 
         // basic authorization
         if (setup.username!=null)

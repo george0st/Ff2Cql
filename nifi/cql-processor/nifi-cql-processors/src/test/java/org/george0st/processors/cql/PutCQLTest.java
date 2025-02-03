@@ -27,6 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import java.io.IOException;
 import java.util.*;
@@ -83,6 +84,27 @@ public class PutCQLTest {
     }
 
     @Test
+    public void testZero() throws IOException {
+        Setup aa = TestSetup.getInstance(testRunner,
+                TestSetup.getTestPropertyFile(new String []{"test-cassandra-private.json", "test-properties.json"}));
+        Setup bb = TestSetup.getInstance(testRunner,
+                TestSetup.getTestPropertyFile(new String []{"test-cassandra-private.json", "test-properties.json"}));
+
+        aa.username="aa";
+        bb.username=null;
+        assertTrue(aa.compare(bb)==Setup.CompareStatus.CHANGE_ACCESS);
+        assertTrue(bb.compare(aa)==Setup.CompareStatus.CHANGE_ACCESS);
+
+        bb.username=aa.username;
+        aa.pwd="aa";
+        bb.pwd=null;
+        assertTrue(aa.compare(bb)==Setup.CompareStatus.CHANGE_ACCESS);
+        assertTrue(bb.compare(aa)==Setup.CompareStatus.CHANGE_ACCESS);
+
+    }
+
+
+        @Test
     public void testBasic() {
 
         HashMap<String, String> attributes = new HashMap<String, String>();

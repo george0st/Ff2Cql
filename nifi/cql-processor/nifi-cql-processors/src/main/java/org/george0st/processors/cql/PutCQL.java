@@ -63,7 +63,7 @@ public class PutCQL extends AbstractProcessor {
             .Builder()
             .name("Port")
             .description("Port for communication.")
-            .required(false)
+            .required(true)
             .defaultValue("9042")
             .addValidator(StandardValidators.POSITIVE_INTEGER_VALIDATOR)
             .build();
@@ -74,7 +74,7 @@ public class PutCQL extends AbstractProcessor {
             .description("Username for the CQL connection.")
             .required(false)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
-            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
     public static final PropertyDescriptor MY_PASSWORD = new PropertyDescriptor
@@ -83,7 +83,7 @@ public class PutCQL extends AbstractProcessor {
             .description("Password for the CQL connection.")
             .required(false)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
-            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .sensitive(true)
             .build();
 
@@ -91,10 +91,10 @@ public class PutCQL extends AbstractProcessor {
             .Builder()
             .name("Local Data Center")
             .description("Name of local data center e.g. 'dc1', 'datacenter1', etc.")
-            .required(true)
+            .required(false)
             .defaultValue("dc1")
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
-            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
     public static final PropertyDescriptor MY_CONNECTION_TIMEOUT = new PropertyDescriptor
