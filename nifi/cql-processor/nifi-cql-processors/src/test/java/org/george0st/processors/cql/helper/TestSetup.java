@@ -11,6 +11,9 @@ import java.io.IOException;
 
 public class TestSetup extends Setup {
 
+    public String name;
+    public String compaction;
+
     private TestRunner testRunner;
 
     private TestSetup(){
@@ -22,7 +25,12 @@ public class TestSetup extends Setup {
     public static TestSetup getInstance(TestRunner testRunner, String propertyFile) throws IOException {
         try (FileReader fileReader = new FileReader(propertyFile)) {
             TestSetup setup = (new Gson()).fromJson(fileReader, TestSetup.class);
+
+            //  default setting
+            if (setup.compaction==null)
+                setup.compaction="{'class':'SizeTieredCompactionStrategy'}";
             setup.setRunner(testRunner);
+
             return setup;
         }
     }

@@ -4,7 +4,6 @@ import org.george0st.processor.CsvCqlValidate;
 import org.george0st.processor.CsvCqlWrite;
 import org.george0st.helper.Setup;
 import org.junit.jupiter.api.*;
-
 import java.io.IOException;
 import java.io.File;
 

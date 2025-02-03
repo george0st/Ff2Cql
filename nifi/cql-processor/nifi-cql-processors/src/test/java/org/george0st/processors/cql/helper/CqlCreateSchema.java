@@ -6,12 +6,14 @@ import org.apache.commons.csv.CSVPrinter;
 import org.george0st.processors.cql.helper.RndGenerator;
 import org.george0st.processors.cql.helper.TestSetup;
 import org.george0st.processors.cql.CqlAccess;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -41,7 +43,7 @@ public class CqlCreateSchema extends CqlAccess {
             "coltimeuuid", "timeuuid",
             "colvarchar", "varchar"};
 
-    public CqlCreateSchema(Setup setup) throws InterruptedException {
+    public CqlCreateSchema(TestSetup setup) throws InterruptedException {
         super(setup);
     }
 
@@ -86,7 +88,7 @@ public class CqlCreateSchema extends CqlAccess {
             String createTable = String.format("CREATE TABLE IF NOT EXISTS %s ", setup.table) +
                     String.format("(%s ", getColumnDefinitions()) +
                     String.format("PRIMARY KEY (%s)) ", String.join(",", primaryKeys)) +
-                    "WITH compaction = {'class': 'UnifiedCompactionStrategy', 'scaling_parameters': 'L10, T10'}";
+                    String.format("WITH compaction = %s;", ((TestSetup) setup).compaction);
             session.execute(createTable);
         }
     }

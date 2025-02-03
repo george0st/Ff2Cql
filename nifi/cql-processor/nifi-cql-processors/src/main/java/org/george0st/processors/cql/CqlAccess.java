@@ -38,7 +38,8 @@ public class CqlAccess {
         builder.withLocalDatacenter(setup.localDC);
 
         // basic authorization
-        builder.withAuthCredentials(setup.username, setup.pwd);
+        if (setup.username!=null)
+            builder.withAuthCredentials(setup.username, setup.pwd);
 
         // add supported codecs
         builder.addTypeCodecs(new CqlIntToStringCodec(),
