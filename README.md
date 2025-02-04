@@ -61,5 +61,5 @@ colbigint,colint,coltext,colfloat,coldouble,coldate,coltime,coltimestamp,colbool
   - **TIME**
     - ISO_LOCAL_TIME (format "HH:mm:ss"), example '08:43:09'
   - **TIMESTAMP**
-    - ISO 8601 (format "yyyy-MM-dd'T'HH:mm:ss'Z'"), example '2001-01-01T00:00:00Z' or '2024-06-29T21:08:54.463Z'
+    - [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) (format "yyyy-MM-dd'T'HH:mm:ss.sss'Z'"), examples '2024-06-29T21:08:54.463Z', '2001-01-01T00:00:00Z'
   - etc.
