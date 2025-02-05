@@ -252,7 +252,7 @@ public class PutCQL extends AbstractProcessor {
                     if (status == Setup.CompareStatus.CHANGE_ACCESS)
                         cqlAccess = new CqlAccess(setup);
                 }
-                session.putAttribute(flowFile, "CQLCompareStatus", status.name());//setup == newSetup ? "NEW" : "REUSE");
+                session.putAttribute(flowFile, "CQLCompareStatus", status.name());
             }
 
             //  write CSV
@@ -265,18 +265,6 @@ public class PutCQL extends AbstractProcessor {
             session.transfer(flowFile, REL_FAILURE);
             return;
         }
-
-        //  read attribute
-//        flowFile.getAttribute("");
-
-        //  write attribute
-//        session.putAttribute(flowFile, "newprop_jirka","value steuer");
-//        session.putAttribute(flowFile, "mycounter", counter.toString());
-
-        // Helpers:
-        //  https://medium.com/@tomerdayan168/build-your-processors-in-nifi-7bb0f217ed75
-        //  https://help.hcl-software.com/commerce/9.1.0/search/tasks/t_createcustomnifi.html
-
         session.transfer(flowFile, REL_SUCCESS);
     }
 }
