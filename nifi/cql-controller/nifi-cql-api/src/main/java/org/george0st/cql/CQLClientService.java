@@ -22,7 +22,7 @@ import org.apache.nifi.controller.ControllerService;
 
 @Tags({"example"})
 @CapabilityDescription("Example Service API.")
-public interface CQLService extends ControllerService {
+public interface CQLClientService extends ControllerService {
 
     void execute();
 
