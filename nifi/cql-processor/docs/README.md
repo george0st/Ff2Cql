@@ -25,7 +25,7 @@ You have to do these steps (it is only one-time action):
 ![PutCQL, setup properties](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_properties.png)
 
 ### Input
-- **FlowFile with CSV content** for import (content [see](../../../README.md#31-expected-contentformat)),
+- **FlowFile with CSV content** for import (content [see](../../../docs/conversion.md)),
    where the CSV content (with header) is based on 'keyspace.table' definition in 
    CQL (from data types point of view).
 

@@ -10,7 +10,7 @@ You can use java application (Ff2Cql-*.jar) directly in NiFi:
 
 ### Input
 - **connection.json** file to CQL, [see](#42-connection-setting-to-cql)
-- **CSV file(s) with header** for import (content [see](../../../README.md#31-expected-contentformat)),
+- **CSV file(s) with header** for import (content [see](../../../docs/conversion.md)),
    where the CSV content is based on 'keyspace.table' definition in CQL
 
 ### ExecuteProcess setting (key items)
