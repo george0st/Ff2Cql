@@ -241,6 +241,7 @@ public class PutCQL extends AbstractProcessor {
             return;
         }
 
+        //  1. create/get data for connection
         try {
             Setup newSetup = new Setup(context);
 
@@ -255,10 +256,13 @@ public class PutCQL extends AbstractProcessor {
                 session.putAttribute(flowFile, "CQLCompareStatus", status.name());
             }
 
-            //  write CSV
+            //  2. get data from FlowFile (support CSV)
             CsvCqlWrite write=new CsvCqlWrite(cqlAccess, setup.dryRun);
+
+            //  3. put data to CQL
             long count=write.executeContent(this.getByteContent(flowFile,session));
 
+            //  4. write some information to the output (as write attributes)
             session.putAttribute(flowFile, "CQLCount", Long.toString(count));
         } catch (IOException e) {
             getLogger().error("CQLProcessor, Processing error", e);

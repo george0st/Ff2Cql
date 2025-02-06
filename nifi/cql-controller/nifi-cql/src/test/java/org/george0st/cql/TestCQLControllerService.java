@@ -16,14 +16,29 @@
  */
 package org.george0st.cql;
 
-import org.apache.nifi.annotation.documentation.CapabilityDescription;
-import org.apache.nifi.annotation.documentation.Tags;
-import org.apache.nifi.controller.ControllerService;
+import org.apache.nifi.reporting.InitializationException;
+import org.apache.nifi.util.TestRunner;
+import org.apache.nifi.util.TestRunners;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-@Tags({"example"})
-@CapabilityDescription("Example Service API.")
-public interface MyService extends ControllerService {
+public class TestCQLControllerService {
 
-    void execute();
+    @BeforeEach
+    public void init() {
+
+    }
+
+    @Test
+    public void testService() throws InitializationException {
+        final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
+        final CQLControllerService service = new CQLControllerService();
+        runner.addControllerService("test-good", service);
+
+        runner.setProperty(service, CQLControllerService.MY_PROPERTY, "test-value");
+        runner.enableControllerService(service);
+
+        runner.assertValid(service);
+    }
 
 }

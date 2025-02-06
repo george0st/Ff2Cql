@@ -28,9 +28,13 @@ import org.apache.nifi.controller.ConfigurationContext;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.reporting.InitializationException;
 
+
+// inspiration
+// https://github.com/apache/nifi/blob/main/nifi-extension-bundles/nifi-mongodb-bundle/nifi-mongodb-services/src/main/java/org/apache/nifi/mongodb/MongoDBControllerService.java#L187
+
 @Tags({ "example"})
-@CapabilityDescription("Example ControllerService implementation of MyService.")
-public class StandardMyService extends AbstractControllerService implements MyService {
+@CapabilityDescription("Example ControllerService implementation of CQLClientService.")
+public class CQLControllerService extends AbstractControllerService implements CQLClientService {
 
     public static final PropertyDescriptor MY_PROPERTY = new PropertyDescriptor
             .Builder()

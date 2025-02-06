@@ -32,7 +32,7 @@ You can use java application (Ff2Cql-*.jar) directly in NiFi:
 
 #### Input
 - **connection.json** file to CQL, [see](#42-connection-setting-to-cql)
-- **FlowFile/CSV with header** (content [see](../../../README.md#31-expected-contentformat)),
+- **FlowFile/CSV with header** (content [see](../../../docs/conversion.md)),
    where the FlowFile/CSV content is based on 'keyspace.table' definition in CQL
    (the integration is via stdin)
 

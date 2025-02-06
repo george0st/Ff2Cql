@@ -121,8 +121,8 @@ public class PutCQLTest {
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
-            setup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-            setup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+            setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
+            setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
             assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
         }
@@ -155,15 +155,15 @@ public class PutCQLTest {
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
-            setup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-            setup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+            setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
+            setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
             assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
 
             testRunner.enqueue(content2, attributes);
             setup.setProperty();
-            setup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-            setup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+            setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
+            setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
             assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
         }
@@ -195,22 +195,22 @@ public class PutCQLTest {
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
-            setup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-            setup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+            setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
+            setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
             assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
-            setup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-            setup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+            setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
+            setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
             assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
 
             testRunner.enqueue(content2, attributes);
             setup.setProperty();
-            setup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "150");
-            setup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+            setup.setProperty(PutCQL.MY_BATCH_SIZE, "150");
+            setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
             assertEquals(Setup.CompareStatus.CHANGE.name(), result.getAttribute("CQLCompareStatus"));
         }
@@ -234,29 +234,29 @@ public class PutCQLTest {
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
-            setup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-            setup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+            setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
+            setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
             assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
-            setup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-            setup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+            setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
+            setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
             assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
-            setup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-            setup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+            setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
+            setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
             assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
-            setup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-            setup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+            setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
+            setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
             assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
         }
@@ -273,8 +273,8 @@ public class PutCQLTest {
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
-            setup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-            setup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+            setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
+            setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
             assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
         }
@@ -291,8 +291,8 @@ public class PutCQLTest {
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
-            setup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-            setup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+            setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
+            setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
             assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
         }
@@ -315,8 +315,8 @@ public class PutCQLTest {
             for (int i = 0; i < 10; i++) {
                 testRunner.enqueue(content, attributes);
                 setup.setProperty();
-                setup.setProperty(PutCQL.MY_BATCH_SIZE.getName(), "350");
-                setup.setProperty(PutCQL.MY_DRY_RUN.getName(), "false");
+                setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
+                setup.setProperty(PutCQL.MY_DRY_RUN, "false");
                 result = coreTest();
                 if (i == 0)
                     assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
