@@ -29,8 +29,8 @@ import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.reporting.InitializationException;
 
 @Tags({ "example"})
-@CapabilityDescription("Example ControllerService implementation of MyService.")
-public class StandardMyService extends AbstractControllerService implements MyService {
+@CapabilityDescription("Example ControllerService implementation of CQLService.")
+public class CQLControllerService extends AbstractControllerService implements CQLService {
 
     public static final PropertyDescriptor MY_PROPERTY = new PropertyDescriptor
             .Builder()

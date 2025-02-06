@@ -46,17 +46,17 @@ public class Setup {
      * @param context   definition of process context
      */
     public Setup(ProcessContext context){
-        setIPAddresses(context.getProperty(PutCQL.MY_IP_ADDRESSES.getName()).getValue());
-        port=context.getProperty(PutCQL.MY_PORT.getName()).asInteger();
-        username=context.getProperty(PutCQL.MY_USERNAME.getName()).getValue();
-        pwd=context.getProperty(PutCQL.MY_PASSWORD.getName()).getValue();
-        localDC=context.getProperty(PutCQL.MY_LOCALDC.getName()).getValue();
-        connectionTimeout=context.getProperty(PutCQL.MY_CONNECTION_TIMEOUT.getName()).asLong();
-        requestTimeout=context.getProperty(PutCQL.MY_REQUEST_TIMEOUT.getName()).asLong();
-        consistencyLevel=context.getProperty(PutCQL.MY_CONSISTENCY_LEVEL.getName()).getValue();
-        table=context.getProperty(PutCQL.MY_TABLE.getName()).getValue();
-        setBatch(context.getProperty(PutCQL.MY_BATCH_SIZE.getName()).asLong());
-        dryRun=context.getProperty(PutCQL.MY_DRY_RUN.getName()).asBoolean();
+        setIPAddresses(context.getProperty(PutCQL.MY_IP_ADDRESSES).getValue());
+        port=context.getProperty(PutCQL.MY_PORT).asInteger();
+        username=context.getProperty(PutCQL.MY_USERNAME).getValue();
+        pwd=context.getProperty(PutCQL.MY_PASSWORD).getValue();
+        localDC=context.getProperty(PutCQL.MY_LOCALDC).getValue();
+        connectionTimeout=context.getProperty(PutCQL.MY_CONNECTION_TIMEOUT).asLong();
+        requestTimeout=context.getProperty(PutCQL.MY_REQUEST_TIMEOUT).asLong();
+        consistencyLevel=context.getProperty(PutCQL.MY_CONSISTENCY_LEVEL).getValue();
+        table=context.getProperty(PutCQL.MY_TABLE).getValue();
+        setBatch(context.getProperty(PutCQL.MY_BATCH_SIZE).asLong());
+        dryRun=context.getProperty(PutCQL.MY_DRY_RUN).asBoolean();
     }
 
     public CompareStatus compare(Setup o){
