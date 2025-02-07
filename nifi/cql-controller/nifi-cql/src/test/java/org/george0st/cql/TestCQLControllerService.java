@@ -35,7 +35,7 @@ public class TestCQLControllerService {
         final CQLControllerService service = new CQLControllerService();
         runner.addControllerService("test-good", service);
 
-        runner.setProperty(service, CQLControllerService.MY_PROPERTY, "test-value");
+        runner.setProperty(service, CQLControllerService.IP_ADDRESSES, "test-value");
         runner.enableControllerService(service);
 
         runner.assertValid(service);

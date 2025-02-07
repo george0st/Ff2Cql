@@ -17,6 +17,7 @@
 package org.george0st.processors.cql;
 
 import org.apache.nifi.annotation.behavior.*;
+import org.apache.nifi.components.AllowableValue;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.annotation.lifecycle.OnScheduled;
@@ -36,24 +37,39 @@ import java.io.*;
 import java.util.List;
 import java.util.Set;
 
-@Tags({"CQL","Cassandra", "ScyllaDB", "AstraDB", "YugabyteDB", "Cassandra Query Language",
-        "NoSQL", "Write", "Put"})
+@Tags({"CQL", "Cassandra", "ScyllaDB", "AstraDB", "YugabyteDB", "Cassandra Query Language",
+        "NoSQL", "Write", "Insert", "Update", "Put"})
 @CapabilityDescription("Writes the contents of FlowFile to an CQL engine (support Apache Cassandra, " +
         "ScyllaDB, AstraDB, etc.). The processor expects content in FlowFile/CSV with header.")
 @SeeAlso({})
 @InputRequirement(InputRequirement.Requirement.INPUT_REQUIRED)
 @ReadsAttributes({@ReadsAttribute(attribute="", description="")})
 @WritesAttributes({
-        @WritesAttribute(attribute="CQLCount", description="Amount of write rows to CQL."),
-        @WritesAttribute(attribute="CQLCompareStatus", description="View to the internal CQL processing.")})
+        @WritesAttribute(attribute=PutCQL.ATTRIBUTE_COUNT, description="Amount of write rows to CQL."),
+        @WritesAttribute(attribute=PutCQL.ATTRIBUTE_COMPARE_STATUS, description="View to the internal CQL processing.")})
 public class PutCQL extends AbstractProcessor {
+
+    static final String ATTRIBUTE_COUNT = "CQLCount";
+    static final String ATTRIBUTE_COMPARE_STATUS = "CQLCompareStatus";
+
+    static final AllowableValue CL_LOCAL_ONE = new AllowableValue("LOCAL_ONE", "Local one");
+    static final AllowableValue CL_LOCAL_QUORUM = new AllowableValue("LOCAL_QUORUM", "Local quorum");
+    static final AllowableValue CL_LOCAL_SERIAL = new AllowableValue("LOCAL_SERIAL", "Local serial");
+    static final AllowableValue CL_EACH_QUORUM = new AllowableValue("EACH_QUORUM", "Each quorum");
+    static final AllowableValue CL_ANY = new AllowableValue("ANY", "Any");
+    static final AllowableValue CL_ONE = new AllowableValue("ONE", "One");
+    static final AllowableValue CL_TWO = new AllowableValue("TWO", "Two");
+    static final AllowableValue CL_THREE = new AllowableValue("THREE", "Three");
+    static final AllowableValue CL_QUORUM = new AllowableValue("QUORUM", "Quorum");
+    static final AllowableValue CL_ALL = new AllowableValue("ALL", "All");
+    static final AllowableValue CL_SERIAL = new AllowableValue("SERIAL", "Serial");
 
     //  region All Properties
 
     public static final PropertyDescriptor MY_IP_ADDRESSES = new PropertyDescriptor
             .Builder()
             .name("IP Addresses")
-            .description("List of IP addresses for CQL connection, the addresses are splitted by comma (e.g. '192.168.0.1, 192.168.0.2').")
+            .description("List of IP addresses for CQL connection, the addresses are split by comma (e.g. '192.168.0.1, 192.168.0.2').")
             .required(true)
             .defaultValue("localhost")
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
@@ -120,9 +136,9 @@ public class PutCQL extends AbstractProcessor {
             .name("Consistency Level")
             .description("Consistency Level for CQL operations.")
             .required(true)
-            .defaultValue("LOCAL_ONE")
+            .defaultValue(CL_LOCAL_ONE.getValue())
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-            .allowableValues("LOCAL_ONE", "LOCAL_QUORUM", "LOCAL_SERIAL", "EACH_QUORUM", "ANY", "ONE", "TWO", "THREE", "QUORUM", "ALL", "SERIAL")
+            .allowableValues(CL_LOCAL_ONE, CL_LOCAL_QUORUM, CL_LOCAL_SERIAL, CL_EACH_QUORUM, CL_ANY, CL_ONE, CL_TWO, CL_THREE, CL_QUORUM, CL_ALL, CL_SERIAL)
             .build();
 
     public static final PropertyDescriptor MY_TABLE = new PropertyDescriptor
