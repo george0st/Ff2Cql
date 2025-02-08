@@ -30,6 +30,7 @@ import org.apache.nifi.processor.ProcessSession;
 import org.apache.nifi.processor.ProcessorInitializationContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
+import org.george0st.cql.CQLClientService;
 import org.george0st.processors.cql.helper.Setup;
 import org.george0st.processors.cql.processor.CsvCqlWrite;
 
@@ -65,6 +66,14 @@ public class PutCQL extends AbstractProcessor {
     static final AllowableValue CL_SERIAL = new AllowableValue("SERIAL", "Serial");
 
     //  region All Properties
+
+    public static final PropertyDescriptor CQL_SERVICE = new PropertyDescriptor
+            .Builder()
+            .name("Service Connection")
+            .description("Service connection to CQL.")
+            .required(true)
+            .identifiesControllerService(CQLClientService.class)
+            .build();
 
     public static final PropertyDescriptor MY_IP_ADDRESSES = new PropertyDescriptor
             .Builder()
@@ -193,7 +202,8 @@ public class PutCQL extends AbstractProcessor {
 
     @Override
     protected void init(final ProcessorInitializationContext context) {
-        descriptors = List.of(MY_IP_ADDRESSES,
+        descriptors = List.of(CQL_SERVICE,
+                MY_IP_ADDRESSES,
                 MY_PORT,
                 MY_USERNAME,
                 MY_PASSWORD,
