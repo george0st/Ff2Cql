@@ -74,7 +74,7 @@ public class CQLControllerService extends AbstractControllerService implements C
             .sensitive(true)
             .build();
 
-    public static final PropertyDescriptor LOCALDC = new PropertyDescriptor
+    public static final PropertyDescriptor LOCAL_DC = new PropertyDescriptor
             .Builder()
             .name("Local Data Center")
             .description("Name of local data center e.g. 'dc1', 'datacenter1', etc.")
@@ -107,7 +107,7 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("Consistency Level")
             .description("Consistency Level for CQL operations.")
             .required(true)
-            .defaultValue(CL_LOCAL_ONE)
+            .defaultValue(CL_LOCAL_ONE.getValue())
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .allowableValues(CL_LOCAL_ONE, CL_LOCAL_QUORUM, CL_LOCAL_SERIAL, CL_EACH_QUORUM, CL_ANY, CL_ONE, CL_TWO, CL_THREE, CL_QUORUM, CL_ALL, CL_SERIAL)
             .build();
@@ -117,7 +117,7 @@ public class CQLControllerService extends AbstractControllerService implements C
             PORT,
             USERNAME,
             PASSWORD,
-            LOCALDC,
+            LOCAL_DC,
             CONNECTION_TIMEOUT,
             REQUEST_TIMEOUT,
             CONSISTENCY_LEVEL);
