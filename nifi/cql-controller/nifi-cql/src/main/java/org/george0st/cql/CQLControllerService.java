@@ -32,20 +32,95 @@ import org.apache.nifi.reporting.InitializationException;
 // inspiration
 // https://github.com/apache/nifi/blob/main/nifi-extension-bundles/nifi-mongodb-bundle/nifi-mongodb-services/src/main/java/org/apache/nifi/mongodb/MongoDBControllerService.java#L187
 
-@Tags({ "example"})
-@CapabilityDescription("Example ControllerService implementation of CQLClientService.")
+@Tags({ "cql","cassandra", "scyllaDB", "cassandra query language", "nosql", "service"})
+@CapabilityDescription("Provides a controller service that configures a connection to CQL solution and " +
+        "provides access to that connection to other CQL-related components.")
 public class CQLControllerService extends AbstractControllerService implements CQLClientService {
 
-    public static final PropertyDescriptor MY_PROPERTY = new PropertyDescriptor
+    public static final PropertyDescriptor IP_ADDRESSES = new PropertyDescriptor
             .Builder()
-            .name("My Property")
-            .displayName("My Property")
-            .description("Example Property")
+            .name("IP Addresses")
+            .description("List of IP addresses for CQL connection, the addresses are split by comma (e.g. '192.168.0.1, 192.168.0.2').")
             .required(true)
+            .defaultValue("localhost")
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
-    private static final List<PropertyDescriptor> properties = List.of(MY_PROPERTY);
+    public static final PropertyDescriptor PORT = new PropertyDescriptor
+            .Builder()
+            .name("Port")
+            .description("Port for communication.")
+            .required(true)
+            .defaultValue("9042")
+            .addValidator(StandardValidators.POSITIVE_INTEGER_VALIDATOR)
+            .build();
+
+    public static final PropertyDescriptor USERNAME = new PropertyDescriptor
+            .Builder()
+            .name("Username")
+            .description("Username for the CQL connection.")
+            .required(false)
+            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .build();
+
+    public static final PropertyDescriptor PASSWORD = new PropertyDescriptor
+            .Builder()
+            .name("Password")
+            .description("Password for the CQL connection.")
+            .required(false)
+            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .sensitive(true)
+            .build();
+
+    public static final PropertyDescriptor LOCAL_DC = new PropertyDescriptor
+            .Builder()
+            .name("Local Data Center")
+            .description("Name of local data center e.g. 'dc1', 'datacenter1', etc.")
+            .required(false)
+            .defaultValue("dc1")
+            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .build();
+
+    public static final PropertyDescriptor CONNECTION_TIMEOUT = new PropertyDescriptor
+            .Builder()
+            .name("Connection Timeout")
+            .description("Timeout for connection to CQL engine.")
+            .required(true)
+            .defaultValue("900")
+            .addValidator(StandardValidators.LONG_VALIDATOR)
+            .build();
+
+    public static final PropertyDescriptor REQUEST_TIMEOUT = new PropertyDescriptor
+            .Builder()
+            .name("Request Timeout")
+            .description("Timeout for request to CQL engine.")
+            .required(true)
+            .defaultValue("60")
+            .addValidator(StandardValidators.LONG_VALIDATOR)
+            .build();
+
+    public static final PropertyDescriptor CONSISTENCY_LEVEL = new PropertyDescriptor
+            .Builder()
+            .name("Consistency Level")
+            .description("Consistency Level for CQL operations.")
+            .required(true)
+            .defaultValue(CL_LOCAL_ONE.getValue())
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .allowableValues(CL_LOCAL_ONE, CL_LOCAL_QUORUM, CL_LOCAL_SERIAL, CL_EACH_QUORUM, CL_ANY, CL_ONE, CL_TWO, CL_THREE, CL_QUORUM, CL_ALL, CL_SERIAL)
+            .build();
+
+    private static final List<PropertyDescriptor> properties = List.of(
+            IP_ADDRESSES,
+            PORT,
+            USERNAME,
+            PASSWORD,
+            LOCAL_DC,
+            CONNECTION_TIMEOUT,
+            REQUEST_TIMEOUT,
+            CONSISTENCY_LEVEL);
 
     @Override
     protected List<PropertyDescriptor> getSupportedPropertyDescriptors() {

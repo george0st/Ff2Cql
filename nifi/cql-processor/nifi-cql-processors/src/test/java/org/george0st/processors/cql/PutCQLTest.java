@@ -70,13 +70,13 @@ public class PutCQLTest {
         result = testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS).getLast();
         finish = System.currentTimeMillis();
 
-        count=Long.parseLong(result.getAttribute("CQLCount"));
+        count=Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
         System.out.printf("SetupName: '%s'; '%s': %s (%d ms); Access: %s; Items: %d; Perf: %.1f [calls/sec]%s",
                 result.getAttribute("CQLName"),
                 "FlowFile",
                 ReadableValue.fromMillisecond(finish - start),
                 finish-start,
-                result.getAttribute("CQLCompareStatus"),
+                result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS),
                 count,
                 count / ((finish - start) / 1000.0),
                 System.lineSeparator());
@@ -124,7 +124,7 @@ public class PutCQLTest {
             setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
             setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
-            assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
+            assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
         }
     }
 
@@ -158,14 +158,14 @@ public class PutCQLTest {
             setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
             setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
-            assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
+            assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
 
             testRunner.enqueue(content2, attributes);
             setup.setProperty();
             setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
             setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
-            assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
+            assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
         }
     }
 
@@ -198,21 +198,21 @@ public class PutCQLTest {
             setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
             setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
-            assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
+            assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
             setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
             setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
-            assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
+            assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
 
             testRunner.enqueue(content2, attributes);
             setup.setProperty();
             setup.setProperty(PutCQL.MY_BATCH_SIZE, "150");
             setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
-            assertEquals(Setup.CompareStatus.CHANGE.name(), result.getAttribute("CQLCompareStatus"));
+            assertEquals(Setup.CompareStatus.CHANGE.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
         }
     }
 
@@ -237,28 +237,28 @@ public class PutCQLTest {
             setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
             setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
-            assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
+            assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
             setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
             setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
-            assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
+            assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
             setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
             setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
-            assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
+            assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
             setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
             setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
-            assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
+            assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
         }
     }
 
@@ -276,7 +276,7 @@ public class PutCQLTest {
             setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
             setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
-            assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
+            assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
         }
     }
 
@@ -294,7 +294,7 @@ public class PutCQLTest {
             setup.setProperty(PutCQL.MY_BATCH_SIZE, "350");
             setup.setProperty(PutCQL.MY_DRY_RUN, "false");
             result = coreTest();
-            assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
+            assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
         }
     }
 
@@ -319,9 +319,9 @@ public class PutCQLTest {
                 setup.setProperty(PutCQL.MY_DRY_RUN, "false");
                 result = coreTest();
                 if (i == 0)
-                    assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute("CQLCompareStatus"));
+                    assertEquals(Setup.CompareStatus.CHANGE_ACCESS.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
                 else
-                    assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute("CQLCompareStatus"));
+                    assertEquals(Setup.CompareStatus.SAME.name(), result.getAttribute(PutCQL.ATTRIBUTE_COMPARE_STATUS));
             }
         }
     }
