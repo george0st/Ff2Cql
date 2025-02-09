@@ -96,6 +96,72 @@ public class TestCQLControllerService {
     }
 
     @Test
+    public void testSettingNotValidIPAddresses() throws InitializationException {
+        final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
+        final CQLControllerService service = new CQLControllerService();
+
+        runner.addControllerService("test-good", service);
+
+        runner.setProperty(service, CQLControllerService.IP_ADDRESSES, "");
+        runner.setProperty(service, CQLControllerService.PORT, "9042");
+        runner.setProperty(service, CQLControllerService.USERNAME, "perf");
+        runner.setProperty(service, CQLControllerService.PASSWORD, "perf");
+        runner.setProperty(service, CQLControllerService.LOCAL_DC, "datacenter1");
+        runner.setProperty(service, CQLControllerService.CONNECTION_TIMEOUT, "90");
+        runner.setProperty(service, CQLControllerService.REQUEST_TIMEOUT, "90");
+        runner.setProperty(service, CQLControllerService.CONSISTENCY_LEVEL, "LOCAL_ONE");
+        runner.setValidateExpressionUsage(false);
+        //runner.enableControllerService(service);
+
+        //  invalid port
+        runner.assertNotValid(service);
+    }
+
+    @Test
+    public void testSettingNotValidConnectionTimeout() throws InitializationException {
+        final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
+        final CQLControllerService service = new CQLControllerService();
+
+        runner.addControllerService("test-good", service);
+
+        runner.setProperty(service, CQLControllerService.IP_ADDRESSES, "10.192.0.1");
+        runner.setProperty(service, CQLControllerService.PORT, "9042");
+        runner.setProperty(service, CQLControllerService.USERNAME, "perf");
+        runner.setProperty(service, CQLControllerService.PASSWORD, "perf");
+        runner.setProperty(service, CQLControllerService.LOCAL_DC, "datacenter1");
+        runner.setProperty(service, CQLControllerService.CONNECTION_TIMEOUT, "ee");
+        runner.setProperty(service, CQLControllerService.REQUEST_TIMEOUT, "90");
+        runner.setProperty(service, CQLControllerService.CONSISTENCY_LEVEL, "LOCAL_ONE");
+        runner.setValidateExpressionUsage(false);
+        //runner.enableControllerService(service);
+
+        //  invalid port
+        runner.assertNotValid(service);
+    }
+
+    @Test
+    public void testSettingNotValidRequestTimeout() throws InitializationException {
+        final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
+        final CQLControllerService service = new CQLControllerService();
+
+        runner.addControllerService("test-good", service);
+
+        runner.setProperty(service, CQLControllerService.IP_ADDRESSES, "10.192.0.1");
+        runner.setProperty(service, CQLControllerService.PORT, "9042");
+        runner.setProperty(service, CQLControllerService.USERNAME, "perf");
+        runner.setProperty(service, CQLControllerService.PASSWORD, "perf");
+        runner.setProperty(service, CQLControllerService.LOCAL_DC, "datacenter1");
+        runner.setProperty(service, CQLControllerService.CONNECTION_TIMEOUT, "90");
+        runner.setProperty(service, CQLControllerService.REQUEST_TIMEOUT, "qq");
+        runner.setProperty(service, CQLControllerService.CONSISTENCY_LEVEL, "LOCAL_ONE");
+        runner.setValidateExpressionUsage(false);
+        //runner.enableControllerService(service);
+
+        //  invalid port
+        runner.assertNotValid(service);
+    }
+
+    @Test
     public void testConnection() throws InitializationException {
         final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
         final CQLControllerService service = new CQLControllerService();
