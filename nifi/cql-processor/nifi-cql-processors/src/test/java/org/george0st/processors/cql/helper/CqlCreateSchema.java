@@ -5,7 +5,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.george0st.processors.cql.helper.RndGenerator;
 import org.george0st.processors.cql.helper.TestSetup;
-import org.george0st.processors.cql.CqlAccess;
+import org.george0st.processors.cql.processor.CqlProcessor;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Create test table in CQL for complex testing of all supported types.
  */
-public class CqlCreateSchema extends CqlAccess {
+public class CqlCreateSchema extends CqlProcessor {
 
     private final RndGenerator rnd=new RndGenerator();
     private final static String testOutput="./test_output";
@@ -43,8 +43,8 @@ public class CqlCreateSchema extends CqlAccess {
             "coltimeuuid", "timeuuid",
             "colvarchar", "varchar"};
 
-    public CqlCreateSchema(TestSetup setup) throws InterruptedException {
-        super(setup);
+    public CqlCreateSchema(CqlSession session, TestSetup setup) throws InterruptedException {
+        super(session, setup);
     }
 
     public String[] getPrimaryKeys(){
@@ -70,7 +70,6 @@ public class CqlCreateSchema extends CqlAccess {
     }
 
     public void Create() {
-        try (CqlSession session = sessionBuilder.build()) {
 //            // Drop key space
 //            session.execute(f"DROP KEYSPACE IF EXISTS {self._run_setup['keyspace']};");
 
@@ -81,16 +80,15 @@ public class CqlCreateSchema extends CqlAccess {
 //                    f"'replication_factor' : {self._run_setup['keyspace_replication_factor']}" +
 //                    "};");
 
-            // DROP TABLE
-            session.execute(String.format("DROP TABLE IF EXISTS %s;", setup.table));
+        // DROP TABLE
+        session.execute(String.format("DROP TABLE IF EXISTS %s;", setup.table));
 
-            // CREATE TABLE
-            String createTable = String.format("CREATE TABLE IF NOT EXISTS %s ", setup.table) +
-                    String.format("(%s ", getColumnDefinitions()) +
-                    String.format("PRIMARY KEY (%s)) ", String.join(",", primaryKeys)) +
-                    String.format("WITH compaction = %s;", ((TestSetup) setup).compaction);
-            session.execute(createTable);
-        }
+        // CREATE TABLE
+        String createTable = String.format("CREATE TABLE IF NOT EXISTS %s ", setup.table) +
+                String.format("(%s ", getColumnDefinitions()) +
+                String.format("PRIMARY KEY (%s)) ", String.join(",", primaryKeys)) +
+                String.format("WITH compaction = %s;", ((TestSetup) setup).compaction);
+        session.execute(createTable);
     }
 
     public File generateRndCSVFile(int csvItems, boolean sequenceID) throws IOException {
@@ -128,4 +126,17 @@ public class CqlCreateSchema extends CqlAccess {
         }
         return randomFile;
     }
+
+    public long execute(String fileName) throws IOException{
+        return 0;
+    }
+
+    public long executeContent(String data) throws IOException{
+        return 0;
+    }
+
+    public long executeContent(byte[] byteArray) throws IOException{
+        return 0;
+    }
+
 }

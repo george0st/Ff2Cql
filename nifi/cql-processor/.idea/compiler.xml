@@ -7,6 +7,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="nifi-cql-nar" />
+        <module name="nifi-cql" />
+        <module name="nifi-cql-api" />
         <module name="nifi-cql-processors" />
       </profile>
     </annotationProcessing>

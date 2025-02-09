@@ -18,6 +18,7 @@ package org.george0st.cql;
 
 import java.util.List;
 
+import com.datastax.oss.driver.api.core.CqlSession;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.annotation.lifecycle.OnDisabled;
@@ -27,15 +28,19 @@ import org.apache.nifi.controller.AbstractControllerService;
 import org.apache.nifi.controller.ConfigurationContext;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.reporting.InitializationException;
+import org.george0st.cql.helper.ControllerSetup;
 
 
 // inspiration
 // https://github.com/apache/nifi/blob/main/nifi-extension-bundles/nifi-mongodb-bundle/nifi-mongodb-services/src/main/java/org/apache/nifi/mongodb/MongoDBControllerService.java#L187
 
-@Tags({ "cql","cassandra", "scyllaDB", "cassandra query language", "nosql", "service"})
+@Tags({ "cql", "nosql", "cassandra", "scyllaDB", "cassandra query language", "service"})
 @CapabilityDescription("Provides a controller service that configures a connection to CQL solution and " +
         "provides access to that connection to other CQL-related components.")
 public class CQLControllerService extends AbstractControllerService implements CQLClientService {
+
+    private String uri;
+    protected CQLAccess cqlAccess;
 
     public static final PropertyDescriptor IP_ADDRESSES = new PropertyDescriptor
             .Builder()
@@ -128,6 +133,39 @@ public class CQLControllerService extends AbstractControllerService implements C
     }
 
     /**
+     * Closed shared access to CQL
+     */
+    protected void closeAccess(){
+        if (cqlAccess != null) {
+            cqlAccess.close();
+            cqlAccess = null;
+        }
+    }
+
+    /**
+     * Create shared access to CQL, based on setting in Controller
+     * @param context   Controller context
+     */
+    protected void createAccess(final ConfigurationContext context){
+        try {
+            // close (if open)
+            closeAccess();
+
+            //  create access
+            cqlAccess = new CQLAccess(new ControllerSetup(context));
+
+            //  test connection
+            try (CqlSession session = cqlAccess.sessionBuilder.build()) {
+                this.getLogger().info("Success connection");
+            }
+        }
+        catch(Exception ex) {
+            getLogger().error("CQLControllerService, createAccess error", ex);
+            closeAccess();
+        }
+    }
+
+    /**
      * @param context
      *            the configuration context
      * @throws InitializationException
@@ -135,17 +173,36 @@ public class CQLControllerService extends AbstractControllerService implements C
      */
     @OnEnabled
     public void onEnabled(final ConfigurationContext context) throws InitializationException {
+        this.uri = getURI(context);
 
+        //  create new access based on controllerSetup
+        createAccess(context);
+    }
+
+    protected String getURI(final ConfigurationContext context) {
+        final String ip = context.getProperty(IP_ADDRESSES).evaluateAttributeExpressions().getValue();
+//        final String port = context.getProperty(PORT).evaluateAttributeExpressions().getValue();
+//        final String user = context.getProperty(USERNAME).evaluateAttributeExpressions().getValue();
+//        if (!ip.contains("@") && user != null && passw != null) {
+//            return uri.replaceFirst("://", "://" + URLEncoder.encode(user, StandardCharsets.UTF_8) + ":" + URLEncoder.encode(passw, StandardCharsets.UTF_8) + "@");
+//        } else {
+//            return uri;
+//        }
+        return ip;
+    }
+
+    @Override
+    public String getURI() {
+        return uri;
     }
 
     @OnDisabled
     public void shutdown() {
-
+        closeAccess();
     }
 
     @Override
-    public void execute() {
+    public CqlSession getSession() { return cqlAccess != null ? cqlAccess.sessionBuilder.build() : null; }
 
-    }
 
 }

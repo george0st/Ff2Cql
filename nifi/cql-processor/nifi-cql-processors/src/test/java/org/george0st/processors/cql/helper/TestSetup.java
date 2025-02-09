@@ -3,7 +3,7 @@ package org.george0st.processors.cql.helper;
 import com.google.gson.Gson;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.util.TestRunner;
-import org.apache.nifi.util.TestRunners;
+import org.george0st.cql.CQLClientService;
 import org.george0st.processors.cql.PutCQL;
 
 import java.io.File;
@@ -37,10 +37,10 @@ public class TestSetup extends Setup {
     }
 
     /**
-     * Choose the first existing setup file name.
-     * @param path Path for setup file location.
-     * @param files List of setup file names for check.
-     * @return Setup file name.
+     * Choose the first existing controllerSetup file name.
+     * @param path Path for controllerSetup file location.
+     * @param files List of controllerSetup file names for check.
+     * @return ControllerSetup file name.
      */
     public static String getTestPropertyFile(String path, String[] files){
         String fileName;
@@ -69,16 +69,16 @@ public class TestSetup extends Setup {
      * Setting test runner based on test setting
      */
     public void setProperty(){
-        setProperty(PutCQL.MY_IP_ADDRESSES, String.join(",", ipAddresses));
-        setProperty(PutCQL.MY_PORT, String.valueOf(port));
-        setProperty(PutCQL.MY_LOCALDC, localDC);
-        setProperty(PutCQL.MY_USERNAME, username);
-        setProperty(PutCQL.MY_PASSWORD, pwd);
-        setProperty(PutCQL.MY_CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
-        setProperty(PutCQL.MY_REQUEST_TIMEOUT, String.valueOf(requestTimeout));
-        setProperty(PutCQL.MY_CONSISTENCY_LEVEL, consistencyLevel);
-        setProperty(PutCQL.MY_BATCH_SIZE, String.valueOf(getBatch()));
-        setProperty(PutCQL.MY_TABLE, table);
-        setProperty(PutCQL.MY_BATCH_SIZE, String.valueOf(dryRun));
+//        setProperty(CQLClientService.IP_ADDRESSES, String.join(",", ipAddresses));
+//        setProperty(PutCQL.MY_PORT, String.valueOf(port));
+//        setProperty(PutCQL.MY_LOCALDC, localDC);
+//        setProperty(PutCQL.MY_USERNAME, username);
+//        setProperty(PutCQL.MY_PASSWORD, pwd);
+//        setProperty(PutCQL.MY_CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
+//        setProperty(PutCQL.MY_REQUEST_TIMEOUT, String.valueOf(requestTimeout));
+        setProperty(PutCQL.WRITE_CONSISTENCY_LEVEL, consistencyLevel);
+        setProperty(PutCQL.BATCH_SIZE, String.valueOf(getBatch()));
+        setProperty(PutCQL.TABLE, table);
+        setProperty(PutCQL.BATCH_SIZE, String.valueOf(dryRun));
     }
 }

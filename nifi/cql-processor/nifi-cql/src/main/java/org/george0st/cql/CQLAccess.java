@@ -1,46 +1,47 @@
-package org.george0st.processors.cql;
+package org.george0st.cql;
 
 import com.datastax.oss.driver.api.core.CqlSessionBuilder;
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
 import com.datastax.oss.driver.api.core.config.OptionsMap;
 import com.datastax.oss.driver.api.core.config.TypedDriverOption;
-import org.george0st.processors.cql.codec.*;
-import org.george0st.processors.cql.helper.Setup;
+import org.george0st.cql.codec.*;
+import org.george0st.cql.helper.ControllerSetup;
+
 import java.net.InetSocketAddress;
 
 /**
  * Access to the CQL source/engine with default setting such as
  * IP addresses, authorization, codecs, timeouts, consistency level, etc.).
  */
-public class CqlAccess {
+public class CQLAccess {
 
-    protected Setup setup;
+    protected ControllerSetup controllerSetup;
     protected CqlSessionBuilder sessionBuilder;
 
-    public CqlAccess(Setup setup) {
-        this.setup = setup;
+    public CQLAccess(ControllerSetup controllerSetup) {
+        this.controllerSetup = controllerSetup;
         this.sessionBuilder = createBuilder();
     }
 
-    public CqlAccess(CqlAccess access) {
-        this.setup = access.setup;
-        this.sessionBuilder = access.sessionBuilder;
+    public void close(){
+        sessionBuilder = null;
+        controllerSetup = null;
     }
 
     private CqlSessionBuilder createBuilder(){
         CqlSessionBuilder builder = new CqlSessionBuilder();
 
         // IP addresses
-        for (String ipAddress : this.setup.ipAddresses)
-            builder.addContactPoint(new InetSocketAddress(ipAddress.strip(), setup.port));
+        for (String ipAddress : this.controllerSetup.ipAddresses)
+            builder.addContactPoint(new InetSocketAddress(ipAddress.strip(), controllerSetup.port));
 
         // data center
-        if (setup.localDC!=null)
-            builder.withLocalDatacenter(setup.localDC);
+        if (controllerSetup.localDC!=null)
+            builder.withLocalDatacenter(controllerSetup.localDC);
 
         // basic authorization
-        if (setup.username!=null)
-            builder.withAuthCredentials(setup.username, setup.pwd);
+        if (controllerSetup.username!=null)
+            builder.withAuthCredentials(controllerSetup.username, controllerSetup.pwd);
 
         // add supported codecs
         builder.addTypeCodecs(new CqlIntToStringCodec(),
@@ -58,10 +59,10 @@ public class CqlAccess {
 
         // default options (balancing, timeout, CL)
         OptionsMap options = OptionsMap.driverDefaults();
-        options.put(TypedDriverOption.LOAD_BALANCING_LOCAL_DATACENTER, setup.localDC);
-        options.put(TypedDriverOption.CONNECTION_CONNECT_TIMEOUT, java.time.Duration.ofSeconds(setup.connectionTimeout));
-        options.put(TypedDriverOption.REQUEST_TIMEOUT, java.time.Duration.ofSeconds(setup.requestTimeout));
-        options.put(TypedDriverOption.REQUEST_CONSISTENCY, setup.consistencyLevel);
+        options.put(TypedDriverOption.LOAD_BALANCING_LOCAL_DATACENTER, controllerSetup.localDC);
+        options.put(TypedDriverOption.CONNECTION_CONNECT_TIMEOUT, java.time.Duration.ofSeconds(controllerSetup.connectionTimeout));
+        options.put(TypedDriverOption.REQUEST_TIMEOUT, java.time.Duration.ofSeconds(controllerSetup.requestTimeout));
+        options.put(TypedDriverOption.REQUEST_CONSISTENCY, controllerSetup.consistencyLevel);
 //        options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "LZ4");
 //        options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "SNAPPY");
         options.put(TypedDriverOption.PROTOCOL_VERSION, "V4");

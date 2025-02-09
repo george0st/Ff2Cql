@@ -8,7 +8,6 @@ import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.george0st.processors.cql.CqlAccess;
 import org.george0st.processors.cql.helper.Setup;
 import java.io.*;
 import java.util.Iterator;
@@ -19,15 +18,15 @@ import java.util.Iterator;
  */
 public class CsvCqlWrite extends CqlProcessor {
 
-    public CsvCqlWrite(Setup setup, boolean dryRun) {
-        super(setup, dryRun);
-    }
+//    public CsvCqlWrite(ControllerSetup controllerSetup, boolean dryRun) {
+//        super(controllerSetup, dryRun);
+//    }
+//
+//    public CsvCqlWrite(CqlAccess access, boolean dryRun) { super(access, dryRun); }
 
-    public CsvCqlWrite(CqlAccess access, boolean dryRun) {
-        super(access, dryRun);
-    }
+    public CsvCqlWrite(CqlSession session, Setup setup) { super(session, setup); }
 
-    private long executeCore(CqlSession session, Reader reader) throws IOException {
+    private long executeCore(Reader reader) throws IOException {
         long totalCount=0;
 
         CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
@@ -52,14 +51,14 @@ public class CsvCqlWrite extends CqlProcessor {
                 totalCount++;
 
                 if (count == setup.getBatch()) {
-                    if (!dryRun)
+                    if (!setup.dryRun)
                         session.execute(batch);
                     batch = batch.clear();
                     count = 0;
                 }
             }
             if (count > 0)
-                if (!dryRun)
+                if (!setup.dryRun)
                     session.execute(batch);
         }
         return totalCount;
@@ -68,11 +67,9 @@ public class CsvCqlWrite extends CqlProcessor {
     public long executeContent(String data) throws IOException {
         long totalCount=0;
 
-        try (CqlSession session = sessionBuilder.build()) {
-            if (data!=null) {
-                try (Reader reader = new StringReader(data)) {
-                    totalCount = this.executeCore(session, reader);
-                }
+        if (data!=null) {
+            try (Reader reader = new StringReader(data)) {
+                totalCount = this.executeCore(reader);
             }
         }
         return totalCount;
@@ -81,12 +78,10 @@ public class CsvCqlWrite extends CqlProcessor {
     public long executeContent(byte[] byteArray) throws IOException {
         long totalCount=0;
 
-        try (CqlSession session = sessionBuilder.build()) {
-            if (byteArray!=null) {
-                try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray)) {
-                    try (Reader reader = new InputStreamReader(byteArrayInputStream)) {
-                        totalCount = this.executeCore(session, reader);
-                    }
+        if (byteArray!=null) {
+            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray)) {
+                try (Reader reader = new InputStreamReader(byteArrayInputStream)) {
+                    totalCount = this.executeCore(reader);
                 }
             }
         }
@@ -96,19 +91,16 @@ public class CsvCqlWrite extends CqlProcessor {
     public long execute(String fileName) throws IOException {
         long totalCount=0;
 
-        try (CqlSession session = sessionBuilder.build()) {
-
-            if (fileName==null){
-                // add stdin
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
-                    totalCount = this.executeCore(session, reader);
-                }
+        if (fileName==null){
+            // add stdin
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
+                totalCount = this.executeCore(reader);
             }
-            else
-                try (Reader reader = new FileReader(fileName)) {
-                    totalCount = this.executeCore(session, reader);
-                }
         }
+        else
+            try (Reader reader = new FileReader(fileName)) {
+                totalCount = this.executeCore(reader);
+            }
         return totalCount;
     }
 

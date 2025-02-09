@@ -22,7 +22,7 @@ You have to do these steps (it is only one-time action):
 ![PutCQL, processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_processor.png)
 
 ### 2.4 Setup processor properties
-![PutCQL, setup properties](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_properties.png)
+![PutCQL, controllerSetup properties](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_putcql_properties.png)
 
 ### Input
 - **FlowFile with CSV content** for import (content [see](../../../docs/conversion.md)),

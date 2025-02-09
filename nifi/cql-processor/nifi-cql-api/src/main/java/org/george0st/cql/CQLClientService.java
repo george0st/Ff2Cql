@@ -16,6 +16,7 @@
  */
 package org.george0st.cql;
 
+import com.datastax.oss.driver.api.core.CqlSession;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.components.AllowableValue;
@@ -25,18 +26,28 @@ import org.apache.nifi.controller.ControllerService;
 @CapabilityDescription("Interface for controller service that configures a connection to CQL solution.")
 public interface CQLClientService extends ControllerService {
 
-    AllowableValue CL_LOCAL_ONE = new AllowableValue("LOCAL_ONE", "Local one");
-    AllowableValue CL_LOCAL_QUORUM = new AllowableValue("LOCAL_QUORUM", "Local quorum");
-    AllowableValue CL_LOCAL_SERIAL = new AllowableValue("LOCAL_SERIAL", "Local serial");
-    AllowableValue CL_EACH_QUORUM = new AllowableValue("EACH_QUORUM", "Each quorum");
-    AllowableValue CL_ANY = new AllowableValue("ANY", "Any");
-    AllowableValue CL_ONE = new AllowableValue("ONE", "One");
-    AllowableValue CL_TWO = new AllowableValue("TWO", "Two");
-    AllowableValue CL_THREE = new AllowableValue("THREE", "Three");
-    AllowableValue CL_QUORUM = new AllowableValue("QUORUM", "Quorum");
-    AllowableValue CL_ALL = new AllowableValue("ALL", "All");
-    AllowableValue CL_SERIAL = new AllowableValue("SERIAL", "Serial");
+    AllowableValue CL_LOCAL_ONE = new AllowableValue("LOCAL_ONE", "LOCAL_ONE");
+    AllowableValue CL_LOCAL_QUORUM = new AllowableValue("LOCAL_QUORUM", "LOCAL_QUORUM");
+    AllowableValue CL_LOCAL_SERIAL = new AllowableValue("LOCAL_SERIAL", "LOCAL_SERIAL");
+    AllowableValue CL_EACH_QUORUM = new AllowableValue("EACH_QUORUM", "EACH_QUORUM");
+    AllowableValue CL_ANY = new AllowableValue("ANY", "ANY");
+    AllowableValue CL_ONE = new AllowableValue("ONE", "ONE");
+    AllowableValue CL_TWO = new AllowableValue("TWO", "TWO");
+    AllowableValue CL_THREE = new AllowableValue("THREE", "THREE");
+    AllowableValue CL_QUORUM = new AllowableValue("QUORUM", "QUORUM");
+    AllowableValue CL_ALL = new AllowableValue("ALL", "ALL");
+    AllowableValue CL_SERIAL = new AllowableValue("SERIAL", "SERIAL");
 
-    void execute();
+    /**
+     * The uri for transitUri in provenance reporter
+     * @return  text uri
+     */
+    String getURI();
+
+    /**
+     * Get session for access to CQL solution
+     * @return  new cql session
+     */
+    CqlSession getSession();
 
 }

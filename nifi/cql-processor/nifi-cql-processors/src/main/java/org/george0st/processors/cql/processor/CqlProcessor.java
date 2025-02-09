@@ -1,6 +1,6 @@
 package org.george0st.processors.cql.processor;
 
-import org.george0st.processors.cql.CqlAccess;
+import com.datastax.oss.driver.api.core.CqlSession;
 import org.george0st.processors.cql.helper.Setup;
 import java.io.IOException;
 
@@ -8,18 +8,25 @@ import java.io.IOException;
 /**
  * Basic abstract class for processor
  */
-abstract class CqlProcessor extends CqlAccess {
+public abstract class CqlProcessor {   //extends CqlAccess
 
-    protected boolean dryRun;
+    //protected boolean dryRun;
+    protected CqlSession session;
+    protected Setup setup;
 
-    public CqlProcessor(Setup setup, boolean dryRun) {
-        super(setup);
-        this.dryRun=dryRun;
-    }
+//    public CqlProcessor(ControllerSetup controllerSetup, boolean dryRun) {
+//        super(controllerSetup);
+//        this.dryRun=dryRun;
+//    }
+//
+//    public CqlProcessor(CqlAccess access, boolean dryRun) {
+//        super(access);
+//        this.dryRun=dryRun;
+//    }
 
-    public CqlProcessor(CqlAccess access, boolean dryRun) {
-        super(access);
-        this.dryRun=dryRun;
+    public CqlProcessor(CqlSession cqlSession, Setup setup) {
+        this.session=cqlSession;
+        this.setup=setup;
     }
 
     protected String prepareHeaders(String[] headers){
@@ -45,8 +52,8 @@ abstract class CqlProcessor extends CqlAccess {
         return prepareItems.toString();
     }
 
-    abstract long execute(String fileName) throws IOException;
-    abstract long executeContent(String data) throws IOException;
-    abstract long executeContent(byte[] byteArray) throws IOException;
+    protected abstract long execute(String fileName) throws IOException;
+    protected abstract long executeContent(String data) throws IOException;
+    protected abstract long executeContent(byte[] byteArray) throws IOException;
 
 }
