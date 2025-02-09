@@ -146,7 +146,7 @@ public class CQLControllerService extends AbstractControllerService implements C
      * Create shared access to CQL, based on setting in Controller
      * @param context   Controller context
      */
-    protected void createAccess(final ConfigurationContext context){
+    protected void createAccess(final ConfigurationContext context, boolean test){
         try {
             // close (if open)
             closeAccess();
@@ -154,14 +154,15 @@ public class CQLControllerService extends AbstractControllerService implements C
             //  create access
             cqlAccess = new CQLAccess(new ControllerSetup(context));
 
-            //  test connection
-            try (CqlSession session = cqlAccess.sessionBuilder.build()) {
-                this.getLogger().info("Success connection");
+            if (test) {
+                //  test connection
+                try (CqlSession session = getSession()) {
+                    getLogger().info("Success connection [{}] !!!", cqlAccess.controllerSetup.getIPAddresses());
+                }
             }
-        }
-        catch(Exception ex) {
-            getLogger().error("CQLControllerService, createAccess error", ex);
-            closeAccess();
+        } catch(Exception ex){
+            getLogger().error("createAccess");
+            throw ex;
         }
     }
 
@@ -175,8 +176,8 @@ public class CQLControllerService extends AbstractControllerService implements C
     public void onEnabled(final ConfigurationContext context) throws InitializationException {
         this.uri = getURI(context);
 
-        //  create new access based on controllerSetup
-        createAccess(context);
+        //  create new access based on controllerSetup (and test connection)
+        createAccess(context, true);
     }
 
     protected String getURI(final ConfigurationContext context) {
