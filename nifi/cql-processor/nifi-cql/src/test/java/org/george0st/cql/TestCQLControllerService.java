@@ -34,11 +34,17 @@ public class TestCQLControllerService {
     public void testService() throws InitializationException {
         final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
         final CQLControllerService service = new CQLControllerService();
+
         runner.addControllerService("test-good", service);
 
-        runner.setProperty(service, CQLControllerService.IP_ADDRESSES, "test-value");
+        runner.setProperty(service, CQLControllerService.IP_ADDRESSES, "10.129.53.159,10.129.53.154,10.129.53.153");
+        runner.setProperty(service, CQLControllerService.PORT, "9042");
+        runner.setProperty(service, CQLControllerService.USERNAME, "perf");
+        runner.setProperty(service, CQLControllerService.PASSWORD, "perf");
+        runner.setProperty(service, CQLControllerService.LOCAL_DC, "datacenter1");
+        runner.setValidateExpressionUsage(false);
         runner.enableControllerService(service);
-
+        
         runner.assertValid(service);
     }
 

@@ -17,21 +17,25 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.nifi</groupId>
-        <artifactId>nifi-extension-bundles</artifactId>
-        <version>2.1.0</version>
+        <groupId>org.george0st</groupId>
+        <artifactId>cql-processor</artifactId>
+        <version>1.0</version>
     </parent>
 
-    <groupId>org.george0st</groupId>
-    <artifactId>cql-processor</artifactId>
-    <version>1.2.0</version>
-    <packaging>pom</packaging>
+    <artifactId>nifi-cql-api</artifactId>
+    <packaging>jar</packaging>
 
-    <modules>
-        <module>nifi-cql-processors</module>
-        <module>nifi-cql-nar</module>
-        <module>nifi-cql</module>
-        <module>nifi-cql-api</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.cassandra</groupId>
+            <artifactId>java-driver-core</artifactId>
+            <version>4.18.1</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.apache.nifi</groupId>
+            <artifactId>nifi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

@@ -16,6 +16,7 @@
  */
 package org.george0st.processors.cql;
 
+import com.datastax.oss.driver.api.core.CqlSession;
 import org.apache.nifi.annotation.behavior.*;
 import org.apache.nifi.components.AllowableValue;
 import org.apache.nifi.components.PropertyDescriptor;
@@ -30,6 +31,7 @@ import org.apache.nifi.processor.ProcessSession;
 import org.apache.nifi.processor.ProcessorInitializationContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
+import org.george0st.cql.CQLClientService;
 import org.george0st.processors.cql.helper.Setup;
 import org.george0st.processors.cql.processor.CsvCqlWrite;
 
@@ -52,96 +54,30 @@ public class PutCQL extends AbstractProcessor {
     static final String ATTRIBUTE_COUNT = "CQLCount";
     static final String ATTRIBUTE_COMPARE_STATUS = "CQLCompareStatus";
 
-    static final AllowableValue CL_LOCAL_ONE = new AllowableValue("LOCAL_ONE", "Local one");
-    static final AllowableValue CL_LOCAL_QUORUM = new AllowableValue("LOCAL_QUORUM", "Local quorum");
-    static final AllowableValue CL_LOCAL_SERIAL = new AllowableValue("LOCAL_SERIAL", "Local serial");
-    static final AllowableValue CL_EACH_QUORUM = new AllowableValue("EACH_QUORUM", "Each quorum");
-    static final AllowableValue CL_ANY = new AllowableValue("ANY", "Any");
-    static final AllowableValue CL_ONE = new AllowableValue("ONE", "One");
-    static final AllowableValue CL_TWO = new AllowableValue("TWO", "Two");
-    static final AllowableValue CL_THREE = new AllowableValue("THREE", "Three");
-    static final AllowableValue CL_QUORUM = new AllowableValue("QUORUM", "Quorum");
-    static final AllowableValue CL_ALL = new AllowableValue("ALL", "All");
-    static final AllowableValue CL_SERIAL = new AllowableValue("SERIAL", "Serial");
-
     //  region All Properties
 
-    public static final PropertyDescriptor MY_IP_ADDRESSES = new PropertyDescriptor
+    public static final PropertyDescriptor CLIENT_SERVICE = new PropertyDescriptor
             .Builder()
-            .name("IP Addresses")
-            .description("List of IP addresses for CQL connection, the addresses are split by comma (e.g. '192.168.0.1, 192.168.0.2').")
+            .name("Service Connection")
+            .description("Service connection to CQL.")
             .required(true)
-            .defaultValue("localhost")
-            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .identifiesControllerService(CQLClientService.class)
             .build();
 
-    public static final PropertyDescriptor MY_PORT = new PropertyDescriptor
-            .Builder()
-            .name("Port")
-            .description("Port for communication.")
-            .required(true)
-            .defaultValue("9042")
-            .addValidator(StandardValidators.POSITIVE_INTEGER_VALIDATOR)
-            .build();
-
-    public static final PropertyDescriptor MY_USERNAME = new PropertyDescriptor
-            .Builder()
-            .name("Username")
-            .description("Username for the CQL connection.")
-            .required(false)
-            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
-            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-            .build();
-
-    public static final PropertyDescriptor MY_PASSWORD = new PropertyDescriptor
-            .Builder()
-            .name("Password")
-            .description("Password for the CQL connection.")
-            .required(false)
-            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
-            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-            .sensitive(true)
-            .build();
-
-    public static final PropertyDescriptor MY_LOCALDC = new PropertyDescriptor
-            .Builder()
-            .name("Local Data Center")
-            .description("Name of local data center e.g. 'dc1', 'datacenter1', etc.")
-            .required(false)
-            .defaultValue("dc1")
-            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
-            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-            .build();
-
-    public static final PropertyDescriptor MY_CONNECTION_TIMEOUT = new PropertyDescriptor
-            .Builder()
-            .name("Connection Timeout")
-            .description("Timeout for connection to CQL engine.")
-            .required(true)
-            .defaultValue("900")
-            .addValidator(StandardValidators.LONG_VALIDATOR)
-            .build();
-
-    public static final PropertyDescriptor MY_REQUEST_TIMEOUT = new PropertyDescriptor
-            .Builder()
-            .name("Request Timeout")
-            .description("Timeout for request to CQL engine.")
-            .required(true)
-            .defaultValue("60")
-            .addValidator(StandardValidators.LONG_VALIDATOR)
-            .build();
-
-    public static final PropertyDescriptor MY_CONSISTENCY_LEVEL = new PropertyDescriptor
+    public static final PropertyDescriptor WRITE_CONSISTENCY_LEVEL = new PropertyDescriptor
             .Builder()
             .name("Consistency Level")
             .description("Consistency Level for CQL operations.")
             .required(true)
-            .defaultValue(CL_LOCAL_ONE.getValue())
+            .defaultValue(CQLClientService.CL_LOCAL_ONE.getValue())
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-            .allowableValues(CL_LOCAL_ONE, CL_LOCAL_QUORUM, CL_LOCAL_SERIAL, CL_EACH_QUORUM, CL_ANY, CL_ONE, CL_TWO, CL_THREE, CL_QUORUM, CL_ALL, CL_SERIAL)
+            .allowableValues(CQLClientService.CL_LOCAL_ONE, CQLClientService.CL_LOCAL_QUORUM, CQLClientService.CL_LOCAL_SERIAL,
+                    CQLClientService.CL_EACH_QUORUM, CQLClientService.CL_ANY, CQLClientService.CL_ONE,
+                    CQLClientService.CL_TWO, CQLClientService.CL_THREE, CQLClientService.CL_QUORUM,
+                    CQLClientService.CL_ALL, CQLClientService.CL_SERIAL)
             .build();
 
-    public static final PropertyDescriptor MY_TABLE = new PropertyDescriptor
+    public static final PropertyDescriptor TABLE = new PropertyDescriptor
             .Builder()
             .name("Table")
             .description("Table and schema name in CQL (expected format <schema>.<table>).")
@@ -150,7 +86,7 @@ public class PutCQL extends AbstractProcessor {
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
-    public static final PropertyDescriptor MY_BATCH_SIZE = new PropertyDescriptor
+    public static final PropertyDescriptor BATCH_SIZE = new PropertyDescriptor
             .Builder()
             .name("Batch Size")
             .description("Size of bulk for data ingest.")
@@ -159,7 +95,7 @@ public class PutCQL extends AbstractProcessor {
             .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)
             .build();
 
-    public static final PropertyDescriptor MY_DRY_RUN = new PropertyDescriptor
+    public static final PropertyDescriptor DRY_RUN = new PropertyDescriptor
             .Builder()
             .name("Dry Run")
             .description("Dry run for processing (without final write to CQL engine).")
@@ -188,22 +124,13 @@ public class PutCQL extends AbstractProcessor {
 
     private Set<Relationship> relationships;
 
-    private Setup setup = null;
-    private CqlAccess cqlAccess;
-
     @Override
     protected void init(final ProcessorInitializationContext context) {
-        descriptors = List.of(MY_IP_ADDRESSES,
-                MY_PORT,
-                MY_USERNAME,
-                MY_PASSWORD,
-                MY_LOCALDC,
-                MY_CONNECTION_TIMEOUT,
-                MY_REQUEST_TIMEOUT,
-                MY_CONSISTENCY_LEVEL,
-                MY_TABLE,
-                MY_BATCH_SIZE,
-                MY_DRY_RUN);
+        descriptors = List.of(CLIENT_SERVICE,
+                WRITE_CONSISTENCY_LEVEL,
+                TABLE,
+                BATCH_SIZE,
+                DRY_RUN);
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
     }
 
@@ -217,16 +144,13 @@ public class PutCQL extends AbstractProcessor {
         return descriptors;
     }
 
+    protected CQLClientService clientService;
+
     @OnScheduled
     public void onScheduled(final ProcessContext context) {
+        clientService = context.getProperty(CLIENT_SERVICE).asControllerService(CQLClientService.class);
     }
 
-    /**
-     * Get flow file content
-     * @param flowFile  The Flow file
-     * @param session   The client session
-     * @return The flow file as string
-     */
     private String getContent(FlowFile flowFile, ProcessSession session){
         final var byteArrayOutputStream = new ByteArrayOutputStream();
         session.exportTo(flowFile, byteArrayOutputStream);
@@ -239,12 +163,6 @@ public class PutCQL extends AbstractProcessor {
         return byteArrayOutputStream.toByteArray();
     }
 
-    /**
-     * Set flow file content based on string
-     * @param flowFile  The flow file
-     * @param session   The client session
-     * @param content   The content for write to flow file
-     */
     private void updateContent(FlowFile flowFile, ProcessSession session, String content){
         InputStream inputStream = new ByteArrayInputStream(content.getBytes());
         session.importFrom(inputStream, flowFile);
@@ -253,38 +171,28 @@ public class PutCQL extends AbstractProcessor {
     @Override
     public void onTrigger(final ProcessContext context, final ProcessSession session) {
         FlowFile flowFile = session.get();
-        if (flowFile == null) {
-            return;
-        }
+        if (flowFile == null) return;
 
-        //  1. create/get data for connection
         try {
-            Setup newSetup = new Setup(context);
+            //  1. get cql session (based on controller)
+            try (CqlSession cqlSession = clientService.getSession()) {
 
-            synchronized (this) {
-                Setup.CompareStatus status;
+                //  2. get setting from processor
+                CsvCqlWrite write = new CsvCqlWrite(cqlSession, new Setup(context));
 
-                if ((status=newSetup.compare(setup)) != Setup.CompareStatus.SAME) {
-                    setup = newSetup;
-                    if (status == Setup.CompareStatus.CHANGE_ACCESS)
-                        cqlAccess = new CqlAccess(setup);
-                }
-                session.putAttribute(flowFile, "CQLCompareStatus", status.name());
+                //  3. put data (FlowFile) to CQL
+                long count = write.executeContent(this.getByteContent(flowFile, session));
+
+                //  4. write some information to the output (as write attributes)
+                session.putAttribute(flowFile, "CQLCount", Long.toString(count));
+
+                //  5. success reporting
+                session.getProvenanceReporter().send(flowFile, clientService.getURI());
+                session.transfer(flowFile, REL_SUCCESS);
             }
-
-            //  2. get data from FlowFile (support CSV)
-            CsvCqlWrite write=new CsvCqlWrite(cqlAccess, setup.dryRun);
-
-            //  3. put data to CQL
-            long count=write.executeContent(this.getByteContent(flowFile,session));
-
-            //  4. write some information to the output (as write attributes)
-            session.putAttribute(flowFile, "CQLCount", Long.toString(count));
-        } catch (IOException e) {
-            getLogger().error("CQLProcessor, Processing error", e);
+        } catch (Exception ex) {
+            getLogger().error("PutCQL, OnTrigger error", ex);
             session.transfer(flowFile, REL_FAILURE);
-            return;
         }
-        session.transfer(flowFile, REL_SUCCESS);
     }
 }
