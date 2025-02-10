@@ -1,0 +1,13 @@
+{
+  "enable": true,
+  "name": "cassandra",
+  "ipAddresses": ["10.129.53.159", "10.129.53.154", "10.129.53.153"],
+  "port": 9042,
+  "username": "perf",
+  "pwd": "perf",
+  "localDC": "datacenter1",
+  "connectionTimeout": "900",
+  "requestTimeout": "60",
+  "consistencyLevel": "LOCAL_ONE",
+  "table": "prftest.csv2cql_test3"
+}

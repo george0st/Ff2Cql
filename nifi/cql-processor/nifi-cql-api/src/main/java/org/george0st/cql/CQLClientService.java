@@ -22,7 +22,7 @@ import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.components.AllowableValue;
 import org.apache.nifi.controller.ControllerService;
 
-@Tags({"CQL", "service", "interface"})
+@Tags({"cql", "service", "interface"})
 @CapabilityDescription("Interface for controller service that configures a connection to CQL solution.")
 public interface CQLClientService extends ControllerService {
 

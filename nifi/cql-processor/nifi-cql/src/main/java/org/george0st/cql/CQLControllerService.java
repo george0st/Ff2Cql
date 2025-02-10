@@ -34,7 +34,7 @@ import org.george0st.cql.helper.ControllerSetup;
 // inspiration
 // https://github.com/apache/nifi/blob/main/nifi-extension-bundles/nifi-mongodb-bundle/nifi-mongodb-services/src/main/java/org/apache/nifi/mongodb/MongoDBControllerService.java#L187
 
-@Tags({ "cql", "nosql", "cassandra", "scyllaDB", "cassandra query language", "service"})
+@Tags({ "cql", "nosql", "cassandra", "scylladb", "cassandra query language", "service"})
 @CapabilityDescription("Provides a controller service that configures a connection to CQL solution and " +
         "provides access to that connection to other CQL-related components.")
 public class CQLControllerService extends AbstractControllerService implements CQLClientService {
@@ -157,7 +157,7 @@ public class CQLControllerService extends AbstractControllerService implements C
             if (test) {
                 //  test connection
                 try (CqlSession session = getSession()) {
-                    getLogger().info("Success connection [{}] !!!", cqlAccess.controllerSetup.getIPAddresses());
+                    getLogger().info("SUCCESS connection [{}] !!!", cqlAccess.controllerSetup.getIPAddresses());
                 }
             }
         } catch(Exception ex){
