@@ -18,8 +18,10 @@ package org.george0st.processors.cql;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import org.apache.nifi.flowfile.FlowFile;
+import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
+import org.george0st.cql.CQLControllerService;
 import org.george0st.processors.cql.helper.CqlCreateSchema;
 import org.george0st.processors.cql.helper.ReadableValue;
 import org.george0st.processors.cql.helper.Setup;
@@ -57,9 +59,11 @@ public class PutCQLTest {
 //    }
 
     @BeforeEach
-    public void init() throws IOException, InterruptedException {
+    public void init() throws IOException, InterruptedException, InitializationException {
 
         testRunner = TestRunners.newTestRunner(PutCQL.class);
+        testRunner.addControllerService(PutCQL.CLIENT_SERVICE.getName(), new CQLControllerService());
+
 
         setups=new ArrayList<TestSetup>();
         setups.add(TestSetup.getInstance(testRunner,

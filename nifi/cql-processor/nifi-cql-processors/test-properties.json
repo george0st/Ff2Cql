@@ -1,4 +1,5 @@
 {
+  "enable": true,
   "name": "<name of setting e.g. cassandra, scylla, etc.>",
   "ipAddresses": ["<add ip>", "<add ip2>", "..."],
   "port": 9042,

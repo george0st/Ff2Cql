@@ -31,6 +31,12 @@
             <artifactId>nifi-cql-api</artifactId>
             <version>1.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.george0st</groupId>
+            <artifactId>nifi-cql</artifactId>
+            <version>1.1</version>
+            <scope>test</scope>
+        </dependency>
 
 
         <dependency>

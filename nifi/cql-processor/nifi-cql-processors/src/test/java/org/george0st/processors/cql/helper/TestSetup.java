@@ -10,7 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class TestSetup extends Setup {
-
+    public boolean enable;
     public String name;
     public String compaction;
 
