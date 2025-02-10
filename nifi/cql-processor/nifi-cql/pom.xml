@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.george0st</groupId>
         <artifactId>cql-processor</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
 
     <artifactId>nifi-cql</artifactId>
@@ -29,7 +29,13 @@
         <dependency>
             <groupId>org.george0st</groupId>
             <artifactId>nifi-cql-api</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.cassandra</groupId>

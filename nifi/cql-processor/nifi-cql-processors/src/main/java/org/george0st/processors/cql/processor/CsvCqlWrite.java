@@ -50,7 +50,7 @@ public class CsvCqlWrite extends CqlProcessor {
                 count++;
                 totalCount++;
 
-                if (count == setup.getBatch()) {
+                if (count == setup.getBatchSize()) {
                     if (!setup.dryRun)
                         session.execute(batch);
                     batch = batch.clear();
@@ -108,7 +108,7 @@ public class CsvCqlWrite extends CqlProcessor {
         String insertQuery = "INSERT INTO " + this.setup.table + " (" + prepareHeaders+") " +
                 "VALUES (" + prepareItems + ");";
         return session.prepare(SimpleStatement.newInstance(insertQuery)
-                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
+                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.writeConsistencyLevel)));
     }
 
 }

@@ -3,7 +3,6 @@ package org.george0st.processors.cql.helper;
 import com.google.gson.Gson;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.util.TestRunner;
-import org.george0st.cql.CQLClientService;
 import org.george0st.processors.cql.PutCQL;
 
 import java.io.File;
@@ -11,7 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class TestSetup extends Setup {
-
+    public boolean enable;
     public String name;
     public String compaction;
 
@@ -76,8 +75,8 @@ public class TestSetup extends Setup {
 //        setProperty(PutCQL.MY_PASSWORD, pwd);
 //        setProperty(PutCQL.MY_CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
 //        setProperty(PutCQL.MY_REQUEST_TIMEOUT, String.valueOf(requestTimeout));
-        setProperty(PutCQL.WRITE_CONSISTENCY_LEVEL, consistencyLevel);
-        setProperty(PutCQL.BATCH_SIZE, String.valueOf(getBatch()));
+        setProperty(PutCQL.WRITE_CONSISTENCY_LEVEL, writeConsistencyLevel);
+        setProperty(PutCQL.BATCH_SIZE, String.valueOf(getBatchSize()));
         setProperty(PutCQL.TABLE, table);
         setProperty(PutCQL.BATCH_SIZE, String.valueOf(dryRun));
     }

@@ -34,7 +34,7 @@ import org.george0st.cql.helper.ControllerSetup;
 // inspiration
 // https://github.com/apache/nifi/blob/main/nifi-extension-bundles/nifi-mongodb-bundle/nifi-mongodb-services/src/main/java/org/apache/nifi/mongodb/MongoDBControllerService.java#L187
 
-@Tags({ "cql", "nosql", "cassandra", "scyllaDB", "cassandra query language", "service"})
+@Tags({ "cql", "nosql", "cassandra", "scylladb", "cassandra query language", "service"})
 @CapabilityDescription("Provides a controller service that configures a connection to CQL solution and " +
         "provides access to that connection to other CQL-related components.")
 public class CQLControllerService extends AbstractControllerService implements CQLClientService {
@@ -146,7 +146,7 @@ public class CQLControllerService extends AbstractControllerService implements C
      * Create shared access to CQL, based on setting in Controller
      * @param context   Controller context
      */
-    protected void createAccess(final ConfigurationContext context){
+    protected void createAccess(final ConfigurationContext context, boolean test){
         try {
             // close (if open)
             closeAccess();
@@ -154,14 +154,15 @@ public class CQLControllerService extends AbstractControllerService implements C
             //  create access
             cqlAccess = new CQLAccess(new ControllerSetup(context));
 
-            //  test connection
-            try (CqlSession session = cqlAccess.sessionBuilder.build()) {
-                this.getLogger().info("Success connection");
+            if (test) {
+                //  test connection
+                try (CqlSession session = getSession()) {
+                    getLogger().info("SUCCESS connection [{}] !!!", cqlAccess.controllerSetup.getIPAddresses());
+                }
             }
-        }
-        catch(Exception ex) {
-            getLogger().error("CQLControllerService, createAccess error", ex);
-            closeAccess();
+        } catch(Exception ex){
+            getLogger().error("createAccess");
+            throw ex;
         }
     }
 
@@ -175,8 +176,8 @@ public class CQLControllerService extends AbstractControllerService implements C
     public void onEnabled(final ConfigurationContext context) throws InitializationException {
         this.uri = getURI(context);
 
-        //  create new access based on controllerSetup
-        createAccess(context);
+        //  create new access based on controllerSetup (and test connection)
+        createAccess(context, true);
     }
 
     protected String getURI(final ConfigurationContext context) {

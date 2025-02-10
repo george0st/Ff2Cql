@@ -1,0 +1,13 @@
+{
+  "enable": true,
+  "name": "<name of setting e.g. cassandra, scylla, etc.>",
+  "ipAddresses": ["<add ip>", "<add ip2>", "..."],
+  "port": 9042,
+  "username": "<add username>",
+  "pwd": "<add pwd>",
+  "localDC": "<local data center>",
+  "connectionTimeout": "<timeout in seconds>",
+  "requestTimeout": "<timeout in seconds>",
+  "consistencyLevel": "<consistency level e.g. LOCAL_ONE, LOCAL_QUORUM, etc.>",
+  "table": "<add 'keyspace.table' in CQL>"
+}
