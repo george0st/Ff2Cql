@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.george0st</groupId>
             <artifactId>nifi-cql</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
 
 
