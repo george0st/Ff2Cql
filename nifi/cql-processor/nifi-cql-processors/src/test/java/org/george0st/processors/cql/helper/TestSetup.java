@@ -3,6 +3,7 @@ package org.george0st.processors.cql.helper;
 import com.google.gson.Gson;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.util.TestRunner;
+import org.george0st.cql.CQLControllerService;
 import org.george0st.processors.cql.PutCQL;
 
 import java.io.File;
@@ -12,24 +13,38 @@ import java.io.IOException;
 public class TestSetup extends Setup {
     public boolean enable;
     public String name;
+    public String []ipAddresses;
+    public int port;
+    public String username;
+    public String pwd;
+    public String localDC;
+    public long connectionTimeout;
+    public long requestTimeout;
+    public String consistencyLevel;
     public String compaction;
 
-    private TestRunner testRunner;
+    protected TestRunner testRunner;
+    protected CQLControllerService testService;
 
     private TestSetup(){
     }
 
-    private void setRunner(TestRunner testRunner){
-        this.testRunner=testRunner;
+    public void setIPAddresses(String ipAddr) {
+        String[] items = ipAddr.split(",");
+        for (int i=0; i < items.length ; i++) items[i]=items[i].strip();
+        this.ipAddresses = items;
     }
-    public static TestSetup getInstance(TestRunner testRunner, String propertyFile) throws IOException {
+    public String getIPAddresses() { return String.join(",",this.ipAddresses); }
+
+    public static TestSetup getInstance(TestRunner runner, CQLControllerService service, String propertyFile) throws IOException {
         try (FileReader fileReader = new FileReader(propertyFile)) {
             TestSetup setup = (new Gson()).fromJson(fileReader, TestSetup.class);
 
             //  default setting
             if (setup.compaction==null)
                 setup.compaction="{'class':'SizeTieredCompactionStrategy'}";
-            setup.setRunner(testRunner);
+            setup.testRunner=runner;
+            setup.testService=service;
 
             return setup;
         }
@@ -59,22 +74,42 @@ public class TestSetup extends Setup {
         return null;
     }
 
+    public void setControllerProperty(PropertyDescriptor property, String propertyValue) {
+        if (propertyValue != null)
+            testRunner.setProperty(testService, property, propertyValue);
+    }
+
     public void setProperty(PropertyDescriptor property, String propertyValue) {
         if (propertyValue != null)
             testRunner.setProperty(property, propertyValue);
+
     }
 
     /**
      * Setting test runner based on test setting
      */
     public void setProperty(){
-//        setProperty(CQLClientService.IP_ADDRESSES, String.join(",", ipAddresses));
-//        setProperty(PutCQL.MY_PORT, String.valueOf(port));
-//        setProperty(PutCQL.MY_LOCALDC, localDC);
-//        setProperty(PutCQL.MY_USERNAME, username);
-//        setProperty(PutCQL.MY_PASSWORD, pwd);
-//        setProperty(PutCQL.MY_CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
-//        setProperty(PutCQL.MY_REQUEST_TIMEOUT, String.valueOf(requestTimeout));
+
+        //  setup controller setting
+
+        //protected MongoDBClientService clientService;
+//        runner.addControllerService("clientService", clientService);
+//        runner.setProperty(clientService, MongoDBControllerService.URI, MONGO_CONTAINER.getConnectionString());
+//        runner.setProperty(AbstractMongoProcessor.CLIENT_SERVICE, "clientService");
+
+
+        setControllerProperty(CQLControllerService.IP_ADDRESSES, String.join(",", ipAddresses));
+        setControllerProperty(CQLControllerService.PORT, String.valueOf(port));
+        setControllerProperty(CQLControllerService.LOCAL_DC, localDC);
+        setControllerProperty(CQLControllerService.USERNAME, username);
+        setControllerProperty(CQLControllerService.PASSWORD, pwd);
+        setControllerProperty(CQLControllerService.CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
+        setControllerProperty(CQLControllerService.REQUEST_TIMEOUT, String.valueOf(requestTimeout));
+        setControllerProperty(CQLControllerService.CONSISTENCY_LEVEL, consistencyLevel);
+
+        //  setting processor setting
+        //setProperty(PutCQL.CLIENT_SERVICE, testService);
+        setProperty(PutCQL.SERVICE_CONTROLLER, PutCQL.SERVICE_CONTROLLER.getName());
         setProperty(PutCQL.WRITE_CONSISTENCY_LEVEL, writeConsistencyLevel);
         setProperty(PutCQL.BATCH_SIZE, String.valueOf(getBatchSize()));
         setProperty(PutCQL.TABLE, table);

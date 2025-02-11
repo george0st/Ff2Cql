@@ -9,6 +9,9 @@
   "connectionTimeout": "<timeout in seconds>",
   "requestTimeout": "<timeout in seconds>",
   "consistencyLevel": "<consistency level e.g. LOCAL_ONE, LOCAL_QUORUM, etc.>",
+  "writeConsistencyLevel": "<consistency level e.g. LOCAL_ONE, LOCAL_QUORUM, etc.>",
+  "batchSize": 200,
   "table": "<add 'keyspace.table' in CQL>",
+  "dryRun": false,
   "compaction": "<setting for compaction e.g. {'class':'SizeTieredCompactionStrategy'}>"
 }
