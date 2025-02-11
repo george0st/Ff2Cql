@@ -18,7 +18,6 @@ package org.george0st.processors.cql;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import org.apache.nifi.annotation.behavior.*;
-import org.apache.nifi.components.AllowableValue;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.annotation.lifecycle.OnScheduled;
@@ -47,19 +46,17 @@ import java.util.Set;
 @InputRequirement(InputRequirement.Requirement.INPUT_REQUIRED)
 @ReadsAttributes({@ReadsAttribute(attribute="", description="")})
 @WritesAttributes({
-        @WritesAttribute(attribute=PutCQL.ATTRIBUTE_COUNT, description="Amount of write rows to CQL."),
-        @WritesAttribute(attribute=PutCQL.ATTRIBUTE_COMPARE_STATUS, description="View to the internal CQL processing.")})
+        @WritesAttribute(attribute=PutCQL.ATTRIBUTE_COUNT, description="Amount of write rows to CQL.")})
 public class PutCQL extends AbstractProcessor {
 
-    static final String ATTRIBUTE_COUNT = "CQLCount";
-    static final String ATTRIBUTE_COMPARE_STATUS = "CQLCompareStatus";
+    static final String ATTRIBUTE_COUNT = "cql.count";
 
     //  region All Properties
 
-    public static final PropertyDescriptor CLIENT_SERVICE = new PropertyDescriptor
+    public static final PropertyDescriptor SERVICE_CONTROLLER = new PropertyDescriptor
             .Builder()
-            .name("Service Connection")
-            .description("Service connection to CQL.")
+            .name("Service Controller")
+            .description("Service controller to CQL.")
             .required(true)
             .identifiesControllerService(CQLClientService.class)
             .build();
@@ -126,7 +123,7 @@ public class PutCQL extends AbstractProcessor {
 
     @Override
     protected void init(final ProcessorInitializationContext context) {
-        descriptors = List.of(CLIENT_SERVICE,
+        descriptors = List.of(SERVICE_CONTROLLER,
                 WRITE_CONSISTENCY_LEVEL,
                 TABLE,
                 BATCH_SIZE,
@@ -148,7 +145,7 @@ public class PutCQL extends AbstractProcessor {
 
     @OnScheduled
     public void onScheduled(final ProcessContext context) {
-        clientService = context.getProperty(CLIENT_SERVICE).asControllerService(CQLClientService.class);
+        clientService = context.getProperty(SERVICE_CONTROLLER).asControllerService(CQLClientService.class);
     }
 
     private String getContent(FlowFile flowFile, ProcessSession session){
@@ -184,9 +181,9 @@ public class PutCQL extends AbstractProcessor {
                 long count = write.executeContent(this.getByteContent(flowFile, session));
 
                 //  4. write some information to the output (as write attributes)
-                session.putAttribute(flowFile, "CQLCount", Long.toString(count));
+                session.putAttribute(flowFile, ATTRIBUTE_COUNT, Long.toString(count));
 
-                //  5. success reporting
+                //  5. success and provenance reporting
                 session.getProvenanceReporter().send(flowFile, clientService.getURI());
                 session.transfer(flowFile, REL_SUCCESS);
             }

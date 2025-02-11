@@ -21,6 +21,7 @@ import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.components.AllowableValue;
 import org.apache.nifi.controller.ControllerService;
+import org.apache.nifi.controller.VerifiableControllerService;
 
 @Tags({"cql", "service", "interface"})
 @CapabilityDescription("Interface for controller service that configures a connection to CQL solution.")

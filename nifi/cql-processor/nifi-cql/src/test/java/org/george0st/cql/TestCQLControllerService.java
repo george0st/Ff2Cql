@@ -18,13 +18,11 @@ package org.george0st.cql;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import org.apache.nifi.reporting.InitializationException;
-import org.apache.nifi.util.LogMessage;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
 import org.george0st.cql.helper.TestControllerSetup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Marker;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,23 +40,23 @@ public class TestCQLControllerService {
     }
 
     // region internal
-    private void addTestScope(TestRunner testRunner, CQLControllerService service, String propertyFile) throws IOException {
+    private void addTestScope(TestRunner testRunner, CQLControllerService testService, String propertyFile) throws IOException {
         TestControllerSetup itm;
 
-        itm = TestControllerSetup.getInstance(testRunner, service, propertyFile);
+        itm = TestControllerSetup.getInstance(testRunner, testService, propertyFile);
         if (itm!=null) {
             setups.add(itm);
             testRunner.getLogger().info("Test scope: '{}'", itm.name);
         }
     }
 
-    private void initTestScope(TestRunner testRunner, CQLControllerService service) throws IOException {
+    private void initTestScope(TestRunner testRunner, CQLControllerService testService) throws IOException {
         if (setups == null) {
             setups = new ArrayList<TestControllerSetup>();
 
-            addTestScope(testRunner, service,
+            addTestScope(testRunner, testService,
                     TestControllerSetup.getTestPropertyFile(new String[]{"test-cassandra-private.json", "test-properties.json"}));
-            addTestScope(testRunner, service,
+            addTestScope(testRunner, testService,
                     TestControllerSetup.getTestPropertyFile(new String[]{"test-scylla-private.json", "test-properties.json"}));
         }
     }
