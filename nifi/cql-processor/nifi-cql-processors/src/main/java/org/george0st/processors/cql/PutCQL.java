@@ -183,7 +183,7 @@ public class PutCQL extends AbstractProcessor {
                 //  4. write some information to the output (as write attributes)
                 session.putAttribute(flowFile, ATTRIBUTE_COUNT, Long.toString(count));
 
-                //  5. success reporting
+                //  5. success and provenance reporting
                 session.getProvenanceReporter().send(flowFile, clientService.getURI());
                 session.transfer(flowFile, REL_SUCCESS);
             }

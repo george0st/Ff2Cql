@@ -40,12 +40,13 @@ public class TestSetup extends Setup {
         try (FileReader fileReader = new FileReader(propertyFile)) {
             TestSetup setup = (new Gson()).fromJson(fileReader, TestSetup.class);
 
-            //  default setting
-            if (setup.compaction==null)
-                setup.compaction="{'class':'SizeTieredCompactionStrategy'}";
-            setup.testRunner=runner;
-            setup.testService=service;
+            if (!setup.enable) return null;
 
+            //  default setting
+            if (setup.compaction == null)
+                setup.compaction = "{'class':'SizeTieredCompactionStrategy'}";
+            setup.testRunner = runner;
+            setup.testService = service;
             return setup;
         }
     }
@@ -90,14 +91,7 @@ public class TestSetup extends Setup {
      */
     public void setProperty(){
 
-        //  setup controller setting
-
-        //protected MongoDBClientService clientService;
-//        runner.addControllerService("clientService", clientService);
-//        runner.setProperty(clientService, MongoDBControllerService.URI, MONGO_CONTAINER.getConnectionString());
-//        runner.setProperty(AbstractMongoProcessor.CLIENT_SERVICE, "clientService");
-
-
+        //  set controller properties
         setControllerProperty(CQLControllerService.IP_ADDRESSES, String.join(",", ipAddresses));
         setControllerProperty(CQLControllerService.PORT, String.valueOf(port));
         setControllerProperty(CQLControllerService.LOCAL_DC, localDC);
@@ -107,12 +101,13 @@ public class TestSetup extends Setup {
         setControllerProperty(CQLControllerService.REQUEST_TIMEOUT, String.valueOf(requestTimeout));
         setControllerProperty(CQLControllerService.CONSISTENCY_LEVEL, consistencyLevel);
 
-        //  setting processor setting
-        //setProperty(PutCQL.CLIENT_SERVICE, testService);
+        //  set processor properties
         setProperty(PutCQL.SERVICE_CONTROLLER, PutCQL.SERVICE_CONTROLLER.getName());
         setProperty(PutCQL.WRITE_CONSISTENCY_LEVEL, writeConsistencyLevel);
         setProperty(PutCQL.BATCH_SIZE, String.valueOf(getBatchSize()));
         setProperty(PutCQL.TABLE, table);
-        setProperty(PutCQL.BATCH_SIZE, String.valueOf(dryRun));
+        setProperty(PutCQL.DRY_RUN, String.valueOf(dryRun));
+
+        testRunner.setValidateExpressionUsage(false);
     }
 }

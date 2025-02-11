@@ -16,18 +16,19 @@
  */
 package org.george0st.processors.cql;
 
+import com.datastax.oss.driver.api.core.CqlSession;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
 import org.george0st.cql.CQLControllerService;
+import org.george0st.processors.cql.helper.CqlCreateSchema;
 import org.george0st.processors.cql.helper.ReadableValue;
 import org.george0st.processors.cql.helper.TestSetup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import java.io.IOException;
 import java.util.*;
@@ -82,58 +83,42 @@ public class PutCQLTest {
                     TestSetup.getTestPropertyFile(new String[]{"test-scylla-private.json", "test-properties.json"}));
         }
 
-        //  build schema
-//        for (TestSetup controllerSetup: setups) {
+//        //  build schema
+//        for (TestSetup setup: setups) {
 //            CqlSession session=null;
-//            CqlCreateSchema schema = new CqlCreateSchema(session, controllerSetup);
+//            CqlCreateSchema schema = new CqlCreateSchema(session, setup);
 //            schema.Create();
 //        }
 
     }
 
     private FlowFile coreTest(){
-        long finish, start, count;
-        FlowFile result;
+        try{
+            long finish, start, count;
+            FlowFile result;
 
-        start = System.currentTimeMillis();
-        testRunner.run();
-        result = testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS).getLast();
-        finish = System.currentTimeMillis();
+            start = System.currentTimeMillis();
+            testRunner.run();
+            result = testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS).getLast();
+            finish = System.currentTimeMillis();
 
-        count=Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
-        System.out.printf("SetupName: '%s'; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-                result.getAttribute("CQLName"),
-                "FlowFile",
-                ReadableValue.fromMillisecond(finish - start),
-                finish-start,
-                count,
-                count / ((finish - start) / 1000.0),
-                System.lineSeparator());
-        return result;
+            count=Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
+            System.out.printf("SetupName: '%s'; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+                    result.getAttribute("CQLName"),
+                    "FlowFile",
+                    ReadableValue.fromMillisecond(finish - start),
+                    finish-start,
+                    count,
+                    count / ((finish - start) / 1000.0),
+                    System.lineSeparator());
+            return result;
+        }
+        catch(Exception ex) {
+            return null;
+        }
     }
-//
-//    @Test
-//    public void testZero() throws IOException {
-//        ControllerSetup aa = TestSetup.getInstance(testRunner,
-//                TestSetup.getTestPropertyFile(new String []{"test-cassandra-private.json", "test-properties.json"}));
-//        ControllerSetup bb = TestSetup.getInstance(testRunner,
-//                TestSetup.getTestPropertyFile(new String []{"test-cassandra-private.json", "test-properties.json"}));
-//
-//        aa.username="aa";
-//        bb.username=null;
-//        assertTrue(aa.compare(bb)==ControllerSetup.CompareStatus.CHANGE_ACCESS);
-//        assertTrue(bb.compare(aa)==ControllerSetup.CompareStatus.CHANGE_ACCESS);
-//
-//        bb.username=aa.username;
-//        aa.pwd="aa";
-//        bb.pwd=null;
-//        assertTrue(aa.compare(bb)==ControllerSetup.CompareStatus.CHANGE_ACCESS);
-//        assertTrue(bb.compare(aa)==ControllerSetup.CompareStatus.CHANGE_ACCESS);
-//
-//    }
-//
-//
-        @Test
+
+    @Test
     public void testBasic() {
 
         HashMap<String, String> attributes = new HashMap<String, String>();
@@ -150,16 +135,20 @@ public class PutCQLTest {
 
             testRunner.enqueue(content, attributes);
             setup.setProperty();
-            setup.setProperty(PutCQL.BATCH_SIZE, "350");
-            setup.setProperty(PutCQL.DRY_RUN, "false");
-            testRunner.setValidateExpressionUsage(false);
             testRunner.enableControllerService(testService);
             result = coreTest();
             testRunner.disableControllerService(testService);
 
-            //  check amount of items
+            //  check result
+            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
+            //  check amount of write items
             assertEquals(Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)),4);
         }
+    }
+
+    @Test
+    public void Test2(){
+
     }
 //
 //    @Test

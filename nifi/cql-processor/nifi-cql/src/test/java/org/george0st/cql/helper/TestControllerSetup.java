@@ -14,22 +14,23 @@ public class TestControllerSetup extends ControllerSetup{
     public String name;
 
     private TestRunner testRunner;
-    private CQLControllerService service;
+    private CQLControllerService testService;
 
     private TestControllerSetup(){
     }
 
     private void setRunner(TestRunner testRunner, CQLControllerService service){
         this.testRunner=testRunner;
-        this.service=service;
+        this.testService =service;
     }
 
-    public static TestControllerSetup getInstance(TestRunner testRunner, CQLControllerService service, String propertyFile) throws IOException {
+    public static TestControllerSetup getInstance(TestRunner runner, CQLControllerService service, String propertyFile) throws IOException {
         try (FileReader fileReader = new FileReader(propertyFile)) {
             TestControllerSetup setup = (new Gson()).fromJson(fileReader, TestControllerSetup.class);
 
             if (!setup.enable) return null;
-            setup.setRunner(testRunner, service);
+            setup.testRunner = runner;
+            setup.testService = service;
             return setup;
         }
     }
@@ -60,7 +61,7 @@ public class TestControllerSetup extends ControllerSetup{
 
     public void setProperty(PropertyDescriptor property, String propertyValue) {
         if (propertyValue != null)
-            testRunner.setProperty(service, property, propertyValue);
+            testRunner.setProperty(testService, property, propertyValue);
     }
 
     /**
