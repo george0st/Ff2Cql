@@ -58,7 +58,7 @@ You have to do these steps (only one-time action):
 
 ### Output
 
-- **CQLCount** (FlowFile attribute)
+- **cql.count** (FlowFile attribute)
   - The amount of write rows to CQL.
 
 ### PutCQL setting (key items):
