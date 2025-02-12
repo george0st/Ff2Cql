@@ -1,7 +1,7 @@
 ## 1. Usage in NiFi
 
 You can use NiFi processor (nifi-cql-nar-*.nar).
-- ✅ **PutCQL** as NiFi processor with controller, where inputs are FlowFiles
+- ✅ **PutCQL** as NiFi v2 processor with controller, where inputs are FlowFiles
 
 ## 2. PutCQL (NiFi processor)
 

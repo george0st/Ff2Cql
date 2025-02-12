@@ -1,8 +1,8 @@
 ## 1. Usage in NiFi
 
 You can use java application (Ff2Cql-*.jar) directly in NiFi:
-- ✅ **ExecuteProcess**, where input are CSV files, [see](#2-executeprocess-java-application)
-- ✅ **ExecuteStreamCommand**, where input are FlowFiles, [see](#3-executestreamcommand-java-application)
+- ✅ **ExecuteProcess**, where inputs are CSV files, [see](#2-executeprocess-java-application)
+- ✅ **ExecuteStreamCommand**, where inputs are FlowFiles, [see](#3-executestreamcommand-java-application)
 
 ## 2. ExecuteProcess (java application)
 
