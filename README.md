@@ -16,7 +16,7 @@ ScyllaDB, AstraDB, etc.). The implementation details:
 ## 2. Usage in NiFi
 
 You can use this preferred way:
- - ✅ **PutCQL** as NiFi processor with controller ([download last version](./nifi/cql-processor/output/), see 'nifi-cql-nar-*.nar'), where inputs are FlowFiles ([addition detail](./nifi/cql-processor/docs/README.md))
+ - ✅ **PutCQL** as NiFi processor with controller ([download latest version](./nifi/cql-processor/output/), see 'nifi-cql-nar-*.nar'), where inputs are FlowFiles ([addition detail](./nifi/cql-processor/docs/README.md))
  
 or two other alternative ways:
  - ✅ **ExecuteProcess** with java application (see 'Ff2Cql-*.jar'), where inputs are CSV files ([addition detail](./console_app/Ff2Cql/docs/README.md#2-executeprocess-java-application)) 
