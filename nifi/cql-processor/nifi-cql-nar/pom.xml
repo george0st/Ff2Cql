@@ -27,6 +27,7 @@
     <packaging>nar</packaging>
 
     <dependencies>
+        <!-- internal -->
         <dependency>
             <groupId>org.george0st</groupId>
             <artifactId>nifi-cql-processors</artifactId>
@@ -37,6 +38,7 @@
             <artifactId>nifi-cql</artifactId>
             <version>2.2.0</version>
         </dependency>
+        <!-- core -->
         <dependency>
             <groupId>org.apache.nifi</groupId>
             <artifactId>nifi-standard-services-api-nar</artifactId>
