@@ -41,22 +41,6 @@ public class PutCQLTest {
 
     // Helper
     // https://medium.com/@mr.sinchan.banerjee/nifi-custom-processor-series-part-3-junit-test-with-nifi-mock-a935a1a4e3e5
-
-
-//    public TestRunner init2(Class processor) throws Exception {
-//        TestRunner runner = TestRunners.newTestRunner(processor);
-//        runner.addControllerService("clientService", clientService);
-//        runner.setProperty(clientService, MongoDBControllerService.URI, MONGO_CONTAINER.getConnectionString());
-//        runner.setProperty(AbstractMongoProcessor.CLIENT_SERVICE, "clientService");
-//        runner.enableControllerService(clientService);
-//        runner.setEnvironmentVariableValue("uri", MONGO_CONTAINER.getConnectionString());
-//        runner.setEnvironmentVariableValue("db", DATABASE_NAME);
-//        runner.setEnvironmentVariableValue("collection", COLLECTION_NAME);
-//        runner.setProperty(AbstractMongoProcessor.DATABASE_NAME, "${db}");
-//        runner.setProperty(AbstractMongoProcessor.COLLECTION_NAME, "${collection}");
-//        return runner;
-//    }
-
     private void addTestScope(TestRunner testRunner, CQLControllerService testService, String propertyFile) throws IOException {
         TestSetup itm;
 
@@ -69,7 +53,6 @@ public class PutCQLTest {
 
     @BeforeEach
     public void init() throws IOException, InterruptedException, InitializationException {
-
         testRunner = TestRunners.newTestRunner(PutCQL.class);
         testService = new CQLControllerService();
         testRunner.addControllerService(PutCQL.SERVICE_CONTROLLER.getName(), testService);

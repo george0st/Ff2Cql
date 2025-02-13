@@ -40,7 +40,7 @@ You have to do these steps (only one-time action):
 - **Request Timeout:**
     - 60 (in seconds)
 - **Consistency Level:**
-    - E.g. LOCAL_ONE, LOCAL_QUORUM, etc.
+    - Default consistency level, e.g. LOCAL_ONE, LOCAL_QUORUM, etc.
 
 ### 2.3 Add processor and setup properties
 
