@@ -63,8 +63,8 @@ public class PutCQL extends AbstractProcessor {
 
     public static final PropertyDescriptor WRITE_CONSISTENCY_LEVEL = new PropertyDescriptor
             .Builder()
-            .name("Consistency Level")
-            .description("Consistency Level for CQL operations.")
+            .name("Write Consistency Level")
+            .description("Write consistency Level for CQL operations.")
             .required(true)
             .defaultValue(CQLClientService.CL_LOCAL_ONE.getValue())
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
@@ -77,7 +77,7 @@ public class PutCQL extends AbstractProcessor {
     public static final PropertyDescriptor TABLE = new PropertyDescriptor
             .Builder()
             .name("Table")
-            .description("Table and schema name in CQL (expected format <schema>.<table>).")
+            .description("Table and schema name in CQL (expected format '<schema>.<table>').")
             .required(true)
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
@@ -86,7 +86,7 @@ public class PutCQL extends AbstractProcessor {
     public static final PropertyDescriptor BATCH_SIZE = new PropertyDescriptor
             .Builder()
             .name("Batch Size")
-            .description("Size of bulk for data ingest.")
+            .description("Size of batch for data ingest (in one operation).")
             .required(false)
             .defaultValue("200")
             .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)

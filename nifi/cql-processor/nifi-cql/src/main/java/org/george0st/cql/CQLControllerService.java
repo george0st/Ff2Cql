@@ -45,7 +45,8 @@ public class CQLControllerService extends AbstractControllerService implements C
     public static final PropertyDescriptor IP_ADDRESSES = new PropertyDescriptor
             .Builder()
             .name("IP Addresses")
-            .description("List of IP addresses for CQL connection, the addresses are split by comma (e.g. '192.168.0.1, 192.168.0.2').")
+            .description("List of IP addresses for CQL connection, the addresses are split by comma " +
+                    "(e.g. '192.168.0.1, 192.168.0.2, ...' or 'localhost').")
             .required(true)
             .defaultValue("localhost")
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
@@ -92,7 +93,7 @@ public class CQLControllerService extends AbstractControllerService implements C
     public static final PropertyDescriptor CONNECTION_TIMEOUT = new PropertyDescriptor
             .Builder()
             .name("Connection Timeout")
-            .description("Timeout for connection to CQL engine.")
+            .description("Timeout for connection to CQL engine (in seconds).")
             .required(true)
             .defaultValue("900")
             .addValidator(StandardValidators.LONG_VALIDATOR)
@@ -101,7 +102,7 @@ public class CQLControllerService extends AbstractControllerService implements C
     public static final PropertyDescriptor REQUEST_TIMEOUT = new PropertyDescriptor
             .Builder()
             .name("Request Timeout")
-            .description("Timeout for request to CQL engine.")
+            .description("Timeout for request to CQL engine (in seconds).")
             .required(true)
             .defaultValue("60")
             .addValidator(StandardValidators.LONG_VALIDATOR)
@@ -110,7 +111,7 @@ public class CQLControllerService extends AbstractControllerService implements C
     public static final PropertyDescriptor CONSISTENCY_LEVEL = new PropertyDescriptor
             .Builder()
             .name("Consistency Level")
-            .description("Consistency Level for CQL operations.")
+            .description("Default consistency Level for CQL operations.")
             .required(true)
             .defaultValue(CL_LOCAL_ONE.getValue())
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
