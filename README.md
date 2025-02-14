@@ -2,7 +2,7 @@
 
 ![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/docs/assets/nifi_cassandra.png?raw=true)
 
-A simple transfer data from NiFi FlowFile to CQL (support Apache Cassandra, 
+A simple transfer data from NiFi to CQL (support Apache Cassandra, 
 ScyllaDB, AstraDB, etc.). The implementation details:
  - development NiFi v2 processor (with controller) and java application (support Java 17/21+)
  - support Apache Cassandra v4/v5, ScyllaDB, AstraDB based on CQL (Cassandra Query Language)
@@ -16,7 +16,7 @@ ScyllaDB, AstraDB, etc.). The implementation details:
 ## 2. Usage in NiFi
 
 You can use this preferred way:
- - ✅ **PutCQL** as NiFi processor with controller ([download last version](./nifi/cql-processor/output/), see 'nifi-cql-nar-*.nar'), where inputs are FlowFiles ([addition detail](./nifi/cql-processor/docs/README.md))
+ - ✅ **PutCQL** as NiFi processor with controller ([download latest version](./nifi/cql-processor/output/), see 'nifi-cql-nar-*.nar'), where inputs are FlowFiles ([addition detail](./nifi/cql-processor/docs/README.md))
  
 or two other alternative ways:
  - ✅ **ExecuteProcess** with java application (see 'Ff2Cql-*.jar'), where inputs are CSV files ([addition detail](./console_app/Ff2Cql/docs/README.md#2-executeprocess-java-application)) 
