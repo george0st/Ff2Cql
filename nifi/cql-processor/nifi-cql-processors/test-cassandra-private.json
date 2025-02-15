@@ -11,6 +11,7 @@
   "consistencyLevel": "LOCAL_ONE",
   "writeConsistencyLevel": "LOCAL_ONE",
   "batchSize": 200,
+  "batchType": "UNLOGGED",
   "table": "prftest.csv2cql_test3",
   "dryRun": false,
   "compaction": "{'class': 'UnifiedCompactionStrategy', 'scaling_parameters': 'L10, T10'}"

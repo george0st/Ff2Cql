@@ -26,19 +26,19 @@ You have to do these steps (only one-time action):
 ### CQLControllerService setting (key items):
 
 - **IP Addresses:**
-    - IP addresses of CQL engine with comma delimiter e.g. '10.129.53.10, 10.129.53.11, 10.129.53.12'
+    - IP addresses of CQL engine with comma delimiter e.g. '10.129.53.10, 10.129.53.11, 10.129.53.12'.
 - **Port:**
-    - Port for communication with CQL engine (default is 9042)
+    - Port for communication with CQL engine (default is 9042).
 - **Username:**
-    - Username for login to CQL
+    - Username for login to CQL.
 - **Password:**
-    - Password for login to CQL
+    - Password for login to CQL.
 - **Local Data Center:**
     - Name of local data center in CQL typically e.g. 'dc1' or 'datacenter1', etc.
 - **Connection Timeout:**
-    - 900 (in seconds)
+    - 900 (in seconds).
 - **Request Timeout:**
-    - 60 (in seconds)
+    - 60 (in seconds).
 - **Consistency Level:**
     - Default consistency level, e.g. LOCAL_ONE, LOCAL_QUORUM, etc.
 
@@ -66,10 +66,11 @@ You have to do these steps (only one-time action):
 - **Write Consistency Level:**
   - E.g. LOCAL_ONE, LOCAL_QUORUM, etc.
 - **Table:**
-  - Schema and table name in CQL for write/put a data (expected format 'keyspace.table') 
-    e.g. 'cqlschema.cqltable'
-  - The data types defined in the table will be used for value conversions from the CSV file.
+  - Schema and table name in CQL for write/put a data (expected format 'keyspace.table', e.g. 'cqlschema.cqltable').
+  - The data types defined in the CQL table will be used for value conversions from the CSV file.
 - **Batch Size:**
-  - Size of batch for write to CQL (default is 200)
+  - Size of batch for write to CQL (default is 200).
+- **Batch Type:**
+  - Batch type with relation to an atomicity of batch operation (default UNLOGGED, it is without atomicity).
 - **Dry Run:**
-  - The simulation of write to CQL (default is false)
+  - The simulation of write to CQL (default is false).

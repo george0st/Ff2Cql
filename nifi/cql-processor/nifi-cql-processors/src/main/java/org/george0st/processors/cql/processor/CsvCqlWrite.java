@@ -18,12 +18,6 @@ import java.util.Iterator;
  */
 public class CsvCqlWrite extends CqlProcessor {
 
-//    public CsvCqlWrite(ControllerSetup controllerSetup, boolean dryRun) {
-//        super(controllerSetup, dryRun);
-//    }
-//
-//    public CsvCqlWrite(CqlAccess access, boolean dryRun) { super(access, dryRun); }
-
     public CsvCqlWrite(CqlSession session, Setup setup) { super(session, setup); }
 
     private long executeCore(Reader reader) throws IOException {
@@ -40,7 +34,7 @@ public class CsvCqlWrite extends CqlProcessor {
             String prepareItems = prepareItems(headers);
             PreparedStatement stm = insertStatement(session, prepareHeaders, prepareItems);
 
-            BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.UNLOGGED);
+            BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.valueOf(setup.batchType));
             String[] line;
             int count = 0;
 
