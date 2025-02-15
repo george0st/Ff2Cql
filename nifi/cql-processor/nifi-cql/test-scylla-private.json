@@ -6,6 +6,5 @@
   "localDC": "datacenter1",
   "connectionTimeout": "900",
   "requestTimeout": "60",
-  "consistencyLevel": "LOCAL_ONE",
-  "table": "prftest.csv2cql_test3"
+  "consistencyLevel": "LOCAL_ONE"
 }

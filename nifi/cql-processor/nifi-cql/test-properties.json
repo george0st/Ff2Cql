@@ -8,6 +8,5 @@
   "localDC": "<local data center>",
   "connectionTimeout": "<timeout in seconds>",
   "requestTimeout": "<timeout in seconds>",
-  "consistencyLevel": "<consistency level e.g. LOCAL_ONE, LOCAL_QUORUM, etc.>",
-  "table": "<add 'keyspace.table' in CQL>"
+  "consistencyLevel": "<consistency level e.g. LOCAL_ONE, LOCAL_QUORUM, etc.>"
 }

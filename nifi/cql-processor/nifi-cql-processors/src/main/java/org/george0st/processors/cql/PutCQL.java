@@ -18,6 +18,7 @@ package org.george0st.processors.cql;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import org.apache.nifi.annotation.behavior.*;
+import org.apache.nifi.components.AllowableValue;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.annotation.lifecycle.OnScheduled;
@@ -51,6 +52,9 @@ public class PutCQL extends AbstractProcessor {
 
     static final String ATTRIBUTE_COUNT = "cql.count";
 
+    static final AllowableValue BT_LOGGED = new AllowableValue("LOGGED", "LOGGED");
+    static final AllowableValue BT_UNLOGGED = new AllowableValue("UNLOGGED", "UNLOGGED");
+
     //  region All Properties
 
     public static final PropertyDescriptor SERVICE_CONTROLLER = new PropertyDescriptor
@@ -66,7 +70,7 @@ public class PutCQL extends AbstractProcessor {
             .name("Write Consistency Level")
             .description("Write consistency Level for CQL operations.")
             .required(true)
-            .defaultValue(CQLClientService.CL_LOCAL_ONE.getValue())
+            .defaultValue(CQLClientService.CL_LOCAL_ONE)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .allowableValues(CQLClientService.CL_LOCAL_ONE, CQLClientService.CL_LOCAL_QUORUM, CQLClientService.CL_LOCAL_SERIAL,
                     CQLClientService.CL_EACH_QUORUM, CQLClientService.CL_ANY, CQLClientService.CL_ONE,
@@ -90,6 +94,16 @@ public class PutCQL extends AbstractProcessor {
             .required(false)
             .defaultValue("200")
             .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)
+            .build();
+
+    public static final PropertyDescriptor BATCH_TYPE = new PropertyDescriptor
+            .Builder()
+            .name("Batch Type")
+            .description("Batch type with relation to an atomicity of batch operation.")
+            .required(true)
+            .defaultValue(BT_UNLOGGED)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .allowableValues(BT_UNLOGGED, BT_LOGGED)
             .build();
 
     public static final PropertyDescriptor DRY_RUN = new PropertyDescriptor
@@ -127,6 +141,7 @@ public class PutCQL extends AbstractProcessor {
                 WRITE_CONSISTENCY_LEVEL,
                 TABLE,
                 BATCH_SIZE,
+                BATCH_TYPE,
                 DRY_RUN);
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
     }

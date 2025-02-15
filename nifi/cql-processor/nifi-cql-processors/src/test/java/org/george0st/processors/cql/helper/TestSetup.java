@@ -83,7 +83,6 @@ public class TestSetup extends Setup {
     public void setProperty(PropertyDescriptor property, String propertyValue) {
         if (propertyValue != null)
             testRunner.setProperty(property, propertyValue);
-
     }
 
     /**
@@ -105,6 +104,7 @@ public class TestSetup extends Setup {
         setProperty(PutCQL.SERVICE_CONTROLLER, PutCQL.SERVICE_CONTROLLER.getName());
         setProperty(PutCQL.WRITE_CONSISTENCY_LEVEL, writeConsistencyLevel);
         setProperty(PutCQL.BATCH_SIZE, String.valueOf(getBatchSize()));
+        setProperty(PutCQL.BATCH_TYPE, batchType);
         setProperty(PutCQL.TABLE, table);
         setProperty(PutCQL.DRY_RUN, String.valueOf(dryRun));
 
