@@ -66,12 +66,11 @@ You have to do these steps (only one-time action):
 - **Write Consistency Level:**
   - E.g. LOCAL_ONE, LOCAL_QUORUM, etc.
 - **Table:**
-  - Schema and table name in CQL for write/put a data (expected format 'keyspace.table'). 
-    e.g. 'cqlschema.cqltable'
-  - The data types defined in the table will be used for value conversions from the CSV file.
+  - Schema and table name in CQL for write/put a data (expected format 'keyspace.table', e.g. 'cqlschema.cqltable').
+  - The data types defined in the CQL table will be used for value conversions from the CSV file.
 - **Batch Size:**
   - Size of batch for write to CQL (default is 200).
 - **Batch Type:**
-    - Batch type with relation to an atomicity of batch operation (default UNLOGGED, it is without atomicity).
+  - Batch type with relation to an atomicity of batch operation (default UNLOGGED, it is without atomicity).
 - **Dry Run:**
   - The simulation of write to CQL (default is false).
