@@ -24,6 +24,7 @@
 
     <artifactId>nifi-cql</artifactId>
     <packaging>jar</packaging>
+    <version>2.2.0</version>
 
     <dependencies>
         <!-- internal -->

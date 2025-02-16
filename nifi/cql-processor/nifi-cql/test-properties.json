@@ -3,6 +3,7 @@
   "name": "<name of setting e.g. cassandra, scylla, etc.>",
   "ipAddresses": ["<add ip>", "<add ip2>", "..."],
   "port": 9042,
+  "secureConnectionBundle": "<link to '*.zip' file, downloaded from AstraDB web>",
   "username": "<add username>",
   "pwd": "<add pwd>",
   "localDC": "<local data center>",

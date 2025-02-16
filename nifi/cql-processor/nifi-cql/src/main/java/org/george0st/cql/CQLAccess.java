@@ -9,6 +9,7 @@ import org.george0st.cql.codec.*;
 import org.george0st.cql.helper.ControllerSetup;
 
 import java.net.InetSocketAddress;
+import java.nio.file.Paths;
 
 /**
  * Access to the CQL source/engine with default setting such as
@@ -39,6 +40,10 @@ public class CQLAccess {
         // data center
         if (controllerSetup.localDC!=null)
             builder.withLocalDatacenter(controllerSetup.localDC);
+
+        //  secureConnectionBundle
+        if (controllerSetup.secureConnectionBundle!=null)
+            builder.withCloudSecureConnectBundle(Paths.get(controllerSetup.secureConnectionBundle));
 
         // basic authorization
         if (controllerSetup.username!=null)

@@ -30,6 +30,11 @@ You have to do these steps (only one-time action):
     - IP addresses of CQL engine with comma delimiter e.g. '10.129.53.10, 10.129.53.11, 10.129.53.12'.
 - **Port:**
     - Port for communication with CQL engine (default is 9042).
+- **Secure Connection Bundle:**
+    - Secure Connection Bundle for access to AstraDB (it is the link to '*.zip'
+      file, downloaded from AstraDB web). 
+    - NOTE: the 'username' is 'clientId' and 'password' id 'secret', these values
+      are from the file '*-token.json', downloaded from AstraDB web.
 - **Username:**
     - Username for login to CQL.
 - **Password:**

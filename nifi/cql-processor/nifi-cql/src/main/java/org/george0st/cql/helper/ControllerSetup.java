@@ -12,6 +12,7 @@ public class ControllerSetup {
 
     public String []ipAddresses;
     public int port;
+    public String secureConnectionBundle;
     public String username;
     public String pwd;
     public String localDC;
@@ -37,6 +38,7 @@ public class ControllerSetup {
     public ControllerSetup(final ConfigurationContext context){
         setIPAddresses(context.getProperty(CQLControllerService.IP_ADDRESSES).getValue());
         port=context.getProperty(CQLControllerService.PORT).asInteger();
+        secureConnectionBundle=context.getProperty(CQLControllerService.SECURE_CONNECTION_BUNDLE).getValue();
         username=context.getProperty(CQLControllerService.USERNAME).getValue();
         pwd=context.getProperty(CQLControllerService.PASSWORD).getValue();
         localDC=context.getProperty(CQLControllerService.LOCAL_DC).getValue();
@@ -62,6 +64,7 @@ public class ControllerSetup {
         if (((ControllerSetup)o).port != port) return false;
 
         //  login
+        if (!((ControllerSetup)o).secureConnectionBundle.equals(secureConnectionBundle)) return false;
         if (((ControllerSetup)o).username!=null) {
             if (!((ControllerSetup)o).username.equals(username)) return false;
         } else if (username!=null) return false;

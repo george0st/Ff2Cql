@@ -70,7 +70,7 @@ public class PutCQL extends AbstractProcessor {
             .name("Write Consistency Level")
             .description("Write consistency Level for CQL operations.")
             .required(true)
-            .defaultValue(CQLClientService.CL_LOCAL_ONE)
+            .defaultValue(CQLClientService.CL_LOCAL_ONE.getValue())
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .allowableValues(CQLClientService.CL_LOCAL_ONE, CQLClientService.CL_LOCAL_QUORUM, CQLClientService.CL_LOCAL_SERIAL,
                     CQLClientService.CL_EACH_QUORUM, CQLClientService.CL_ANY, CQLClientService.CL_ONE,
