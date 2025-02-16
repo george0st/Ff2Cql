@@ -12,6 +12,7 @@ You have to do these steps (only one-time action):
     - the last version is [here](./../output/)
  2. Import the *.nar file to the NiFi lib directory
     - expected location in Linux e.g. '/opt/nifi/current-nifi/lib'
+    - expected location in Windows e.g. 'C:\Program Files\Apache\Nifi\lib'
  3. STOP NiFi
  4. START NiFi
 
@@ -26,21 +27,28 @@ You have to do these steps (only one-time action):
 ### CQLControllerService setting (key items):
 
 - **IP Addresses:**
-    - IP addresses of CQL engine with comma delimiter e.g. '10.129.53.10, 10.129.53.11, 10.129.53.12'.
+    - IP addresses of CQL engine with comma delimiter e.g. '10.129.53.10,
+      10.129.53.11, 10.129.53.12' or 'localhost'.
 - **Port:**
     - Port for communication with CQL engine (default is 9042).
+- **Secure Connection Bundle:**
+    - Secure Connection Bundle for access to AstraDB (it is the link to '*.zip'
+      file, downloaded from AstraDB web). 
+    - NOTE: the 'username' is 'clientId' and 'password' id 'secret', these values
+      are from the file '*-token.json', downloaded from AstraDB web.
 - **Username:**
     - Username for login to CQL.
 - **Password:**
     - Password for login to CQL.
 - **Local Data Center:**
     - Name of local data center in CQL typically e.g. 'dc1' or 'datacenter1', etc.
+      (default is 'datacenter1')
 - **Connection Timeout:**
-    - 900 (in seconds).
+    - Connection timeout in seconds (default is 900 seconds).
 - **Request Timeout:**
-    - 60 (in seconds).
+    - Request timeout in seconds (default is 60 seconds).
 - **Consistency Level:**
-    - Default consistency level, e.g. LOCAL_ONE, LOCAL_QUORUM, etc.
+    - Default consistency level (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.).
 
 ### 2.3 Add processor and setup properties
 
@@ -64,7 +72,7 @@ You have to do these steps (only one-time action):
 ### PutCQL setting (key items):
 
 - **Write Consistency Level:**
-  - E.g. LOCAL_ONE, LOCAL_QUORUM, etc.
+  - Consistency level for write operation (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.).
 - **Table:**
   - Schema and table name in CQL for write/put a data (expected format 'keyspace.table', e.g. 'cqlschema.cqltable').
   - The data types defined in the CQL table will be used for value conversions from the CSV file.

@@ -61,6 +61,18 @@ public class CQLControllerService extends AbstractControllerService implements C
             .addValidator(StandardValidators.POSITIVE_INTEGER_VALIDATOR)
             .build();
 
+    public static final PropertyDescriptor SECURE_CONNECTION_BUNDLE = new PropertyDescriptor
+            .Builder()
+            .name("Secure Connection Bundle")
+            .description("Secure Connection Bundle for access to AstraDB " +
+                    "(it is the link to '*.zip' file, downloaded from AstraDB web). " +
+                    "NOTE: the 'username' is 'clientId' and 'password' id 'secret', these values are from " +
+                    "the file '*-token.json', downloaded from AstraDB web.")
+            .required(false)
+            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            .sensitive(false)
+            .build();
+
     public static final PropertyDescriptor USERNAME = new PropertyDescriptor
             .Builder()
             .name("Username")
@@ -85,7 +97,7 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("Local Data Center")
             .description("Name of local data center e.g. 'dc1', 'datacenter1', etc.")
             .required(false)
-            .defaultValue("dc1")
+            .defaultValue("datacenter1")
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
@@ -121,6 +133,7 @@ public class CQLControllerService extends AbstractControllerService implements C
     private static final List<PropertyDescriptor> properties = List.of(
             IP_ADDRESSES,
             PORT,
+            SECURE_CONNECTION_BUNDLE,
             USERNAME,
             PASSWORD,
             LOCAL_DC,

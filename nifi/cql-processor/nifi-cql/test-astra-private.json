@@ -1,0 +1,13 @@
+{
+  "enable": true,
+  "name": "astradb",
+  "ipAddresses": ["localhost"],
+  "port": 9042,
+  "secureConnectionBundle": "",
+  "username": "perf",
+  "pwd": "perf",
+  "localDC": "datacenter1",
+  "connectionTimeout": "900",
+  "requestTimeout": "60",
+  "consistencyLevel": "LOCAL_ONE"
+}
