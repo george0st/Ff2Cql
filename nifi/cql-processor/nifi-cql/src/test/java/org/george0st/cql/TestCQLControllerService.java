@@ -55,9 +55,11 @@ public class TestCQLControllerService {
             setups = new ArrayList<TestControllerSetup>();
 
             addTestScope(testRunner, testService,
-                    TestControllerSetup.getTestPropertyFile(new String[]{"test-cassandra-private.json", "test-properties.json"}));
+                    TestControllerSetup.getTestPropertyFile("./src/test",
+                            new String[]{"test-cassandra.json", "test-properties.json"}));
             addTestScope(testRunner, testService,
-                    TestControllerSetup.getTestPropertyFile(new String[]{"test-scylla-private.json", "test-properties.json"}));
+                    TestControllerSetup.getTestPropertyFile("./src/test",
+                            new String[]{"test-scylla.json", "test-properties.json"}));
         }
     }
 

@@ -61,9 +61,11 @@ public class PutCQLTest {
             setups = new ArrayList<TestSetup>();
 
             addTestScope(testRunner, testService,
-                    TestSetup.getTestPropertyFile(new String[]{"test-cassandra-private.json", "test-properties.json"}));
+                    TestSetup.getTestPropertyFile("./src/test",
+                            new String[]{"test-cassandra.json", "test-properties.json"}));
             addTestScope(testRunner, testService,
-                    TestSetup.getTestPropertyFile(new String[]{"test-scylla-private.json", "test-properties.json"}));
+                    TestSetup.getTestPropertyFile("./src/test",
+                            new String[]{"test-scylla.json", "test-properties.json"}));
         }
 
 //        //  build schema
