@@ -27,7 +27,8 @@ You have to do these steps (only one-time action):
 ### CQLControllerService setting (key items):
 
 - **IP Addresses:**
-    - IP addresses of CQL engine with comma delimiter e.g. '10.129.53.10, 10.129.53.11, 10.129.53.12'.
+    - IP addresses of CQL engine with comma delimiter e.g. '10.129.53.10,
+      10.129.53.11, 10.129.53.12' or 'localhost'.
 - **Port:**
     - Port for communication with CQL engine (default is 9042).
 - **Secure Connection Bundle:**
@@ -41,8 +42,9 @@ You have to do these steps (only one-time action):
     - Password for login to CQL.
 - **Local Data Center:**
     - Name of local data center in CQL typically e.g. 'dc1' or 'datacenter1', etc.
+      (default is 'datacenter1')
 - **Connection Timeout:**
-    - Connection timeout in seconds (deafult is 900 seconds).
+    - Connection timeout in seconds (default is 900 seconds).
 - **Request Timeout:**
     - Request timeout in seconds (default is 60 seconds).
 - **Consistency Level:**
