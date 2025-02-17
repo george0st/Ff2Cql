@@ -30,6 +30,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -66,6 +68,9 @@ public class PutCQLTest {
             addTestScope(testRunner, testService,
                     TestSetup.getTestPropertyFile("./src/test",
                             new String[]{"test-scylla.json", "test-properties.json"}));
+            addTestScope(testRunner, testService,
+                    TestSetup.getTestPropertyFile("./src/test",
+                            new String[]{"test-astra.json", "test-properties.json"}));
         }
 
 //        //  build schema

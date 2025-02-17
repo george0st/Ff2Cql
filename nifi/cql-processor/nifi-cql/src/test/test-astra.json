@@ -1,12 +1,10 @@
 {
   "enable": true,
   "name": "astradb",
-  "ipAddresses": ["localhost"],
   "port": 9042,
-  "secureConnectionBundle": "",
-  "username": "perf",
-  "pwd": "perf",
-  "localDC": "datacenter1",
+  "secureConnectionBundle": "c:/java/secure-connect-astradb-test.zip",
+  "username": "clientId, c:/Java/jiri.steuer@embedit.com-token.json",
+  "pwd": "secret, c:/Java/jiri.steuer@embedit.com-token.json",
   "connectionTimeout": "900",
   "requestTimeout": "60",
   "consistencyLevel": "LOCAL_ONE"

@@ -1,12 +1,10 @@
 {
-  "enable": true,
+  "enable": false,
   "name": "astradb",
-  "ipAddresses": ["10.129.53.159", "10.129.53.154", "10.129.53.153"],
   "port": 9042,
-  "secureConnectionBundle": "",
-  "username": "perf",
-  "pwd": "perf",
-  "localDC": "datacenter1",
+  "secureConnectionBundle": "c:/java/secure-connect-astradb-test.zip",
+  "username": "clientId, c:/Java/jiri.steuer@embedit.com-token.json",
+  "pwd": "secret, c:/Java/jiri.steuer@embedit.com-token.json",
   "connectionTimeout": "900",
   "requestTimeout": "60",
   "consistencyLevel": "LOCAL_ONE",
@@ -18,3 +16,4 @@
   "dryRun": false,
   "compaction": "{'class': 'UnifiedCompactionStrategy', 'scaling_parameters': 'L10, T10'}"
 }
+

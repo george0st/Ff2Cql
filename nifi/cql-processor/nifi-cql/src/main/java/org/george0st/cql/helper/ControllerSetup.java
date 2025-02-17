@@ -21,11 +21,13 @@ public class ControllerSetup {
     public String consistencyLevel;
 
     public void setIPAddresses(String ipAddr) {
-        String[] items = ipAddr.split(",");
-        for (int i=0; i < items.length ; i++) items[i]=items[i].strip();
-        this.ipAddresses = items;
+        if (ipAddr!=null) {
+            String[] items = ipAddr.split(",");
+            for (int i = 0; i < items.length; i++) items[i] = items[i].strip();
+            this.ipAddresses = items;
+        }
     }
-    public String getIPAddresses() { return String.join(",",this.ipAddresses); }
+    public String getIPAddresses() { return ipAddresses!=null ? String.join(",",this.ipAddresses) : null; }
 
     public ControllerSetup(){
     }
