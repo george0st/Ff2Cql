@@ -1,5 +1,5 @@
 {
-  "enable": true,
+  "enable": false,
   "name": "astradb",
   "port": 9042,
   "secureConnectionBundle": "c:/java/secure-connect-astradb-test.zip",
