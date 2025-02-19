@@ -33,7 +33,7 @@ You can see sample of relevant setting for CQL controllers:
    - access with security connection bundle (SCB) and token
    - NOTE about SCB: see the file with **'.zip'** suffix
      - How to get the SCB? Go to the https://astra.datastax.com/...,
-       Menu Databases/<Your database>/Region/[Download SCB](./docs/assets/astradb-download-SCB.png)
+       Menu Databases/Your database/Region/[Download SCB](./docs/assets/astradb-download-SCB.png)
    - NOTE about token: see the file with **'token.json'** suffix
      - How to get the token? Go to the https://astra.datastax.com/...,
        Menu Tokens/Generate Token/Token Details/[Download Token Details](./docs/assets/astradb-download-token.png)
