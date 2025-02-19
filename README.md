@@ -31,8 +31,10 @@ You can see sample of relevant setting for CQL controllers:
    - access with IP addresses
  - [AstraDB setting](./nifi/cql-processor/nifi-cql/src/test/test-astra.json)
    - access with security connection bundle and token
-     - security connection bundle (SCB), see the **'.zip' file suffix**, downloaded from AstraDB web portal
+     - security connection bundle (SCB), see the **'.zip' file suffix**
+       - go to the https://astra.datastax.com/..., Menu Databases/Your database/Region/[Download SCB](./docs/assets/astradb-download-SCB.png)
      - token, see the **'token.json' file suffix**, downloaded from AstraDB web portal
+       - go to the https://astra.datastax.com/..., Menu Tokens/Generate Token/Token Details/[Download Token Details](./docs/assets/astradb-download-token.png)
 
 NOTE: 
- - these connection setting are using in unit tests
+ - these connection settings are using directly in unit tests
