@@ -30,11 +30,13 @@ You can see sample of relevant setting for CQL controllers:
  - [Scylla setting](./nifi/cql-processor/nifi-cql/src/test/test-scylla.json)
    - access with IP addresses
  - [AstraDB setting](./nifi/cql-processor/nifi-cql/src/test/test-astra.json)
-   - access with security connection bundle and token
-     - security connection bundle (SCB), see the **'.zip' file suffix**
-       - go to the https://astra.datastax.com/..., Menu Databases/Your database/Region/[Download SCB](./docs/assets/astradb-download-SCB.png)
-     - token, see the **'token.json' file suffix**, downloaded from AstraDB web portal
-       - go to the https://astra.datastax.com/..., Menu Tokens/Generate Token/Token Details/[Download Token Details](./docs/assets/astradb-download-token.png)
+   - access with security connection bundle (SCB) and token
+   - NOTE about SCB: see the file with **'.zip'** suffix
+     - How to get the SCB? Go to the https://astra.datastax.com/...,
+       Menu Databases/<Your database>/Region/[Download SCB](./docs/assets/astradb-download-SCB.png)
+   - NOTE about token: see the file with **'token.json'** suffix
+     - How to get the token? Go to the https://astra.datastax.com/...,
+       Menu Tokens/Generate Token/Token Details/[Download Token Details](./docs/assets/astradb-download-token.png)
 
 NOTE: 
- - these connection settings are using directly in unit tests
+ - These connection settings are used directly in unit tests.
