@@ -1,12 +1,14 @@
 package org.george0st.processors.cql.helper;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.util.TestRunner;
 import org.george0st.cql.CQLControllerService;
 import org.george0st.processors.cql.PutCQL;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -15,6 +17,7 @@ public class TestSetup extends Setup {
     public String name;
     public String []ipAddresses;
     public int port;
+    public String secureConnectionBundle;
     public String username;
     public String pwd;
     public String localDC;
@@ -30,9 +33,11 @@ public class TestSetup extends Setup {
     }
 
     public void setIPAddresses(String ipAddr) {
-        String[] items = ipAddr.split(",");
-        for (int i=0; i < items.length ; i++) items[i]=items[i].strip();
-        this.ipAddresses = items;
+        if (ipAddr!=null) {
+            String[] items = ipAddr.split(",");
+            for (int i = 0; i < items.length; i++) items[i] = items[i].strip();
+            this.ipAddresses = items;
+        }
     }
     public String getIPAddresses() { return String.join(",",this.ipAddresses); }
 
@@ -61,7 +66,7 @@ public class TestSetup extends Setup {
         String fileName;
 
         for (String file: files) {
-            fileName = String.format("%s/%s", path, file);
+            fileName = path.endsWith("/") ? String.format("%s%s", path, file) : String.format("%s/%s", path, file);
             if (new File(fileName).exists())
                 return fileName;
         }
@@ -76,26 +81,48 @@ public class TestSetup extends Setup {
     }
 
     public void setControllerProperty(PropertyDescriptor property, String propertyValue) {
-        if (propertyValue != null)
-            testRunner.setProperty(testService, property, propertyValue);
+        //if (propertyValue != null)
+        testRunner.setProperty(testService, property, propertyValue);
     }
 
     public void setProperty(PropertyDescriptor property, String propertyValue) {
-        if (propertyValue != null)
-            testRunner.setProperty(property, propertyValue);
+        //if (propertyValue != null)
+        testRunner.setProperty(property, propertyValue);
+    }
+
+    private String getJson(String item) {
+        if (item!=null) {
+            try {
+                if (item.toLowerCase().endsWith(".json")) {
+                    String[] items = item.split(",");
+                    File jsonFile = new File(items[1].strip());
+                    return jsonFile.isFile() ?
+                            JsonParser.parseReader(new FileReader(jsonFile)).getAsJsonObject().get(items[0].strip()).getAsString() :
+                            item;
+                }
+            }
+            catch(Exception ex) {
+            }
+        }
+        return item;
     }
 
     /**
      * Setting test runner based on test setting
      */
-    public void setProperty(){
+    public void setProperty() {
 
         //  set controller properties
-        setControllerProperty(CQLControllerService.IP_ADDRESSES, String.join(",", ipAddresses));
+        setControllerProperty(CQLControllerService.IP_ADDRESSES, ipAddresses!=null ?
+                String.join(",", ipAddresses) :
+                (String)null);
+//        if (ipAddresses!=null)
+//            setControllerProperty(CQLControllerService.IP_ADDRESSES, String.join(",", ipAddresses));
         setControllerProperty(CQLControllerService.PORT, String.valueOf(port));
-        setControllerProperty(CQLControllerService.LOCAL_DC, localDC);
-        setControllerProperty(CQLControllerService.USERNAME, username);
-        setControllerProperty(CQLControllerService.PASSWORD, pwd);
+        setProperty(CQLControllerService.SECURE_CONNECTION_BUNDLE, secureConnectionBundle);
+        setProperty(CQLControllerService.USERNAME, getJson(username));
+        setProperty(CQLControllerService.PASSWORD, getJson(pwd));
+        setProperty(CQLControllerService.LOCAL_DC, localDC);
         setControllerProperty(CQLControllerService.CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
         setControllerProperty(CQLControllerService.REQUEST_TIMEOUT, String.valueOf(requestTimeout));
         setControllerProperty(CQLControllerService.CONSISTENCY_LEVEL, consistencyLevel);

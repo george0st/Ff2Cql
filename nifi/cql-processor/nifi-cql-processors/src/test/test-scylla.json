@@ -3,10 +3,11 @@
   "name": "scylla",
   "ipAddresses": ["localhost"],
   "port": 9042,
-  "localDC": "datacenter1",
+
   "connectionTimeout": "900",
   "requestTimeout": "60",
   "consistencyLevel": "LOCAL_ONE",
+
   "writeConsistencyLevel": "LOCAL_ONE",
   "batchSize": 200,
   "batchType": "UNLOGGED",

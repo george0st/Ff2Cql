@@ -47,16 +47,17 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("IP Addresses")
             .description("List of IP addresses for CQL connection, the addresses are split by comma " +
                     "(e.g. '192.168.0.1, 192.168.0.2, ...' or 'localhost').")
-            .required(true)
-            .defaultValue("localhost")
-            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .required(false)
+            //.defaultValue("localhost")
+            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
     public static final PropertyDescriptor PORT = new PropertyDescriptor
             .Builder()
             .name("Port")
             .description("Port for communication.")
-            .required(true)
+            .required(false)
             .defaultValue("9042")
             .addValidator(StandardValidators.POSITIVE_INTEGER_VALIDATOR)
             .build();
@@ -97,7 +98,7 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("Local Data Center")
             .description("Name of local data center e.g. 'dc1', 'datacenter1', etc.")
             .required(false)
-            .defaultValue("datacenter1")
+            //.defaultValue("datacenter1")
             .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
@@ -171,7 +172,9 @@ public class CQLControllerService extends AbstractControllerService implements C
             if (test) {
                 //  test connection
                 try (CqlSession session = getSession()) {
-                    getLogger().info("SUCCESS connection [{}] !!!", cqlAccess.controllerSetup.getIPAddresses());
+                    String ipAddress=cqlAccess.controllerSetup.getIPAddresses();
+                    getLogger().info("SUCCESS connection [{}] !!!",
+                            ipAddress!=null ? "IP - " + ipAddress : "SCB - " + cqlAccess.controllerSetup.secureConnectionBundle);
                 }
             }
         } catch(Exception ex){

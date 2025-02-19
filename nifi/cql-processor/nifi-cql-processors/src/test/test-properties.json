@@ -10,6 +10,7 @@
   "connectionTimeout": "<timeout in seconds>",
   "requestTimeout": "<timeout in seconds>",
   "consistencyLevel": "<consistency level e.g. LOCAL_ONE, LOCAL_QUORUM, etc.>",
+
   "writeConsistencyLevel": "<consistency level e.g. LOCAL_ONE, LOCAL_QUORUM, etc.>",
   "batchSize": 200,
   "batchType": "<batch type, possible values UNLOGGED, LOGGED>",

@@ -33,13 +33,10 @@ public class CQLAccess {
     private CqlSessionBuilder createBuilder(){
         CqlSessionBuilder builder = new CqlSessionBuilder();
 
-        // IP addresses
-        for (String ipAddress : this.controllerSetup.ipAddresses)
-            builder.addContactPoint(new InetSocketAddress(ipAddress.strip(), controllerSetup.port));
-
-        // data center
-        if (controllerSetup.localDC!=null)
-            builder.withLocalDatacenter(controllerSetup.localDC);
+        // IP addresses (optional because secureConnectionBundle)
+        if (this.controllerSetup.ipAddresses!=null)
+            for (String ipAddress : this.controllerSetup.ipAddresses)
+                builder.addContactPoint(new InetSocketAddress(ipAddress.strip(), controllerSetup.port));
 
         //  secureConnectionBundle
         if (controllerSetup.secureConnectionBundle!=null)
@@ -48,6 +45,10 @@ public class CQLAccess {
         // basic authorization
         if (controllerSetup.username!=null)
             builder.withAuthCredentials(controllerSetup.username, controllerSetup.pwd);
+
+        // data center
+        if (controllerSetup.localDC!=null)
+            builder.withLocalDatacenter(controllerSetup.localDC);
 
         // add supported codecs
         builder.addTypeCodecs(new CqlIntToStringCodec(),
@@ -65,7 +66,8 @@ public class CQLAccess {
 
         // default options (balancing, timeout, CL)
         OptionsMap options = OptionsMap.driverDefaults();
-        options.put(TypedDriverOption.LOAD_BALANCING_LOCAL_DATACENTER, controllerSetup.localDC);
+        if (controllerSetup.localDC!=null)
+            options.put(TypedDriverOption.LOAD_BALANCING_LOCAL_DATACENTER, controllerSetup.localDC);
         options.put(TypedDriverOption.CONNECTION_CONNECT_TIMEOUT, java.time.Duration.ofSeconds(controllerSetup.connectionTimeout));
         options.put(TypedDriverOption.REQUEST_TIMEOUT, java.time.Duration.ofSeconds(controllerSetup.requestTimeout));
         options.put(TypedDriverOption.REQUEST_CONSISTENCY, controllerSetup.consistencyLevel);

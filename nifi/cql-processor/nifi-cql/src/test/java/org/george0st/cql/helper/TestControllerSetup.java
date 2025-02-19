@@ -1,11 +1,16 @@
 package org.george0st.cql.helper;
 
+import com.datastax.oss.driver.internal.core.addresstranslation.PassThroughAddressTranslator;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.util.TestRunner;
 import org.george0st.cql.CQLControllerService;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -45,7 +50,7 @@ public class TestControllerSetup extends ControllerSetup{
         String fileName;
 
         for (String file: files) {
-            fileName = String.format("%s/%s", path, file);
+            fileName = path.endsWith("/") ? String.format("%s%s", path, file) : String.format("%s/%s", path, file);
             if (new File(fileName).exists())
                 return fileName;
         }
@@ -60,27 +65,42 @@ public class TestControllerSetup extends ControllerSetup{
     }
 
     public void setProperty(PropertyDescriptor property, String propertyValue) {
-        if (propertyValue != null)
-            testRunner.setProperty(testService, property, propertyValue);
+        //if (propertyValue != null)
+        testRunner.setProperty(testService, property, propertyValue);
+    }
+
+    private String getJson(String item) {
+        if (item!=null) {
+            try {
+                if (item.toLowerCase().endsWith(".json")) {
+                    String[] items = item.split(",");
+                    File jsonFile = new File(items[1].strip());
+                    return jsonFile.isFile() ?
+                            JsonParser.parseReader(new FileReader(jsonFile)).getAsJsonObject().get(items[0].strip()).getAsString() :
+                            item;
+                }
+            }
+            catch(Exception ex) {
+            }
+        }
+        return item;
     }
 
     /**
      * Setting test runner based on test setting
      */
-    public void setProperty(){
-        setProperty(CQLControllerService.IP_ADDRESSES, String.join(",", ipAddresses));
+    public void setProperty() {
+        setProperty(CQLControllerService.IP_ADDRESSES, ipAddresses!=null ?
+                String.join(",", ipAddresses) :
+                (String)null);
         setProperty(CQLControllerService.PORT, String.valueOf(port));
+        setProperty(CQLControllerService.SECURE_CONNECTION_BUNDLE, secureConnectionBundle);
+        setProperty(CQLControllerService.USERNAME, getJson(username));
+        setProperty(CQLControllerService.PASSWORD, getJson(pwd));
         setProperty(CQLControllerService.LOCAL_DC, localDC);
-        setProperty(CQLControllerService.USERNAME, username);
-        setProperty(CQLControllerService.PASSWORD, pwd);
         setProperty(CQLControllerService.CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
         setProperty(CQLControllerService.REQUEST_TIMEOUT, String.valueOf(requestTimeout));
-
-
-//        setProperty(PutCQL.WRITE_CONSISTENCY_LEVEL, consistencyLevel);
-//        setProperty(PutCQL.BATCH_SIZE, String.valueOf(getBatch()));
-//        setProperty(PutCQL.TABLE, table);
-//        setProperty(PutCQL.BATCH_SIZE, String.valueOf(dryRun));
+        setProperty(CQLControllerService.CONSISTENCY_LEVEL, String.valueOf(consistencyLevel));
     }
 
 }

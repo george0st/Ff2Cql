@@ -1,15 +1,15 @@
 {
-  "enable": true,
-  "name": "astradb",
+  "enable": false,
+  "name": "cassandra",
   "ipAddresses": ["10.129.53.159", "10.129.53.154", "10.129.53.153"],
   "port": 9042,
-  "secureConnectionBundle": "",
   "username": "perf",
   "pwd": "perf",
   "localDC": "datacenter1",
   "connectionTimeout": "900",
   "requestTimeout": "60",
   "consistencyLevel": "LOCAL_ONE",
+
   "writeConsistencyLevel": "LOCAL_ONE",
   "batchSize": 200,
   "batchType": "UNLOGGED",

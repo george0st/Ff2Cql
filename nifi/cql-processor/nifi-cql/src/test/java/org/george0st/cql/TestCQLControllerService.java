@@ -55,9 +55,14 @@ public class TestCQLControllerService {
             setups = new ArrayList<TestControllerSetup>();
 
             addTestScope(testRunner, testService,
-                    TestControllerSetup.getTestPropertyFile(new String[]{"test-cassandra-private.json", "test-properties.json"}));
+                    TestControllerSetup.getTestPropertyFile("./src/test",
+                            new String[]{"test-cassandra.json", "test-properties.json"}));
             addTestScope(testRunner, testService,
-                    TestControllerSetup.getTestPropertyFile(new String[]{"test-scylla-private.json", "test-properties.json"}));
+                    TestControllerSetup.getTestPropertyFile("./src/test",
+                            new String[]{"test-scylla.json", "test-properties.json"}));
+            addTestScope(testRunner, testService,
+                    TestControllerSetup.getTestPropertyFile("./src/test",
+                            new String[]{"test-astra.json", "test-properties.json"}));
         }
     }
 
@@ -78,11 +83,9 @@ public class TestCQLControllerService {
             runner.assertValid(service);
         }
     }
-    // endregion
 
-    // region Setting - NotValid
     @Test
-    public void testSettingNotValidIPAddresses() throws InitializationException, IOException {
+    public void testSettingValidIPAddresses() throws InitializationException, IOException {
         final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
         final CQLControllerService service = new CQLControllerService();
 
@@ -92,10 +95,14 @@ public class TestCQLControllerService {
 
         for (TestControllerSetup controllerSetup: setups) {
             controllerSetup.setProperty();
-            runner.setProperty(service, CQLControllerService.IP_ADDRESSES, "");     //  err
-            runner.assertNotValid(service);
+            runner.setProperty(service, CQLControllerService.IP_ADDRESSES, (String)null);     //  err
+            runner.assertValid(service);
         }
     }
+
+    // endregion
+
+    // region Setting - NotValid
 
     @Test
     public void testSettingNotValidPort() throws InitializationException, IOException {
