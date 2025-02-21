@@ -28,7 +28,7 @@ You can see sample of relevant setting for CQL controllers:
  - [Cassandra setting](./nifi/cql-processor/nifi-cql/src/test/test-cassandra.json)
    - access with IP addresses
  - [Scylla setting](./nifi/cql-processor/nifi-cql/src/test/test-scylla.json)
-   - access with IP addresses
+   - access with IP address (localhost)
  - [AstraDB setting](./nifi/cql-processor/nifi-cql/src/test/test-astra.json)
    - access with security connection bundle (SCB) and token
    - NOTE about SCB: see the file with **'.zip'** suffix
@@ -37,6 +37,8 @@ You can see sample of relevant setting for CQL controllers:
    - NOTE about token: see the file with **'token.json'** suffix
      - How to get the token? Go to the https://astra.datastax.com/...,
        Menu Tokens/Generate Token/Token Details/[Download Token Details](./docs/assets/astradb-download-token.png)
-
+ - YugabyteDB
+   - TBD.
+   
 NOTE: 
  - These connection settings are used directly in unit tests.
