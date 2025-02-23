@@ -37,7 +37,7 @@ You can see sample of relevant setting for CQL controllers:
    - NOTE about token: see the file with **'token.json'** suffix
      - How to get the token? Go to the https://astra.datastax.com/...,
        Menu Tokens/Generate Token/Token Details/[Download Token Details](./docs/assets/astradb-download-token.png)
- - YugabyteDB
+ - [YugabyteDB setting](./nifi/cql-processor/nifi-cql/src/test/test-yugabyte.json)
    - TBD.
    
 NOTE: 
