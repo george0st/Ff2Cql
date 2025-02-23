@@ -1,6 +1,6 @@
 {
-  "enable": true,
-  "name": "scylla",
+  "enable": false,
+  "name": "yugabyte",
   "ipAddresses": ["localhost"],
   "port": 9042,
   "connectionTimeout": "900",
