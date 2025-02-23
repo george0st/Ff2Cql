@@ -3,7 +3,6 @@
   "name": "yugabyte",
   "ipAddresses": ["localhost"],
   "port": 9042,
-
   "connectionTimeout": "900",
   "requestTimeout": "60",
   "consistencyLevel": "LOCAL_ONE",
