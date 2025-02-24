@@ -24,17 +24,19 @@
 
     <artifactId>nifi-cql-processors</artifactId>
     <packaging>jar</packaging>
+    <version>2.2.1</version>
+
     <dependencies>
         <!-- internal -->
         <dependency>
             <groupId>org.george0st</groupId>
             <artifactId>nifi-cql-api</artifactId>
-            <version>2.2.0</version>
+            <version>2.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.george0st</groupId>
             <artifactId>nifi-cql</artifactId>
-            <version>2.2.0</version>
+            <version>2.2.1</version>
             <scope>test</scope>
         </dependency>
         <!-- external -->

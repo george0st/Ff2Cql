@@ -90,9 +90,10 @@ public class TestControllerSetup extends ControllerSetup{
      * Setting test runner based on test setting
      */
     public void setProperty() {
-        setProperty(CQLControllerService.IP_ADDRESSES, ipAddresses!=null ?
-                String.join(",", ipAddresses) :
-                (String)null);
+        // clear all properties before the setting
+        testRunner.clearProperties();
+
+        setProperty(CQLControllerService.IP_ADDRESSES, ipAddresses!=null ? String.join(",", ipAddresses) : (String)null);
         setProperty(CQLControllerService.PORT, String.valueOf(port));
         setProperty(CQLControllerService.SECURE_CONNECTION_BUNDLE, secureConnectionBundle);
         setProperty(CQLControllerService.USERNAME, getJson(username));

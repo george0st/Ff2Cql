@@ -24,6 +24,7 @@ import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.annotation.lifecycle.OnDisabled;
 import org.apache.nifi.annotation.lifecycle.OnEnabled;
 import org.apache.nifi.components.PropertyDescriptor;
+import org.apache.nifi.components.Validator;
 import org.apache.nifi.controller.AbstractControllerService;
 import org.apache.nifi.controller.ConfigurationContext;
 import org.apache.nifi.processor.util.StandardValidators;
@@ -49,8 +50,9 @@ public class CQLControllerService extends AbstractControllerService implements C
                     "(e.g. '192.168.0.1, 192.168.0.2, ...' or 'localhost').")
             .required(false)
             //.defaultValue("localhost")
-            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            //.addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .addValidator(Validator.VALID)
             .build();
 
     public static final PropertyDescriptor PORT = new PropertyDescriptor
@@ -70,8 +72,8 @@ public class CQLControllerService extends AbstractControllerService implements C
                     "NOTE: the 'username' is 'clientId' and 'password' id 'secret', these values are from " +
                     "the file '*-token.json', downloaded from AstraDB web.")
             .required(false)
-            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
-            .sensitive(false)
+            //.addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            .addValidator(Validator.VALID)
             .build();
 
     public static final PropertyDescriptor USERNAME = new PropertyDescriptor
@@ -79,7 +81,8 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("Username")
             .description("Username for the CQL connection.")
             .required(false)
-            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            //.addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            .addValidator(Validator.VALID)
             //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
@@ -88,7 +91,8 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("Password")
             .description("Password for the CQL connection.")
             .required(false)
-            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            //.addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            .addValidator(Validator.VALID)
             //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .sensitive(true)
             .build();
@@ -99,7 +103,8 @@ public class CQLControllerService extends AbstractControllerService implements C
             .description("Name of local data center e.g. 'dc1', 'datacenter1', etc.")
             .required(false)
             //.defaultValue("datacenter1")
-            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            //.addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            .addValidator(Validator.VALID)
             //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
