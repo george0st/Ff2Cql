@@ -83,25 +83,30 @@ public class PutCQLTest {
     }
 
     private FlowFile coreTest(){
-        try{
+        try {
             long finish, start, count;
             FlowFile result;
+            boolean ok;
 
             start = System.currentTimeMillis();
             testRunner.run();
             result = testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS).getLast();
+            ok = testRunner.getFlowFilesForRelationship(PutCQL.REL_FAILURE).isEmpty();
             finish = System.currentTimeMillis();
 
-            count=Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
-            System.out.printf("SetupName: '%s'; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-                    result.getAttribute("CQLName"),
-                    "FlowFile",
-                    ReadableValue.fromMillisecond(finish - start),
-                    finish-start,
-                    count,
-                    count / ((finish - start) / 1000.0),
-                    System.lineSeparator());
-            return result;
+            if (ok) {
+                count = Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
+                System.out.printf("SetupName: '%s'; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+                        result.getAttribute("CQLName"),
+                        "FlowFile",
+                        ReadableValue.fromMillisecond(finish - start),
+                        finish - start,
+                        count,
+                        count / ((finish - start) / 1000.0),
+                        System.lineSeparator());
+                return result;
+            }
+            return null;
         }
         catch(Exception ex) {
             return null;

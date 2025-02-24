@@ -83,7 +83,7 @@ public class PutCQL extends AbstractProcessor {
             .name("Table")
             .description("Table and schema name in CQL (expected format '<schema>.<table>').")
             .required(true)
-            .addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
+            //.addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
@@ -100,7 +100,7 @@ public class PutCQL extends AbstractProcessor {
             .Builder()
             .name("Batch Type")
             .description("Batch type with relation to an atomicity of batch operation.")
-            .required(true)
+            .required(false)
             .defaultValue(BT_UNLOGGED)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .allowableValues(BT_UNLOGGED, BT_LOGGED)

@@ -86,8 +86,8 @@ public class TestSetup extends Setup {
     }
 
     public void setProperty(PropertyDescriptor property, String propertyValue) {
-        //if (propertyValue != null)
-        testRunner.setProperty(property, propertyValue);
+        if (propertyValue != null)
+            testRunner.setProperty(property, propertyValue);
     }
 
     private String getJson(String item) {
@@ -111,23 +111,21 @@ public class TestSetup extends Setup {
      * Setting test runner based on test setting
      */
     public void setProperty() {
+        // clear all properties before the setting
+        testRunner.clearProperties();
 
-        //  set controller properties
-        setControllerProperty(CQLControllerService.IP_ADDRESSES, ipAddresses!=null ?
-                String.join(",", ipAddresses) :
-                (String)null);
-//        if (ipAddresses!=null)
-//            setControllerProperty(CQLControllerService.IP_ADDRESSES, String.join(",", ipAddresses));
+        //  set CONTROLLER properties
+        setControllerProperty(CQLControllerService.IP_ADDRESSES, ipAddresses!=null ? String.join(",", ipAddresses) : (String)null);
         setControllerProperty(CQLControllerService.PORT, String.valueOf(port));
-        setProperty(CQLControllerService.SECURE_CONNECTION_BUNDLE, secureConnectionBundle);
-        setProperty(CQLControllerService.USERNAME, getJson(username));
-        setProperty(CQLControllerService.PASSWORD, getJson(pwd));
-        setProperty(CQLControllerService.LOCAL_DC, localDC);
+        setControllerProperty(CQLControllerService.SECURE_CONNECTION_BUNDLE, secureConnectionBundle);
+        setControllerProperty(CQLControllerService.USERNAME, getJson(username));
+        setControllerProperty(CQLControllerService.PASSWORD, getJson(pwd));
+        setControllerProperty(CQLControllerService.LOCAL_DC, localDC);
         setControllerProperty(CQLControllerService.CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
         setControllerProperty(CQLControllerService.REQUEST_TIMEOUT, String.valueOf(requestTimeout));
         setControllerProperty(CQLControllerService.CONSISTENCY_LEVEL, consistencyLevel);
 
-        //  set processor properties
+        //  set PROCESSOR properties
         setProperty(PutCQL.SERVICE_CONTROLLER, PutCQL.SERVICE_CONTROLLER.getName());
         setProperty(PutCQL.WRITE_CONSISTENCY_LEVEL, writeConsistencyLevel);
         setProperty(PutCQL.BATCH_SIZE, String.valueOf(getBatchSize()));
