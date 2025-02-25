@@ -50,7 +50,10 @@ public class TestCQLControllerService {
         }
     }
 
-    private void initTestScope(TestRunner testRunner, CQLControllerService testService) throws IOException {
+    private void initTestScope(TestRunner testRunner, CQLControllerService testService) throws IOException, InitializationException {
+        testRunner.addControllerService("test-good", testService);
+        testRunner.setValidateExpressionUsage(false);
+
         if (setups == null) {
             setups = new ArrayList<TestControllerSetup>();
 
@@ -64,6 +67,7 @@ public class TestCQLControllerService {
                     TestControllerSetup.getTestPropertyFile("./src/test",
                             new String[]{"test-astra.json", "test-properties.json"}));
         }
+
     }
 
     // endregion
@@ -74,10 +78,7 @@ public class TestCQLControllerService {
         final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
         final CQLControllerService service = new CQLControllerService();
 
-        runner.addControllerService("test-good", service);
-        runner.setValidateExpressionUsage(false);
         initTestScope(runner, service);
-
         for (TestControllerSetup controllerSetup: setups) {
             controllerSetup.setProperty();
             runner.assertValid(service);
@@ -89,10 +90,7 @@ public class TestCQLControllerService {
         final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
         final CQLControllerService service = new CQLControllerService();
 
-        runner.addControllerService("test-good", service);
-        runner.setValidateExpressionUsage(false);
         initTestScope(runner, service);
-
         for (TestControllerSetup controllerSetup: setups) {
             controllerSetup.setProperty();
             runner.setProperty(service, CQLControllerService.IP_ADDRESSES, (String)null);     //  err
@@ -109,10 +107,7 @@ public class TestCQLControllerService {
         final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
         final CQLControllerService service = new CQLControllerService();
 
-        runner.addControllerService("test-good", service);
-        runner.setValidateExpressionUsage(false);
         initTestScope(runner, service);
-
         for (TestControllerSetup controllerSetup: setups) {
             controllerSetup.setProperty();
             runner.setProperty(service, CQLControllerService.PORT, "aa");           //  err
@@ -125,10 +120,7 @@ public class TestCQLControllerService {
         final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
         final CQLControllerService service = new CQLControllerService();
 
-        runner.addControllerService("test-good", service);
-        runner.setValidateExpressionUsage(false);
         initTestScope(runner, service);
-
         for (TestControllerSetup controllerSetup: setups) {
             controllerSetup.setProperty();
             runner.setProperty(service, CQLControllerService.CONNECTION_TIMEOUT, "ee");     //  err
@@ -141,10 +133,7 @@ public class TestCQLControllerService {
         final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
         final CQLControllerService service = new CQLControllerService();
 
-        runner.addControllerService("test-good", service);
-        runner.setValidateExpressionUsage(false);
         initTestScope(runner, service);
-
         for (TestControllerSetup controllerSetup: setups) {
             controllerSetup.setProperty();
             runner.setProperty(service, CQLControllerService.REQUEST_TIMEOUT, "qq");        //  err
@@ -157,10 +146,7 @@ public class TestCQLControllerService {
         final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
         final CQLControllerService service = new CQLControllerService();
 
-        runner.addControllerService("test-good", service);
-        runner.setValidateExpressionUsage(false);
         initTestScope(runner, service);
-
         for (TestControllerSetup controllerSetup: setups) {
             controllerSetup.setProperty();
             runner.setProperty(service, CQLControllerService.CONSISTENCY_LEVEL, "LOCAL");   //  err
@@ -176,10 +162,7 @@ public class TestCQLControllerService {
         final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
         final CQLControllerService service = new CQLControllerService();
 
-        runner.addControllerService("test-good", service);
-        runner.setValidateExpressionUsage(false);
         initTestScope(runner, service);
-
         for (TestControllerSetup controllerSetup: setups) {
             controllerSetup.setProperty();
             runner.enableControllerService(service);
@@ -192,16 +175,14 @@ public class TestCQLControllerService {
         final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
         final CQLControllerService service = new CQLControllerService();
 
-        runner.addControllerService("test-good", service);
-        runner.setValidateExpressionUsage(false);
         initTestScope(runner, service);
-
         for (TestControllerSetup controllerSetup: setups) {
             controllerSetup.setProperty();
             runner.enableControllerService(service);
 
             //  test session
             try (CqlSession session = service.getSession()){
+                // TODO: LOG success
             }
             runner.disableControllerService(service);
         }
@@ -216,10 +197,7 @@ public class TestCQLControllerService {
         final TestRunner runner = TestRunners.newTestRunner(TestProcessor.class);
         final CQLControllerService service = new CQLControllerService();
 
-        runner.addControllerService("test-good", service);
-        runner.setValidateExpressionUsage(false);
         initTestScope(runner, service);
-
         for (TestControllerSetup controllerSetup: setups) {
             controllerSetup.setProperty();
             runner.enableControllerService(service);
