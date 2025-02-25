@@ -67,7 +67,6 @@ public class TestCQLControllerService {
                     TestControllerSetup.getTestPropertyFile("./src/test",
                             new String[]{"test-astra.json", "test-properties.json"}));
         }
-
     }
 
     // endregion
@@ -182,7 +181,7 @@ public class TestCQLControllerService {
 
             //  test session
             try (CqlSession session = service.getSession()){
-                // TODO: LOG success
+                runner.getLogger().info("SUCCESS session [{}]",controllerSetup.name);
             }
             runner.disableControllerService(service);
         }
