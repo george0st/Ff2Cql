@@ -43,14 +43,46 @@ public class PutCQLTest {
 
     // Helper
     // https://medium.com/@mr.sinchan.banerjee/nifi-custom-processor-series-part-3-junit-test-with-nifi-mock-a935a1a4e3e5
-    private void addTestScope(TestRunner testRunner, CQLControllerService testService, String propertyFile) throws IOException {
+    public PutCQLTest() throws IOException, InterruptedException, InitializationException {
+
+        //  create TestSetup
+        setups=CreateSetup();
+
+        //  build schema, if needed
+        TestRunner runner = TestRunners.newTestRunner(PutCQL.class);
+        CQLControllerService service = new CQLControllerService();
+        runner.addControllerService(PutCQL.SERVICE_CONTROLLER.getName(), service);
+        for (TestSetup setup: setups) {
+            setup.setProperty(runner, service);
+            runner.enableControllerService(service);
+            try (CqlSession session=service.getSession()) {
+                CqlCreateSchema schema = new CqlCreateSchema(session, setup);
+                schema.Create();
+            }
+            runner.disableControllerService(service);
+        }
+    }
+
+    private ArrayList<TestSetup> CreateSetup() throws IOException {
+        ArrayList<TestSetup> setup= new ArrayList<TestSetup>();
+
+        addTestScope(setup,
+                TestSetup.getTestPropertyFile("./src/test",
+                        new String[]{"test-cassandra.json", "test-properties.json"}));
+        addTestScope(setup,
+                TestSetup.getTestPropertyFile("./src/test",
+                        new String[]{"test-scylla.json", "test-properties.json"}));
+        addTestScope(setup,
+                TestSetup.getTestPropertyFile("./src/test",
+                        new String[]{"test-astra.json", "test-properties.json"}));
+        return setup;
+    }
+
+    private void addTestScope(List<TestSetup> setup, String propertyFile) throws IOException {
         TestSetup itm;
 
-        itm = TestSetup.getInstance(testRunner, testService, propertyFile);
-        if (itm!=null) {
-            setups.add(itm);
-            testRunner.getLogger().info("Test scope: '{}'", itm.name);
-        }
+        itm = TestSetup.getInstance(propertyFile);
+        if (itm!=null) setup.add(itm);
     }
 
     @BeforeEach
@@ -59,27 +91,9 @@ public class PutCQLTest {
         testService = new CQLControllerService();
         testRunner.addControllerService(PutCQL.SERVICE_CONTROLLER.getName(), testService);
 
-        if (setups == null) {
-            setups = new ArrayList<TestSetup>();
-
-            addTestScope(testRunner, testService,
-                    TestSetup.getTestPropertyFile("./src/test",
-                            new String[]{"test-cassandra.json", "test-properties.json"}));
-            addTestScope(testRunner, testService,
-                    TestSetup.getTestPropertyFile("./src/test",
-                            new String[]{"test-scylla.json", "test-properties.json"}));
-            addTestScope(testRunner, testService,
-                    TestSetup.getTestPropertyFile("./src/test",
-                            new String[]{"test-astra.json", "test-properties.json"}));
+        for (TestSetup setup: setups) {
+            System.out.println(String.format("Test scope: '%s'", setup.name));
         }
-
-//        //  build schema
-//        for (TestSetup setup: setups) {
-//            CqlSession session=null;
-//            CqlCreateSchema schema = new CqlCreateSchema(session, setup);
-//            schema.Create();
-//        }
-
     }
 
     private FlowFile coreTest(){
@@ -128,7 +142,7 @@ public class PutCQLTest {
             attributes.put("CQLName", setup.name);
 
             testRunner.enqueue(content, attributes);
-            setup.setProperty();
+            setup.setProperty(testRunner, testService);
             testRunner.enableControllerService(testService);
             result = coreTest();
             testRunner.disableControllerService(testService);
@@ -139,8 +153,7 @@ public class PutCQLTest {
     }
 
     @Test
-    public void testBatchTypes() {
-
+    public void testBatchLoggedTypes() {
         HashMap<String, String> attributes = new HashMap<String, String>();
 
         String content = "\"colbigint\",\"colint\",\"coltext\",\"colfloat\",\"coldouble\",\"coldate\",\"coltime\",\"coltimestamp\",\"colboolean\",\"coluuid\",\"colsmallint\",\"coltinyint\",\"coltimeuuid\",\"colvarchar\"\n" +
@@ -155,19 +168,35 @@ public class PutCQLTest {
 
             //  batch type LOGGED
             testRunner.enqueue(content, attributes);
-            setup.setProperty();
-            setup.setProperty(PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
+            setup.setProperty(testRunner, testService);
+            setup.setProperty(testRunner, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
             testRunner.enableControllerService(testService);
             result = coreTest();
             testRunner.disableControllerService(testService);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+        }
+    }
+
+    @Test
+    public void testBatchUnLoggedTypes() {
+        HashMap<String, String> attributes = new HashMap<String, String>();
+
+        String content = "\"colbigint\",\"colint\",\"coltext\",\"colfloat\",\"coldouble\",\"coldate\",\"coltime\",\"coltimestamp\",\"colboolean\",\"coluuid\",\"colsmallint\",\"coltinyint\",\"coltimeuuid\",\"colvarchar\"\n" +
+                "\"0\",\"1064\",\"zeVOKGnORq\",\"627.6811\",\"395.8522407512559\",\"1971-11-12\",\"03:37:15\",\"2000-09-25T22:18:45Z\",\"false\",\"6080071f-4dd1-4ea5-b711-9ad0716e242a\",\"8966\",\"55\",\"f45e58f5-c3b7-11ef-8d19-97ae87be7c54\",\"Tzxsw\"\n" +
+                "\"1\",\"1709\",\"7By0z5QEXh\",\"652.03955\",\"326.9081263857284\",\"2013-12-17\",\"08:43:09\",\"2010-04-27T07:02:27Z\",\"false\",\"7d511666-2f81-41c4-9d5c-a5fa87f7d1c3\",\"24399\",\"38\",\"f45e8006-c3b7-11ef-8d19-172ff8d0d752\",\"exAbN\"\n" +
+                "\"2\",\"6249\",\"UYI6AgkcBt\",\"939.01556\",\"373.48559413289485\",\"1980-11-05\",\"15:44:43\",\"2023-11-24T05:59:12Z\",\"false\",\"dbd35d1b-38d0-49a4-8069-9efd68314dc5\",\"6918\",\"72\",\"f45e8007-c3b7-11ef-8d19-d784fa8af8e3\",\"IjnDb\"\n" +
+                "\"3\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"2024-06-29T21:08:54.463Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
+        FlowFile result;
+
+        for (TestSetup setup : setups) {
+            attributes.put("CQLName", setup.name);
 
             //  batch type UNLOGGED
             testRunner.enqueue(content, attributes);
-            setup.setProperty();
-            setup.setProperty(PutCQL.BATCH_TYPE, PutCQL.BT_UNLOGGED.getValue());
+            setup.setProperty(testRunner, testService);
+            setup.setProperty(testRunner, PutCQL.BATCH_TYPE, PutCQL.BT_UNLOGGED.getValue());
             testRunner.enableControllerService(testService);
             result = coreTest();
             testRunner.disableControllerService(testService);
@@ -200,7 +229,7 @@ public class PutCQLTest {
             attributes.put("CQLName",setup.name);
 
             testRunner.enqueue(content, attributes);
-            setup.setProperty();
+            setup.setProperty(testRunner, testService);
             testRunner.enableControllerService(testService);
             result = coreTest();
             testRunner.disableControllerService(testService);
@@ -208,9 +237,8 @@ public class PutCQLTest {
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(5, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
 
-
             testRunner.enqueue(content2, attributes);
-            setup.setProperty();
+            setup.setProperty(testRunner, testService);
             testRunner.enableControllerService(testService);
             result = coreTest();
             testRunner.disableControllerService(testService);
@@ -225,10 +253,6 @@ public class PutCQLTest {
         HashMap<String, String> attributes = new HashMap<String, String>();
 
         String content = "colbigint,colint,coltext,colfloat,coldouble,coldate,coltime,coltimestamp,colboolean,coluuid,colsmallint,coltinyint,coltimeuuid,colvarchar\n" +
-                "0,1064,zeVOKGnORq,627.6811,395.8522407512559,1971-11-12,03:37:15,2000-09-25T22:18:45Z,false,6080071f-4dd1-4ea5-b711-9ad0716e242a,8966,55,f45e58f5-c3b7-11ef-8d19-97ae87be7c54,Tzxsw\n" +
-                "1,1709,7By0z5QEXh,652.03955,326.9081263857284,2013-12-17,08:43:09,2010-04-27T07:02:27Z,false,7d511666-2f81-41c4-9d5c-a5fa87f7d1c3,24399,38,f45e8006-c3b7-11ef-8d19-172ff8d0d752,exAbN\n";
-
-        String content2 = "colbigint,colint,coltext,colfloat,coldouble,coldate,coltime,coltimestamp,colboolean,coluuid,colsmallint,coltinyint,coltimeuuid,colvarchar\n" +
                 "10,1064,zeVOKGnORq,627.6811,395.8522407512559,1971-11-12,03:37:15,2000-09-25T22:18:45Z,false,6080071f-4dd1-4ea5-b711-9ad0716e242a,8966,55,f45e58f5-c3b7-11ef-8d19-97ae87be7c54,Tzxsw\n" +
                 "11,1709,7By0z5QEXh,652.03955,326.9081263857284,2013-12-17,08:43:09,2010-04-27T07:02:27Z,false,7d511666-2f81-41c4-9d5c-a5fa87f7d1c3,24399,38,f45e8006-c3b7-11ef-8d19-172ff8d0d752,exAbN\n" +
                 "12,6249,UYI6AgkcBt,939.01556,373.48559413289485,1980-11-05,15:44:43,2023-11-24T05:59:12Z,false,dbd35d1b-38d0-49a4-8069-9efd68314dc5,6918,72,f45e8007-c3b7-11ef-8d19-d784fa8af8e3,IjnDb\n" +
@@ -239,25 +263,7 @@ public class PutCQLTest {
             attributes.put("CQLName", setup.name);
 
             testRunner.enqueue(content, attributes);
-            setup.setProperty();
-            testRunner.enableControllerService(testService);
-            result = coreTest();
-            testRunner.disableControllerService(testService);
-            //  check amount of write items
-            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(2, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
-
-            testRunner.enqueue(content, attributes);
-            setup.setProperty();
-            testRunner.enableControllerService(testService);
-            result = coreTest();
-            testRunner.disableControllerService(testService);
-            //  check amount of write items
-            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(2, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
-
-            testRunner.enqueue(content2, attributes);
-            setup.setProperty();
+            setup.setProperty(testRunner, testService);
             testRunner.enableControllerService(testService);
             result = coreTest();
             testRunner.disableControllerService(testService);
@@ -277,7 +283,7 @@ public class PutCQLTest {
             attributes.put("CQLName", setup.name);
 
             testRunner.enqueue(content, attributes);
-            setup.setProperty();
+            setup.setProperty(testRunner, testService);
             testRunner.enableControllerService(testService);
             result = coreTest();
             testRunner.disableControllerService(testService);
@@ -297,7 +303,7 @@ public class PutCQLTest {
             attributes.put("CQLName", setup.name);
 
             testRunner.enqueue(content, attributes);
-            setup.setProperty();
+            setup.setProperty(testRunner, testService);
             testRunner.enableControllerService(testService);
             result = coreTest();
             testRunner.disableControllerService(testService);
@@ -317,7 +323,7 @@ public class PutCQLTest {
             attributes.put("CQLName", setup.name);
 
             testRunner.enqueue(content, attributes);
-            setup.setProperty();
+            setup.setProperty(testRunner, testService);
             testRunner.enableControllerService(testService);
             result = coreTest();
             testRunner.disableControllerService(testService);
@@ -340,7 +346,7 @@ public class PutCQLTest {
         for (TestSetup setup: setups) {
             attributes.put("CQLName", setup.name);
 
-            setup.setProperty();
+            setup.setProperty(testRunner, testService);
             testRunner.enableControllerService(testService);
             for (int i = 0; i < 5; i++) {
                 testRunner.enqueue(content, attributes);
@@ -367,7 +373,7 @@ public class PutCQLTest {
             attributes.put("CQLName", setup.name);
 
             testRunner.enqueue(content, attributes);
-            setup.setProperty();
+            setup.setProperty(testRunner, testService);
             testRunner.enableControllerService(testService);
             result = coreTest();
             testRunner.disableControllerService(testService);
