@@ -26,9 +26,6 @@ public class TestSetup extends Setup {
     public String consistencyLevel;
     public String compaction;
 
-    protected TestRunner testRunner;
-    protected CQLControllerService testService;
-
     private TestSetup(){
     }
 
@@ -41,7 +38,7 @@ public class TestSetup extends Setup {
     }
     public String getIPAddresses() { return String.join(",",this.ipAddresses); }
 
-    public static TestSetup getInstance(TestRunner runner, CQLControllerService service, String propertyFile) throws IOException {
+    public static TestSetup getInstance(String propertyFile) throws IOException {
         try (FileReader fileReader = new FileReader(propertyFile)) {
             TestSetup setup = (new Gson()).fromJson(fileReader, TestSetup.class);
 
@@ -50,8 +47,6 @@ public class TestSetup extends Setup {
             //  default setting
             if (setup.compaction == null)
                 setup.compaction = "{'class':'SizeTieredCompactionStrategy'}";
-            setup.testRunner = runner;
-            setup.testService = service;
             return setup;
         }
     }
@@ -80,12 +75,12 @@ public class TestSetup extends Setup {
         return null;
     }
 
-    public void setControllerProperty(PropertyDescriptor property, String propertyValue) {
+    public void setControllerProperty(TestRunner testRunner, CQLControllerService testService, PropertyDescriptor property, String propertyValue) {
         //if (propertyValue != null)
         testRunner.setProperty(testService, property, propertyValue);
     }
 
-    public void setProperty(PropertyDescriptor property, String propertyValue) {
+    public void setProperty(TestRunner testRunner, PropertyDescriptor property, String propertyValue) {
         if (propertyValue != null)
             testRunner.setProperty(property, propertyValue);
     }
@@ -110,28 +105,28 @@ public class TestSetup extends Setup {
     /**
      * Setting test runner based on test setting
      */
-    public void setProperty() {
+    public void setProperty(TestRunner testRunner, CQLControllerService testService) {
         // clear all properties before the setting
         testRunner.clearProperties();
 
         //  set CONTROLLER properties
-        setControllerProperty(CQLControllerService.IP_ADDRESSES, ipAddresses!=null ? String.join(",", ipAddresses) : (String)null);
-        setControllerProperty(CQLControllerService.PORT, String.valueOf(port));
-        setControllerProperty(CQLControllerService.SECURE_CONNECTION_BUNDLE, secureConnectionBundle);
-        setControllerProperty(CQLControllerService.USERNAME, getJson(username));
-        setControllerProperty(CQLControllerService.PASSWORD, getJson(pwd));
-        setControllerProperty(CQLControllerService.LOCAL_DC, localDC);
-        setControllerProperty(CQLControllerService.CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
-        setControllerProperty(CQLControllerService.REQUEST_TIMEOUT, String.valueOf(requestTimeout));
-        setControllerProperty(CQLControllerService.CONSISTENCY_LEVEL, consistencyLevel);
+        setControllerProperty(testRunner, testService, CQLControllerService.IP_ADDRESSES, ipAddresses!=null ? String.join(",", ipAddresses) : (String)null);
+        setControllerProperty(testRunner, testService, CQLControllerService.PORT, String.valueOf(port));
+        setControllerProperty(testRunner, testService, CQLControllerService.SECURE_CONNECTION_BUNDLE, secureConnectionBundle);
+        setControllerProperty(testRunner, testService, CQLControllerService.USERNAME, getJson(username));
+        setControllerProperty(testRunner, testService, CQLControllerService.PASSWORD, getJson(pwd));
+        setControllerProperty(testRunner, testService, CQLControllerService.LOCAL_DC, localDC);
+        setControllerProperty(testRunner, testService, CQLControllerService.CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
+        setControllerProperty(testRunner, testService, CQLControllerService.REQUEST_TIMEOUT, String.valueOf(requestTimeout));
+        setControllerProperty(testRunner, testService, CQLControllerService.CONSISTENCY_LEVEL, consistencyLevel);
 
         //  set PROCESSOR properties
-        setProperty(PutCQL.SERVICE_CONTROLLER, PutCQL.SERVICE_CONTROLLER.getName());
-        setProperty(PutCQL.WRITE_CONSISTENCY_LEVEL, writeConsistencyLevel);
-        setProperty(PutCQL.BATCH_SIZE, String.valueOf(getBatchSize()));
-        setProperty(PutCQL.BATCH_TYPE, batchType);
-        setProperty(PutCQL.TABLE, table);
-        setProperty(PutCQL.DRY_RUN, String.valueOf(dryRun));
+        setProperty(testRunner, PutCQL.SERVICE_CONTROLLER, PutCQL.SERVICE_CONTROLLER.getName());
+        setProperty(testRunner, PutCQL.WRITE_CONSISTENCY_LEVEL, writeConsistencyLevel);
+        setProperty(testRunner, PutCQL.BATCH_SIZE, String.valueOf(getBatchSize()));
+        setProperty(testRunner, PutCQL.BATCH_TYPE, batchType);
+        setProperty(testRunner, PutCQL.TABLE, table);
+        setProperty(testRunner, PutCQL.DRY_RUN, String.valueOf(dryRun));
 
         testRunner.setValidateExpressionUsage(false);
     }
