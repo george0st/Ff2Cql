@@ -92,7 +92,7 @@ public class PutCQLTest {
         testRunner.addControllerService(PutCQL.SERVICE_CONTROLLER.getName(), testService);
 
         for (TestSetup setup: setups) {
-            testRunner.getLogger().info("Test scope: '{}'", setup.name);
+            System.out.println(String.format("Test scope: '%s'", setup.name));
         }
     }
 
