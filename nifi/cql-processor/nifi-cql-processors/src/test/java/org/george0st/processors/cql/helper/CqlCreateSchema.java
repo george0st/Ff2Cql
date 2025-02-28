@@ -1,19 +1,17 @@
 package org.george0st.processors.cql.helper;
 
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.Row;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.george0st.processors.cql.helper.RndGenerator;
-import org.george0st.processors.cql.helper.TestSetup;
 import org.george0st.processors.cql.processor.CqlProcessor;
-import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -51,14 +49,14 @@ public class CqlCreateSchema extends CqlProcessor {
         return primaryKeys;
     }
 
-    public String getColumnDefinitions(){
+    private String getColumnDefinitions(){
         StringBuilder bld=new StringBuilder();
         for (int i=0;i<columns.length/2;i++)
             bld.append(String.format("%s %s,", columns[i*2],columns[i*2+1]));
         return bld.toString();
     }
 
-    public String[] getColumns(){
+    private String[] getColumns(){
         List<String> bld=new ArrayList<String>();
         for (int i=0;i<columns.length/2;i++)
             bld.add(columns[i*2]);
@@ -80,15 +78,50 @@ public class CqlCreateSchema extends CqlProcessor {
 //                    f"'replication_factor' : {self._run_setup['keyspace_replication_factor']}" +
 //                    "};");
 
-        // DROP TABLE
-        session.execute(String.format("DROP TABLE IF EXISTS %s;", setup.table));
+        if (!sameTable(setup.getOnlyKeyspace(), setup.getOnlyTable())) {
 
-        // CREATE TABLE
-        String createTable = String.format("CREATE TABLE IF NOT EXISTS %s ", setup.table) +
-                String.format("(%s ", getColumnDefinitions()) +
-                String.format("PRIMARY KEY (%s)) ", String.join(",", primaryKeys)) +
-                String.format("WITH compaction = %s;", ((TestSetup) setup).compaction);
-        session.execute(createTable);
+            // TODO: CREATE KEYSPACE
+
+            // DROP TABLE
+            session.execute(String.format("DROP TABLE IF EXISTS %s;", setup.table));
+
+            // CREATE TABLE
+            String createTable = String.format("CREATE TABLE IF NOT EXISTS %s ", setup.table) +
+                    String.format("(%s ", getColumnDefinitions()) +
+                    String.format("PRIMARY KEY (%s)) ", String.join(",", primaryKeys)) +
+                    String.format("WITH compaction = %s;", ((TestSetup) setup).compaction);
+            session.execute(createTable);
+        }
+    }
+
+
+    /**
+     * Check, if table has the requested structure
+     *
+     * @param keyspaceName  tested key space
+     * @param tableName     tested table
+     * @return  true - the same table, false - different tables
+     */
+    private boolean sameTable(String keyspaceName, String tableName){
+        boolean result=false;
+
+        try {
+            ResultSet rs = session.execute(String.format("SELECT column_name, kind, type " +
+                    "FROM system_schema.columns " +
+                    "WHERE keyspace_name = '%s' AND table_name = '%s'", keyspaceName, tableName));
+
+            List<String> dbColumns=new ArrayList<>();
+            for (Row row: rs) dbColumns.add(row.getString("column_name"));
+
+            for (String column: getColumns()) {
+                if (!dbColumns.contains(column))
+                    return false;
+            }
+            result=true;
+        }
+        catch(Exception ex){
+        }
+        return result;
     }
 
     public File generateRndCSVFile(int csvItems, boolean sequenceID) throws IOException {
