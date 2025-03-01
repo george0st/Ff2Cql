@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -71,19 +72,21 @@ public class CqlCreateSchema extends CqlProcessor {
 //            // Drop key space
 //            session.execute(f"DROP KEYSPACE IF EXISTS {self._run_setup['keyspace']};");
 
-//            // Create key space
-//            session.execute(f"CREATE KEYSPACE IF NOT EXISTS {self._run_setup['keyspace']} " +
-//                    "WITH replication = {" +
-//                    f"'class':'{self._run_setup['keyspace_replication_class']}', " +
-//                    f"'replication_factor' : {self._run_setup['keyspace_replication_factor']}" +
-//                    "};");
+
+//        alter keyspace "prftest"
+//        with replication = {'class' : 'NetworkTopologyStrategy', 'replication_factor' : 3}
+//        and durable_writes = true;
+
+        if (!sameKeyspace(setup.getOnlyKeyspace())) {
+            // Create key space, if not exist
+            session.execute(String.format("CREATE KEYSPACE IF NOT EXISTS %s WITH replication = %s;",
+                    setup.getOnlyKeyspace(),
+                    ((TestSetup) setup).replication));
+        }
 
         if (!sameTable(setup.getOnlyKeyspace(), setup.getOnlyTable())) {
-
-            // TODO: CREATE KEYSPACE
-
             // DROP TABLE
-            session.execute(String.format("DROP TABLE IF EXISTS %s;", setup.table));
+            //session.execute(String.format("DROP TABLE IF EXISTS %s;", setup.table));
 
             // CREATE TABLE
             String createTable = String.format("CREATE TABLE IF NOT EXISTS %s ", setup.table) +
@@ -94,7 +97,21 @@ public class CqlCreateSchema extends CqlProcessor {
         }
     }
 
+    private boolean sameKeyspace(String keyspaceName){
 
+        boolean result=false;
+
+        try {
+            Row row = session.execute(String.format("SELECT keyspace_name FROM system_schema.keyspaces "+
+                    "WHERE keyspace_name='%s';", keyspaceName)).one();
+
+            result=true;
+        }
+        catch(Exception ex){
+        }
+        return result;
+
+    }
     /**
      * Check, if table has the requested structure
      *
@@ -113,11 +130,13 @@ public class CqlCreateSchema extends CqlProcessor {
             List<String> dbColumns=new ArrayList<>();
             for (Row row: rs) dbColumns.add(row.getString("column_name"));
 
-            for (String column: getColumns()) {
-                if (!dbColumns.contains(column))
-                    return false;
-            }
             result=true;
+            for (String column: getColumns()) {
+                if (!dbColumns.contains(column)) {
+                    result = false;
+                    break;
+                }
+            }
         }
         catch(Exception ex){
         }

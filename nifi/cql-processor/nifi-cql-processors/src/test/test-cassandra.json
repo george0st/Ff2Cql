@@ -1,5 +1,5 @@
 {
-  "enable": true,
+  "enable": false,
   "name": "cassandra",
   "ipAddresses": ["10.129.53.159", "10.129.53.154", "10.129.53.153"],
   "port": 9042,
@@ -15,5 +15,7 @@
   "batchType": "UNLOGGED",
   "table": "prftest.csv2cql_test3",
   "dryRun": false,
+
+  "replication": "{'class' : 'NetworkTopologyStrategy', 'replication_factor' : 3}",
   "compaction": "{'class': 'UnifiedCompactionStrategy', 'scaling_parameters': 'L10, T10'}"
 }
