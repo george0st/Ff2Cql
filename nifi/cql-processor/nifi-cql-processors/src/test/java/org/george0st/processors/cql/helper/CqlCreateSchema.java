@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -69,22 +68,14 @@ public class CqlCreateSchema extends CqlProcessor {
     }
 
     public void Create() {
-//            // Drop key space
-//            session.execute(f"DROP KEYSPACE IF EXISTS {self._run_setup['keyspace']};");
-
-
-//        alter keyspace "prftest"
-//        with replication = {'class' : 'NetworkTopologyStrategy', 'replication_factor' : 3}
-//        and durable_writes = true;
-
-        if (!sameKeyspace(setup.getOnlyKeyspace())) {
+        if (!requestedKeyspace(setup.getOnlyKeyspace())) {
             // Create key space, if not exist
             session.execute(String.format("CREATE KEYSPACE IF NOT EXISTS %s WITH replication = %s;",
                     setup.getOnlyKeyspace(),
                     ((TestSetup) setup).replication));
         }
 
-        if (!sameTable(setup.getOnlyKeyspace(), setup.getOnlyTable())) {
+        if (!requestedTable(setup.getOnlyKeyspace(), setup.getOnlyTable())) {
             // DROP TABLE
             //session.execute(String.format("DROP TABLE IF EXISTS %s;", setup.table));
 
@@ -97,28 +88,30 @@ public class CqlCreateSchema extends CqlProcessor {
         }
     }
 
-    private boolean sameKeyspace(String keyspaceName){
-
-        boolean result=false;
-
+    /**
+     * Check, if keyspace has the requested structure
+     *
+     * @param keyspaceName  tested key space
+     * @return  true - the requested content, false - different content
+     */
+    private boolean requestedKeyspace(String keyspaceName){
         try {
-            Row row = session.execute(String.format("SELECT keyspace_name FROM system_schema.keyspaces "+
-                    "WHERE keyspace_name='%s';", keyspaceName)).one();
-            result = row != null;
+            return session.execute(String.format("SELECT keyspace_name FROM system_schema.keyspaces "+
+                    "WHERE keyspace_name='%s';", keyspaceName)).one() != null;
         }
         catch(Exception ex){
         }
-        return result;
-
+        return false;
     }
+    
     /**
      * Check, if table has the requested structure
      *
      * @param keyspaceName  tested key space
      * @param tableName     tested table
-     * @return  true - the same table, false - different tables
+     * @return  true - the requested content, false - different content
      */
-    private boolean sameTable(String keyspaceName, String tableName){
+    private boolean requestedTable(String keyspaceName, String tableName){
         boolean result=false;
 
         try {
