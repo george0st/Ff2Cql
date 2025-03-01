@@ -103,7 +103,7 @@ public class CqlCreateSchema extends CqlProcessor {
         }
         return false;
     }
-    
+
     /**
      * Check, if table has the requested structure
      *
