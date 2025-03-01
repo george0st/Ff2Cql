@@ -203,7 +203,10 @@ public class CQLControllerService extends AbstractControllerService implements C
     }
 
     protected String getURI(final ConfigurationContext context) {
-        final String ip = context.getProperty(IP_ADDRESSES).evaluateAttributeExpressions().getValue();
+        //final String ip = context.getProperty(IP_ADDRESSES).evaluateAttributeExpressions().getValue();
+        final String ip = context.getProperty(IP_ADDRESSES).getValue();
+        final String secureConnectionBundl = context.getProperty(SECURE_CONNECTION_BUNDLE).getValue();
+
 //        final String port = context.getProperty(PORT).evaluateAttributeExpressions().getValue();
 //        final String user = context.getProperty(USERNAME).evaluateAttributeExpressions().getValue();
 //        if (!ip.contains("@") && user != null && passw != null) {
@@ -211,7 +214,7 @@ public class CQLControllerService extends AbstractControllerService implements C
 //        } else {
 //            return uri;
 //        }
-        return ip;
+        return ip != null ? ip: secureConnectionBundl;
     }
 
     @Override

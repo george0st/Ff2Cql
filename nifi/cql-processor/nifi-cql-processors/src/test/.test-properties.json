@@ -16,5 +16,7 @@
   "batchType": "<batch type, possible values UNLOGGED, LOGGED>",
   "table": "<add 'keyspace.table' in CQL>",
   "dryRun": false,
+
+  "replication": "<setting for schema replication e.g. {'class' : 'NetworkTopologyStrategy', 'replication_factor' : 3}>",
   "compaction": "<setting for compaction e.g. {'class':'SizeTieredCompactionStrategy'}>"
 }

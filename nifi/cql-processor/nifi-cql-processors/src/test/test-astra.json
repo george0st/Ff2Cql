@@ -7,13 +7,15 @@
   "pwd": "secret, c:/Java/jiri.steuer@embedit.com-token.json",
   "connectionTimeout": "900",
   "requestTimeout": "60",
-  "consistencyLevel": "LOCAL_ONE",
+  "consistencyLevel": "LOCAL_QUORUM",
 
-  "writeConsistencyLevel": "LOCAL_ONE",
+  "writeConsistencyLevel": "LOCAL_QUORUM",
   "batchSize": 200,
   "batchType": "UNLOGGED",
   "table": "prftest.csv2cql_test3",
   "dryRun": false,
+
+  "replication": "{'class' : 'NetworkTopologyStrategy', 'replication_factor' : 3}",
   "compaction": "{'class': 'UnifiedCompactionStrategy', 'scaling_parameters': 'L10, T10'}"
 }
 

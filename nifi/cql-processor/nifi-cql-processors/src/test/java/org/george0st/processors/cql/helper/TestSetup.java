@@ -24,6 +24,7 @@ public class TestSetup extends Setup {
     public long connectionTimeout;
     public long requestTimeout;
     public String consistencyLevel;
+    public String replication;
     public String compaction;
 
     private TestSetup(){
@@ -47,6 +48,8 @@ public class TestSetup extends Setup {
             //  default setting
             if (setup.compaction == null)
                 setup.compaction = "{'class':'SizeTieredCompactionStrategy'}";
+            if (setup.replication == null)
+                setup.replication = "{'class' : 'NetworkTopologyStrategy', 'replication_factor' : 1}";
             return setup;
         }
     }

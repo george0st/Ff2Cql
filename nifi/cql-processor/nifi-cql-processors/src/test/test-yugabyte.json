@@ -12,5 +12,6 @@
   "batchType": "UNLOGGED",
   "table": "prftest.csv2cql_test3",
   "dryRun": false,
+
   "compaction": "{'class':'SizeTieredCompactionStrategy'}"
 }

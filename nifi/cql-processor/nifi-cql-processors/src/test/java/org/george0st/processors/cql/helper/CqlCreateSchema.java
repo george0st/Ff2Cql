@@ -1,19 +1,17 @@
 package org.george0st.processors.cql.helper;
 
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.Row;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.george0st.processors.cql.helper.RndGenerator;
-import org.george0st.processors.cql.helper.TestSetup;
 import org.george0st.processors.cql.processor.CqlProcessor;
-import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -51,14 +49,14 @@ public class CqlCreateSchema extends CqlProcessor {
         return primaryKeys;
     }
 
-    public String getColumnDefinitions(){
+    private String getColumnDefinitions(){
         StringBuilder bld=new StringBuilder();
         for (int i=0;i<columns.length/2;i++)
             bld.append(String.format("%s %s,", columns[i*2],columns[i*2+1]));
         return bld.toString();
     }
 
-    public String[] getColumns(){
+    private String[] getColumns(){
         List<String> bld=new ArrayList<String>();
         for (int i=0;i<columns.length/2;i++)
             bld.add(columns[i*2]);
@@ -70,25 +68,71 @@ public class CqlCreateSchema extends CqlProcessor {
     }
 
     public void Create() {
-//            // Drop key space
-//            session.execute(f"DROP KEYSPACE IF EXISTS {self._run_setup['keyspace']};");
+        if (!requestedKeyspace(setup.getOnlyKeyspace())) {
+            // Create key space, if not exist
+            session.execute(String.format("CREATE KEYSPACE IF NOT EXISTS %s WITH replication = %s;",
+                    setup.getOnlyKeyspace(),
+                    ((TestSetup) setup).replication));
+        }
 
-//            // Create key space
-//            session.execute(f"CREATE KEYSPACE IF NOT EXISTS {self._run_setup['keyspace']} " +
-//                    "WITH replication = {" +
-//                    f"'class':'{self._run_setup['keyspace_replication_class']}', " +
-//                    f"'replication_factor' : {self._run_setup['keyspace_replication_factor']}" +
-//                    "};");
+        if (!requestedTable(setup.getOnlyKeyspace(), setup.getOnlyTable())) {
+            // DROP TABLE
+            //session.execute(String.format("DROP TABLE IF EXISTS %s;", setup.table));
 
-        // DROP TABLE
-        session.execute(String.format("DROP TABLE IF EXISTS %s;", setup.table));
+            // CREATE TABLE
+            String createTable = String.format("CREATE TABLE IF NOT EXISTS %s ", setup.table) +
+                    String.format("(%s ", getColumnDefinitions()) +
+                    String.format("PRIMARY KEY (%s)) ", String.join(",", primaryKeys)) +
+                    String.format("WITH compaction = %s;", ((TestSetup) setup).compaction);
+            session.execute(createTable);
+        }
+    }
 
-        // CREATE TABLE
-        String createTable = String.format("CREATE TABLE IF NOT EXISTS %s ", setup.table) +
-                String.format("(%s ", getColumnDefinitions()) +
-                String.format("PRIMARY KEY (%s)) ", String.join(",", primaryKeys)) +
-                String.format("WITH compaction = %s;", ((TestSetup) setup).compaction);
-        session.execute(createTable);
+    /**
+     * Check, if keyspace has the requested structure
+     *
+     * @param keyspaceName  tested key space
+     * @return  true - the requested content, false - different content
+     */
+    private boolean requestedKeyspace(String keyspaceName){
+        try {
+            return session.execute(String.format("SELECT keyspace_name FROM system_schema.keyspaces "+
+                    "WHERE keyspace_name='%s';", keyspaceName)).one() != null;
+        }
+        catch(Exception ex){
+        }
+        return false;
+    }
+    
+    /**
+     * Check, if table has the requested structure
+     *
+     * @param keyspaceName  tested key space
+     * @param tableName     tested table
+     * @return  true - the requested content, false - different content
+     */
+    private boolean requestedTable(String keyspaceName, String tableName){
+        boolean result=false;
+
+        try {
+            ResultSet rs = session.execute(String.format("SELECT column_name, kind, type " +
+                    "FROM system_schema.columns " +
+                    "WHERE keyspace_name = '%s' AND table_name = '%s'", keyspaceName, tableName));
+
+            List<String> dbColumns=new ArrayList<>();
+            for (Row row: rs) dbColumns.add(row.getString("column_name"));
+
+            result=true;
+            for (String column: getColumns()) {
+                if (!dbColumns.contains(column)) {
+                    result = false;
+                    break;
+                }
+            }
+        }
+        catch(Exception ex){
+        }
+        return result;
     }
 
     public File generateRndCSVFile(int csvItems, boolean sequenceID) throws IOException {

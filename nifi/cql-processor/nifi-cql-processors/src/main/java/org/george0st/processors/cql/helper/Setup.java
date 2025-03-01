@@ -17,6 +17,8 @@ public class Setup {
 
     public void setBatchSize(long batchSize) { this.batchSize = batchSize; }
     public long getBatchSize() { return batchSize > 0 ? batchSize : 200; }
+    public String getOnlyTable() { return table!=null ? table.split("\\.")[1] : null; }
+    public String getOnlyKeyspace() { return table!=null ? table.split("\\.")[0] : null; }
 
     public Setup(){
     }
