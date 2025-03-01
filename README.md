@@ -42,3 +42,7 @@ You can see sample of relevant setting for CQL controllers:
    
 NOTE: 
  - These connection settings are used directly in unit tests.
+
+## 4. Apache NiFi v2 & Scylla/Cassandra v5
+
+![Apache NiFi v2 & Scylla/Cassandra v5](./nifi/cql-processor/docs/assets/ApacheNiFiv2&Scylla-Cassandra.mp4)
