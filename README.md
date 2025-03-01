@@ -45,4 +45,4 @@ NOTE:
 
 ## 4. Apache NiFi v2 & Scylla/Cassandra v5
 
-[![Apache NiFi v2 & Scylla/Cassandra v5](./nifi/cql-processor/docs/assets/Apache_Nifi_Scylla_Cassandra_v5.png)](./nifi/cql-processor/docs/assets/ApacheNiFiv2&Scylla-Cassandra.mp4)
+[![Apache NiFi v2 & Scylla/Cassandra v5](./nifi/cql-processor/docs/assets/Apache_Nifi_Scylla_Cassandra_v5.png)](https://fivekg.onrender.com/images/ApacheNiFiv2&Scylla-Cassandra.mp4)
