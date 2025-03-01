@@ -104,8 +104,7 @@ public class CqlCreateSchema extends CqlProcessor {
         try {
             Row row = session.execute(String.format("SELECT keyspace_name FROM system_schema.keyspaces "+
                     "WHERE keyspace_name='%s';", keyspaceName)).one();
-
-            result=true;
+            result = row != null;
         }
         catch(Exception ex){
         }
