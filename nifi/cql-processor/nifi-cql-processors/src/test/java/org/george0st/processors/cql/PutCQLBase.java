@@ -98,7 +98,7 @@ public class PutCQLBase {
         return result;
     }
 
-    protected FlowFile coreTest(){
+    private FlowFile coreTest(){
         try {
             long finish, start, count;
             FlowFile result;
