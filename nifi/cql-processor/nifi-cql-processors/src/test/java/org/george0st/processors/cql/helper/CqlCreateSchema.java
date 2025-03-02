@@ -7,9 +7,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.george0st.processors.cql.processor.CqlProcessor;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,38 +133,50 @@ public class CqlCreateSchema extends CqlProcessor {
         return result;
     }
 
-    public File generateRndCSVFile(int csvItems, boolean sequenceID) throws IOException {
-        // generate random file name
-        File randomFile=getRandomFile();
+    private void generateRndContent(Writer writer, int csvItems, boolean sequenceID) throws IOException {
+        if (csvItems>=0) {
+            CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+                    .setHeader(getColumns())
+                    .get();
 
-            // generate random content
-        try (FileWriter writer = new FileWriter(randomFile, false)) {
-            if (csvItems>=0) {
-                CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
-                        .setHeader(getColumns())
-                        .get();
-
-                try (final CSVPrinter csvWriter = new CSVPrinter(writer, csvFormat)) {
-                    // write content
-                    for (int i = 0; i < csvItems; i++) {
-                        csvWriter.printRecord(
-                                sequenceID ? Integer.toString(i) : Integer.toString(rnd.getInt(Integer.MAX_VALUE)), //  bigint
-                                Integer.toString(rnd.getInt(Integer.MAX_VALUE)),                    //  int
-                                rnd.getStringSequence(10),                              // text
-                                Float.toString(rnd.getFloat(1000)),                     // float
-                                Double.toString(rnd.getDouble(1000)),                   //  double
-                                rnd.getLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE),    //  date
-                                rnd.getLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME),    //  time
-                                rnd.getInstant().toString(),                                     //  timestamp
-                                rnd.getBoolean().toString(),                                     //  boolean
-                                rnd.getUUID(false).toString(),                          //  uuid
-                                Integer.toString(rnd.getInt(0, Short.MAX_VALUE)),                //  smallint
-                                Integer.toString(rnd.getInt(0, Byte.MAX_VALUE)),                 //  tinyint
-                                rnd.getUUID(true).toString(),                           //  timeuuid
-                                rnd.getStringSequence(5));                                //  varchar
-                    }
+            try (final CSVPrinter csvWriter = new CSVPrinter(writer, csvFormat)) {
+                // write content
+                for (int i = 0; i < csvItems; i++) {
+                    csvWriter.printRecord(
+                            sequenceID ? Integer.toString(i) : Integer.toString(rnd.getInt(Integer.MAX_VALUE)), //  bigint
+                            Integer.toString(rnd.getInt(Integer.MAX_VALUE)),                    //  int
+                            rnd.getStringSequence(10),                              // text
+                            Float.toString(rnd.getFloat(1000)),                     // float
+                            Double.toString(rnd.getDouble(1000)),                   //  double
+                            rnd.getLocalDate().format(DateTimeFormatter.ISO_LOCAL_DATE),    //  date
+                            rnd.getLocalTime().format(DateTimeFormatter.ISO_LOCAL_TIME),    //  time
+                            rnd.getInstant().toString(),                                     //  timestamp
+                            rnd.getBoolean().toString(),                                     //  boolean
+                            rnd.getUUID(false).toString(),                          //  uuid
+                            Integer.toString(rnd.getInt(0, Short.MAX_VALUE)),                //  smallint
+                            Integer.toString(rnd.getInt(0, Byte.MAX_VALUE)),                 //  tinyint
+                            rnd.getUUID(true).toString(),                           //  timeuuid
+                            rnd.getStringSequence(5));                                //  varchar
                 }
             }
+        }
+    }
+
+    public String generateRndCSVString(int csvItems, boolean sequenceID) throws IOException {
+        // generate random content
+        try (StringWriter writer = new StringWriter()) {
+            generateRndContent(writer, csvItems, sequenceID);
+            return writer.toString();
+        }
+    }
+
+    public File generateRndCSVFile(int csvItems, boolean sequenceID) throws IOException {
+        // generate random file
+        File randomFile=getRandomFile();
+
+        // generate random content
+        try (FileWriter writer = new FileWriter(randomFile, false)) {
+            generateRndContent(writer, csvItems, sequenceID);
         }
         return randomFile;
     }
