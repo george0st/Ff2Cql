@@ -16,13 +16,10 @@
  */
 package org.george0st.processors.cql;
 
-import com.datastax.oss.driver.api.core.CqlSession;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.reporting.InitializationException;
-import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
 import org.george0st.cql.CQLControllerService;
-import org.george0st.processors.cql.helper.CqlCreateSchema;
 import org.george0st.processors.cql.helper.ReadableValue;
 import org.george0st.processors.cql.helper.TestSetup;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,58 +28,19 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-public class PutCQLTest {
+public class PutCQLFunction extends PutCQLBase {
 
-    private TestRunner testRunner;
-    private CQLControllerService testService;
-    private List<TestSetup> setups;
+//    private TestRunner testRunner;
+//    private CQLControllerService testService;
+//    private List<TestSetup> setups;
 
     // Helper
     // https://medium.com/@mr.sinchan.banerjee/nifi-custom-processor-series-part-3-junit-test-with-nifi-mock-a935a1a4e3e5
-    public PutCQLTest() throws IOException, InterruptedException, InitializationException {
-
-        //  create TestSetup
-        setups=CreateSetup();
-
-        //  build schema, if needed
-        TestRunner runner = TestRunners.newTestRunner(PutCQL.class);
-        CQLControllerService service = new CQLControllerService();
-        runner.addControllerService(PutCQL.SERVICE_CONTROLLER.getName(), service);
-        for (TestSetup setup: setups) {
-            setup.setProperty(runner, service);
-            runner.enableControllerService(service);
-            try (CqlSession session=service.getSession()) {
-                CqlCreateSchema schema = new CqlCreateSchema(session, setup);
-                schema.Create();
-            }
-            runner.disableControllerService(service);
-        }
-    }
-
-    private ArrayList<TestSetup> CreateSetup() throws IOException {
-        ArrayList<TestSetup> setup= new ArrayList<TestSetup>();
-
-        addTestScope(setup,
-                TestSetup.getTestPropertyFile("./src/test",
-                        new String[]{"test-cassandra.json", "test-properties.json"}));
-        addTestScope(setup,
-                TestSetup.getTestPropertyFile("./src/test",
-                        new String[]{"test-scylla.json", "test-properties.json"}));
-        addTestScope(setup,
-                TestSetup.getTestPropertyFile("./src/test",
-                        new String[]{"test-astra.json", "test-properties.json"}));
-        return setup;
-    }
-
-    private void addTestScope(List<TestSetup> setup, String propertyFile) throws IOException {
-        TestSetup itm;
-
-        itm = TestSetup.getInstance(propertyFile);
-        if (itm!=null) setup.add(itm);
+    public PutCQLFunction() throws IOException, InterruptedException, InitializationException {
+        super();
     }
 
     @BeforeEach
