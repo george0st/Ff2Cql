@@ -39,6 +39,10 @@ public class CqlCreateSchema extends CqlProcessor {
             "coltimeuuid", "timeuuid",
             "colvarchar", "varchar"};
 
+    public CqlCreateSchema() throws InterruptedException {
+        super(null, null);
+    }
+
     public CqlCreateSchema(CqlSession session, TestSetup setup) throws InterruptedException {
         super(session, setup);
     }
@@ -75,7 +79,7 @@ public class CqlCreateSchema extends CqlProcessor {
 
         if (!requestedTable(setup.getOnlyKeyspace(), setup.getOnlyTable())) {
             // DROP TABLE
-            //session.execute(String.format("DROP TABLE IF EXISTS %s;", setup.table));
+            session.execute(String.format("DROP TABLE IF EXISTS %s;", setup.table));
 
             // CREATE TABLE
             String createTable = String.format("CREATE TABLE IF NOT EXISTS %s ", setup.table) +

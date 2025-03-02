@@ -87,7 +87,6 @@ public class PutCQLBase {
         HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
         FlowFile result;
 
-        //attributes.put("CQLName", setup.name);
         testRunner.enqueue(content, attributes);
         setup.setProperty(testRunner, testService);
         if (property != null)
