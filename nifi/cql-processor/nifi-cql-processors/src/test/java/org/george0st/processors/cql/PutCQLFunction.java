@@ -32,63 +32,14 @@ import java.io.IOException;
 import java.util.*;
 
 public class PutCQLFunction extends PutCQLBase {
-
-//    private TestRunner testRunner;
-//    private CQLControllerService testService;
-//    private List<TestSetup> setups;
-
     // Helper
     // https://medium.com/@mr.sinchan.banerjee/nifi-custom-processor-series-part-3-junit-test-with-nifi-mock-a935a1a4e3e5
     public PutCQLFunction() throws IOException, InterruptedException, InitializationException {
         super();
     }
 
-    @BeforeEach
-    public void init() throws IOException, InterruptedException, InitializationException {
-        testRunner = TestRunners.newTestRunner(PutCQL.class);
-        testService = new CQLControllerService();
-        testRunner.addControllerService(PutCQL.SERVICE_CONTROLLER.getName(), testService);
-
-        for (TestSetup setup: setups) {
-            System.out.println(String.format("Test scope: '%s'", setup.name));
-        }
-    }
-
-    private FlowFile coreTest(){
-        try {
-            long finish, start, count;
-            FlowFile result;
-            boolean ok;
-
-            start = System.currentTimeMillis();
-            testRunner.run();
-            result = testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS).getLast();
-            ok = testRunner.getFlowFilesForRelationship(PutCQL.REL_FAILURE).isEmpty();
-            finish = System.currentTimeMillis();
-
-            if (ok) {
-                count = Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
-                System.out.printf("SetupName: '%s'; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-                        result.getAttribute("CQLName"),
-                        "FlowFile",
-                        ReadableValue.fromMillisecond(finish - start),
-                        finish - start,
-                        count,
-                        count / ((finish - start) / 1000.0),
-                        System.lineSeparator());
-                return result;
-            }
-            return null;
-        }
-        catch(Exception ex) {
-            return null;
-        }
-    }
-
     @Test
     public void testBasic() {
-        HashMap<String, String> attributes = new HashMap<String, String>();
-
         String content = "\"colbigint\",\"colint\",\"coltext\",\"colfloat\",\"coldouble\",\"coldate\",\"coltime\",\"coltimestamp\",\"colboolean\",\"coluuid\",\"colsmallint\",\"coltinyint\",\"coltimeuuid\",\"colvarchar\"\n" +
                 "\"0\",\"1064\",\"zeVOKGnORq\",\"627.6811\",\"395.8522407512559\",\"1971-11-12\",\"03:37:15\",\"2000-09-25T22:18:45Z\",\"false\",\"6080071f-4dd1-4ea5-b711-9ad0716e242a\",\"8966\",\"55\",\"f45e58f5-c3b7-11ef-8d19-97ae87be7c54\",\"Tzxsw\"\n" +
                 "\"1\",\"1709\",\"7By0z5QEXh\",\"652.03955\",\"326.9081263857284\",\"2013-12-17\",\"08:43:09\",\"2010-04-27T07:02:27Z\",\"false\",\"7d511666-2f81-41c4-9d5c-a5fa87f7d1c3\",\"24399\",\"38\",\"f45e8006-c3b7-11ef-8d19-172ff8d0d752\",\"exAbN\"\n" +
@@ -97,13 +48,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            attributes.put("CQLName", setup.name);
-
-            testRunner.enqueue(content, attributes);
-            setup.setProperty(testRunner, testService);
-            testRunner.enableControllerService(testService);
-            result = coreTest();
-            testRunner.disableControllerService(testService);
+            result = coreTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -112,8 +57,6 @@ public class PutCQLFunction extends PutCQLBase {
 
     @Test
     public void testBatchLoggedTypes() {
-        HashMap<String, String> attributes = new HashMap<String, String>();
-
         String content = "\"colbigint\",\"colint\",\"coltext\",\"colfloat\",\"coldouble\",\"coldate\",\"coltime\",\"coltimestamp\",\"colboolean\",\"coluuid\",\"colsmallint\",\"coltinyint\",\"coltimeuuid\",\"colvarchar\"\n" +
                 "\"0\",\"1064\",\"zeVOKGnORq\",\"627.6811\",\"395.8522407512559\",\"1971-11-12\",\"03:37:15\",\"2000-09-25T22:18:45Z\",\"false\",\"6080071f-4dd1-4ea5-b711-9ad0716e242a\",\"8966\",\"55\",\"f45e58f5-c3b7-11ef-8d19-97ae87be7c54\",\"Tzxsw\"\n" +
                 "\"1\",\"1709\",\"7By0z5QEXh\",\"652.03955\",\"326.9081263857284\",\"2013-12-17\",\"08:43:09\",\"2010-04-27T07:02:27Z\",\"false\",\"7d511666-2f81-41c4-9d5c-a5fa87f7d1c3\",\"24399\",\"38\",\"f45e8006-c3b7-11ef-8d19-172ff8d0d752\",\"exAbN\"\n" +
@@ -122,15 +65,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            attributes.put("CQLName", setup.name);
-
-            //  batch type LOGGED
-            testRunner.enqueue(content, attributes);
-            setup.setProperty(testRunner, testService);
-            setup.setProperty(testRunner, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
-            testRunner.enableControllerService(testService);
-            result = coreTest();
-            testRunner.disableControllerService(testService);
+            result = coreTest(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -139,8 +74,6 @@ public class PutCQLFunction extends PutCQLBase {
 
     @Test
     public void testBatchUnLoggedTypes() {
-        HashMap<String, String> attributes = new HashMap<String, String>();
-
         String content = "\"colbigint\",\"colint\",\"coltext\",\"colfloat\",\"coldouble\",\"coldate\",\"coltime\",\"coltimestamp\",\"colboolean\",\"coluuid\",\"colsmallint\",\"coltinyint\",\"coltimeuuid\",\"colvarchar\"\n" +
                 "\"0\",\"1064\",\"zeVOKGnORq\",\"627.6811\",\"395.8522407512559\",\"1971-11-12\",\"03:37:15\",\"2000-09-25T22:18:45Z\",\"false\",\"6080071f-4dd1-4ea5-b711-9ad0716e242a\",\"8966\",\"55\",\"f45e58f5-c3b7-11ef-8d19-97ae87be7c54\",\"Tzxsw\"\n" +
                 "\"1\",\"1709\",\"7By0z5QEXh\",\"652.03955\",\"326.9081263857284\",\"2013-12-17\",\"08:43:09\",\"2010-04-27T07:02:27Z\",\"false\",\"7d511666-2f81-41c4-9d5c-a5fa87f7d1c3\",\"24399\",\"38\",\"f45e8006-c3b7-11ef-8d19-172ff8d0d752\",\"exAbN\"\n" +
@@ -149,15 +82,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            attributes.put("CQLName", setup.name);
-
-            //  batch type UNLOGGED
-            testRunner.enqueue(content, attributes);
-            setup.setProperty(testRunner, testService);
-            setup.setProperty(testRunner, PutCQL.BATCH_TYPE, PutCQL.BT_UNLOGGED.getValue());
-            testRunner.enableControllerService(testService);
-            result = coreTest();
-            testRunner.disableControllerService(testService);
+            result = coreTest(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -166,8 +91,6 @@ public class PutCQLFunction extends PutCQLBase {
 
     @Test
     public void testMoreItems() {
-        HashMap<String, String> attributes = new HashMap<String, String>();
-
         String content = "\"colbigint\",\"colint\",\"coltext\",\"colfloat\",\"coldouble\",\"coldate\",\"coltime\",\"coltimestamp\",\"colboolean\",\"coluuid\",\"colsmallint\",\"coltinyint\",\"coltimeuuid\",\"colvarchar\"\n" +
                 "\"0\",\"1064\",\"zeVOKGnORq\",\"627.6811\",\"395.8522407512559\",\"1971-11-12\",\"03:37:15\",\"2000-09-25T22:18:45Z\",\"false\",\"6080071f-4dd1-4ea5-b711-9ad0716e242a\",\"8966\",\"55\",\"f45e58f5-c3b7-11ef-8d19-97ae87be7c54\",\"Tzxsw\"\n" +
                 "\"1\",\"1709\",\"7By0z5QEXh\",\"652.03955\",\"326.9081263857284\",\"2013-12-17\",\"08:43:09\",\"2010-04-27T07:02:27Z\",\"false\",\"7d511666-2f81-41c4-9d5c-a5fa87f7d1c3\",\"24399\",\"38\",\"f45e8006-c3b7-11ef-8d19-172ff8d0d752\",\"exAbN\"\n" +
@@ -184,22 +107,12 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup: setups) {
-            attributes.put("CQLName",setup.name);
-
-            testRunner.enqueue(content, attributes);
-            setup.setProperty(testRunner, testService);
-            testRunner.enableControllerService(testService);
-            result = coreTest();
-            testRunner.disableControllerService(testService);
+            result = coreTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(5, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
 
-            testRunner.enqueue(content2, attributes);
-            setup.setProperty(testRunner, testService);
-            testRunner.enableControllerService(testService);
-            result = coreTest();
-            testRunner.disableControllerService(testService);
+            result = coreTest(setup, content2);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -208,8 +121,6 @@ public class PutCQLFunction extends PutCQLBase {
 
     @Test
     public void testNoQuotas() {
-        HashMap<String, String> attributes = new HashMap<String, String>();
-
         String content = "colbigint,colint,coltext,colfloat,coldouble,coldate,coltime,coltimestamp,colboolean,coluuid,colsmallint,coltinyint,coltimeuuid,colvarchar\n" +
                 "10,1064,zeVOKGnORq,627.6811,395.8522407512559,1971-11-12,03:37:15,2000-09-25T22:18:45Z,false,6080071f-4dd1-4ea5-b711-9ad0716e242a,8966,55,f45e58f5-c3b7-11ef-8d19-97ae87be7c54,Tzxsw\n" +
                 "11,1709,7By0z5QEXh,652.03955,326.9081263857284,2013-12-17,08:43:09,2010-04-27T07:02:27Z,false,7d511666-2f81-41c4-9d5c-a5fa87f7d1c3,24399,38,f45e8006-c3b7-11ef-8d19-172ff8d0d752,exAbN\n" +
@@ -218,13 +129,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup: setups) {
-            attributes.put("CQLName", setup.name);
-
-            testRunner.enqueue(content, attributes);
-            setup.setProperty(testRunner, testService);
-            testRunner.enableControllerService(testService);
-            result = coreTest();
-            testRunner.disableControllerService(testService);
+            result = coreTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -233,18 +138,11 @@ public class PutCQLFunction extends PutCQLBase {
 
     @Test
     public void testEmptyInput() {
-        HashMap<String, String> attributes = new HashMap<String, String>();
         String content = "";
         FlowFile result;
 
         for (TestSetup setup: setups) {
-            attributes.put("CQLName", setup.name);
-
-            testRunner.enqueue(content, attributes);
-            setup.setProperty(testRunner, testService);
-            testRunner.enableControllerService(testService);
-            result = coreTest();
-            testRunner.disableControllerService(testService);
+            result = coreTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(0, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -253,18 +151,11 @@ public class PutCQLFunction extends PutCQLBase {
 
     @Test
     public void testOnlyHeader() {
-        HashMap<String, String> attributes = new HashMap<String, String>();
         String content = "\"colbigint\",\"colint\",\"coltext\",\"colfloat\",\"coldouble\",\"coldate\",\"coltime\",\"coltimestamp\",\"colboolean\",\"coluuid\",\"colsmallint\",\"coltinyint\",\"coltimeuuid\",\"colvarchar\"\n";
         FlowFile result;
 
         for (TestSetup setup: setups) {
-            attributes.put("CQLName", setup.name);
-
-            testRunner.enqueue(content, attributes);
-            setup.setProperty(testRunner, testService);
-            testRunner.enableControllerService(testService);
-            result = coreTest();
-            testRunner.disableControllerService(testService);
+            result = coreTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(0, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -273,18 +164,11 @@ public class PutCQLFunction extends PutCQLBase {
 
     @Test
     public void testOnlyHeaderNoQuotas() {
-        HashMap<String, String> attributes = new HashMap<String, String>();
         String content = "colbigint,colint,coltext,colfloat,coldouble,coldate,coltime,coltimestamp,colboolean,coluuid,colsmallint,coltinyint,coltimeuuid,colvarchar\n";
         FlowFile result;
 
         for (TestSetup setup: setups) {
-            attributes.put("CQLName", setup.name);
-
-            testRunner.enqueue(content, attributes);
-            setup.setProperty(testRunner, testService);
-            testRunner.enableControllerService(testService);
-            result = coreTest();
-            testRunner.disableControllerService(testService);
+            result = coreTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(0, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -293,7 +177,6 @@ public class PutCQLFunction extends PutCQLBase {
 
     @Test
     public void testBasicRepeat5() {
-        HashMap<String, String> attributes = new HashMap<String, String>();
         String content = "\"colbigint\",\"colint\",\"coltext\",\"colfloat\",\"coldouble\",\"coldate\",\"coltime\",\"coltimestamp\",\"colboolean\",\"coluuid\",\"colsmallint\",\"coltinyint\",\"coltimeuuid\",\"colvarchar\"\n" +
                 "\"0\",\"1064\",\"zeVOKGnORq\",\"627.6811\",\"395.8522407512559\",\"1971-11-12\",\"03:37:15\",\"2000-09-25T22:18:45Z\",\"false\",\"6080071f-4dd1-4ea5-b711-9ad0716e242a\",\"8966\",\"55\",\"f45e58f5-c3b7-11ef-8d19-97ae87be7c54\",\"Tzxsw\"\n" +
                 "\"1\",\"1709\",\"7By0z5QEXh\",\"652.03955\",\"326.9081263857284\",\"2013-12-17\",\"08:43:09\",\"2010-04-27T07:02:27Z\",\"false\",\"7d511666-2f81-41c4-9d5c-a5fa87f7d1c3\",\"24399\",\"38\",\"f45e8006-c3b7-11ef-8d19-172ff8d0d752\",\"exAbN\"\n" +
@@ -302,24 +185,17 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup: setups) {
-            attributes.put("CQLName", setup.name);
-
-            setup.setProperty(testRunner, testService);
-            testRunner.enableControllerService(testService);
             for (int i = 0; i < 5; i++) {
-                testRunner.enqueue(content, attributes);
-                result = coreTest();
+                result = coreTest(setup, content);
                 //  check amount of write items
                 assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
                 assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
             }
-            testRunner.disableControllerService(testService);
         }
     }
 
     @Test
     public void testNoQuotas2() {
-        HashMap<String, String> attributes = new HashMap<String, String>();
         String content = "colbigint,colint,coltext,colfloat,coldouble,coldate,coltime,coltimestamp,colboolean,coluuid,colsmallint,coltinyint,coltimeuuid,colvarchar\n" +
                 "0,1064,zeVOKGnORq,627.6811,395.8522407512559,1971-11-12,03:37:15,2000-09-25T22:18:45Z,false,6080071f-4dd1-4ea5-b711-9ad0716e242a,8966,55,f45e58f5-c3b7-11ef-8d19-97ae87be7c54,Tzxswn\n" +
                 "1,1709,7By0z5QEXh,652.03955,326.9081263857284,2013-12-17,08:43:09,2010-04-27T07:02:27Z,false,7d511666-2f81-41c4-9d5c-a5fa87f7d1c3,24399,38,f45e8006-c3b7-11ef-8d19-172ff8d0d752,exAbNn\n" +
@@ -328,13 +204,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup: setups) {
-            attributes.put("CQLName", setup.name);
-
-            testRunner.enqueue(content, attributes);
-            setup.setProperty(testRunner, testService);
-            testRunner.enableControllerService(testService);
-            result = coreTest();
-            testRunner.disableControllerService(testService);
+            result = coreTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
