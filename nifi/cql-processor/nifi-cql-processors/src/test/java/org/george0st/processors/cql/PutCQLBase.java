@@ -7,9 +7,8 @@ import org.apache.nifi.reporting.InitializationException;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
 import org.george0st.cql.CQLControllerService;
-import org.george0st.processors.cql.helper.CqlCreateSchema;
+import org.george0st.processors.cql.helper.CqlSchema;
 import org.george0st.processors.cql.helper.ReadableValue;
-import org.george0st.processors.cql.helper.Setup;
 import org.george0st.processors.cql.helper.TestSetup;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -39,8 +38,9 @@ public class PutCQLBase {
 
             //  build schema, if needed
             try (CqlSession session=service.getSession()) {
-                CqlCreateSchema schema = new CqlCreateSchema(session, setup);
-                schema.Create();
+                CqlSchema schema = new CqlSchema(session, setup);
+                if (!schema.createSchema())
+                    schema.cleanData();
             }
             runner.disableControllerService(service);
         }
