@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Create test table in CQL for complex testing of all supported types.
  */
-public class CqlSchema extends CqlProcessor {
+public class CqlTestSchema extends CqlProcessor {
 
     private final RndGenerator rnd=new RndGenerator();
     private final static String testOutput="./test_output";
@@ -40,11 +40,11 @@ public class CqlSchema extends CqlProcessor {
             "coltimeuuid", "timeuuid",
             "colvarchar", "varchar"};
 
-    public CqlSchema() throws InterruptedException {
+    public CqlTestSchema() throws InterruptedException {
         super(null, null);
     }
 
-    public CqlSchema(CqlSession session, TestSetup setup) throws InterruptedException {
+    public CqlTestSchema(CqlSession session, TestSetup setup) throws InterruptedException {
         super(session, setup);
     }
 
@@ -71,7 +71,7 @@ public class CqlSchema extends CqlProcessor {
     }
 
     /**
-     * Create schema in CQL
+     * Create test schema in CQL
      */
     public boolean createSchema() {
         boolean newSchema=false;
@@ -100,7 +100,7 @@ public class CqlSchema extends CqlProcessor {
     }
 
     /**
-     * Clean data from CQL (keep only empty schema)
+     * Clean test data in CQL (keep only empty schema)
      */
     public void cleanData() throws InterruptedException {
         try {
@@ -185,6 +185,14 @@ public class CqlSchema extends CqlProcessor {
         }
     }
 
+    /**
+     * Generate random test data as CSV String
+     *
+     * @param csvItems      amount of items
+     * @param sequenceID    sequence ID
+     * @return              generated data
+     * @throws IOException  exception from commons-csv
+     */
     public String generateRndCSVString(int csvItems, boolean sequenceID) throws IOException {
         // generate random content
         try (StringWriter writer = new StringWriter()) {
@@ -193,6 +201,14 @@ public class CqlSchema extends CqlProcessor {
         }
     }
 
+    /**
+     * Generated random test data as CSV file
+     *
+     * @param csvItems      amount of items
+     * @param sequenceID    sequence ID
+     * @return              the File with random data
+     * @throws IOException  exception from commons-csv
+     */
     public File generateRndCSVFile(int csvItems, boolean sequenceID) throws IOException {
         // generate random file
         File randomFile=getRandomFile();
