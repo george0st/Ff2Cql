@@ -13,5 +13,6 @@
   "table": "prftest.csv2cql_test3",
   "dryRun": false,
 
+  "replication": "{'class' : 'SimpleStrategy', 'replication_factor' : 1}",
   "compaction": "{'class':'SizeTieredCompactionStrategy'}"
 }

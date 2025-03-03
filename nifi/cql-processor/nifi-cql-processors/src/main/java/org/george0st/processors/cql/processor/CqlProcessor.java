@@ -8,9 +8,8 @@ import java.io.IOException;
 /**
  * Basic abstract class for processor
  */
-public abstract class CqlProcessor {   //extends CqlAccess
+public abstract class CqlProcessor {
 
-    //protected boolean dryRun;
     protected CqlSession session;
     protected Setup setup;
 

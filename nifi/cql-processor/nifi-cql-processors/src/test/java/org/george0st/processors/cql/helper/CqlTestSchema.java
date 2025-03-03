@@ -16,11 +16,12 @@ import java.util.List;
 /**
  * Create test table in CQL for complex testing of all supported types.
  */
-public class CqlCreateSchema extends CqlProcessor {
+public class CqlTestSchema extends CqlProcessor {
 
     private final RndGenerator rnd=new RndGenerator();
     private final static String testOutput="./test_output";
     private final static String testInput="./test_input";
+    private final long operationSleepTime=2000;
 
     private final String[] primaryKeys=new String[]{"colbigint", "colint"};
     private final String[] columns=new String[]{
@@ -39,7 +40,11 @@ public class CqlCreateSchema extends CqlProcessor {
             "coltimeuuid", "timeuuid",
             "colvarchar", "varchar"};
 
-    public CqlCreateSchema(CqlSession session, TestSetup setup) throws InterruptedException {
+    public CqlTestSchema() throws InterruptedException {
+        super(null, null);
+    }
+
+    public CqlTestSchema(CqlSession session, TestSetup setup) throws InterruptedException {
         super(session, setup);
     }
 
@@ -65,17 +70,23 @@ public class CqlCreateSchema extends CqlProcessor {
         return new File(String.format("%s/CsvToCql_%s.csv.tmp",testOutput, rnd.getStringSequence(10)));
     }
 
-    public void Create() {
+    /**
+     * Create test schema in CQL
+     */
+    public boolean createSchema() {
+        boolean newSchema=false;
+
         if (!requestedKeyspace(setup.getOnlyKeyspace())) {
             // Create key space, if not exist
             session.execute(String.format("CREATE KEYSPACE IF NOT EXISTS %s WITH replication = %s;",
                     setup.getOnlyKeyspace(),
                     ((TestSetup) setup).replication));
+            newSchema=true;
         }
 
         if (!requestedTable(setup.getOnlyKeyspace(), setup.getOnlyTable())) {
             // DROP TABLE
-            //session.execute(String.format("DROP TABLE IF EXISTS %s;", setup.table));
+            session.execute(String.format("DROP TABLE IF EXISTS %s;", setup.table));
 
             // CREATE TABLE
             String createTable = String.format("CREATE TABLE IF NOT EXISTS %s ", setup.table) +
@@ -83,22 +94,35 @@ public class CqlCreateSchema extends CqlProcessor {
                     String.format("PRIMARY KEY (%s)) ", String.join(",", primaryKeys)) +
                     String.format("WITH compaction = %s;", ((TestSetup) setup).compaction);
             session.execute(createTable);
+            newSchema=true;
         }
+        return newSchema;
     }
 
     /**
-     * Check, if keyspace has the requested structure
+     * Clean test data in CQL (keep only empty schema)
+     */
+    public void cleanData() throws InterruptedException {
+        try {
+            session.execute(String.format("TRUNCATE TABLE %s;", setup.table));
+            //  for data synchronization
+            Thread.sleep(operationSleepTime);
+        }
+        catch(Exception ignored){}
+    }
+
+    /**
+     * Check, if keyspace exist
      *
      * @param keyspaceName  tested key space
-     * @return  true - the requested content, false - different content
+     * @return  true - the keyspace exist, false - the keyspace does not exist
      */
     private boolean requestedKeyspace(String keyspaceName){
         try {
             return session.execute(String.format("SELECT keyspace_name FROM system_schema.keyspaces "+
                     "WHERE keyspace_name='%s';", keyspaceName)).one() != null;
         }
-        catch(Exception ex){
-        }
+        catch(Exception ignored){}
         return false;
     }
 
@@ -128,8 +152,7 @@ public class CqlCreateSchema extends CqlProcessor {
                 }
             }
         }
-        catch(Exception ex){
-        }
+        catch(Exception ignored){}
         return result;
     }
 
@@ -162,6 +185,14 @@ public class CqlCreateSchema extends CqlProcessor {
         }
     }
 
+    /**
+     * Generate random test data as CSV String
+     *
+     * @param csvItems      amount of items
+     * @param sequenceID    sequence ID
+     * @return              generated data
+     * @throws IOException  exception from commons-csv
+     */
     public String generateRndCSVString(int csvItems, boolean sequenceID) throws IOException {
         // generate random content
         try (StringWriter writer = new StringWriter()) {
@@ -170,6 +201,14 @@ public class CqlCreateSchema extends CqlProcessor {
         }
     }
 
+    /**
+     * Generated random test data as CSV file
+     *
+     * @param csvItems      amount of items
+     * @param sequenceID    sequence ID
+     * @return              the File with random data
+     * @throws IOException  exception from commons-csv
+     */
     public File generateRndCSVFile(int csvItems, boolean sequenceID) throws IOException {
         // generate random file
         File randomFile=getRandomFile();
