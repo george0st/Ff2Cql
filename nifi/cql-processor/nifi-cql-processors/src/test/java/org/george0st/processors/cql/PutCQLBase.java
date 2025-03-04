@@ -109,6 +109,20 @@ public class PutCQLBase {
             ok = testRunner.getFlowFilesForRelationship(PutCQL.REL_FAILURE).isEmpty();
             finish = System.currentTimeMillis();
 
+//            if ((validateAlso) && (randomFile!=null)) {
+//                // delay (before read for synch on CQL side)
+//                Thread.sleep(3000);
+//
+//                // validate (read value from CSV and from CQL and compare content)
+//                start = System.currentTimeMillis();
+//                count = (new CsvCqlValidate(Setup.getInstance(testSetupFile), schema.getPrimaryKeys())).execute(randomFile.getPath());
+//                finish = System.currentTimeMillis();
+//                System.out.println("VALIDATE; Items: " + ReadableValue.fromNumber(count) + "; " +
+//                        String.format("Perf: %.1f [calls/sec]; ", count / ((finish-start) / 1000.0)) +
+//                        "Duration: " + ReadableValue.fromMillisecond(finish - start));
+//            }
+
+
             if (ok) {
                 count = Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
                 System.out.printf("SetupName: '%s'; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
