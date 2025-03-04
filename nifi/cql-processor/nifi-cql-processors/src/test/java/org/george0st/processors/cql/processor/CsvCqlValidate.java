@@ -7,13 +7,12 @@ import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import com.datastax.oss.driver.api.core.type.DataTypes;
+import com.datastax.oss.driver.api.core.type.DataType;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.george0st.processors.cql.helper.Setup;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.rmi.UnexpectedException;
 import java.time.Instant;
 import java.time.LocalTime;
@@ -32,59 +31,58 @@ public class CsvCqlValidate extends CqlProcessor {
         this.primaryKeys = primaryKeys;
     }
 
-    public long execute(String fileName) throws IOException {
+    public long executeCore(Reader reader) throws IOException {
         long totalCount=0;
 
-        try (Reader reader = new FileReader(fileName)) {
-            CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
-                    .setSkipHeaderRecord(true)
-                    .get();
-            Iterator<CSVRecord> iterator = csvFormat.parse(reader).iterator();
+        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+                .setSkipHeaderRecord(true)
+                .get();
+        Iterator<CSVRecord> iterator = csvFormat.parse(reader).iterator();
 
-            if (iterator.hasNext()) {
-                String[] headers = iterator.next().values();
-                String prepareHeaders = prepareHeaders(headers);
-                String whereItems = whereItems(this.primaryKeys);
-                int[] mapIndexes = mapIndexes(headers);
+        if (iterator.hasNext()) {
+            String[] headers = iterator.next().values();
+            String prepareHeaders = prepareHeaders(headers);
+            String whereItems = whereItems(this.primaryKeys);
+            int[] mapIndexes = mapIndexes(headers);
 
-                PreparedStatement stm = selectStatement(session, prepareHeaders, whereItems);
-                BoundStatement bound;
+            PreparedStatement stm = selectStatement(session, prepareHeaders, whereItems);
+            BoundStatement bound;
 
-                String itm;
-                String[] line;
-                String[] newLine = new String[this.primaryKeys.length];
-                Row row;
-                com.datastax.oss.driver.api.core.type.DataType itmType;
-                for ( ; iterator.hasNext(); ) {
-                    line = iterator.next().values();
+            String itm;
+            String[] line;
+            String[] newLine = new String[this.primaryKeys.length];
+            Row row;
+            DataType itmType;
 
-                    //  bind items for query
-                    for (int i : mapIndexes)
-                        newLine[i] = line[i];
-                    bound = stm.bind((Object[]) newLine);
-                    totalCount++;
+            for ( ; iterator.hasNext(); ) {
+                line = iterator.next().values();
 
-                    // execute query
-                    row = session.execute(bound).one();
-                    if (row == null) continue;
+                //  bind items for query
+                for (int i : mapIndexes)
+                    newLine[i] = line[i];
+                bound = stm.bind((Object[]) newLine);
+                totalCount++;
 
-                    //  check values from query
-                    for (int i = 0; i < headers.length; i++) {
-                        itmType = row.getType(i);
-                        itm = row.getString(i);
-                        if (itm != null) {
-                            if (itmType == DataTypes.TIME) {
-                                if (!LocalTime.parse(itm).equals(LocalTime.parse(line[i])))
+                // execute query
+                row = session.execute(bound).one();
+                if (row == null) continue;
+
+                //  check values from query
+                for (int i = 0; i < headers.length; i++) {
+                    itmType = row.getType(i);
+                    itm = row.getString(i);
+                    if (itm != null) {
+                        if (itmType == DataTypes.TIME) {
+                            if (!LocalTime.parse(itm).equals(LocalTime.parse(line[i])))
+                                throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
+                        } else {
+                            if (itmType == DataTypes.TIMESTAMP) {
+                                if (!Instant.parse(itm).equals(Instant.parse(line[i]))) {
                                     throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
-                            } else {
-                                if (itmType == DataTypes.TIMESTAMP) {
-                                    if (!Instant.parse(itm).equals(Instant.parse(line[i]))) {
-                                        throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
-                                    }
-                                } else {
-                                    if (!itm.equals(line[i]))
-                                        throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
                                 }
+                            } else {
+                                if (!itm.equals(line[i]))
+                                    throw new UnexpectedException(String.format("Check: Irrelevant values '%s','%s'", line[0], line[i]));
                             }
                         }
                     }
@@ -96,12 +94,44 @@ public class CsvCqlValidate extends CqlProcessor {
 
     @Override
     protected long executeContent(String data) throws IOException {
-        return 0;
+        long totalCount=0;
+
+        if (data!=null) {
+            try (Reader reader = new StringReader(data)) {
+                totalCount = this.executeCore(reader);
+            }
+        }
+        return totalCount;
     }
 
     @Override
     protected long executeContent(byte[] byteArray) throws IOException {
-        return 0;
+        long totalCount=0;
+
+        if (byteArray!=null) {
+            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray)) {
+                try (Reader reader = new InputStreamReader(byteArrayInputStream)) {
+                    totalCount = this.executeCore(reader);
+                }
+            }
+        }
+        return totalCount;
+    }
+
+    public long execute(String fileName) throws IOException {
+        long totalCount=0;
+
+        if (fileName==null){
+            // add stdin
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
+                totalCount = this.executeCore(reader);
+            }
+        }
+        else
+            try (Reader reader = new FileReader(fileName)) {
+                totalCount = this.executeCore(reader);
+            }
+        return totalCount;
     }
 
     protected int[] mapIndexes(String[] headers){
