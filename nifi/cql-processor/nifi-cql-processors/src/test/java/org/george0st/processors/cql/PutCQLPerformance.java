@@ -19,8 +19,8 @@ public class PutCQLPerformance extends PutCQLBase {
     }
 
     @Test
-    @DisplayName("Seq W, 1. 100 items")
-    void csvWRSequence100() throws Exception {
+    @DisplayName("SEQ Write - 100 items")
+    void csvSequenceWrite100() throws Exception {
         String content=new CqlTestSchema().generateRndCSVString(100,true);
         FlowFile result;
 
@@ -32,8 +32,8 @@ public class PutCQLPerformance extends PutCQLBase {
     }
 
     @Test
-    @DisplayName("Seq W, 2. 1K items")
-    void csvWRSequence1K() throws Exception {
+    @DisplayName("SEQ Write - 1K items")
+    void csvSequenceWrite1K() throws Exception {
         String content=new CqlTestSchema().generateRndCSVString(1_000,true);
         FlowFile result;
 
@@ -45,8 +45,8 @@ public class PutCQLPerformance extends PutCQLBase {
     }
 
     @Test
-    @DisplayName("Seq W, 2. 10K items")
-    void csvWRSequence10K() throws Exception {
+    @DisplayName("SEQ Write - 10K items")
+    void csvSequenceWrite10K() throws Exception {
         String content=new CqlTestSchema().generateRndCSVString(10_000,true);
         FlowFile result;
 
@@ -58,8 +58,8 @@ public class PutCQLPerformance extends PutCQLBase {
     }
 
     @Test
-    @DisplayName("Seq W, 3. 100K items")
-    void csvWRSequence100K() throws Exception {
+    @DisplayName("SEQ Write - 100K items")
+    void csvSequenceWrite100K() throws Exception {
         String content=new CqlTestSchema().generateRndCSVString(100_000,true);
         FlowFile result;
 
@@ -71,8 +71,8 @@ public class PutCQLPerformance extends PutCQLBase {
     }
 
     @Test
-    @DisplayName("Rnd W, 1. 100 items")
-    void csvWRRandom100() throws Exception {
+    @DisplayName("RND Write - 100 items")
+    void csvRandomWrite100() throws Exception {
         String content=new CqlTestSchema().generateRndCSVString(100,false);
         FlowFile result;
 
@@ -84,8 +84,8 @@ public class PutCQLPerformance extends PutCQLBase {
     }
 
     @Test
-    @DisplayName("Rnd W, 2. 1K items")
-    void csvWRRandom1K() throws Exception {
+    @DisplayName("RND Write - 1K items")
+    void csvRandomWrite1K() throws Exception {
         String content=new CqlTestSchema().generateRndCSVString(1_000,false);
         FlowFile result;
 
@@ -97,8 +97,8 @@ public class PutCQLPerformance extends PutCQLBase {
     }
 
     @Test
-    @DisplayName("Rnd W, 2. 10K items")
-    void csvWRRandom10K() throws Exception {
+    @DisplayName("RND Write - 10K items")
+    void csvRandomWrite10K() throws Exception {
         String content=new CqlTestSchema().generateRndCSVString(10_000,false);
         FlowFile result;
 
@@ -110,8 +110,8 @@ public class PutCQLPerformance extends PutCQLBase {
     }
 
     @Test
-    @DisplayName("Rnd W, 3. 100K items")
-    void csvWRRandom100K() throws Exception {
+    @DisplayName("RND Write - 100K items")
+    void csvRandomWrite100K() throws Exception {
         String content=new CqlTestSchema().generateRndCSVString(100_000,false);
         FlowFile result;
 
