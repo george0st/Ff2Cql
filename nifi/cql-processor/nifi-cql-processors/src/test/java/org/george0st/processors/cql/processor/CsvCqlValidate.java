@@ -31,7 +31,7 @@ public class CsvCqlValidate extends CqlProcessor {
         this.primaryKeys = primaryKeys;
     }
 
-    public long executeCore(Reader reader) throws IOException {
+    private long executeCore(Reader reader) throws IOException {
         long totalCount=0;
 
         CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
@@ -93,7 +93,7 @@ public class CsvCqlValidate extends CqlProcessor {
     }
 
     @Override
-    protected long executeContent(String data) throws IOException {
+    public long executeContent(String data) throws IOException {
         long totalCount=0;
 
         if (data!=null) {
@@ -105,7 +105,7 @@ public class CsvCqlValidate extends CqlProcessor {
     }
 
     @Override
-    protected long executeContent(byte[] byteArray) throws IOException {
+    public long executeContent(byte[] byteArray) throws IOException {
         long totalCount=0;
 
         if (byteArray!=null) {

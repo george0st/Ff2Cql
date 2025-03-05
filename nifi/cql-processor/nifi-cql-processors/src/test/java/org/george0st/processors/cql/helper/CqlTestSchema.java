@@ -23,8 +23,8 @@ public class CqlTestSchema extends CqlProcessor {
     private final static String testInput="./test_input";
     private final long operationSleepTime=2000;
 
-    private final String[] primaryKeys=new String[]{"colbigint", "colint"};
-    private final String[] columns=new String[]{
+    public static final String[] primaryKeys=new String[]{"colbigint", "colint"};
+    public static final String[] columns=new String[]{
             "colbigint", "bigint",
             "colint", "int",
             "coltext", "text",

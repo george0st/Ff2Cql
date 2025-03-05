@@ -25,7 +25,7 @@ public class PutCQLPerformance extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(100, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
         }
@@ -38,7 +38,7 @@ public class PutCQLPerformance extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(1_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
         }
@@ -51,7 +51,7 @@ public class PutCQLPerformance extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(10_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
         }
@@ -64,7 +64,7 @@ public class PutCQLPerformance extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(100_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
         }
@@ -77,7 +77,7 @@ public class PutCQLPerformance extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(100, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
         }
@@ -90,7 +90,7 @@ public class PutCQLPerformance extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(1_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
         }
@@ -103,7 +103,7 @@ public class PutCQLPerformance extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(10_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
         }
@@ -116,7 +116,7 @@ public class PutCQLPerformance extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(100_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
         }

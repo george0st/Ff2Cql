@@ -18,18 +18,13 @@ package org.george0st.processors.cql;
 
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.reporting.InitializationException;
-import org.apache.nifi.util.TestRunners;
-import org.george0st.cql.CQLControllerService;
-import org.george0st.processors.cql.helper.ReadableValue;
 import org.george0st.processors.cql.helper.TestSetup;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.IOException;
-import java.util.*;
 
 public class PutCQLFunction extends PutCQLBase {
     // Helper
@@ -48,7 +43,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -65,7 +60,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            result = coreTest(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
+            result = runTest(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -82,7 +77,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            result = coreTest(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
+            result = runTest(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -107,12 +102,12 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup: setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(5, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
 
-            result = coreTest(setup, content2);
+            result = runTest(setup, content2);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -129,7 +124,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup: setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -142,7 +137,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup: setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(0, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -155,7 +150,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup: setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(0, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -168,7 +163,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup: setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(0, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -186,7 +181,7 @@ public class PutCQLFunction extends PutCQLBase {
 
         for (TestSetup setup: setups) {
             for (int i = 0; i < 5; i++) {
-                result = coreTest(setup, content);
+                result = runTest(setup, content);
                 //  check amount of write items
                 assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
                 assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -204,7 +199,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup: setups) {
-            result = coreTest(setup, content);
+            result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
