@@ -10,6 +10,9 @@ import org.george0st.cql.CQLControllerService;
 import org.george0st.processors.cql.helper.CqlTestSchema;
 import org.george0st.processors.cql.helper.ReadableValue;
 import org.george0st.processors.cql.helper.TestSetup;
+import org.george0st.processors.cql.processor.CsvCqlValidate;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.IOException;
@@ -79,11 +82,34 @@ public class PutCQLBase {
         }
     }
 
-    protected FlowFile coreTest(TestSetup setup, String content) {
-        return coreTest(setup, content, null, null);
+    @AfterEach
+    public void Close() throws InterruptedException {
+        for (TestSetup setup: setups) {
+            setup.setProperty(testRunner, testService);
+            testRunner.enableControllerService(testService);
+
+            //  build schema, if needed
+            try (CqlSession session=testService.getSession()) {
+                CqlTestSchema schema = new CqlTestSchema(session, setup);
+                schema.cleanData();
+            }
+            testRunner.disableControllerService(testService);
+        }
     }
 
-    protected FlowFile coreTest(TestSetup setup, String content, PropertyDescriptor property, String propertyValue){
+    protected FlowFile runTest(TestSetup setup, String content) {
+        return runTestWithProperty(setup, content, null, null, false);
+    }
+
+    protected FlowFile runTest(TestSetup setup, String content, boolean validate) {
+        return runTestWithProperty(setup, content, null, null, validate);
+    }
+
+    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue){
+        return  runTestWithProperty(setup, content, property, propertyValue, false);
+    }
+
+    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue, boolean validate){
         HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
         FlowFile result;
 
@@ -92,12 +118,12 @@ public class PutCQLBase {
         if (property != null)
             setup.setProperty(testRunner, property, propertyValue);
         testRunner.enableControllerService(testService);
-        result = coreTest();
+        result = coreTest(setup, content, validate);
         testRunner.disableControllerService(testService);
         return result;
     }
 
-    private FlowFile coreTest(){
+    private FlowFile coreTest(TestSetup setup, String content, boolean validate){
         try {
             long finish, start, count;
             FlowFile result;
@@ -111,7 +137,7 @@ public class PutCQLBase {
 
             if (ok) {
                 count = Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
-                System.out.printf("SetupName: '%s'; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+                System.out.printf("Source: '%s'; WRITE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
                         result.getAttribute("CQLName"),
                         "FlowFile",
                         ReadableValue.fromMillisecond(finish - start),
@@ -119,6 +145,26 @@ public class PutCQLBase {
                         count,
                         count / ((finish - start) / 1000.0),
                         System.lineSeparator());
+
+                if (validate) {
+                    // delay (before read for synch on CQL side)
+                    Thread.sleep(3000);
+
+                    // validate (read value from CSV and from CQL and compare content)
+                    try (CqlSession session=testService.getSession()) {
+                        start = System.currentTimeMillis();
+                        count = (new CsvCqlValidate(session, setup, CqlTestSchema.primaryKeys)).executeContent(content);
+                        finish = System.currentTimeMillis();
+                    }
+                    System.out.printf("Source: '%s'; VALIDATE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+                            result.getAttribute("CQLName"),
+                            "FlowFile",
+                            ReadableValue.fromMillisecond(finish - start),
+                            finish - start,
+                            count,
+                            count / ((finish - start) / 1000.0),
+                            System.lineSeparator());
+                }
                 return result;
             }
             return null;
