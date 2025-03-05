@@ -60,7 +60,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            result = runTest(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
+            result = runTestWithProperty(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -77,7 +77,7 @@ public class PutCQLFunction extends PutCQLBase {
         FlowFile result;
 
         for (TestSetup setup : setups) {
-            result = runTest(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
+            result = runTestWithProperty(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));

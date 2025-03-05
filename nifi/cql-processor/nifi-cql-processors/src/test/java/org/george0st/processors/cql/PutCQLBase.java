@@ -81,14 +81,18 @@ public class PutCQLBase {
     }
 
     protected FlowFile runTest(TestSetup setup, String content) {
-        return runTest(setup, content, null, null, false);
+        return runTestWithProperty(setup, content, null, null, false);
     }
 
     protected FlowFile runTest(TestSetup setup, String content, boolean validate) {
-        return runTest(setup, content, null, null, validate);
+        return runTestWithProperty(setup, content, null, null, validate);
     }
 
-    protected FlowFile runTest(TestSetup setup, String content, PropertyDescriptor property, String propertyValue, boolean validate){
+    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue){
+        return  runTestWithProperty(setup, content, property, propertyValue, false);
+    }
+
+    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue, boolean validate){
         HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
         FlowFile result;
 
@@ -116,7 +120,7 @@ public class PutCQLBase {
 
             if (ok) {
                 count = Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
-                System.out.printf("SetupName: '%s'; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+                System.out.printf("Source: '%s'; WRITE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
                         result.getAttribute("CQLName"),
                         "FlowFile",
                         ReadableValue.fromMillisecond(finish - start),
@@ -135,9 +139,14 @@ public class PutCQLBase {
                         count = (new CsvCqlValidate(session, setup, CqlTestSchema.primaryKeys)).executeContent(content);
                         finish = System.currentTimeMillis();
                     }
-                    System.out.println("VALIDATE; Items: " + ReadableValue.fromNumber(count) + "; " +
-                            String.format("Perf: %.1f [calls/sec]; ", count / ((finish-start) / 1000.0)) +
-                            "Duration: " + ReadableValue.fromMillisecond(finish - start));
+                    System.out.printf("Source: '%s'; VALIDATE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+                            result.getAttribute("CQLName"),
+                            "FlowFile",
+                            ReadableValue.fromMillisecond(finish - start),
+                            finish - start,
+                            count,
+                            count / ((finish - start) / 1000.0),
+                            System.lineSeparator());
                 }
                 return result;
             }
