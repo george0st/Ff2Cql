@@ -18,6 +18,8 @@ public class PutCQLPerformance extends PutCQLBase {
         super();
     }
 
+    // region SEQ Write
+
     @Test
     @DisplayName("SEQ Write - 100 items")
     void csvSequenceWrite100() throws Exception {
@@ -69,6 +71,64 @@ public class PutCQLPerformance extends PutCQLBase {
             assertEquals(100_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
         }
     }
+    // endregion SEQ Write
+
+    // region SEQ Write/Validate
+
+    @Test
+    @DisplayName("SEQ Write/Validate - 100 items")
+    void csvSequenceWriteValidate100() throws Exception {
+        String content=new CqlTestSchema().generateRndCSVString(100,true);
+        FlowFile result;
+
+        for (TestSetup setup : setups) {
+            result = runTest(setup, content, true);
+            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
+            assertEquals(100, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+        }
+    }
+
+    @Test
+    @DisplayName("SEQ Write/Validate - 1K items")
+    void csvSequenceWriteValidate1K() throws Exception {
+        String content=new CqlTestSchema().generateRndCSVString(1_000,true);
+        FlowFile result;
+
+        for (TestSetup setup : setups) {
+            result = runTest(setup, content, true);
+            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
+            assertEquals(1_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+        }
+    }
+
+    @Test
+    @DisplayName("SEQ Write/Validate - 10K items")
+    void csvSequenceWriteValidate10K() throws Exception {
+        String content=new CqlTestSchema().generateRndCSVString(10_000,true);
+        FlowFile result;
+
+        for (TestSetup setup : setups) {
+            result = runTest(setup, content, true);
+            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
+            assertEquals(10_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+        }
+    }
+
+    @Test
+    @DisplayName("SEQ Write/Validate - 100K items")
+    void csvSequenceWriteValidate100K() throws Exception {
+        String content=new CqlTestSchema().generateRndCSVString(100_000,true);
+        FlowFile result;
+
+        for (TestSetup setup : setups) {
+            result = runTest(setup, content, true);
+            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
+            assertEquals(100_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+        }
+    }
+    // endregion SEQ Write/Validate
+
+    // region RND Write
 
     @Test
     @DisplayName("RND Write - 100 items")
@@ -121,5 +181,6 @@ public class PutCQLPerformance extends PutCQLBase {
             assertEquals(100_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
         }
     }
+    // endregion RND Write
 
 }
