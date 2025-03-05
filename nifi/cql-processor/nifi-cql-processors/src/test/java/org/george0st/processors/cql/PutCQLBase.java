@@ -11,6 +11,8 @@ import org.george0st.processors.cql.helper.CqlTestSchema;
 import org.george0st.processors.cql.helper.ReadableValue;
 import org.george0st.processors.cql.helper.TestSetup;
 import org.george0st.processors.cql.processor.CsvCqlValidate;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.IOException;
@@ -77,6 +79,21 @@ public class PutCQLBase {
 
         for (TestSetup setup: setups) {
             System.out.println(String.format("Test scope: '%s'", setup.name));
+        }
+    }
+
+    @AfterEach
+    public void Close() throws InterruptedException {
+        for (TestSetup setup: setups) {
+            setup.setProperty(testRunner, testService);
+            testRunner.enableControllerService(testService);
+
+            //  build schema, if needed
+            try (CqlSession session=testService.getSession()) {
+                CqlTestSchema schema = new CqlTestSchema(session, setup);
+                schema.cleanData();
+            }
+            testRunner.disableControllerService(testService);
         }
     }
 
