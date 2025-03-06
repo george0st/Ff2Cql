@@ -26,11 +26,11 @@ or two other alternative ways:
 
 You can see sample of relevant setting for CQL controllers:
  - [Cassandra setting](./nifi/cql-processor/nifi-cql/src/test/test-cassandra.json)
-   - access with IP addresses
+   - access with IP addresses (name/password)
  - [Scylla setting](./nifi/cql-processor/nifi-cql/src/test/test-scylla.json)
-   - access with IP address (localhost)
+   - access with IP address (without name/password)
  - [AstraDB setting](./nifi/cql-processor/nifi-cql/src/test/test-astra.json)
-   - access with security connection bundle (SCB) and token
+   - access with Security Connection Bundle (SCB) and Token
    - NOTE about SCB: see the file with **'.zip'** suffix
      - How to get the SCB? Go to the https://astra.datastax.com/...,
        Menu Databases/Your database/Region/[Download SCB](./docs/assets/astradb-download-SCB.png)
