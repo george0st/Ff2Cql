@@ -11,8 +11,8 @@
   "consistencyLevel": "LOCAL_ONE",
 
   "writeConsistencyLevel": "LOCAL_ONE",
-  "batchSize": 200,
-  "batchType": "UNLOGGED",
+  "batchSize": 100,
+  "batchType": "LOGGED",
   "table": "prftest.csv2cql_test3",
   "dryRun": false,
 

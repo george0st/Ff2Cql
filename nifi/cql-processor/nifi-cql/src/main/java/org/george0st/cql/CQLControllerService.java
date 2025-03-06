@@ -50,8 +50,6 @@ public class CQLControllerService extends AbstractControllerService implements C
                     "(e.g. '192.168.0.1, 192.168.0.2, ...' or 'localhost').")
             .required(false)
             //.defaultValue("localhost")
-            //.addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
-            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .addValidator(Validator.VALID)
             .build();
 
@@ -72,7 +70,6 @@ public class CQLControllerService extends AbstractControllerService implements C
                     "NOTE: the 'username' is 'clientId' and 'password' id 'secret', these values are from " +
                     "the file '*-token.json', downloaded from AstraDB web.")
             .required(false)
-            //.addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             .addValidator(Validator.VALID)
             .build();
 
@@ -81,9 +78,7 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("Username")
             .description("Username for the CQL connection.")
             .required(false)
-            //.addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             .addValidator(Validator.VALID)
-            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
     public static final PropertyDescriptor PASSWORD = new PropertyDescriptor
@@ -91,9 +86,7 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("Password")
             .description("Password for the CQL connection.")
             .required(false)
-            //.addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             .addValidator(Validator.VALID)
-            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .sensitive(true)
             .build();
 
@@ -102,10 +95,7 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("Local Data Center")
             .description("Name of local data center e.g. 'dc1', 'datacenter1', etc.")
             .required(false)
-            //.defaultValue("datacenter1")
-            //.addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             .addValidator(Validator.VALID)
-            //.addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 
     public static final PropertyDescriptor CONNECTION_TIMEOUT = new PropertyDescriptor
@@ -206,15 +196,7 @@ public class CQLControllerService extends AbstractControllerService implements C
         //final String ip = context.getProperty(IP_ADDRESSES).evaluateAttributeExpressions().getValue();
         final String ip = context.getProperty(IP_ADDRESSES).getValue();
         final String secureConnectionBundl = context.getProperty(SECURE_CONNECTION_BUNDLE).getValue();
-
-//        final String port = context.getProperty(PORT).evaluateAttributeExpressions().getValue();
-//        final String user = context.getProperty(USERNAME).evaluateAttributeExpressions().getValue();
-//        if (!ip.contains("@") && user != null && passw != null) {
-//            return uri.replaceFirst("://", "://" + URLEncoder.encode(user, StandardCharsets.UTF_8) + ":" + URLEncoder.encode(passw, StandardCharsets.UTF_8) + "@");
-//        } else {
-//            return uri;
-//        }
-        return ip != null ? ip: secureConnectionBundl;
+        return ip != null ? ip : secureConnectionBundl;
     }
 
     @Override
@@ -229,6 +211,5 @@ public class CQLControllerService extends AbstractControllerService implements C
 
     @Override
     public CqlSession getSession() { return cqlAccess != null ? cqlAccess.sessionBuilder.build() : null; }
-
 
 }

@@ -83,7 +83,6 @@ public class PutCQL extends AbstractProcessor {
             .name("Table")
             .description("Table and schema name in CQL (expected format '<schema>.<table>').")
             .required(true)
-            //.addValidator(StandardValidators.ATTRIBUTE_KEY_PROPERTY_NAME_VALIDATOR)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .build();
 

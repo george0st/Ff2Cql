@@ -125,7 +125,7 @@ public class PutCQLBase {
 
     private FlowFile coreTest(TestSetup setup, String content, boolean validate){
         try {
-            long finish, start, count;
+            long finish, start, countWrite, countRead;
             FlowFile result;
             boolean ok;
 
@@ -136,14 +136,14 @@ public class PutCQLBase {
             finish = System.currentTimeMillis();
 
             if (ok) {
-                count = Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
+                countWrite = Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
                 System.out.printf("Source: '%s'; WRITE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
                         result.getAttribute("CQLName"),
                         "FlowFile",
                         ReadableValue.fromMillisecond(finish - start),
                         finish - start,
-                        count,
-                        count / ((finish - start) / 1000.0),
+                        countWrite,
+                        countWrite / ((finish - start) / 1000.0),
                         System.lineSeparator());
 
                 if (validate) {
@@ -153,7 +153,7 @@ public class PutCQLBase {
                     // validate (read value from CSV and from CQL and compare content)
                     try (CqlSession session=testService.getSession()) {
                         start = System.currentTimeMillis();
-                        count = (new CsvCqlValidate(session, setup, CqlTestSchema.primaryKeys)).executeContent(content);
+                        countRead = (new CsvCqlValidate(session, setup, CqlTestSchema.primaryKeys)).executeContent(content);
                         finish = System.currentTimeMillis();
                     }
                     System.out.printf("Source: '%s'; VALIDATE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
@@ -161,9 +161,12 @@ public class PutCQLBase {
                             "FlowFile",
                             ReadableValue.fromMillisecond(finish - start),
                             finish - start,
-                            count,
-                            count / ((finish - start) / 1000.0),
+                            countRead,
+                            countRead / ((finish - start) / 1000.0),
                             System.lineSeparator());
+
+                    if (countWrite != countRead)
+                        throw new Exception("The amount of Write and Read operations are different");
                 }
                 return result;
             }
