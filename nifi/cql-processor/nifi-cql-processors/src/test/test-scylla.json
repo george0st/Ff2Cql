@@ -1,5 +1,5 @@
 {
-  "enable": false,
+  "enable": true,
   "name": "scylla",
   "ipAddresses": ["localhost"],
   "port": 9042,
