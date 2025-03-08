@@ -28,7 +28,7 @@ You have to do these steps (only one-time action):
 
 - **IP Addresses:**
     - IP addresses of CQL engine with comma delimiter e.g. '10.129.53.10,
-      10.129.53.11, 10.129.53.12' or 'localhost'.
+      10.129.53.11, 10.129.53.12' or 'localhost', etc.
 - **Port:**
     - Port for communication with CQL engine (default is 9042).
 - **Secure Connection Bundle:**
@@ -71,6 +71,8 @@ You have to do these steps (only one-time action):
 
 ### PutCQL setting (key items):
 
+- **Service Controller:**
+  - see relation to [CQLControllerService](#22-add-controller-and-setup-properties)
 - **Write Consistency Level:**
   - Consistency level for write operation (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.).
 - **Table:**
