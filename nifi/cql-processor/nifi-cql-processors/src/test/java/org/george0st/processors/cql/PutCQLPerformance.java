@@ -115,6 +115,19 @@ public class PutCQLPerformance extends PutCQLBase {
     }
 
     @Test
+    @DisplayName("SEQ Write/Validate - 30K items")
+    void csvSequenceWriteValidate30K() throws Exception {
+        String content=new CqlTestSchema().generateRndCSVString(30_000,true);
+        FlowFile result;
+
+        for (TestSetup setup : setups) {
+            result = runTest(setup, content, true);
+            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
+            assertEquals(30_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+        }
+    }
+
+    @Test
     @DisplayName("SEQ Write/Validate - 100K items")
     void csvSequenceWriteValidate100K() throws Exception {
         String content=new CqlTestSchema().generateRndCSVString(100_000,true);
@@ -166,6 +179,19 @@ public class PutCQLPerformance extends PutCQLBase {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(10_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+        }
+    }
+
+    @Test
+    @DisplayName("RND Write - 30K items")
+    void csvRandomWrite30K() throws Exception {
+        String content=new CqlTestSchema().generateRndCSVString(30_000,false);
+        FlowFile result;
+
+        for (TestSetup setup : setups) {
+            result = runTest(setup, content);
+            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
+            assertEquals(30_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
         }
     }
 
