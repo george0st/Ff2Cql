@@ -37,7 +37,7 @@ public class CQLAccess {
         if (this.controllerSetup.ipAddresses!=null)
             for (String ipAddress : this.controllerSetup.ipAddresses)
                 builder.addContactPoint(new InetSocketAddress(ipAddress.strip(), controllerSetup.port));
-
+        
         //  secureConnectionBundle
         if (controllerSetup.secureConnectionBundle!=null)
             builder.withCloudSecureConnectBundle(Paths.get(controllerSetup.secureConnectionBundle));
