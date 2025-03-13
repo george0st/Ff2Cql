@@ -46,6 +46,8 @@ public class CQLAccess {
         if (controllerSetup.username!=null)
             builder.withAuthCredentials(controllerSetup.username, controllerSetup.pwd);
 
+        // TODO: add SSL handler
+
         // data center
         if (controllerSetup.localDC!=null)
             builder.withLocalDatacenter(controllerSetup.localDC);
