@@ -27,6 +27,7 @@ import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.components.Validator;
 import org.apache.nifi.controller.AbstractControllerService;
 import org.apache.nifi.controller.ConfigurationContext;
+import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.reporting.InitializationException;
 import org.george0st.cql.helper.ControllerSetup;
@@ -49,8 +50,9 @@ public class CQLControllerService extends AbstractControllerService implements C
             .description("List of IP addresses for CQL connection, the addresses are split by comma " +
                     "(e.g. '192.168.0.1, 192.168.0.2, ...' or 'localhost').")
             .required(false)
-            //.defaultValue("localhost")
-            .addValidator(Validator.VALID)
+            //.addValidator(Validator.VALID)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
 
     public static final PropertyDescriptor PORT = new PropertyDescriptor
@@ -70,7 +72,9 @@ public class CQLControllerService extends AbstractControllerService implements C
                     "NOTE: the 'username' is 'clientId' and 'password' id 'secret', these values are from " +
                     "the file '*-token.json', downloaded from AstraDB web.")
             .required(false)
-            .addValidator(Validator.VALID)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
+//            .addValidator(Validator.VALID)
             .build();
 
     public static final PropertyDescriptor USERNAME = new PropertyDescriptor
@@ -78,7 +82,9 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("Username")
             .description("Username for the CQL connection.")
             .required(false)
-            .addValidator(Validator.VALID)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
+//            .addValidator(Validator.VALID)
             .build();
 
     public static final PropertyDescriptor PASSWORD = new PropertyDescriptor
@@ -86,7 +92,9 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("Password")
             .description("Password for the CQL connection.")
             .required(false)
-            .addValidator(Validator.VALID)
+            //.addValidator(Validator.VALID)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .sensitive(true)
             .build();
 
@@ -95,7 +103,9 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("Local Data Center")
             .description("Name of local data center e.g. 'dc1', 'datacenter1', etc.")
             .required(false)
-            .addValidator(Validator.VALID)
+            //.addValidator(Validator.VALID)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
 
     public static final PropertyDescriptor CONNECTION_TIMEOUT = new PropertyDescriptor
@@ -193,9 +203,8 @@ public class CQLControllerService extends AbstractControllerService implements C
     }
 
     protected String getURI(final ConfigurationContext context) {
-        //final String ip = context.getProperty(IP_ADDRESSES).evaluateAttributeExpressions().getValue();
-        final String ip = context.getProperty(IP_ADDRESSES).getValue();
-        final String secureConnectionBundl = context.getProperty(SECURE_CONNECTION_BUNDLE).getValue();
+        final String ip = context.getProperty(IP_ADDRESSES).evaluateAttributeExpressions().getValue();
+        final String secureConnectionBundl = context.getProperty(SECURE_CONNECTION_BUNDLE).evaluateAttributeExpressions().getValue();
         return ip != null ? ip : secureConnectionBundl;
     }
 

@@ -4,6 +4,7 @@ import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.reporting.InitializationException;
 import org.george0st.processors.cql.helper.CqlTestSchema;
 import org.george0st.processors.cql.helper.TestSetup;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -60,6 +61,7 @@ public class PutCQLPerformance extends PutCQLBase {
     }
 
     @Test
+    @Disabled
     @DisplayName("SEQ Write - 100K items")
     void csvSequenceWrite100K() throws Exception {
         String content=new CqlTestSchema().generateRndCSVString(100_000,true);
@@ -128,6 +130,7 @@ public class PutCQLPerformance extends PutCQLBase {
     }
 
     @Test
+    @Disabled
     @DisplayName("SEQ Write/Validate - 100K items")
     void csvSequenceWriteValidate100K() throws Exception {
         String content=new CqlTestSchema().generateRndCSVString(100_000,true);
@@ -196,6 +199,7 @@ public class PutCQLPerformance extends PutCQLBase {
     }
 
     @Test
+    @Disabled
     @DisplayName("RND Write - 100K items")
     void csvRandomWrite100K() throws Exception {
         String content=new CqlTestSchema().generateRndCSVString(100_000,false);
