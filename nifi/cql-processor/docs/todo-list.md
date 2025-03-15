@@ -1,11 +1,10 @@
 TO-DO list
 ==========
 
-1. finish yugabyteDB
- - https://docs.yugabyte.com/preview/drivers-orms/java/ycql-ssl/
+PutSQL
+  1. finish yugabyteDB
+   - https://docs.yugabyte.com/preview/drivers-orms/java/ycql-ssl/
+  1.1. Add SSL handler for Controller
 
-2. Add SSL handler for Controller
-
-3. Add verification for Controller
 
 
