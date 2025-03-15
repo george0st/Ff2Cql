@@ -39,13 +39,13 @@ public class ControllerSetup {
      */
     public ControllerSetup(final ConfigurationContext context){
         setIPAddresses(context.getProperty(CQLControllerService.IP_ADDRESSES).evaluateAttributeExpressions().getValue());
-        port=context.getProperty(CQLControllerService.PORT).asInteger();
+        port=context.getProperty(CQLControllerService.PORT).evaluateAttributeExpressions().asInteger();
         secureConnectionBundle=context.getProperty(CQLControllerService.SECURE_CONNECTION_BUNDLE).evaluateAttributeExpressions().getValue();
         username=context.getProperty(CQLControllerService.USERNAME).evaluateAttributeExpressions().getValue();
         pwd=context.getProperty(CQLControllerService.PASSWORD).evaluateAttributeExpressions().getValue();
         localDC=context.getProperty(CQLControllerService.LOCAL_DC).evaluateAttributeExpressions().getValue();
-        connectionTimeout=context.getProperty(CQLControllerService.CONNECTION_TIMEOUT).asLong();
-        requestTimeout=context.getProperty(CQLControllerService.REQUEST_TIMEOUT).asLong();
+        connectionTimeout=context.getProperty(CQLControllerService.CONNECTION_TIMEOUT).evaluateAttributeExpressions().asLong();
+        requestTimeout=context.getProperty(CQLControllerService.REQUEST_TIMEOUT).evaluateAttributeExpressions().asLong();
         consistencyLevel=context.getProperty(CQLControllerService.CONSISTENCY_LEVEL).getValue();
     }
 

@@ -62,6 +62,7 @@ public class CQLControllerService extends AbstractControllerService implements C
             .required(false)
             .defaultValue("9042")
             .addValidator(StandardValidators.POSITIVE_INTEGER_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
 
     public static final PropertyDescriptor SECURE_CONNECTION_BUNDLE = new PropertyDescriptor
@@ -115,6 +116,7 @@ public class CQLControllerService extends AbstractControllerService implements C
             .required(true)
             .defaultValue("900")
             .addValidator(StandardValidators.LONG_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
 
     public static final PropertyDescriptor REQUEST_TIMEOUT = new PropertyDescriptor
@@ -124,6 +126,7 @@ public class CQLControllerService extends AbstractControllerService implements C
             .required(true)
             .defaultValue("60")
             .addValidator(StandardValidators.LONG_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
 
     public static final PropertyDescriptor CONSISTENCY_LEVEL = new PropertyDescriptor

@@ -20,6 +20,7 @@ import com.datastax.oss.driver.api.core.CqlSession;
 import org.apache.nifi.annotation.behavior.*;
 import org.apache.nifi.components.AllowableValue;
 import org.apache.nifi.components.PropertyDescriptor;
+import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.annotation.lifecycle.OnScheduled;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
@@ -84,6 +85,7 @@ public class PutCQL extends AbstractProcessor {
             .description("Table and schema name in CQL (expected format '<schema>.<table>').")
             .required(true)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
 
     public static final PropertyDescriptor BATCH_SIZE = new PropertyDescriptor
@@ -93,6 +95,7 @@ public class PutCQL extends AbstractProcessor {
             .required(false)
             .defaultValue("200")
             .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
 
     public static final PropertyDescriptor BATCH_TYPE = new PropertyDescriptor
