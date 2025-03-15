@@ -42,13 +42,13 @@ You have to do these steps (only one-time action):
     - Password for login to CQL.
 - **Local Data Center:**
     - Name of local data center in CQL typically e.g. 'dc1' or 'datacenter1', etc.
-      (default is 'datacenter1')
 - **Connection Timeout:**
     - Connection timeout in seconds (default is 900 seconds).
 - **Request Timeout:**
     - Request timeout in seconds (default is 60 seconds).
 - **Consistency Level:**
-    - Default consistency level (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.).
+    - Default consistency level (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.,
+      default is LOCAL_ONE). 
 
 ### 2.3 Add processor and setup properties
 
@@ -74,7 +74,8 @@ You have to do these steps (only one-time action):
 - **Service Controller:**
   - see relation to [CQLControllerService](#22-add-controller-and-setup-properties)
 - **Write Consistency Level:**
-  - Consistency level for write operation (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.).
+  - Consistency level for write operation (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.,
+    default is LOCAL_ONE).
 - **Table:**
   - Schema and table name in CQL for write/put a data (expected format 'keyspace.table', e.g. 'cqlschema.cqltable').
   - The data types defined in the CQL table will be used for value conversions from the CSV file.
