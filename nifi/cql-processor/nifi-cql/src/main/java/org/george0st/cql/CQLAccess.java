@@ -15,7 +15,7 @@ import java.nio.file.Paths;
  * Access to the CQL source/engine with default setting such as
  * IP addresses, authorization, codecs, timeouts, consistency level, etc.).
  */
-public class CQLAccess {
+public class CQLAccess implements AutoCloseable {
 
     protected ControllerSetup controllerSetup;
     protected CqlSessionBuilder sessionBuilder;
@@ -25,6 +25,7 @@ public class CQLAccess {
         this.sessionBuilder = createBuilder();
     }
 
+    @Override
     public void close(){
         sessionBuilder = null;
         controllerSetup = null;

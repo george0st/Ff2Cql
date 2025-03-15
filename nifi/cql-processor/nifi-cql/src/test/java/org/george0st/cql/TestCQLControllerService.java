@@ -52,7 +52,7 @@ public class TestCQLControllerService {
 
     private void initTestScope(TestRunner testRunner, CQLControllerService testService) throws IOException, InitializationException {
         testRunner.addControllerService("test-good", testService);
-        testRunner.setValidateExpressionUsage(false);
+        testRunner.setValidateExpressionUsage(true);
 
         if (setups == null) {
             setups = new ArrayList<TestControllerSetup>();

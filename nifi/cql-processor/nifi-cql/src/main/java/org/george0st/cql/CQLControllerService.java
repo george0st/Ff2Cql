@@ -234,33 +234,59 @@ public class CQLControllerService extends AbstractControllerService implements C
     @Override
     public List<ConfigVerificationResult> verify(ConfigurationContext context, ComponentLog verificationLogger, Map<String, String> variables) {
         List<ConfigVerificationResult> results = new ArrayList<>();
+        ControllerSetup testSetup=null;
 
-        results.add(new ConfigVerificationResult.Builder()
-                .verificationStepName("Config CQL Service")
-                .outcome(SUCCESSFUL)
-                .explanation("Successfully configured CQL Service")
-                .build());
+        // 1. check configuration
+        try {
+            testSetup = new ControllerSetup(context);
+            results.add(new ConfigVerificationResult.Builder()
+                    .verificationStepName("Configure CQL Service")
+                    .outcome(SUCCESSFUL)
+                    .explanation("Successfully configured CQL Service")
+                    .build());
+        }
+        catch(Exception ex) {
+            verificationLogger.error("Failed to configure CQL Service", ex);
+            results.add(new ConfigVerificationResult.Builder()
+                    .verificationStepName("Configure CQL Service")
+                    .outcome(FAILED)
+                    .explanation("Failed to configure CQL Service: " + ex.getMessage())
+                    .build());
+        }
 
-        results.add(new ConfigVerificationResult.Builder()
-                .verificationStepName("Connection CQL Service")
-                .outcome(SUCCESSFUL)
-                .explanation("Successfully connection CQL Service")
-                .build());
+        //  2. check CQL access
+        try (CQLAccess testCqlAccess = new CQLAccess(testSetup)){
+            results.add(new ConfigVerificationResult.Builder()
+                    .verificationStepName("Create CQL Access")
+                    .outcome(SUCCESSFUL)
+                    .explanation("Successfully create CQL Access")
+                    .build());
 
-//        try {
-//            results.add(new ConfigVerificationResult.Builder()
-//                    .verificationStepName("Configure Kerberos User")
-//                    .outcome(SUCCESSFUL)
-//                    .explanation("Successfully configured")
-//                    .build());
-//        } catch (final Exception e) {
-//            verificationLogger.error("Failed to configure Kerberos user", e);
-//            results.add(new ConfigVerificationResult.Builder()
-//                    .verificationStepName("Configure Kerberos User")
-//                    .outcome(FAILED)
-//                    .explanation("Failed to configure Kerberos user: " + e.getMessage())
-//                    .build());
-//        }
+            //  3. check CQL session
+            try (CqlSession session = testCqlAccess.sessionBuilder.build()) {
+                results.add(new ConfigVerificationResult.Builder()
+                        .verificationStepName("Establish Connection")
+                        .outcome(SUCCESSFUL)
+                        .explanation("Successfully establish CQL connection")
+                        .build());
+            }
+            catch(Exception ex){
+                verificationLogger.error("Failed to establish CQL connection", ex);
+                results.add(new ConfigVerificationResult.Builder()
+                        .verificationStepName("Establish Connection")
+                        .outcome(FAILED)
+                        .explanation("Failed to establish CQL connection: " + ex.getMessage())
+                        .build());
+            }
+        }
+        catch (Exception ex) {
+            verificationLogger.error("Failed to create CQL Access", ex);
+            results.add(new ConfigVerificationResult.Builder()
+                    .verificationStepName("Create CQL Access")
+                    .outcome(FAILED)
+                    .explanation("Failed to create CQL Access: " + ex.getMessage())
+                    .build());
+        }
         return results;
     }
 }
