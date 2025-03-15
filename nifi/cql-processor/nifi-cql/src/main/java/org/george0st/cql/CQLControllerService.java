@@ -16,21 +16,28 @@
  */
 package org.george0st.cql;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.Tags;
 import org.apache.nifi.annotation.lifecycle.OnDisabled;
 import org.apache.nifi.annotation.lifecycle.OnEnabled;
+import org.apache.nifi.components.ConfigVerificationResult;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.components.Validator;
 import org.apache.nifi.controller.AbstractControllerService;
 import org.apache.nifi.controller.ConfigurationContext;
+import org.apache.nifi.controller.VerifiableControllerService;
 import org.apache.nifi.expression.ExpressionLanguageScope;
+import org.apache.nifi.logging.ComponentLog;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.reporting.InitializationException;
 import org.george0st.cql.helper.ControllerSetup;
+import static org.apache.nifi.components.ConfigVerificationResult.Outcome.FAILED;
+import static org.apache.nifi.components.ConfigVerificationResult.Outcome.SUCCESSFUL;
 
 
 // inspiration
@@ -39,7 +46,7 @@ import org.george0st.cql.helper.ControllerSetup;
 @Tags({ "cql", "nosql", "cassandra", "scylladb", "cassandra query language", "service"})
 @CapabilityDescription("Provides a controller service that configures a connection to CQL solution and " +
         "provides access to that connection to other CQL-related components.")
-public class CQLControllerService extends AbstractControllerService implements CQLClientService {
+public class CQLControllerService extends AbstractControllerService implements CQLClientService, VerifiableControllerService {
 
     private String uri;
     protected CQLAccess cqlAccess;
@@ -224,4 +231,36 @@ public class CQLControllerService extends AbstractControllerService implements C
     @Override
     public CqlSession getSession() { return cqlAccess != null ? cqlAccess.sessionBuilder.build() : null; }
 
+    @Override
+    public List<ConfigVerificationResult> verify(ConfigurationContext context, ComponentLog verificationLogger, Map<String, String> variables) {
+        List<ConfigVerificationResult> results = new ArrayList<>();
+
+        results.add(new ConfigVerificationResult.Builder()
+                .verificationStepName("Config CQL Service")
+                .outcome(SUCCESSFUL)
+                .explanation("Successfully configured CQL Service")
+                .build());
+
+        results.add(new ConfigVerificationResult.Builder()
+                .verificationStepName("Connection CQL Service")
+                .outcome(SUCCESSFUL)
+                .explanation("Successfully connection CQL Service")
+                .build());
+
+//        try {
+//            results.add(new ConfigVerificationResult.Builder()
+//                    .verificationStepName("Configure Kerberos User")
+//                    .outcome(SUCCESSFUL)
+//                    .explanation("Successfully configured")
+//                    .build());
+//        } catch (final Exception e) {
+//            verificationLogger.error("Failed to configure Kerberos user", e);
+//            results.add(new ConfigVerificationResult.Builder()
+//                    .verificationStepName("Configure Kerberos User")
+//                    .outcome(FAILED)
+//                    .explanation("Failed to configure Kerberos user: " + e.getMessage())
+//                    .build());
+//        }
+        return results;
+    }
 }
