@@ -206,4 +206,46 @@ public class PutCQLFunction extends PutCQLBase {
         }
     }
 
+    // region Test ERRORS
+
+    @Test
+    public void testErrorNonExistColumnInCSV() {
+        String content = "aaa\n" +
+                "0\n" +
+                "1\n";
+        FlowFile result;
+
+        for (TestSetup setup: setups) {
+            result = runTest(setup, content);
+            assertNull(result, String.format("Expected null, besed on simulation error in '%s'", setup.name));
+        }
+    }
+
+    @Test
+    public void testErrorMissingPrimaryKeyColumnInCSV() {
+        String content = "colbigint\n" +
+                "0\n" +
+                "1\n";
+        FlowFile result;
+
+        for (TestSetup setup: setups) {
+            result = runTest(setup, content);
+            assertNull(result, String.format("Expected null, based on simulation error in '%s'", setup.name));
+        }
+    }
+
+    @Test
+    public void testErrorInvalidTypeValueInCSV() {
+        String content = "colbigint,colint\n" +
+                "0,aa\n" +
+                "1,bb\n";
+        FlowFile result;
+
+        for (TestSetup setup: setups) {
+            result = runTest(setup, content);
+            assertNull(result, String.format("Expected null, based on simulation error in '%s'", setup.name));
+        }
+    }
+
+    // endregion Test ERRORS
 }

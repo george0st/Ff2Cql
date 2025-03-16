@@ -131,44 +131,46 @@ public class PutCQLBase {
 
             start = System.currentTimeMillis();
             testRunner.run();
-            result = testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS).getLast();
-            ok = testRunner.getFlowFilesForRelationship(PutCQL.REL_FAILURE).isEmpty();
-            finish = System.currentTimeMillis();
+            if (!testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS).isEmpty()) {
+                result = testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS).getLast();
+                ok = testRunner.getFlowFilesForRelationship(PutCQL.REL_FAILURE).isEmpty();
+                finish = System.currentTimeMillis();
 
-            if (ok) {
-                countWrite = Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
-                System.out.printf("Source: '%s'; WRITE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-                        result.getAttribute("CQLName"),
-                        "FlowFile",
-                        ReadableValue.fromMillisecond(finish - start),
-                        finish - start,
-                        countWrite,
-                        countWrite / ((finish - start) / 1000.0),
-                        System.lineSeparator());
-
-                if (validate) {
-                    // delay (before read for synch on CQL side)
-                    Thread.sleep(3000);
-
-                    // validate (read value from CSV and from CQL and compare content)
-                    try (CqlSession session=testService.getSession()) {
-                        start = System.currentTimeMillis();
-                        countRead = (new CsvCqlValidate(session, setup, CqlTestSchema.primaryKeys)).executeContent(content);
-                        finish = System.currentTimeMillis();
-                    }
-                    System.out.printf("Source: '%s'; VALIDATE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+                if (ok) {
+                    countWrite = Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
+                    System.out.printf("Source: '%s'; WRITE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
                             result.getAttribute("CQLName"),
                             "FlowFile",
                             ReadableValue.fromMillisecond(finish - start),
                             finish - start,
-                            countRead,
-                            countRead / ((finish - start) / 1000.0),
+                            countWrite,
+                            countWrite / ((finish - start) / 1000.0),
                             System.lineSeparator());
 
-                    if (countWrite != countRead)
-                        throw new Exception("The amount of Write and Read operations are different");
+                    if (validate) {
+                        // delay (before read for synch on CQL side)
+                        Thread.sleep(3000);
+
+                        // validate (read value from CSV and from CQL and compare content)
+                        try (CqlSession session = testService.getSession()) {
+                            start = System.currentTimeMillis();
+                            countRead = (new CsvCqlValidate(session, setup, CqlTestSchema.primaryKeys)).executeContent(content);
+                            finish = System.currentTimeMillis();
+                        }
+                        System.out.printf("Source: '%s'; VALIDATE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+                                result.getAttribute("CQLName"),
+                                "FlowFile",
+                                ReadableValue.fromMillisecond(finish - start),
+                                finish - start,
+                                countRead,
+                                countRead / ((finish - start) / 1000.0),
+                                System.lineSeparator());
+
+                        if (countWrite != countRead)
+                            throw new Exception("The amount of Write and Read operations are different");
+                    }
+                    return result;
                 }
-                return result;
             }
             return null;
         }
