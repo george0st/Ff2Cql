@@ -97,19 +97,19 @@ public class PutCQLBase {
         }
     }
 
-    protected FlowFile runTest(TestSetup setup, String content) {
+    protected FlowFile runTest(TestSetup setup, String content) throws Exception {
         return runTestWithProperty(setup, content, null, null, false);
     }
 
-    protected FlowFile runTest(TestSetup setup, String content, boolean validate) {
+    protected FlowFile runTest(TestSetup setup, String content, boolean validate) throws Exception {
         return runTestWithProperty(setup, content, null, null, validate);
     }
 
-    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue){
+    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue) throws Exception {
         return  runTestWithProperty(setup, content, property, propertyValue, false);
     }
 
-    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue, boolean validate){
+    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue, boolean validate) throws Exception {
         HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
         FlowFile result;
 
@@ -123,7 +123,7 @@ public class PutCQLBase {
         return result;
     }
 
-    private FlowFile coreTest(TestSetup setup, String content, boolean validate){
+    private FlowFile coreTest(TestSetup setup, String content, boolean validate) throws Exception {
         try {
             long finish, start, countWrite, countRead;
             FlowFile result;
@@ -172,11 +172,11 @@ public class PutCQLBase {
                     return result;
                 }
             }
-            return null;
         }
-        catch(Exception ex) {
-            return null;
+        catch (Exception ex) {
+            throw new Exception("Error in PROCESSOR");
         }
+        return null;
     }
 
 }

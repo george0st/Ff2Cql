@@ -33,7 +33,7 @@ public class PutCQLErrorFunction extends PutCQLBase {
     }
 
     @Test
-    public void testErrorNonExistColumnInCSV() {
+    public void testErrorNonExistColumnInCSV() throws Exception {
         String content = "aaa\n" +
                 "0\n" +
                 "1\n";
@@ -46,7 +46,7 @@ public class PutCQLErrorFunction extends PutCQLBase {
     }
 
     @Test
-    public void testErrorMissingPrimaryKeyColumnInCSV() {
+    public void testErrorMissingPrimaryKeyColumnInCSV() throws Exception {
         String content = "colbigint\n" +
                 "0\n" +
                 "1\n";
@@ -59,7 +59,7 @@ public class PutCQLErrorFunction extends PutCQLBase {
     }
 
     @Test
-    public void testErrorInvalidIntTypeValueInCSV() {
+    public void testErrorInvalidIntTypeValueInCSV() throws Exception {
         String content = "colbigint,colint\n" +
                 "0,Peter\n" +
                 "1,John\n";
@@ -72,7 +72,7 @@ public class PutCQLErrorFunction extends PutCQLBase {
     }
 
     @Test
-    public void testErrorInvalidFloatTypeValueInCSV() {
+    public void testErrorInvalidFloatTypeValueInCSV() throws Exception {
         String content = "colbigint,colint,colfloat\n" +
                 "0,1064,Peter\n" +
                 "1,1709,John\n";
