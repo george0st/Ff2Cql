@@ -97,19 +97,19 @@ public class PutCQLBase {
         }
     }
 
-    protected FlowFile runTest(TestSetup setup, String content) {
+    protected FlowFile runTest(TestSetup setup, String content) throws Exception {
         return runTestWithProperty(setup, content, null, null, false);
     }
 
-    protected FlowFile runTest(TestSetup setup, String content, boolean validate) {
+    protected FlowFile runTest(TestSetup setup, String content, boolean validate) throws Exception {
         return runTestWithProperty(setup, content, null, null, validate);
     }
 
-    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue){
+    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue) throws Exception {
         return  runTestWithProperty(setup, content, property, propertyValue, false);
     }
 
-    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue, boolean validate){
+    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue, boolean validate) throws Exception {
         HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
         FlowFile result;
 
@@ -123,7 +123,7 @@ public class PutCQLBase {
         return result;
     }
 
-    private FlowFile coreTest(TestSetup setup, String content, boolean validate){
+    private FlowFile coreTest(TestSetup setup, String content, boolean validate) throws Exception {
         try {
             long finish, start, countWrite, countRead;
             FlowFile result;
@@ -131,50 +131,52 @@ public class PutCQLBase {
 
             start = System.currentTimeMillis();
             testRunner.run();
-            result = testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS).getLast();
-            ok = testRunner.getFlowFilesForRelationship(PutCQL.REL_FAILURE).isEmpty();
-            finish = System.currentTimeMillis();
+            if (!testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS).isEmpty()) {
+                result = testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS).getLast();
+                ok = testRunner.getFlowFilesForRelationship(PutCQL.REL_FAILURE).isEmpty();
+                finish = System.currentTimeMillis();
 
-            if (ok) {
-                countWrite = Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
-                System.out.printf("Source: '%s'; WRITE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-                        result.getAttribute("CQLName"),
-                        "FlowFile",
-                        ReadableValue.fromMillisecond(finish - start),
-                        finish - start,
-                        countWrite,
-                        countWrite / ((finish - start) / 1000.0),
-                        System.lineSeparator());
-
-                if (validate) {
-                    // delay (before read for synch on CQL side)
-                    Thread.sleep(3000);
-
-                    // validate (read value from CSV and from CQL and compare content)
-                    try (CqlSession session=testService.getSession()) {
-                        start = System.currentTimeMillis();
-                        countRead = (new CsvCqlValidate(session, setup, CqlTestSchema.primaryKeys)).executeContent(content);
-                        finish = System.currentTimeMillis();
-                    }
-                    System.out.printf("Source: '%s'; VALIDATE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+                if (ok) {
+                    countWrite = Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
+                    System.out.printf("Source: '%s'; WRITE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
                             result.getAttribute("CQLName"),
                             "FlowFile",
                             ReadableValue.fromMillisecond(finish - start),
                             finish - start,
-                            countRead,
-                            countRead / ((finish - start) / 1000.0),
+                            countWrite,
+                            countWrite / ((finish - start) / 1000.0),
                             System.lineSeparator());
 
-                    if (countWrite != countRead)
-                        throw new Exception("The amount of Write and Read operations are different");
+                    if (validate) {
+                        // delay (before read for synch on CQL side)
+                        Thread.sleep(3000);
+
+                        // validate (read value from CSV and from CQL and compare content)
+                        try (CqlSession session = testService.getSession()) {
+                            start = System.currentTimeMillis();
+                            countRead = (new CsvCqlValidate(session, setup, CqlTestSchema.primaryKeys)).executeContent(content);
+                            finish = System.currentTimeMillis();
+                        }
+                        System.out.printf("Source: '%s'; VALIDATE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+                                result.getAttribute("CQLName"),
+                                "FlowFile",
+                                ReadableValue.fromMillisecond(finish - start),
+                                finish - start,
+                                countRead,
+                                countRead / ((finish - start) / 1000.0),
+                                System.lineSeparator());
+
+                        if (countWrite != countRead)
+                            throw new Exception("The amount of Write and Read operations are different");
+                    }
+                    return result;
                 }
-                return result;
             }
-            return null;
         }
-        catch(Exception ex) {
-            return null;
+        catch (Exception ex) {
+            throw new Exception("Error in PROCESSOR");
         }
+        return null;
     }
 
 }

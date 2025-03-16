@@ -17,6 +17,7 @@
 package org.george0st.processors.cql;
 
 import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.servererrors.InvalidQueryException;
 import org.apache.nifi.annotation.behavior.*;
 import org.apache.nifi.components.AllowableValue;
 import org.apache.nifi.components.PropertyDescriptor;
@@ -204,8 +205,13 @@ public class PutCQL extends AbstractProcessor {
                 session.getProvenanceReporter().send(flowFile, clientService.getURI());
                 session.transfer(flowFile, REL_SUCCESS);
             }
-        } catch (Exception ex) {
-            getLogger().error("PutCQL, OnTrigger error", ex);
+        }
+        catch (InvalidQueryException ex){
+            getLogger().error("PutCQL, OnTrigger: InvalidQuery error", ex);
+            session.transfer(flowFile, REL_FAILURE);
+        }
+        catch (Exception ex) {
+            getLogger().error("PutCQL, OnTrigger: Error", ex);
             session.transfer(flowFile, REL_FAILURE);
         }
     }
