@@ -59,10 +59,23 @@ public class PutCQLErrorFunction extends PutCQLBase {
     }
 
     @Test
-    public void testErrorInvalidTypeValueInCSV() {
+    public void testErrorInvalidIntTypeValueInCSV() {
         String content = "colbigint,colint\n" +
-                "0,aa\n" +
-                "1,bb\n";
+                "0,Peter\n" +
+                "1,John\n";
+        FlowFile result;
+
+        for (TestSetup setup: setups) {
+            result = runTest(setup, content);
+            assertNull(result, String.format("Expected null, based on simulation error in '%s'", setup.name));
+        }
+    }
+
+    @Test
+    public void testErrorInvalidFloatTypeValueInCSV() {
+        String content = "colbigint,colint,colfloat\n" +
+                "0,1064,Peter\n" +
+                "1,1709,John\n";
         FlowFile result;
 
         for (TestSetup setup: setups) {
