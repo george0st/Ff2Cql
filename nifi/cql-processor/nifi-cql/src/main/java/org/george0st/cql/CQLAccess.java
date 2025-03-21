@@ -8,6 +8,7 @@ import com.datastax.oss.driver.api.core.config.TypedDriverOption;
 import org.george0st.cql.codec.*;
 import org.george0st.cql.helper.ControllerSetup;
 
+import javax.net.ssl.SSLContext;
 import java.net.InetSocketAddress;
 import java.nio.file.Paths;
 
@@ -47,7 +48,9 @@ public class CQLAccess implements AutoCloseable {
         if (controllerSetup.username!=null)
             builder.withAuthCredentials(controllerSetup.username, controllerSetup.pwd);
 
-        // TODO: add SSL handler
+        // SSL context
+        if (controllerSetup.sslContext != null)
+            builder.withSslContext((SSLContext) controllerSetup.sslContext);
 
         // data center
         if (controllerSetup.localDC!=null)

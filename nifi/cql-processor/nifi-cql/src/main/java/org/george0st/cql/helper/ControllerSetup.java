@@ -1,8 +1,10 @@
 package org.george0st.cql.helper;
 
 import org.apache.nifi.controller.ConfigurationContext;
+import org.apache.nifi.ssl.SSLContextProvider;
 import org.george0st.cql.CQLControllerService;
 import java.util.Arrays;
+import javax.net.ssl.SSLContext;
 
 
 /**
@@ -19,6 +21,7 @@ public class ControllerSetup {
     public long connectionTimeout;
     public long requestTimeout;
     public String consistencyLevel;
+    public Object sslContext;
 
     public void setIPAddresses(String ipAddr) {
         if (ipAddr!=null) {
@@ -47,6 +50,10 @@ public class ControllerSetup {
         connectionTimeout=context.getProperty(CQLControllerService.CONNECTION_TIMEOUT).evaluateAttributeExpressions().asLong();
         requestTimeout=context.getProperty(CQLControllerService.REQUEST_TIMEOUT).evaluateAttributeExpressions().asLong();
         consistencyLevel=context.getProperty(CQLControllerService.CONSISTENCY_LEVEL).getValue();
+
+        //  sslContext
+        SSLContextProvider sslContextProvider = context.getProperty(CQLControllerService.SSL_CONTEXT_SERVICE).asControllerService(SSLContextProvider.class);
+        sslContext = (SSLContext) sslContextProvider != null ? sslContextProvider.createContext() : null;
     }
 
     @Override
