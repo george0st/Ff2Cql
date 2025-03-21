@@ -4,7 +4,6 @@ import org.apache.nifi.controller.ConfigurationContext;
 import org.apache.nifi.ssl.SSLContextProvider;
 import org.george0st.cql.CQLControllerService;
 import java.util.Arrays;
-import javax.net.ssl.SSLContext;
 
 
 /**
@@ -53,7 +52,7 @@ public class ControllerSetup {
 
         //  sslContext
         SSLContextProvider sslContextProvider = context.getProperty(CQLControllerService.SSL_CONTEXT_SERVICE).asControllerService(SSLContextProvider.class);
-        sslContext = (SSLContext) sslContextProvider != null ? sslContextProvider.createContext() : null;
+        sslContext = sslContextProvider != null ? sslContextProvider.createContext() : null;
     }
 
     @Override

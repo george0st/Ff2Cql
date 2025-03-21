@@ -13,16 +13,6 @@ public abstract class CqlProcessor {
     protected CqlSession session;
     protected Setup setup;
 
-//    public CqlProcessor(ControllerSetup controllerSetup, boolean dryRun) {
-//        super(controllerSetup);
-//        this.dryRun=dryRun;
-//    }
-//
-//    public CqlProcessor(CqlAccess access, boolean dryRun) {
-//        super(access);
-//        this.dryRun=dryRun;
-//    }
-
     public CqlProcessor(CqlSession cqlSession, Setup setup) {
         this.session=cqlSession;
         this.setup=setup;

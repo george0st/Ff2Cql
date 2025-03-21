@@ -6,6 +6,5 @@
   "localDC": "datacenter1",
   "connectionTimeout": "900",
   "requestTimeout": "60",
-  "consistencyLevel": "LOCAL_ONE",
-  "sslContext": null
+  "consistencyLevel": "LOCAL_ONE"
 }
