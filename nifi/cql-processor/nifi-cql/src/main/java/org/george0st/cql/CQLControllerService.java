@@ -55,7 +55,6 @@ public class CQLControllerService extends AbstractControllerService implements C
             .description("List of IP addresses for CQL connection, the addresses are split by comma " +
                     "(e.g. '192.168.0.1, 192.168.0.2, ...' or 'localhost').")
             .required(false)
-            //.addValidator(Validator.VALID)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
@@ -80,7 +79,6 @@ public class CQLControllerService extends AbstractControllerService implements C
             .required(false)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
-//            .addValidator(Validator.VALID)
             .build();
 
     public static final PropertyDescriptor USERNAME = new PropertyDescriptor
@@ -90,7 +88,6 @@ public class CQLControllerService extends AbstractControllerService implements C
             .required(false)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
-//            .addValidator(Validator.VALID)
             .build();
 
     public static final PropertyDescriptor PASSWORD = new PropertyDescriptor
@@ -98,7 +95,6 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("Password")
             .description("Password for the CQL connection.")
             .required(false)
-            //.addValidator(Validator.VALID)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .sensitive(true)
@@ -109,7 +105,6 @@ public class CQLControllerService extends AbstractControllerService implements C
             .name("Local Data Center")
             .description("Name of local data center e.g. 'dc1', 'datacenter1', etc.")
             .required(false)
-            //.addValidator(Validator.VALID)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
@@ -144,7 +139,7 @@ public class CQLControllerService extends AbstractControllerService implements C
             .allowableValues(CL_LOCAL_ONE, CL_LOCAL_QUORUM, CL_LOCAL_SERIAL, CL_EACH_QUORUM, CL_ANY, CL_ONE, CL_TWO, CL_THREE, CL_QUORUM, CL_ALL, CL_SERIAL)
             .build();
 
-    PropertyDescriptor SSL_CONTEXT_SERVICE = new PropertyDescriptor.Builder()
+    public static final PropertyDescriptor SSL_CONTEXT_SERVICE = new PropertyDescriptor.Builder()
             .name("SSL Context Service")
             .description("The SSL Context Service used to provide client certificate information for TLS/SSL "
                     + "connections.")
@@ -161,7 +156,8 @@ public class CQLControllerService extends AbstractControllerService implements C
             LOCAL_DC,
             CONNECTION_TIMEOUT,
             REQUEST_TIMEOUT,
-            CONSISTENCY_LEVEL);
+            CONSISTENCY_LEVEL,
+            SSL_CONTEXT_SERVICE);
 
     @Override
     protected List<PropertyDescriptor> getSupportedPropertyDescriptors() {
