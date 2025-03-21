@@ -36,6 +36,7 @@ import org.apache.nifi.logging.ComponentLog;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.reporting.InitializationException;
 import org.george0st.cql.helper.ControllerSetup;
+import org.apache.nifi.ssl.SSLContextProvider;
 import static org.apache.nifi.components.ConfigVerificationResult.Outcome.FAILED;
 import static org.apache.nifi.components.ConfigVerificationResult.Outcome.SUCCESSFUL;
 
@@ -141,6 +142,14 @@ public class CQLControllerService extends AbstractControllerService implements C
             .defaultValue(CL_LOCAL_ONE.getValue())
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .allowableValues(CL_LOCAL_ONE, CL_LOCAL_QUORUM, CL_LOCAL_SERIAL, CL_EACH_QUORUM, CL_ANY, CL_ONE, CL_TWO, CL_THREE, CL_QUORUM, CL_ALL, CL_SERIAL)
+            .build();
+
+    PropertyDescriptor SSL_CONTEXT_SERVICE = new PropertyDescriptor.Builder()
+            .name("SSL Context Service")
+            .description("The SSL Context Service used to provide client certificate information for TLS/SSL "
+                    + "connections.")
+            .required(false)
+            .identifiesControllerService(SSLContextProvider.class)
             .build();
 
     private static final List<PropertyDescriptor> properties = List.of(
