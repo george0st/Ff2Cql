@@ -27,8 +27,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import java.io.IOException;
 
 public class PutCQLFunction extends PutCQLBase {
-    // Helper
-    // https://medium.com/@mr.sinchan.banerjee/nifi-custom-processor-series-part-3-junit-test-with-nifi-mock-a935a1a4e3e5
+
     public PutCQLFunction() throws IOException, InterruptedException, InitializationException {
         super();
     }

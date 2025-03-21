@@ -40,9 +40,6 @@ import static org.apache.nifi.components.ConfigVerificationResult.Outcome.FAILED
 import static org.apache.nifi.components.ConfigVerificationResult.Outcome.SUCCESSFUL;
 
 
-// inspiration
-// https://github.com/apache/nifi/blob/main/nifi-extension-bundles/nifi-mongodb-bundle/nifi-mongodb-services/src/main/java/org/apache/nifi/mongodb/MongoDBControllerService.java#L187
-
 @Tags({ "cql", "nosql", "cassandra", "scylladb", "cassandra query language", "service"})
 @CapabilityDescription("Provides a controller service that configures a connection to CQL solution and " +
         "provides access to that connection to other CQL-related components.")

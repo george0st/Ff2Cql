@@ -28,11 +28,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-// https://medium.com/hashmapinc/creating-custom-processors-and-controllers-in-apache-nifi-e14148740ea
+
 public class TestCQLControllerService {
 
     private List<TestControllerSetup> setups;
-
 
     @BeforeEach
     public void init() {
