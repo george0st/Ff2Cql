@@ -1,7 +1,8 @@
 package org.george0st.processors.cql.processor;
 
 import com.datastax.oss.driver.api.core.CqlSession;
-import org.george0st.processors.cql.helper.Setup;
+import org.george0st.processors.cql.helper.SetupWrite;
+
 import java.io.IOException;
 
 
@@ -11,9 +12,9 @@ import java.io.IOException;
 public abstract class CqlProcessor {
 
     protected CqlSession session;
-    protected Setup setup;
+    protected SetupWrite setup;
 
-    public CqlProcessor(CqlSession cqlSession, Setup setup) {
+    public CqlProcessor(CqlSession cqlSession, SetupWrite setup) {
         this.session=cqlSession;
         this.setup=setup;
     }

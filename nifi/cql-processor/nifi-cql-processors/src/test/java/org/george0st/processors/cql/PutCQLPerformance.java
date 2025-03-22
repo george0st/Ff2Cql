@@ -3,7 +3,7 @@ package org.george0st.processors.cql;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.reporting.InitializationException;
 import org.george0st.processors.cql.helper.CqlTestSchema;
-import org.george0st.processors.cql.helper.TestSetup;
+import org.george0st.processors.cql.helper.TestSetupWrite;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(100,true);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(100, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -40,7 +40,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(1_000,true);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(1_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -53,7 +53,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(10_000,true);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(10_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -66,7 +66,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(30_000,true);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(30_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -80,7 +80,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(100_000,true);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(100_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -96,7 +96,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(100,true);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content, true);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(100, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -109,7 +109,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(1_000,true);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content, true);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(1_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -122,7 +122,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(10_000,true);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content, true);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(10_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -135,7 +135,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(30_000,true);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content, true);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(30_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -149,7 +149,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(100_000,true);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content, true);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(100_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -165,7 +165,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(100,false);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(100, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -178,7 +178,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(1_000,false);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(1_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -191,7 +191,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(10_000,false);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(10_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -204,7 +204,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(30_000,false);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(30_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
@@ -218,7 +218,7 @@ public class PutCQLPerformance extends PutCQLBase {
         String content=new CqlTestSchema().generateRndCSVString(100_000,false);
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(100_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));

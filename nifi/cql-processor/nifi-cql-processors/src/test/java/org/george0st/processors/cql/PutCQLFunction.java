@@ -18,7 +18,7 @@ package org.george0st.processors.cql;
 
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.reporting.InitializationException;
-import org.george0st.processors.cql.helper.TestSetup;
+import org.george0st.processors.cql.helper.TestSetupWrite;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +41,7 @@ public class PutCQLFunction extends PutCQLBase {
                 "\"3\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"2024-06-29T21:08:54.463Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
@@ -58,7 +58,7 @@ public class PutCQLFunction extends PutCQLBase {
                 "\"3\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"2024-06-29T21:08:54.463Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTestWithProperty(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
@@ -75,7 +75,7 @@ public class PutCQLFunction extends PutCQLBase {
                 "\"3\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"2024-06-29T21:08:54.463Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
         FlowFile result;
 
-        for (TestSetup setup : setups) {
+        for (TestSetupWrite setup : setups) {
             result = runTestWithProperty(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
@@ -100,7 +100,7 @@ public class PutCQLFunction extends PutCQLBase {
 
         FlowFile result;
 
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
@@ -122,7 +122,7 @@ public class PutCQLFunction extends PutCQLBase {
                 "13,6998,lXQ69C5HOZ,715.1224,236.7994939033784,1992-02-01,08:07:34,1998-04-09T23:19:18Z,true,84a7395c-94fd-43f5-84c6-4152f0407e93,22123,39,f45e8008-c3b7-11ef-8d19-0376318d55df,jyZo8\n";
         FlowFile result;
 
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
@@ -135,7 +135,7 @@ public class PutCQLFunction extends PutCQLBase {
         String content = "";
         FlowFile result;
 
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
@@ -148,7 +148,7 @@ public class PutCQLFunction extends PutCQLBase {
         String content = "\"colbigint\",\"colint\",\"coltext\",\"colfloat\",\"coldouble\",\"coldate\",\"coltime\",\"coltimestamp\",\"colboolean\",\"coluuid\",\"colsmallint\",\"coltinyint\",\"coltimeuuid\",\"colvarchar\"\n";
         FlowFile result;
 
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
@@ -161,7 +161,7 @@ public class PutCQLFunction extends PutCQLBase {
         String content = "colbigint,colint,coltext,colfloat,coldouble,coldate,coltime,coltimestamp,colboolean,coluuid,colsmallint,coltinyint,coltimeuuid,colvarchar\n";
         FlowFile result;
 
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
@@ -178,7 +178,7 @@ public class PutCQLFunction extends PutCQLBase {
                 "\"3\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"1998-04-09T23:19:18Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
         FlowFile result;
 
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             for (int i = 0; i < 5; i++) {
                 result = runTest(setup, content);
                 //  check amount of write items
@@ -197,7 +197,7 @@ public class PutCQLFunction extends PutCQLBase {
                 "3,6998,lXQ69C5HOZ,715.1224,236.7994939033784,1992-02-01,08:07:34,2024-06-29T21:08:54.463Z,true,84a7395c-94fd-43f5-84c6-4152f0407e93,22123,39,f45e8008-c3b7-11ef-8d19-0376318d55df,jyZo8n\n";
         FlowFile result;
 
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));

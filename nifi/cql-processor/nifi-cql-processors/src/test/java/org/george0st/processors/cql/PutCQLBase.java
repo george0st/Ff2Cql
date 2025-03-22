@@ -9,9 +9,8 @@ import org.apache.nifi.util.TestRunners;
 import org.george0st.cql.CQLControllerService;
 import org.george0st.processors.cql.helper.CqlTestSchema;
 import org.george0st.processors.cql.helper.ReadableValue;
-import org.george0st.processors.cql.helper.TestSetup;
+import org.george0st.processors.cql.helper.TestSetupWrite;
 import org.george0st.processors.cql.processor.CsvCqlValidate;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -25,17 +24,17 @@ public class PutCQLBase {
 
     protected TestRunner testRunner;
     protected CQLControllerService testService;
-    protected List<TestSetup> setups;
+    protected List<TestSetupWrite> setups;
 
     public PutCQLBase() throws IOException, InitializationException, InterruptedException {
-        //  create TestSetup scope based on test-*.json files
+        //  create TestSetupWrite scope based on test-*.json files
         setups = createSetup();
 
         //  prepare test scope
         TestRunner runner = TestRunners.newTestRunner(PutCQL.class);
         CQLControllerService service = new CQLControllerService();
         runner.addControllerService(PutCQL.SERVICE_CONTROLLER.getName(), service);
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             setup.setProperty(runner, service);
             runner.enableControllerService(service);
 
@@ -49,25 +48,25 @@ public class PutCQLBase {
         }
     }
 
-    protected ArrayList<TestSetup> createSetup() throws IOException {
-        ArrayList<TestSetup> setup= new ArrayList<TestSetup>();
+    protected ArrayList<TestSetupWrite> createSetup() throws IOException {
+        ArrayList<TestSetupWrite> setup= new ArrayList<TestSetupWrite>();
 
         addTestScope(setup,
-                TestSetup.getTestPropertyFile("./src/test",
+                TestSetupWrite.getTestPropertyFile("./src/test",
                         new String[]{"test-cassandra.json", "test-properties.json"}));
         addTestScope(setup,
-                TestSetup.getTestPropertyFile("./src/test",
+                TestSetupWrite.getTestPropertyFile("./src/test",
                         new String[]{"test-scylla.json", "test-properties.json"}));
         addTestScope(setup,
-                TestSetup.getTestPropertyFile("./src/test",
+                TestSetupWrite.getTestPropertyFile("./src/test",
                         new String[]{"test-astra.json", "test-properties.json"}));
         return setup;
     }
 
-    protected void addTestScope(List<TestSetup> setup, String propertyFile) throws IOException {
-        TestSetup itm;
+    protected void addTestScope(List<TestSetupWrite> setup, String propertyFile) throws IOException {
+        TestSetupWrite itm;
 
-        itm = TestSetup.getInstance(propertyFile);
+        itm = TestSetupWrite.getInstance(propertyFile);
         if (itm!=null) setup.add(itm);
     }
 
@@ -77,14 +76,14 @@ public class PutCQLBase {
         testService = new CQLControllerService();
         testRunner.addControllerService(PutCQL.SERVICE_CONTROLLER.getName(), testService);
 
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             System.out.println(String.format("Test scope: '%s'", setup.name));
         }
     }
 
     @AfterEach
     public void Close() throws InterruptedException {
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             setup.setProperty(testRunner, testService);
             testRunner.enableControllerService(testService);
 
@@ -97,19 +96,19 @@ public class PutCQLBase {
         }
     }
 
-    protected FlowFile runTest(TestSetup setup, String content) throws Exception {
+    protected FlowFile runTest(TestSetupWrite setup, String content) throws Exception {
         return runTestWithProperty(setup, content, null, null, false);
     }
 
-    protected FlowFile runTest(TestSetup setup, String content, boolean validate) throws Exception {
+    protected FlowFile runTest(TestSetupWrite setup, String content, boolean validate) throws Exception {
         return runTestWithProperty(setup, content, null, null, validate);
     }
 
-    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue) throws Exception {
+    protected FlowFile runTestWithProperty(TestSetupWrite setup, String content, PropertyDescriptor property, String propertyValue) throws Exception {
         return  runTestWithProperty(setup, content, property, propertyValue, false);
     }
 
-    protected FlowFile runTestWithProperty(TestSetup setup, String content, PropertyDescriptor property, String propertyValue, boolean validate) throws Exception {
+    protected FlowFile runTestWithProperty(TestSetupWrite setup, String content, PropertyDescriptor property, String propertyValue, boolean validate) throws Exception {
         HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
         FlowFile result;
 
@@ -123,7 +122,7 @@ public class PutCQLBase {
         return result;
     }
 
-    private FlowFile coreTest(TestSetup setup, String content, boolean validate) throws Exception {
+    private FlowFile coreTest(TestSetupWrite setup, String content, boolean validate) throws Exception {
         try {
             long finish, start, countWrite, countRead;
             FlowFile result;

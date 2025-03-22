@@ -8,11 +8,10 @@ import org.george0st.cql.CQLControllerService;
 import org.george0st.processors.cql.PutCQL;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class TestSetup extends Setup {
+public class TestSetupWrite extends SetupWrite {
     public boolean enable;
     public String name;
     public String []ipAddresses;
@@ -27,7 +26,7 @@ public class TestSetup extends Setup {
     public String replication;
     public String compaction;
 
-    private TestSetup(){
+    private TestSetupWrite(){
     }
 
     public void setIPAddresses(String ipAddr) {
@@ -39,9 +38,9 @@ public class TestSetup extends Setup {
     }
     public String getIPAddresses() { return String.join(",",this.ipAddresses); }
 
-    public static TestSetup getInstance(String propertyFile) throws IOException {
+    public static TestSetupWrite getInstance(String propertyFile) throws IOException {
         try (FileReader fileReader = new FileReader(propertyFile)) {
-            TestSetup setup = (new Gson()).fromJson(fileReader, TestSetup.class);
+            TestSetupWrite setup = (new Gson()).fromJson(fileReader, TestSetupWrite.class);
 
             if (!setup.enable) return null;
 

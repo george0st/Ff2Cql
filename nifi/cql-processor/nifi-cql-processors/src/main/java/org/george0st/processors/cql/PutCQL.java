@@ -34,7 +34,7 @@ import org.apache.nifi.processor.ProcessorInitializationContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.george0st.cql.CQLClientService;
-import org.george0st.processors.cql.helper.Setup;
+import org.george0st.processors.cql.helper.SetupWrite;
 import org.george0st.processors.cql.processor.CsvCqlWrite;
 
 import java.io.*;
@@ -193,7 +193,7 @@ public class PutCQL extends AbstractProcessor {
             try (CqlSession cqlSession = clientService.getSession()) {
 
                 //  2. get setting from processor
-                CsvCqlWrite write = new CsvCqlWrite(cqlSession, new Setup(context));
+                CsvCqlWrite write = new CsvCqlWrite(cqlSession, new SetupWrite(context));
 
                 //  3. put data (FlowFile) to CQL
                 long count = write.executeContent(this.getByteContent(flowFile, session));

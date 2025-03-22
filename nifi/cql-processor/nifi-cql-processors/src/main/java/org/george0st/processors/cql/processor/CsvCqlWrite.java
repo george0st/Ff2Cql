@@ -8,7 +8,8 @@ import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.george0st.processors.cql.helper.Setup;
+import org.george0st.processors.cql.helper.SetupWrite;
+
 import java.io.*;
 import java.util.Iterator;
 
@@ -18,7 +19,7 @@ import java.util.Iterator;
  */
 public class CsvCqlWrite extends CqlProcessor {
 
-    public CsvCqlWrite(CqlSession session, Setup setup) { super(session, setup); }
+    public CsvCqlWrite(CqlSession session, SetupWrite setup) { super(session, setup); }
 
     private long executeCore(Reader reader) throws IOException {
         long totalCount=0;

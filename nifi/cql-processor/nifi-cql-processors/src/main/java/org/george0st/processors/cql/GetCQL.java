@@ -16,8 +16,6 @@
  */
 package org.george0st.processors.cql;
 
-import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.core.servererrors.InvalidQueryException;
 import org.apache.nifi.annotation.behavior.*;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.SeeAlso;
@@ -30,8 +28,6 @@ import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.processor.*;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.george0st.cql.CQLClientService;
-import org.george0st.processors.cql.helper.Setup;
-import org.george0st.processors.cql.processor.CsvCqlWrite;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -78,14 +74,14 @@ public class GetCQL extends AbstractProcessor {
                     CQLClientService.CL_ALL, CQLClientService.CL_SERIAL)
             .build();
 
-//    public static final PropertyDescriptor TABLE = new PropertyDescriptor
-//            .Builder()
-//            .name("Table")
-//            .description("Table and schema name in CQL (expected format '<schema>.<table>').")
-//            .required(true)
-//            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-//            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
-//            .build();
+    public static final PropertyDescriptor TABLE = new PropertyDescriptor
+            .Builder()
+            .name("Table")
+            .description("Table and schema name in CQL (expected format '<schema>.<table>').")
+            .required(true)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
+            .build();
 //
 //    public static final PropertyDescriptor BATCH_SIZE = new PropertyDescriptor
 //            .Builder()
@@ -187,7 +183,7 @@ public class GetCQL extends AbstractProcessor {
 //            try (CqlSession cqlSession = clientService.getSession()) {
 //
 //                //  2. get setting from processor
-//                CsvCqlWrite write = new CsvCqlWrite(cqlSession, new Setup(context));
+//                CsvCqlWrite write = new CsvCqlWrite(cqlSession, new SetupWrite(context));
 //
 //                //  3. put data (FlowFile) to CQL
 //                long count = write.executeContent(this.getByteContent(flowFile, session));
