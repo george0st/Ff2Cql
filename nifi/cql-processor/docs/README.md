@@ -48,7 +48,9 @@ You have to do these steps (only one-time action):
     - Request timeout in seconds (default is 60 seconds).
 - **Consistency Level:**
     - Default consistency level (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.,
-      default is LOCAL_ONE). 
+      default is LOCAL_ONE).
+- **SSL Context Service:**
+    - SSL context service for CQL connection (default is without setting).  
 
 ### 2.3 Add processor and setup properties
 
