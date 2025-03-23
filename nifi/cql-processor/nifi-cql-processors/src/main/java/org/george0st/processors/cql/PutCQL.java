@@ -67,7 +67,7 @@ public class PutCQL extends AbstractProcessor {
             .identifiesControllerService(CQLClientService.class)
             .build();
 
-    public static final PropertyDescriptor WRITE_CONSISTENCY_LEVEL = new PropertyDescriptor
+    public static final PropertyDescriptor CONSISTENCY_LEVEL = new PropertyDescriptor
             .Builder()
             .name("Write Consistency Level")
             .description("Write consistency Level for CQL operations.")
@@ -141,7 +141,7 @@ public class PutCQL extends AbstractProcessor {
     @Override
     protected void init(final ProcessorInitializationContext context) {
         descriptors = List.of(SERVICE_CONTROLLER,
-                WRITE_CONSISTENCY_LEVEL,
+                CONSISTENCY_LEVEL,
                 TABLE,
                 BATCH_SIZE,
                 BATCH_TYPE,

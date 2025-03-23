@@ -147,7 +147,7 @@ public class TestCQLControllerService {
         initTestScope(runner, service);
         for (TestControllerSetup controllerSetup: setups) {
             controllerSetup.setProperty();
-            runner.setProperty(service, CQLControllerService.CONSISTENCY_LEVEL, "LOCAL");   //  err
+            runner.setProperty(service, CQLControllerService.DEFAULT_CONSISTENCY_LEVEL, "LOCAL");   //  err
             runner.assertNotValid(service);
         }
     }

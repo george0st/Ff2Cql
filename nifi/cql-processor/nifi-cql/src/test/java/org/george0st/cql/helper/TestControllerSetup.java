@@ -1,16 +1,12 @@
 package org.george0st.cql.helper;
 
-import com.datastax.oss.driver.internal.core.addresstranslation.PassThroughAddressTranslator;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.util.TestRunner;
 import org.george0st.cql.CQLControllerService;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -101,7 +97,7 @@ public class TestControllerSetup extends ControllerSetup{
         setProperty(CQLControllerService.LOCAL_DC, localDC);
         setProperty(CQLControllerService.CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
         setProperty(CQLControllerService.REQUEST_TIMEOUT, String.valueOf(requestTimeout));
-        setProperty(CQLControllerService.CONSISTENCY_LEVEL, String.valueOf(consistencyLevel));
+        setProperty(CQLControllerService.DEFAULT_CONSISTENCY_LEVEL, String.valueOf(defaultConsistencyLevel));
     }
 
 }

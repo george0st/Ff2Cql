@@ -22,7 +22,7 @@ public class TestSetupWrite extends SetupWrite {
     public String localDC;
     public long connectionTimeout;
     public long requestTimeout;
-    public String consistencyLevel;
+    public String defaultConsistencyLevel;
     public String replication;
     public String compaction;
 
@@ -120,11 +120,11 @@ public class TestSetupWrite extends SetupWrite {
         setControllerProperty(testRunner, testService, CQLControllerService.LOCAL_DC, localDC);
         setControllerProperty(testRunner, testService, CQLControllerService.CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
         setControllerProperty(testRunner, testService, CQLControllerService.REQUEST_TIMEOUT, String.valueOf(requestTimeout));
-        setControllerProperty(testRunner, testService, CQLControllerService.CONSISTENCY_LEVEL, consistencyLevel);
+        setControllerProperty(testRunner, testService, CQLControllerService.DEFAULT_CONSISTENCY_LEVEL, defaultConsistencyLevel);
 
         //  set PROCESSOR properties
         setProperty(testRunner, PutCQL.SERVICE_CONTROLLER, PutCQL.SERVICE_CONTROLLER.getName());
-        setProperty(testRunner, PutCQL.WRITE_CONSISTENCY_LEVEL, writeConsistencyLevel);
+        setProperty(testRunner, PutCQL.CONSISTENCY_LEVEL, consistencyLevel);
         setProperty(testRunner, PutCQL.BATCH_SIZE, String.valueOf(getBatchSize()));
         setProperty(testRunner, PutCQL.BATCH_TYPE, batchType);
         setProperty(testRunner, PutCQL.TABLE, table);

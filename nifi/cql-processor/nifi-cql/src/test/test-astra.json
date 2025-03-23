@@ -7,5 +7,5 @@
   "pwd": "secret, c:/Java/jiri.steuer@embedit.com-token.json",
   "connectionTimeout": "900",
   "requestTimeout": "60",
-  "consistencyLevel": "LOCAL_ONE"
+  "defaultConsistencyLevel": "LOCAL_ONE"
 }

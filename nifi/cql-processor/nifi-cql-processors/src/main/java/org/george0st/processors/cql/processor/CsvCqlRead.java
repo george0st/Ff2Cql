@@ -8,55 +8,55 @@ import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.george0st.processors.cql.helper.SetupWrite;
+import org.george0st.processors.cql.helper.SetupRead;
+
 
 import java.io.*;
 import java.util.Iterator;
 
 
 /**
- * CSV write processor for writing data from CSV to the table in CQL.
+ * CSV read processor for reading data from table in CQL to the CSV.
  */
-public class CsvCqlWrite extends CqlProcessor {
+public class CsvCqlRead extends CqlProcessor {
 
-    public CsvCqlWrite(CqlSession session, SetupWrite setup) { super(session, setup); }
+    public CsvCqlRead(CqlSession session, SetupRead setup) { super(session, setup); }
 
     private long executeCore(Reader reader) throws IOException {
         long totalCount=0;
 
-        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
-                .setSkipHeaderRecord(true)
-                .get();
-        Iterator<CSVRecord> iterator = csvFormat.parse(reader).iterator();
-
-        if (iterator.hasNext()) {
-            SetupWrite writeSetup=(SetupWrite) setup;
-            String[] headers = iterator.next().values();
-            String prepareHeaders = prepareHeaders(headers);
-            String prepareItems = prepareItems(headers);
-            PreparedStatement stm = insertStatement(session, prepareHeaders, prepareItems);
-
-            BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.valueOf(writeSetup.batchType));
-            String[] line;
-            int count = 0;
-
-            while (iterator.hasNext()) {
-                line = iterator.next().values();
-                batch = batch.addAll(stm.bind((Object[]) line));
-                count++;
-                totalCount++;
-
-                if (count == writeSetup.getBatchSize()) {
-                    if (!writeSetup.dryRun)
-                        session.execute(batch);
-                    batch = batch.clear();
-                    count = 0;
-                }
-            }
-            if (count > 0)
-                if (!writeSetup.dryRun)
-                    session.execute(batch);
-        }
+//        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+//                .setSkipHeaderRecord(true)
+//                .get();
+//        Iterator<CSVRecord> iterator = csvFormat.parse(reader).iterator();
+//
+//        if (iterator.hasNext()) {
+//            String[] headers = iterator.next().values();
+//            String prepareHeaders = prepareHeaders(headers);
+//            String prepareItems = prepareItems(headers);
+//            PreparedStatement stm = insertStatement(session, prepareHeaders, prepareItems);
+//
+//            BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.valueOf(setup.batchType));
+//            String[] line;
+//            int count = 0;
+//
+//            while (iterator.hasNext()) {
+//                line = iterator.next().values();
+//                batch = batch.addAll(stm.bind((Object[]) line));
+//                count++;
+//                totalCount++;
+//
+//                if (count == setup.getBatchSize()) {
+//                    if (!setup.dryRun)
+//                        session.execute(batch);
+//                    batch = batch.clear();
+//                    count = 0;
+//                }
+//            }
+//            if (count > 0)
+//                if (!setup.dryRun)
+//                    session.execute(batch);
+//        }
         return totalCount;
     }
 

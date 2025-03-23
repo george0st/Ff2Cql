@@ -150,6 +150,6 @@ public class CsvCqlValidate extends CqlProcessor {
         String selectQuery = "SELECT " + prepareHeaders + " FROM " + this.setup.table +
                 " WHERE " + whereItems + ";";
         return session.prepare(SimpleStatement.newInstance(selectQuery)
-                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.writeConsistencyLevel)));
+                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
     }
 }

@@ -1,6 +1,5 @@
 package org.george0st.cql;
 
-import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.CqlSessionBuilder;
 import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
 import com.datastax.oss.driver.api.core.config.OptionsMap;
@@ -76,7 +75,7 @@ public class CQLAccess implements AutoCloseable {
             options.put(TypedDriverOption.LOAD_BALANCING_LOCAL_DATACENTER, controllerSetup.localDC);
         options.put(TypedDriverOption.CONNECTION_CONNECT_TIMEOUT, java.time.Duration.ofSeconds(controllerSetup.connectionTimeout));
         options.put(TypedDriverOption.REQUEST_TIMEOUT, java.time.Duration.ofSeconds(controllerSetup.requestTimeout));
-        options.put(TypedDriverOption.REQUEST_CONSISTENCY, controllerSetup.consistencyLevel);
+        options.put(TypedDriverOption.REQUEST_CONSISTENCY, controllerSetup.defaultConsistencyLevel);
 //        options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "LZ4");
 //        options.put(TypedDriverOption.PROTOCOL_COMPRESSION, "SNAPPY");
         options.put(TypedDriverOption.PROTOCOL_VERSION, "V4");

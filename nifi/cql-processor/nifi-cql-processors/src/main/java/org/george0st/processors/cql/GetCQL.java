@@ -61,7 +61,7 @@ public class GetCQL extends AbstractProcessor {
             .identifiesControllerService(CQLClientService.class)
             .build();
 
-    public static final PropertyDescriptor READ_CONSISTENCY_LEVEL = new PropertyDescriptor
+    public static final PropertyDescriptor CONSISTENCY_LEVEL = new PropertyDescriptor
             .Builder()
             .name("Read Consistency Level")
             .description("Read consistency Level for CQL operations.")
@@ -82,36 +82,40 @@ public class GetCQL extends AbstractProcessor {
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
-//
-//    public static final PropertyDescriptor BATCH_SIZE = new PropertyDescriptor
-//            .Builder()
-//            .name("Batch Size")
-//            .description("Size of batch for data ingest (in one operation).")
-//            .required(false)
-//            .defaultValue("200")
-//            .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)
-//            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
-//            .build();
-//
-//    public static final PropertyDescriptor BATCH_TYPE = new PropertyDescriptor
-//            .Builder()
-//            .name("Batch Type")
-//            .description("Batch type with relation to an atomicity of batch operation.")
-//            .required(false)
-//            .defaultValue(BT_UNLOGGED)
-//            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-//            .allowableValues(BT_UNLOGGED, BT_LOGGED)
-//            .build();
-//
-//    public static final PropertyDescriptor DRY_RUN = new PropertyDescriptor
-//            .Builder()
-//            .name("Dry Run")
-//            .description("Dry run for processing (without final write to CQL engine).")
-//            .required(false)
-//            .defaultValue("false")
-//            .addValidator(StandardValidators.BOOLEAN_VALIDATOR)
-//            .allowableValues("true", "false")
-//            .build();
+
+    public static final PropertyDescriptor COLUMN_NAMES = new PropertyDescriptor.Builder()
+            .name("Columns to Return")
+            .description("A comma-separated list of column names to be used in the query. If your database requires "
+                    + "special treatment of the names (quoting, e.g.), each name should include such treatment. If no "
+                    + "column names are supplied, all columns in the specified table will be returned. NOTE: It is important "
+                    + "to use consistent column names for a given table for incremental fetch to work properly.")
+            .required(false)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
+            .build();
+
+    public static final PropertyDescriptor WHERE_CLAUSE = new PropertyDescriptor.Builder()
+            .name("Additional WHERE clause")
+            .description("A custom clause to be added in the WHERE condition when building CQL queries.")
+            .required(false)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
+            .build();
+
+    public static final PropertyDescriptor CQL_QUERY = new PropertyDescriptor.Builder()
+            .name("Custom Query")
+            .displayName("Custom Query")
+            .description("A custom CQL query used to retrieve data. Instead of building a CQL query from "
+                    + "other properties, this query will be wrapped as a sub-query. Query must have no ORDER BY statement.")
+            .required(false)
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
+            .build();
+
+//    Fetch Size
+//    Max Rows Per Flow File
+//    Ouptput Batch Size
+
 
     //  endregion All Properties
 
@@ -135,7 +139,10 @@ public class GetCQL extends AbstractProcessor {
     @Override
     protected void init(final ProcessorInitializationContext context) {
         descriptors = List.of(SERVICE_CONTROLLER,
-                READ_CONSISTENCY_LEVEL);
+                COLUMN_NAMES,
+                WHERE_CLAUSE,
+                CQL_QUERY,
+                CONSISTENCY_LEVEL);
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
     }
 
