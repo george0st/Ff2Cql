@@ -63,7 +63,7 @@ public class GetCQL extends AbstractProcessor {
 
     public static final PropertyDescriptor CONSISTENCY_LEVEL = new PropertyDescriptor
             .Builder()
-            .name("Read Consistency Level")
+            .name("Consistency Level")
             .description("Read consistency Level for CQL operations.")
             .required(true)
             .defaultValue(CQLClientService.CL_LOCAL_ONE.getValue())

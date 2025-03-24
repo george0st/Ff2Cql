@@ -27,6 +27,7 @@ import org.apache.nifi.annotation.lifecycle.OnScheduled;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.SeeAlso;
 import org.apache.nifi.annotation.documentation.Tags;
+import org.apache.nifi.migration.PropertyConfiguration;
 import org.apache.nifi.processor.AbstractProcessor;
 import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.processor.ProcessSession;
@@ -38,6 +39,7 @@ import org.george0st.processors.cql.helper.SetupWrite;
 import org.george0st.processors.cql.processor.CsvCqlWrite;
 
 import java.io.*;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -69,7 +71,7 @@ public class PutCQL extends AbstractProcessor {
 
     public static final PropertyDescriptor CONSISTENCY_LEVEL = new PropertyDescriptor
             .Builder()
-            .name("Write Consistency Level")
+            .name("Consistency Level")
             .description("Write consistency Level for CQL operations.")
             .required(true)
             .defaultValue(CQLClientService.CL_LOCAL_ONE.getValue())
@@ -147,6 +149,13 @@ public class PutCQL extends AbstractProcessor {
                 BATCH_TYPE,
                 DRY_RUN);
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
+    }
+
+    @Override
+    public void migrateProperties(final PropertyConfiguration config) {
+        //  support property migration
+        super.migrateProperties(config);
+        config.renameProperty("Write Consistency Level", CONSISTENCY_LEVEL.getName());
     }
 
     @Override

@@ -32,6 +32,7 @@ import org.apache.nifi.controller.ConfigurationContext;
 import org.apache.nifi.controller.VerifiableControllerService;
 import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.logging.ComponentLog;
+import org.apache.nifi.migration.PropertyConfiguration;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.reporting.InitializationException;
 import org.george0st.cql.helper.ControllerSetup;
@@ -161,6 +162,12 @@ public class CQLControllerService extends AbstractControllerService implements C
     @Override
     protected List<PropertyDescriptor> getSupportedPropertyDescriptors() {
         return properties;
+    }
+
+    @Override
+    public void migrateProperties(final PropertyConfiguration config) {
+        super.migrateProperties(config);
+        config.renameProperty("Consistency Level", DEFAULT_CONSISTENCY_LEVEL.getName());
     }
 
     /**
