@@ -55,6 +55,7 @@ import java.util.Set;
 public class PutCQL extends AbstractProcessor {
 
     static final String ATTRIBUTE_COUNT = "cql.count";
+    static final String ATTRIBUTE_ERROR_MESSAGE = "error.message";
 
     static final AllowableValue BT_LOGGED = new AllowableValue("LOGGED", "LOGGED");
     static final AllowableValue BT_UNLOGGED = new AllowableValue("UNLOGGED", "UNLOGGED");
@@ -217,10 +218,14 @@ public class PutCQL extends AbstractProcessor {
         }
         catch (InvalidQueryException ex){
             getLogger().error("PutCQL, OnTrigger: InvalidQuery error", ex);
+            flowFile = session.putAttribute(flowFile, ATTRIBUTE_ERROR_MESSAGE, ex.getMessage());
+            flowFile = session.penalize(flowFile);
             session.transfer(flowFile, REL_FAILURE);
         }
         catch (Exception ex) {
             getLogger().error("PutCQL, OnTrigger: Error", ex);
+            flowFile = session.putAttribute(flowFile, ATTRIBUTE_ERROR_MESSAGE, ex.getMessage());
+            flowFile = session.penalize(flowFile);
             session.transfer(flowFile, REL_FAILURE);
         }
     }
