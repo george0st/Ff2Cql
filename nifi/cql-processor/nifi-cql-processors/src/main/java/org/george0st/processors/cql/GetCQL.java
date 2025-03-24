@@ -16,6 +16,8 @@
  */
 package org.george0st.processors.cql;
 
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.servererrors.InvalidQueryException;
 import org.apache.nifi.annotation.behavior.*;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.SeeAlso;
@@ -28,6 +30,10 @@ import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.processor.*;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.george0st.cql.CQLClientService;
+import org.george0st.processors.cql.helper.SetupRead;
+import org.george0st.processors.cql.helper.SetupWrite;
+import org.george0st.processors.cql.processor.CsvCqlRead;
+import org.george0st.processors.cql.processor.CsvCqlWrite;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -78,7 +84,7 @@ public class GetCQL extends AbstractProcessor {
                     + "to use consistent column names for a given table for incremental fetch to work properly.")
             .required(false)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
 
     public static final PropertyDescriptor WHERE_CLAUSE = new PropertyDescriptor.Builder()
@@ -86,7 +92,7 @@ public class GetCQL extends AbstractProcessor {
             .description("A custom clause to be added in the WHERE condition when building CQL queries.")
             .required(false)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-            .expressionLanguageSupported(ExpressionLanguageScope.FLOWFILE_ATTRIBUTES)
+            .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
 
     public static final PropertyDescriptor CQL_QUERY = new PropertyDescriptor.Builder()
@@ -184,33 +190,38 @@ public class GetCQL extends AbstractProcessor {
     public void onTrigger(final ProcessContext context, final ProcessSession session) {
         FlowFile flowFile = session.get();
         if (flowFile == null) return;
-//
-//        try {
-//            //  1. get cql session (based on controller)
-//            try (CqlSession cqlSession = clientService.getSession()) {
-//
-//                //  2. get setting from processor
-//                CsvCqlWrite write = new CsvCqlWrite(cqlSession, new SetupWrite(context));
-//
-//                //  3. put data (FlowFile) to CQL
-//                long count = write.executeContent(this.getByteContent(flowFile, session));
-//
-//                //  4. write some information to the output (as write attributes)
-//                session.putAttribute(flowFile, ATTRIBUTE_COUNT, Long.toString(count));
-//
-//                //  5. success and provenance reporting
-//                session.getProvenanceReporter().send(flowFile, clientService.getURI());
-//                session.transfer(flowFile, REL_SUCCESS);
-//            }
-//        }
-//        catch (InvalidQueryException ex){
-//            getLogger().error("PutCQL, OnTrigger: InvalidQuery error", ex);
-//            session.transfer(flowFile, REL_FAILURE);
-//        }
-//        catch (Exception ex) {
-//            getLogger().error("PutCQL, OnTrigger: Error", ex);
-//            session.transfer(flowFile, REL_FAILURE);
-//        }
+
+        try {
+            //  1. get cql session (based on controller)
+            try (CqlSession cqlSession = clientService.getSession()) {
+
+                //  2. get setting from processor
+                CsvCqlRead read = new CsvCqlRead(cqlSession, new SetupRead(context));
+
+                //  3. put data (FlowFile) to CQL
+                String data = read.executeContent();
+
+                //  4. write some information to the output (as write attributes)
+                //session.putAttribute(flowFile, ATTRIBUTE_COUNT, Long.toString(count));
+                updateContent(flowFile, session, data);
+
+                //  5. success and provenance reporting
+                session.getProvenanceReporter().send(flowFile, clientService.getURI());
+                session.transfer(flowFile, REL_SUCCESS);
+            }
+        }
+        catch (InvalidQueryException ex){
+            getLogger().error("GetCQL, OnTrigger: InvalidQuery error", ex);
+            flowFile = session.putAttribute(flowFile, CQLAttributes.ERROR_MESSAGE, ex.getMessage());
+            flowFile = session.penalize(flowFile);
+            session.transfer(flowFile, REL_FAILURE);
+        }
+        catch (Exception ex) {
+            getLogger().error("GetCQL, OnTrigger: Error", ex);
+            flowFile = session.putAttribute(flowFile, CQLAttributes.ERROR_MESSAGE, ex.getMessage());
+            flowFile = session.penalize(flowFile);
+            session.transfer(flowFile, REL_FAILURE);
+        }
         session.getProvenanceReporter().send(flowFile, clientService.getURI());
         session.transfer(flowFile, REL_SUCCESS);
     }

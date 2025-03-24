@@ -2,10 +2,8 @@ package org.george0st.processors.cql.processor;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
-import com.datastax.oss.driver.api.core.cql.BatchStatement;
-import com.datastax.oss.driver.api.core.cql.DefaultBatchType;
-import com.datastax.oss.driver.api.core.cql.PreparedStatement;
-import com.datastax.oss.driver.api.core.cql.SimpleStatement;
+import com.datastax.oss.driver.api.core.cql.*;
+import com.datastax.oss.driver.api.core.type.DataType;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.george0st.processors.cql.helper.SetupRead;
@@ -22,8 +20,40 @@ public class CsvCqlRead extends CqlProcessor {
 
     public CsvCqlRead(CqlSession session, SetupRead setup) { super(session, setup); }
 
-    private long executeCore(Reader reader) throws IOException {
+    private long executeCore(Writer writer) throws IOException {
         long totalCount=0;
+        BoundStatement bound;
+        ResultSet rs;
+
+
+        PreparedStatement stm = selectStatement(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause);
+        bound = stm.bind(null);
+        rs = session.execute(bound);
+
+//
+//        String itm;
+//        String[] line;
+//        String[] newLine = new String[this.primaryKeys.length];
+//        Row row;
+//        DataType itmType;
+//
+//        for ( ; iterator.hasNext(); ) {
+//            line = iterator.next().values();
+//
+//            //  bind items for query
+//            for (int i : mapIndexes)
+//                newLine[i] = line[i];
+//            bound = stm.bind((Object[]) newLine);
+//            totalCount++;
+//
+//            // execute query
+//            row = session.execute(bound).one();
+
+
+
+
+
+
 
 //        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
 //                .setSkipHeaderRecord(true)
@@ -60,51 +90,59 @@ public class CsvCqlRead extends CqlProcessor {
         return totalCount;
     }
 
-    public long executeContent(String data) throws IOException {
-        long totalCount=0;
+    public String executeContent() throws IOException {
 
-        if (data!=null) {
-            try (Reader reader = new StringReader(data)) {
-                totalCount = this.executeCore(reader);
-            }
+        try (Writer writer = new StringWriter()) {
+            this.executeCore(writer);
+            return writer.toString();
         }
-        return totalCount;
     }
 
-    public long executeContent(byte[] byteArray) throws IOException {
-        long totalCount=0;
+//    public long executeContent(String data) throws IOException {
+//        long totalCount=0;
+//
+//        if (data!=null) {
+//            try (Reader reader = new StringReader(data)) {
+//                totalCount = this.executeCore(reader);
+//            }
+//        }
+//        return totalCount;
+//    }
 
-        if (byteArray!=null) {
-            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray)) {
-                try (Reader reader = new InputStreamReader(byteArrayInputStream)) {
-                    totalCount = this.executeCore(reader);
-                }
-            }
-        }
-        return totalCount;
-    }
+//    public long executeContent(byte[] byteArray) throws IOException {
+//        long totalCount=0;
+//
+//        if (byteArray!=null) {
+//            try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray)) {
+//                try (Reader reader = new InputStreamReader(byteArrayInputStream)) {
+//                    totalCount = this.executeCore(reader);
+//                }
+//            }
+//        }
+//        return totalCount;
+//    }
 
-    public long execute(String fileName) throws IOException {
-        long totalCount=0;
+//    public long execute(String fileName) throws IOException {
+//        long totalCount=0;
+//
+//        if (fileName==null){
+//            // add stdin
+//            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
+//                totalCount = this.executeCore(reader);
+//            }
+//        }
+//        else
+//            try (Reader reader = new FileReader(fileName)) {
+//                totalCount = this.executeCore(reader);
+//            }
+//        return totalCount;
+//    }
 
-        if (fileName==null){
-            // add stdin
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
-                totalCount = this.executeCore(reader);
-            }
-        }
-        else
-            try (Reader reader = new FileReader(fileName)) {
-                totalCount = this.executeCore(reader);
-            }
-        return totalCount;
-    }
-
-    private PreparedStatement insertStatement(CqlSession session, String prepareHeaders, String prepareItems){
-        String insertQuery = "INSERT INTO " + this.setup.table + " (" + prepareHeaders+") " +
-                "VALUES (" + prepareItems + ");";
-        return session.prepare(SimpleStatement.newInstance(insertQuery)
-                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(setup.consistencyLevel)));
+    private PreparedStatement selectStatement(CqlSession session, String prepareHeaders, String whereItems){
+        String selectQuery = "SELECT " + prepareHeaders + " FROM " + this.setup.table +
+                " WHERE " + whereItems + ";";
+        return session.prepare(SimpleStatement.newInstance(selectQuery)
+                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
     }
 
 }

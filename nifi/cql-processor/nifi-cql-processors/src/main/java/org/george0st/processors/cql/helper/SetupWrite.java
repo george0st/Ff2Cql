@@ -26,6 +26,7 @@ public class SetupWrite extends Setup {
     public SetupWrite(ProcessContext context){
         consistencyLevel = context.getProperty(PutCQL.CONSISTENCY_LEVEL).getValue();
         table = context.getProperty(PutCQL.TABLE).evaluateAttributeExpressions().getValue();
+
         setBatchSize(context.getProperty(PutCQL.BATCH_SIZE).evaluateAttributeExpressions().asLong());
         batchType=context.getProperty(PutCQL.BATCH_TYPE).getValue();
         dryRun = context.getProperty(PutCQL.DRY_RUN).asBoolean();

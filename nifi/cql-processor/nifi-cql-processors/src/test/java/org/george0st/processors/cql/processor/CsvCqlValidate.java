@@ -92,7 +92,6 @@ public class CsvCqlValidate extends CqlProcessor {
         return totalCount;
     }
 
-    @Override
     public long executeContent(String data) throws IOException {
         long totalCount=0;
 
@@ -104,7 +103,6 @@ public class CsvCqlValidate extends CqlProcessor {
         return totalCount;
     }
 
-    @Override
     public long executeContent(byte[] byteArray) throws IOException {
         long totalCount=0;
 

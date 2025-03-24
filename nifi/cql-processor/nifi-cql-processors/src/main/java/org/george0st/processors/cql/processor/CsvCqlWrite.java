@@ -21,6 +21,12 @@ public class CsvCqlWrite extends CqlProcessor {
 
     public CsvCqlWrite(CqlSession session, SetupWrite setup) { super(session, setup); }
 
+    /**
+     * Write core
+     * @param reader        The reader (from different inputs)
+     * @return              The amount of write rows
+     * @throws IOException
+     */
     private long executeCore(Reader reader) throws IOException {
         long totalCount=0;
 
@@ -60,6 +66,12 @@ public class CsvCqlWrite extends CqlProcessor {
         return totalCount;
     }
 
+    /**
+     * Write data to CQL
+     * @param data          The data for writing
+     * @return              The amount of write rows
+     * @throws IOException
+     */
     public long executeContent(String data) throws IOException {
         long totalCount=0;
 
@@ -71,6 +83,12 @@ public class CsvCqlWrite extends CqlProcessor {
         return totalCount;
     }
 
+    /**
+     * Write byteArray to CQL
+     * @param byteArray     The byteArray for writing
+     * @return              The amount of write rows
+     * @throws IOException
+     */
     public long executeContent(byte[] byteArray) throws IOException {
         long totalCount=0;
 
@@ -84,6 +102,12 @@ public class CsvCqlWrite extends CqlProcessor {
         return totalCount;
     }
 
+    /**
+     * Write content of file to CQL
+     * @param fileName      The file name
+     * @return              The amount of write rows
+     * @throws IOException
+     */
     public long execute(String fileName) throws IOException {
         long totalCount=0;
 
@@ -100,6 +124,13 @@ public class CsvCqlWrite extends CqlProcessor {
         return totalCount;
     }
 
+    /**
+     * Prepare insert statement
+     * @param session           The session for connection
+     * @param prepareHeaders    Prepared header
+     * @param prepareItems      Prepared items
+     * @return                  Prepared statement
+     */
     private PreparedStatement insertStatement(CqlSession session, String prepareHeaders, String prepareItems){
         String insertQuery = "INSERT INTO " + this.setup.table + " (" + prepareHeaders+") " +
                 "VALUES (" + prepareItems + ");";

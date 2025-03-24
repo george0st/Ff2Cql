@@ -186,7 +186,11 @@ public class PutCQL extends AbstractProcessor {
     }
 
     private void updateContent(FlowFile flowFile, ProcessSession session, String content){
-        InputStream inputStream = new ByteArrayInputStream(content.getBytes());
+        updateContent(flowFile, session, content.getBytes());
+    }
+
+    private void updateContent(FlowFile flowFile, ProcessSession session, byte[] content){
+        InputStream inputStream = new ByteArrayInputStream(content);
         session.importFrom(inputStream, flowFile);
     }
 

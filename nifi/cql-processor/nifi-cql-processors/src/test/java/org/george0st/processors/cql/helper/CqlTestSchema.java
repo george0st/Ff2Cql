@@ -220,16 +220,4 @@ public class CqlTestSchema extends CqlProcessor {
         return randomFile;
     }
 
-    public long execute(String fileName) throws IOException{
-        return 0;
-    }
-
-    public long executeContent(String data) throws IOException{
-        return 0;
-    }
-
-    public long executeContent(byte[] byteArray) throws IOException{
-        return 0;
-    }
-
 }

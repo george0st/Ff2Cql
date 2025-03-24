@@ -9,6 +9,10 @@ import org.george0st.processors.cql.GetCQL;
  */
 public class SetupRead extends Setup {
 
+    public String columnNames;
+    public String whereClause;
+    public String cqlQuery;
+
     public SetupRead(){ super();  }
 
     /**
@@ -19,5 +23,9 @@ public class SetupRead extends Setup {
     public SetupRead(ProcessContext context){
         consistencyLevel = context.getProperty(GetCQL.CONSISTENCY_LEVEL).getValue();
         table = context.getProperty(GetCQL.TABLE).evaluateAttributeExpressions().getValue();
+
+        columnNames = context.getProperty(GetCQL.COLUMN_NAMES).evaluateAttributeExpressions().getValue();
+        whereClause = context.getProperty(GetCQL.WHERE_CLAUSE).evaluateAttributeExpressions().getValue();
+        cqlQuery = context.getProperty(GetCQL.CQL_QUERY).evaluateAttributeExpressions().getValue();
     }
 }

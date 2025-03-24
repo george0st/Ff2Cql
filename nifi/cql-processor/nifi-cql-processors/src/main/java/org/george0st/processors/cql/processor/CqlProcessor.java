@@ -43,8 +43,8 @@ public abstract class CqlProcessor {
         return prepareItems.toString();
     }
 
-    protected abstract long execute(String fileName) throws IOException;
-    protected abstract long executeContent(String data) throws IOException;
-    protected abstract long executeContent(byte[] byteArray) throws IOException;
+//    protected abstract long execute(String fileName) throws IOException;
+//    protected abstract long executeContent(String data) throws IOException;
+//    protected abstract long executeContent(byte[] byteArray) throws IOException;
 
 }
