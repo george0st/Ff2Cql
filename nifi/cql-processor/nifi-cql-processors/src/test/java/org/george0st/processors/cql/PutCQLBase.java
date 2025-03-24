@@ -136,7 +136,7 @@ public class PutCQLBase {
                 finish = System.currentTimeMillis();
 
                 if (ok) {
-                    countWrite = Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT));
+                    countWrite = Long.parseLong(result.getAttribute(CQLAttributes.COUNT));
                     System.out.printf("Source: '%s'; WRITE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
                             result.getAttribute("CQLName"),
                             "FlowFile",

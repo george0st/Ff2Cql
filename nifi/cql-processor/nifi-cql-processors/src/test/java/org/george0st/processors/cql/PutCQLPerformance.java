@@ -30,7 +30,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(100, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(100, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
 
@@ -43,7 +43,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(1_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(1_000, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
 
@@ -56,7 +56,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(10_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(10_000, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
 
@@ -69,7 +69,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(30_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(30_000, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
 
@@ -83,7 +83,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(100_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(100_000, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
     // endregion SEQ Write
@@ -99,7 +99,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content, true);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(100, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(100, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
 
@@ -112,7 +112,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content, true);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(1_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(1_000, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
 
@@ -125,7 +125,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content, true);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(10_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(10_000, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
 
@@ -138,7 +138,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content, true);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(30_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(30_000, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
 
@@ -152,7 +152,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content, true);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(100_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(100_000, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
     // endregion SEQ Write/Validate
@@ -168,7 +168,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(100, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(100, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
 
@@ -181,7 +181,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(1_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(1_000, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
 
@@ -194,7 +194,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(10_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(10_000, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
 
@@ -207,7 +207,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(30_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(30_000, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
 
@@ -221,7 +221,7 @@ public class PutCQLPerformance extends PutCQLBase {
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(100_000, Long.parseLong(result.getAttribute(PutCQL.ATTRIBUTE_COUNT)));
+            assertEquals(100_000, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
         }
     }
     // endregion RND Write
