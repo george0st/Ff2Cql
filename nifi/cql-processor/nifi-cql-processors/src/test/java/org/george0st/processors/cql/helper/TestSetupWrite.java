@@ -8,11 +8,10 @@ import org.george0st.cql.CQLControllerService;
 import org.george0st.processors.cql.PutCQL;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class TestSetup extends Setup {
+public class TestSetupWrite extends SetupWrite {
     public boolean enable;
     public String name;
     public String []ipAddresses;
@@ -23,11 +22,11 @@ public class TestSetup extends Setup {
     public String localDC;
     public long connectionTimeout;
     public long requestTimeout;
-    public String consistencyLevel;
+    public String defaultConsistencyLevel;
     public String replication;
     public String compaction;
 
-    private TestSetup(){
+    private TestSetupWrite(){
     }
 
     public void setIPAddresses(String ipAddr) {
@@ -39,9 +38,9 @@ public class TestSetup extends Setup {
     }
     public String getIPAddresses() { return String.join(",",this.ipAddresses); }
 
-    public static TestSetup getInstance(String propertyFile) throws IOException {
+    public static TestSetupWrite getInstance(String propertyFile) throws IOException {
         try (FileReader fileReader = new FileReader(propertyFile)) {
-            TestSetup setup = (new Gson()).fromJson(fileReader, TestSetup.class);
+            TestSetupWrite setup = (new Gson()).fromJson(fileReader, TestSetupWrite.class);
 
             if (!setup.enable) return null;
 
@@ -121,11 +120,11 @@ public class TestSetup extends Setup {
         setControllerProperty(testRunner, testService, CQLControllerService.LOCAL_DC, localDC);
         setControllerProperty(testRunner, testService, CQLControllerService.CONNECTION_TIMEOUT, String.valueOf(connectionTimeout));
         setControllerProperty(testRunner, testService, CQLControllerService.REQUEST_TIMEOUT, String.valueOf(requestTimeout));
-        setControllerProperty(testRunner, testService, CQLControllerService.CONSISTENCY_LEVEL, consistencyLevel);
+        setControllerProperty(testRunner, testService, CQLControllerService.DEFAULT_CONSISTENCY_LEVEL, defaultConsistencyLevel);
 
         //  set PROCESSOR properties
         setProperty(testRunner, PutCQL.SERVICE_CONTROLLER, PutCQL.SERVICE_CONTROLLER.getName());
-        setProperty(testRunner, PutCQL.WRITE_CONSISTENCY_LEVEL, writeConsistencyLevel);
+        setProperty(testRunner, PutCQL.CONSISTENCY_LEVEL, consistencyLevel);
         setProperty(testRunner, PutCQL.BATCH_SIZE, String.valueOf(getBatchSize()));
         setProperty(testRunner, PutCQL.BATCH_TYPE, batchType);
         setProperty(testRunner, PutCQL.TABLE, table);

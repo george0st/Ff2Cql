@@ -27,6 +27,7 @@ import org.apache.nifi.annotation.lifecycle.OnScheduled;
 import org.apache.nifi.annotation.documentation.CapabilityDescription;
 import org.apache.nifi.annotation.documentation.SeeAlso;
 import org.apache.nifi.annotation.documentation.Tags;
+import org.apache.nifi.migration.PropertyConfiguration;
 import org.apache.nifi.processor.AbstractProcessor;
 import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.processor.ProcessSession;
@@ -34,7 +35,7 @@ import org.apache.nifi.processor.ProcessorInitializationContext;
 import org.apache.nifi.processor.Relationship;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.george0st.cql.CQLClientService;
-import org.george0st.processors.cql.helper.Setup;
+import org.george0st.processors.cql.helper.SetupWrite;
 import org.george0st.processors.cql.processor.CsvCqlWrite;
 
 import java.io.*;
@@ -49,10 +50,9 @@ import java.util.Set;
 @InputRequirement(InputRequirement.Requirement.INPUT_REQUIRED)
 @ReadsAttributes({@ReadsAttribute(attribute="", description="")})
 @WritesAttributes({
-        @WritesAttribute(attribute=PutCQL.ATTRIBUTE_COUNT, description="Amount of write rows to CQL.")})
+        @WritesAttribute(attribute=CQLAttributes.COUNT, description=CQLAttributes.COUNT_DESC),
+        @WritesAttribute(attribute=CQLAttributes.ERROR_MESSAGE, description=CQLAttributes.ERROR_MESSAGE_DESC)})
 public class PutCQL extends AbstractProcessor {
-
-    static final String ATTRIBUTE_COUNT = "cql.count";
 
     static final AllowableValue BT_LOGGED = new AllowableValue("LOGGED", "LOGGED");
     static final AllowableValue BT_UNLOGGED = new AllowableValue("UNLOGGED", "UNLOGGED");
@@ -67,9 +67,9 @@ public class PutCQL extends AbstractProcessor {
             .identifiesControllerService(CQLClientService.class)
             .build();
 
-    public static final PropertyDescriptor WRITE_CONSISTENCY_LEVEL = new PropertyDescriptor
+    public static final PropertyDescriptor CONSISTENCY_LEVEL = new PropertyDescriptor
             .Builder()
-            .name("Write Consistency Level")
+            .name("Consistency Level")
             .description("Write consistency Level for CQL operations.")
             .required(true)
             .defaultValue(CQLClientService.CL_LOCAL_ONE.getValue())
@@ -141,12 +141,19 @@ public class PutCQL extends AbstractProcessor {
     @Override
     protected void init(final ProcessorInitializationContext context) {
         descriptors = List.of(SERVICE_CONTROLLER,
-                WRITE_CONSISTENCY_LEVEL,
+                CONSISTENCY_LEVEL,
                 TABLE,
                 BATCH_SIZE,
                 BATCH_TYPE,
                 DRY_RUN);
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
+    }
+
+    @Override
+    public void migrateProperties(final PropertyConfiguration config) {
+        //  support property migration
+        super.migrateProperties(config);
+        config.renameProperty("Write Consistency Level", CONSISTENCY_LEVEL.getName());
     }
 
     @Override
@@ -179,7 +186,11 @@ public class PutCQL extends AbstractProcessor {
     }
 
     private void updateContent(FlowFile flowFile, ProcessSession session, String content){
-        InputStream inputStream = new ByteArrayInputStream(content.getBytes());
+        updateContent(flowFile, session, content.getBytes());
+    }
+
+    private void updateContent(FlowFile flowFile, ProcessSession session, byte[] content){
+        InputStream inputStream = new ByteArrayInputStream(content);
         session.importFrom(inputStream, flowFile);
     }
 
@@ -193,13 +204,13 @@ public class PutCQL extends AbstractProcessor {
             try (CqlSession cqlSession = clientService.getSession()) {
 
                 //  2. get setting from processor
-                CsvCqlWrite write = new CsvCqlWrite(cqlSession, new Setup(context));
+                CsvCqlWrite write = new CsvCqlWrite(cqlSession, new SetupWrite(context));
 
                 //  3. put data (FlowFile) to CQL
                 long count = write.executeContent(this.getByteContent(flowFile, session));
 
                 //  4. write some information to the output (as write attributes)
-                session.putAttribute(flowFile, ATTRIBUTE_COUNT, Long.toString(count));
+                session.putAttribute(flowFile, CQLAttributes.COUNT, Long.toString(count));
 
                 //  5. success and provenance reporting
                 session.getProvenanceReporter().send(flowFile, clientService.getURI());
@@ -208,10 +219,14 @@ public class PutCQL extends AbstractProcessor {
         }
         catch (InvalidQueryException ex){
             getLogger().error("PutCQL, OnTrigger: InvalidQuery error", ex);
+            flowFile = session.putAttribute(flowFile, CQLAttributes.ERROR_MESSAGE, ex.getMessage());
+            flowFile = session.penalize(flowFile);
             session.transfer(flowFile, REL_FAILURE);
         }
         catch (Exception ex) {
             getLogger().error("PutCQL, OnTrigger: Error", ex);
+            flowFile = session.putAttribute(flowFile, CQLAttributes.ERROR_MESSAGE, ex.getMessage());
+            flowFile = session.penalize(flowFile);
             session.transfer(flowFile, REL_FAILURE);
         }
     }

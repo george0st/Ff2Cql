@@ -44,7 +44,7 @@ public class CqlTestSchema extends CqlProcessor {
         super(null, null);
     }
 
-    public CqlTestSchema(CqlSession session, TestSetup setup) throws InterruptedException {
+    public CqlTestSchema(CqlSession session, TestSetupWrite setup) throws InterruptedException {
         super(session, setup);
     }
 
@@ -80,7 +80,7 @@ public class CqlTestSchema extends CqlProcessor {
             // Create key space, if not exist
             session.execute(String.format("CREATE KEYSPACE IF NOT EXISTS %s WITH replication = %s;",
                     setup.getOnlyKeyspace(),
-                    ((TestSetup) setup).replication));
+                    ((TestSetupWrite) setup).replication));
             newSchema=true;
         }
 
@@ -92,7 +92,7 @@ public class CqlTestSchema extends CqlProcessor {
             String createTable = String.format("CREATE TABLE IF NOT EXISTS %s ", setup.table) +
                     String.format("(%s ", getColumnDefinitions()) +
                     String.format("PRIMARY KEY (%s)) ", String.join(",", primaryKeys)) +
-                    String.format("WITH compaction = %s;", ((TestSetup) setup).compaction);
+                    String.format("WITH compaction = %s;", ((TestSetupWrite) setup).compaction);
             session.execute(createTable);
             newSchema=true;
         }
@@ -218,18 +218,6 @@ public class CqlTestSchema extends CqlProcessor {
             generateRndContent(writer, csvItems, sequenceID);
         }
         return randomFile;
-    }
-
-    public long execute(String fileName) throws IOException{
-        return 0;
-    }
-
-    public long executeContent(String data) throws IOException{
-        return 0;
-    }
-
-    public long executeContent(byte[] byteArray) throws IOException{
-        return 0;
     }
 
 }

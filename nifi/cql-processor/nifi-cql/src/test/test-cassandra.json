@@ -8,5 +8,5 @@
   "localDC": "datacenter1",
   "connectionTimeout": "900",
   "requestTimeout": "60",
-  "consistencyLevel": "LOCAL_ONE"
+  "defaultConsistencyLevel": "LOCAL_ONE"
 }

@@ -2,6 +2,8 @@ package org.george0st.processors.cql.processor;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import org.george0st.processors.cql.helper.Setup;
+import org.george0st.processors.cql.helper.SetupWrite;
+
 import java.io.IOException;
 
 
@@ -14,8 +16,8 @@ public abstract class CqlProcessor {
     protected Setup setup;
 
     public CqlProcessor(CqlSession cqlSession, Setup setup) {
-        this.session=cqlSession;
-        this.setup=setup;
+        this.session = cqlSession;
+        this.setup = setup;
     }
 
     protected String prepareHeaders(String[] headers){
@@ -41,8 +43,8 @@ public abstract class CqlProcessor {
         return prepareItems.toString();
     }
 
-    protected abstract long execute(String fileName) throws IOException;
-    protected abstract long executeContent(String data) throws IOException;
-    protected abstract long executeContent(byte[] byteArray) throws IOException;
+//    protected abstract long execute(String fileName) throws IOException;
+//    protected abstract long executeContent(String data) throws IOException;
+//    protected abstract long executeContent(byte[] byteArray) throws IOException;
 
 }

@@ -8,7 +8,8 @@ import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.george0st.processors.cql.helper.Setup;
+import org.george0st.processors.cql.helper.SetupWrite;
+
 import java.io.*;
 import java.util.Iterator;
 
@@ -18,8 +19,14 @@ import java.util.Iterator;
  */
 public class CsvCqlWrite extends CqlProcessor {
 
-    public CsvCqlWrite(CqlSession session, Setup setup) { super(session, setup); }
+    public CsvCqlWrite(CqlSession session, SetupWrite setup) { super(session, setup); }
 
+    /**
+     * Write core
+     * @param reader        The reader (from different inputs)
+     * @return              The amount of write rows
+     * @throws IOException
+     */
     private long executeCore(Reader reader) throws IOException {
         long totalCount=0;
 
@@ -29,12 +36,13 @@ public class CsvCqlWrite extends CqlProcessor {
         Iterator<CSVRecord> iterator = csvFormat.parse(reader).iterator();
 
         if (iterator.hasNext()) {
+            SetupWrite writeSetup=(SetupWrite) setup;
             String[] headers = iterator.next().values();
             String prepareHeaders = prepareHeaders(headers);
             String prepareItems = prepareItems(headers);
             PreparedStatement stm = insertStatement(session, prepareHeaders, prepareItems);
 
-            BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.valueOf(setup.batchType));
+            BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.valueOf(writeSetup.batchType));
             String[] line;
             int count = 0;
 
@@ -44,20 +52,26 @@ public class CsvCqlWrite extends CqlProcessor {
                 count++;
                 totalCount++;
 
-                if (count == setup.getBatchSize()) {
-                    if (!setup.dryRun)
+                if (count == writeSetup.getBatchSize()) {
+                    if (!writeSetup.dryRun)
                         session.execute(batch);
                     batch = batch.clear();
                     count = 0;
                 }
             }
             if (count > 0)
-                if (!setup.dryRun)
+                if (!writeSetup.dryRun)
                     session.execute(batch);
         }
         return totalCount;
     }
 
+    /**
+     * Write data to CQL
+     * @param data          The data for writing
+     * @return              The amount of write rows
+     * @throws IOException
+     */
     public long executeContent(String data) throws IOException {
         long totalCount=0;
 
@@ -69,6 +83,12 @@ public class CsvCqlWrite extends CqlProcessor {
         return totalCount;
     }
 
+    /**
+     * Write byteArray to CQL
+     * @param byteArray     The byteArray for writing
+     * @return              The amount of write rows
+     * @throws IOException
+     */
     public long executeContent(byte[] byteArray) throws IOException {
         long totalCount=0;
 
@@ -82,6 +102,12 @@ public class CsvCqlWrite extends CqlProcessor {
         return totalCount;
     }
 
+    /**
+     * Write content of file to CQL
+     * @param fileName      The file name
+     * @return              The amount of write rows
+     * @throws IOException
+     */
     public long execute(String fileName) throws IOException {
         long totalCount=0;
 
@@ -98,11 +124,18 @@ public class CsvCqlWrite extends CqlProcessor {
         return totalCount;
     }
 
+    /**
+     * Prepare insert statement
+     * @param session           The session for connection
+     * @param prepareHeaders    Prepared header
+     * @param prepareItems      Prepared items
+     * @return                  Prepared statement
+     */
     private PreparedStatement insertStatement(CqlSession session, String prepareHeaders, String prepareItems){
         String insertQuery = "INSERT INTO " + this.setup.table + " (" + prepareHeaders+") " +
                 "VALUES (" + prepareItems + ");";
         return session.prepare(SimpleStatement.newInstance(insertQuery)
-                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.writeConsistencyLevel)));
+                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(setup.consistencyLevel)));
     }
 
 }

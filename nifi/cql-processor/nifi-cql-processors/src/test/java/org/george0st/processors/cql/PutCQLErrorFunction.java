@@ -18,7 +18,7 @@ package org.george0st.processors.cql;
 
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.reporting.InitializationException;
-import org.george0st.processors.cql.helper.TestSetup;
+import org.george0st.processors.cql.helper.TestSetupWrite;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class PutCQLErrorFunction extends PutCQLBase {
                 "1\n";
         FlowFile result;
 
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
             assertNull(result, String.format("Expected null, besed on simulation error in '%s'", setup.name));
         }
@@ -51,7 +51,7 @@ public class PutCQLErrorFunction extends PutCQLBase {
                 "1\n";
         FlowFile result;
 
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
             assertNull(result, String.format("Expected null, based on simulation error in '%s'", setup.name));
         }
@@ -64,7 +64,7 @@ public class PutCQLErrorFunction extends PutCQLBase {
                 "1,John\n";
         FlowFile result;
 
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
             assertNull(result, String.format("Expected null, based on simulation error in '%s'", setup.name));
         }
@@ -77,7 +77,7 @@ public class PutCQLErrorFunction extends PutCQLBase {
                 "1,1709,John\n";
         FlowFile result;
 
-        for (TestSetup setup: setups) {
+        for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
             assertNull(result, String.format("Expected null, based on simulation error in '%s'", setup.name));
         }

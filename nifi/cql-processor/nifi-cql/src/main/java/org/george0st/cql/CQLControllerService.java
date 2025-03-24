@@ -27,12 +27,12 @@ import org.apache.nifi.annotation.lifecycle.OnDisabled;
 import org.apache.nifi.annotation.lifecycle.OnEnabled;
 import org.apache.nifi.components.ConfigVerificationResult;
 import org.apache.nifi.components.PropertyDescriptor;
-import org.apache.nifi.components.Validator;
 import org.apache.nifi.controller.AbstractControllerService;
 import org.apache.nifi.controller.ConfigurationContext;
 import org.apache.nifi.controller.VerifiableControllerService;
 import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.logging.ComponentLog;
+import org.apache.nifi.migration.PropertyConfiguration;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.apache.nifi.reporting.InitializationException;
 import org.george0st.cql.helper.ControllerSetup;
@@ -129,9 +129,9 @@ public class CQLControllerService extends AbstractControllerService implements C
             .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
 
-    public static final PropertyDescriptor CONSISTENCY_LEVEL = new PropertyDescriptor
+    public static final PropertyDescriptor DEFAULT_CONSISTENCY_LEVEL = new PropertyDescriptor
             .Builder()
-            .name("Consistency Level")
+            .name("Default Consistency Level")
             .description("Default consistency Level for CQL operations.")
             .required(true)
             .defaultValue(CL_LOCAL_ONE.getValue())
@@ -156,12 +156,18 @@ public class CQLControllerService extends AbstractControllerService implements C
             LOCAL_DC,
             CONNECTION_TIMEOUT,
             REQUEST_TIMEOUT,
-            CONSISTENCY_LEVEL,
+            DEFAULT_CONSISTENCY_LEVEL,
             SSL_CONTEXT_SERVICE);
 
     @Override
     protected List<PropertyDescriptor> getSupportedPropertyDescriptors() {
         return properties;
+    }
+
+    @Override
+    public void migrateProperties(final PropertyConfiguration config) {
+        super.migrateProperties(config);
+        config.renameProperty("Consistency Level", DEFAULT_CONSISTENCY_LEVEL.getName());
     }
 
     /**

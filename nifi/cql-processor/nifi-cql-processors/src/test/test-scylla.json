@@ -6,14 +6,14 @@
   "localDC": "datacenter1",
   "connectionTimeout": "900",
   "requestTimeout": "60",
-  "consistencyLevel": "LOCAL_ONE",
+  "defaultConsistencyLevel": "LOCAL_ONE",
 
-  "writeConsistencyLevel": "LOCAL_ONE",
+  "consistencyLevel": "LOCAL_ONE",
   "batchSize": 100,
   "batchType": "LOGGED",
   "table": "prftest.csv2cql_test3",
   "dryRun": false,
 
-  "replication": "{'class' : 'SimpleStrategy', 'replication_factor' : 1}",
+  "replication": "{'class': 'SimpleStrategy', 'replication_factor': 1}",
   "compaction": "{'class':'SizeTieredCompactionStrategy'}"
 }

@@ -19,7 +19,7 @@ public class ControllerSetup {
     public String localDC;
     public long connectionTimeout;
     public long requestTimeout;
-    public String consistencyLevel;
+    public String defaultConsistencyLevel;
     public Object sslContext;
 
     public void setIPAddresses(String ipAddr) {
@@ -41,14 +41,14 @@ public class ControllerSetup {
      */
     public ControllerSetup(final ConfigurationContext context){
         setIPAddresses(context.getProperty(CQLControllerService.IP_ADDRESSES).evaluateAttributeExpressions().getValue());
-        port=context.getProperty(CQLControllerService.PORT).evaluateAttributeExpressions().asInteger();
-        secureConnectionBundle=context.getProperty(CQLControllerService.SECURE_CONNECTION_BUNDLE).evaluateAttributeExpressions().getValue();
-        username=context.getProperty(CQLControllerService.USERNAME).evaluateAttributeExpressions().getValue();
-        pwd=context.getProperty(CQLControllerService.PASSWORD).evaluateAttributeExpressions().getValue();
-        localDC=context.getProperty(CQLControllerService.LOCAL_DC).evaluateAttributeExpressions().getValue();
-        connectionTimeout=context.getProperty(CQLControllerService.CONNECTION_TIMEOUT).evaluateAttributeExpressions().asLong();
-        requestTimeout=context.getProperty(CQLControllerService.REQUEST_TIMEOUT).evaluateAttributeExpressions().asLong();
-        consistencyLevel=context.getProperty(CQLControllerService.CONSISTENCY_LEVEL).getValue();
+        port = context.getProperty(CQLControllerService.PORT).evaluateAttributeExpressions().asInteger();
+        secureConnectionBundle = context.getProperty(CQLControllerService.SECURE_CONNECTION_BUNDLE).evaluateAttributeExpressions().getValue();
+        username = context.getProperty(CQLControllerService.USERNAME).evaluateAttributeExpressions().getValue();
+        pwd = context.getProperty(CQLControllerService.PASSWORD).evaluateAttributeExpressions().getValue();
+        localDC = context.getProperty(CQLControllerService.LOCAL_DC).evaluateAttributeExpressions().getValue();
+        connectionTimeout = context.getProperty(CQLControllerService.CONNECTION_TIMEOUT).evaluateAttributeExpressions().asLong();
+        requestTimeout = context.getProperty(CQLControllerService.REQUEST_TIMEOUT).evaluateAttributeExpressions().asLong();
+        defaultConsistencyLevel = context.getProperty(CQLControllerService.DEFAULT_CONSISTENCY_LEVEL).getValue();
 
         //  sslContext
         SSLContextProvider sslContextProvider = context.getProperty(CQLControllerService.SSL_CONTEXT_SERVICE).asControllerService(SSLContextProvider.class);
@@ -86,7 +86,7 @@ public class ControllerSetup {
         } else if (localDC!=null) return false;
         if (((ControllerSetup)o).connectionTimeout != connectionTimeout) return false;
         if (((ControllerSetup)o).requestTimeout != requestTimeout) return false;
-        return ((ControllerSetup) o).consistencyLevel.equals(consistencyLevel);
+        return ((ControllerSetup) o).defaultConsistencyLevel.equals(defaultConsistencyLevel);
     }
 
 }

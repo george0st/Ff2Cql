@@ -10,7 +10,7 @@ import com.datastax.oss.driver.api.core.type.DataTypes;
 import com.datastax.oss.driver.api.core.type.DataType;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-import org.george0st.processors.cql.helper.Setup;
+import org.george0st.processors.cql.helper.SetupWrite;
 
 import java.io.*;
 import java.rmi.UnexpectedException;
@@ -26,7 +26,7 @@ public class CsvCqlValidate extends CqlProcessor {
 
     private final String[] primaryKeys;
 
-    public CsvCqlValidate(CqlSession session, Setup setup, String [] primaryKeys) {
+    public CsvCqlValidate(CqlSession session, SetupWrite setup, String [] primaryKeys) {
         super(session, setup);
         this.primaryKeys = primaryKeys;
     }
@@ -92,7 +92,6 @@ public class CsvCqlValidate extends CqlProcessor {
         return totalCount;
     }
 
-    @Override
     public long executeContent(String data) throws IOException {
         long totalCount=0;
 
@@ -104,7 +103,6 @@ public class CsvCqlValidate extends CqlProcessor {
         return totalCount;
     }
 
-    @Override
     public long executeContent(byte[] byteArray) throws IOException {
         long totalCount=0;
 
@@ -150,6 +148,6 @@ public class CsvCqlValidate extends CqlProcessor {
         String selectQuery = "SELECT " + prepareHeaders + " FROM " + this.setup.table +
                 " WHERE " + whereItems + ";";
         return session.prepare(SimpleStatement.newInstance(selectQuery)
-                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.writeConsistencyLevel)));
+                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
     }
 }
