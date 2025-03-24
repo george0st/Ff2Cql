@@ -61,19 +61,6 @@ public class GetCQL extends AbstractProcessor {
             .identifiesControllerService(CQLClientService.class)
             .build();
 
-    public static final PropertyDescriptor CONSISTENCY_LEVEL = new PropertyDescriptor
-            .Builder()
-            .name("Consistency Level")
-            .description("Read consistency Level for CQL operations.")
-            .required(true)
-            .defaultValue(CQLClientService.CL_LOCAL_ONE.getValue())
-            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-            .allowableValues(CQLClientService.CL_LOCAL_ONE, CQLClientService.CL_LOCAL_QUORUM, CQLClientService.CL_LOCAL_SERIAL,
-                    CQLClientService.CL_EACH_QUORUM, CQLClientService.CL_ANY, CQLClientService.CL_ONE,
-                    CQLClientService.CL_TWO, CQLClientService.CL_THREE, CQLClientService.CL_QUORUM,
-                    CQLClientService.CL_ALL, CQLClientService.CL_SERIAL)
-            .build();
-
     public static final PropertyDescriptor TABLE = new PropertyDescriptor
             .Builder()
             .name("Table")
@@ -110,6 +97,19 @@ public class GetCQL extends AbstractProcessor {
             .required(false)
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
+            .build();
+
+    public static final PropertyDescriptor CONSISTENCY_LEVEL = new PropertyDescriptor
+            .Builder()
+            .name("Consistency Level")
+            .description("Read consistency Level for CQL operations.")
+            .required(true)
+            .defaultValue(CQLClientService.CL_LOCAL_ONE.getValue())
+            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+            .allowableValues(CQLClientService.CL_LOCAL_ONE, CQLClientService.CL_LOCAL_QUORUM, CQLClientService.CL_LOCAL_SERIAL,
+                    CQLClientService.CL_EACH_QUORUM, CQLClientService.CL_ANY, CQLClientService.CL_ONE,
+                    CQLClientService.CL_TWO, CQLClientService.CL_THREE, CQLClientService.CL_QUORUM,
+                    CQLClientService.CL_ALL, CQLClientService.CL_SERIAL)
             .build();
 
 //    Fetch Size
