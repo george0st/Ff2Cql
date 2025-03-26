@@ -98,6 +98,10 @@ public class GetCQLBase {
         }
     }
 
+    protected MockFlowFile runTest(TestSetupRead setup) throws Exception {
+        return runTestWithProperty(setup, null, null, null, false);
+    }
+
     protected MockFlowFile runTest(TestSetupRead setup, String content) throws Exception {
         return runTestWithProperty(setup, content, null, null, false);
     }
@@ -111,12 +115,12 @@ public class GetCQLBase {
     }
 
     protected MockFlowFile runTestWithProperty(TestSetupRead setup, String content, PropertyDescriptor property, String propertyValue, boolean validate) throws Exception {
-        HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
-        // FlowFile result;
+        // HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
         MockFlowFile result;
 
         //  TODO: test without the content
-        testRunner.enqueue(content, attributes);
+        if (content!=null)
+            testRunner.enqueue(content);
         setup.setProperty(testRunner, testService);
         if (property != null)
             setup.setProperty(testRunner, property, propertyValue);
@@ -129,12 +133,8 @@ public class GetCQLBase {
     private MockFlowFile coreTest(TestSetupRead setup, String content, boolean validate) throws Exception {
         try {
             long finish, start, countWrite, countRead;
-            //FlowFile result;
             MockFlowFile result;
             boolean ok;
-
-
-            //List<MockFlowFile> flowfiles = runner.getFlowFilesForRelationship( Monopoly.SUCCESS );
 
             start = System.currentTimeMillis();
             testRunner.run();
@@ -146,7 +146,8 @@ public class GetCQLBase {
                 if (ok) {
                     countWrite = Long.parseLong(result.getAttribute(CQLAttributes.COUNT));
                     System.out.printf("Source: '%s'; WRITE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-                            result.getAttribute("CQLName"),
+                            setup.name,
+                            //result.getAttribute("CQLName"),
                             "FlowFile",
                             ReadableValue.fromMillisecond(finish - start),
                             finish - start,

@@ -4,6 +4,7 @@ import com.datastax.oss.driver.api.core.CqlSession;
 import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.reporting.InitializationException;
+import org.apache.nifi.util.MockFlowFile;
 import org.apache.nifi.util.TestRunner;
 import org.apache.nifi.util.TestRunners;
 import org.george0st.cql.CQLControllerService;
@@ -96,23 +97,28 @@ public class PutCQLBase {
         }
     }
 
-    protected FlowFile runTest(TestSetupWrite setup, String content) throws Exception {
+    protected MockFlowFile runTest(TestSetupWrite setup) throws Exception {
+        return runTestWithProperty(setup, null, null, null, false);
+    }
+
+    protected MockFlowFile runTest(TestSetupWrite setup, String content) throws Exception {
         return runTestWithProperty(setup, content, null, null, false);
     }
 
-    protected FlowFile runTest(TestSetupWrite setup, String content, boolean validate) throws Exception {
+    protected MockFlowFile runTest(TestSetupWrite setup, String content, boolean validate) throws Exception {
         return runTestWithProperty(setup, content, null, null, validate);
     }
 
-    protected FlowFile runTestWithProperty(TestSetupWrite setup, String content, PropertyDescriptor property, String propertyValue) throws Exception {
+    protected MockFlowFile runTestWithProperty(TestSetupWrite setup, String content, PropertyDescriptor property, String propertyValue) throws Exception {
         return  runTestWithProperty(setup, content, property, propertyValue, false);
     }
 
-    protected FlowFile runTestWithProperty(TestSetupWrite setup, String content, PropertyDescriptor property, String propertyValue, boolean validate) throws Exception {
-        HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
-        FlowFile result;
+    protected MockFlowFile runTestWithProperty(TestSetupWrite setup, String content, PropertyDescriptor property, String propertyValue, boolean validate) throws Exception {
+        //HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
+        MockFlowFile result;
 
-        testRunner.enqueue(content, attributes);
+        if (content!=null)
+            testRunner.enqueue(content);
         setup.setProperty(testRunner, testService);
         if (property != null)
             setup.setProperty(testRunner, property, propertyValue);
@@ -122,10 +128,10 @@ public class PutCQLBase {
         return result;
     }
 
-    private FlowFile coreTest(TestSetupWrite setup, String content, boolean validate) throws Exception {
+    private MockFlowFile coreTest(TestSetupWrite setup, String content, boolean validate) throws Exception {
         try {
             long finish, start, countWrite, countRead;
-            FlowFile result;
+            MockFlowFile result;
             boolean ok;
 
             start = System.currentTimeMillis();
@@ -138,7 +144,7 @@ public class PutCQLBase {
                 if (ok) {
                     countWrite = Long.parseLong(result.getAttribute(CQLAttributes.COUNT));
                     System.out.printf("Source: '%s'; WRITE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-                            result.getAttribute("CQLName"),
+                            setup.name,//result.getAttribute("CQLName"),
                             "FlowFile",
                             ReadableValue.fromMillisecond(finish - start),
                             finish - start,
@@ -157,7 +163,7 @@ public class PutCQLBase {
                             finish = System.currentTimeMillis();
                         }
                         System.out.printf("Source: '%s'; VALIDATE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-                                result.getAttribute("CQLName"),
+                                setup.name, //result.getAttribute("CQLName"),
                                 "FlowFile",
                                 ReadableValue.fromMillisecond(finish - start),
                                 finish - start,

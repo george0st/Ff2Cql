@@ -18,6 +18,7 @@ package org.george0st.processors.cql;
 
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.reporting.InitializationException;
+import org.apache.nifi.util.MockFlowFile;
 import org.george0st.processors.cql.helper.TestSetupWrite;
 import org.junit.jupiter.api.Test;
 
@@ -39,7 +40,7 @@ public class PutCQLFunction extends PutCQLBase {
                 "\"1\",\"1709\",\"7By0z5QEXh\",\"652.03955\",\"326.9081263857284\",\"2013-12-17\",\"08:43:09\",\"2010-04-27T07:02:27Z\",\"false\",\"7d511666-2f81-41c4-9d5c-a5fa87f7d1c3\",\"24399\",\"38\",\"f45e8006-c3b7-11ef-8d19-172ff8d0d752\",\"exAbN\"\n" +
                 "\"2\",\"6249\",\"UYI6AgkcBt\",\"939.01556\",\"373.48559413289485\",\"1980-11-05\",\"15:44:43\",\"2023-11-24T05:59:12Z\",\"false\",\"dbd35d1b-38d0-49a4-8069-9efd68314dc5\",\"6918\",\"72\",\"f45e8007-c3b7-11ef-8d19-d784fa8af8e3\",\"IjnDb\"\n" +
                 "\"3\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"2024-06-29T21:08:54.463Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup : setups) {
             result = runTest(setup, content);
@@ -56,7 +57,7 @@ public class PutCQLFunction extends PutCQLBase {
                 "\"1\",\"1709\",\"7By0z5QEXh\",\"652.03955\",\"326.9081263857284\",\"2013-12-17\",\"08:43:09\",\"2010-04-27T07:02:27Z\",\"false\",\"7d511666-2f81-41c4-9d5c-a5fa87f7d1c3\",\"24399\",\"38\",\"f45e8006-c3b7-11ef-8d19-172ff8d0d752\",\"exAbN\"\n" +
                 "\"2\",\"6249\",\"UYI6AgkcBt\",\"939.01556\",\"373.48559413289485\",\"1980-11-05\",\"15:44:43\",\"2023-11-24T05:59:12Z\",\"false\",\"dbd35d1b-38d0-49a4-8069-9efd68314dc5\",\"6918\",\"72\",\"f45e8007-c3b7-11ef-8d19-d784fa8af8e3\",\"IjnDb\"\n" +
                 "\"3\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"2024-06-29T21:08:54.463Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup : setups) {
             result = runTestWithProperty(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
@@ -73,7 +74,7 @@ public class PutCQLFunction extends PutCQLBase {
                 "\"1\",\"1709\",\"7By0z5QEXh\",\"652.03955\",\"326.9081263857284\",\"2013-12-17\",\"08:43:09\",\"2010-04-27T07:02:27Z\",\"false\",\"7d511666-2f81-41c4-9d5c-a5fa87f7d1c3\",\"24399\",\"38\",\"f45e8006-c3b7-11ef-8d19-172ff8d0d752\",\"exAbN\"\n" +
                 "\"2\",\"6249\",\"UYI6AgkcBt\",\"939.01556\",\"373.48559413289485\",\"1980-11-05\",\"15:44:43\",\"2023-11-24T05:59:12Z\",\"false\",\"dbd35d1b-38d0-49a4-8069-9efd68314dc5\",\"6918\",\"72\",\"f45e8007-c3b7-11ef-8d19-d784fa8af8e3\",\"IjnDb\"\n" +
                 "\"3\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"2024-06-29T21:08:54.463Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup : setups) {
             result = runTestWithProperty(setup, content, PutCQL.BATCH_TYPE, PutCQL.BT_LOGGED.getValue());
@@ -98,7 +99,7 @@ public class PutCQLFunction extends PutCQLBase {
                 "\"12\",\"6249\",\"UYI6AgkcBt\",\"939.01556\",\"373.48559413289485\",\"1980-11-05\",\"15:44:43\",\"2023-11-24T05:59:12Z\",\"false\",\"dbd35d1b-38d0-49a4-8069-9efd68314dc5\",\"6918\",\"72\",\"f45e8007-c3b7-11ef-8d19-d784fa8af8e3\",\"IjnDb\"\n" +
                 "\"13\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"1998-04-09T23:19:18Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
 
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
@@ -120,7 +121,7 @@ public class PutCQLFunction extends PutCQLBase {
                 "11,1709,7By0z5QEXh,652.03955,326.9081263857284,2013-12-17,08:43:09,2010-04-27T07:02:27Z,false,7d511666-2f81-41c4-9d5c-a5fa87f7d1c3,24399,38,f45e8006-c3b7-11ef-8d19-172ff8d0d752,exAbN\n" +
                 "12,6249,UYI6AgkcBt,939.01556,373.48559413289485,1980-11-05,15:44:43,2023-11-24T05:59:12Z,false,dbd35d1b-38d0-49a4-8069-9efd68314dc5,6918,72,f45e8007-c3b7-11ef-8d19-d784fa8af8e3,IjnDb\n" +
                 "13,6998,lXQ69C5HOZ,715.1224,236.7994939033784,1992-02-01,08:07:34,1998-04-09T23:19:18Z,true,84a7395c-94fd-43f5-84c6-4152f0407e93,22123,39,f45e8008-c3b7-11ef-8d19-0376318d55df,jyZo8\n";
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
@@ -133,7 +134,7 @@ public class PutCQLFunction extends PutCQLBase {
     @Test
     public void testEmptyInput() throws Exception {
         String content = "";
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
@@ -146,7 +147,7 @@ public class PutCQLFunction extends PutCQLBase {
     @Test
     public void testOnlyHeader() throws Exception {
         String content = "\"colbigint\",\"colint\",\"coltext\",\"colfloat\",\"coldouble\",\"coldate\",\"coltime\",\"coltimestamp\",\"colboolean\",\"coluuid\",\"colsmallint\",\"coltinyint\",\"coltimeuuid\",\"colvarchar\"\n";
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
@@ -159,7 +160,7 @@ public class PutCQLFunction extends PutCQLBase {
     @Test
     public void testOnlyHeaderNoQuotas() throws Exception {
         String content = "colbigint,colint,coltext,colfloat,coldouble,coldate,coltime,coltimestamp,colboolean,coluuid,colsmallint,coltinyint,coltimeuuid,colvarchar\n";
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
@@ -176,7 +177,7 @@ public class PutCQLFunction extends PutCQLBase {
                 "\"1\",\"1709\",\"7By0z5QEXh\",\"652.03955\",\"326.9081263857284\",\"2013-12-17\",\"08:43:09\",\"2010-04-27T07:02:27Z\",\"false\",\"7d511666-2f81-41c4-9d5c-a5fa87f7d1c3\",\"24399\",\"38\",\"f45e8006-c3b7-11ef-8d19-172ff8d0d752\",\"exAbN\"\n" +
                 "\"2\",\"6249\",\"UYI6AgkcBt\",\"939.01556\",\"373.48559413289485\",\"1980-11-05\",\"15:44:43\",\"2023-11-24T05:59:12Z\",\"false\",\"dbd35d1b-38d0-49a4-8069-9efd68314dc5\",\"6918\",\"72\",\"f45e8007-c3b7-11ef-8d19-d784fa8af8e3\",\"IjnDb\"\n" +
                 "\"3\",\"6998\",\"lXQ69C5HOZ\",\"715.1224\",\"236.7994939033784\",\"1992-02-01\",\"08:07:34\",\"1998-04-09T23:19:18Z\",\"true\",\"84a7395c-94fd-43f5-84c6-4152f0407e93\",\"22123\",\"39\",\"f45e8008-c3b7-11ef-8d19-0376318d55df\",\"jyZo8\"\n";
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup: setups) {
             for (int i = 0; i < 5; i++) {
@@ -195,7 +196,7 @@ public class PutCQLFunction extends PutCQLBase {
                 "1,1709,7By0z5QEXh,652.03955,326.9081263857284,2013-12-17,08:43:09,2010-04-27T07:02:27Z,false,7d511666-2f81-41c4-9d5c-a5fa87f7d1c3,24399,38,f45e8006-c3b7-11ef-8d19-172ff8d0d752,exAbNn\n" +
                 "2,6249,UYI6AgkcBt,939.01556,373.48559413289485,1980-11-05,15:44:43,2023-11-24T05:59:12Z,false,dbd35d1b-38d0-49a4-8069-9efd68314dc5,6918,72,f45e8007-c3b7-11ef-8d19-d784fa8af8e3,IjnDbn\n" +
                 "3,6998,lXQ69C5HOZ,715.1224,236.7994939033784,1992-02-01,08:07:34,2024-06-29T21:08:54.463Z,true,84a7395c-94fd-43f5-84c6-4152f0407e93,22123,39,f45e8008-c3b7-11ef-8d19-0376318d55df,jyZo8n\n";
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
