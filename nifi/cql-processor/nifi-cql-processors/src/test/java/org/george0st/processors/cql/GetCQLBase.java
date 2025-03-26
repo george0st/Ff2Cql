@@ -10,6 +10,7 @@ import org.apache.nifi.util.TestRunners;
 import org.george0st.cql.CQLControllerService;
 import org.george0st.processors.cql.helper.CqlTestSchema;
 import org.george0st.processors.cql.helper.ReadableValue;
+import org.george0st.processors.cql.helper.TestSetupRead;
 import org.george0st.processors.cql.helper.TestSetupWrite;
 import org.george0st.processors.cql.processor.CsvCqlValidate;
 import org.junit.jupiter.api.AfterEach;
@@ -21,13 +22,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PutCQLBase {
+public class GetCQLBase {
 
     protected TestRunner testRunner;
     protected CQLControllerService testService;
-    protected List<TestSetupWrite> setups;
+    protected List<TestSetupRead> setups;
 
-    public PutCQLBase() throws IOException, InitializationException, InterruptedException {
+    public GetCQLBase() throws IOException, InitializationException, InterruptedException {
         //  create TestSetupWrite scope based on test-*.json files
         setups = createSetup();
 
@@ -35,88 +36,89 @@ public class PutCQLBase {
         TestRunner runner = TestRunners.newTestRunner(PutCQL.class);
         CQLControllerService service = new CQLControllerService();
         runner.addControllerService(PutCQL.SERVICE_CONTROLLER.getName(), service);
-        for (TestSetupWrite setup: setups) {
+        for (TestSetupRead setup: setups) {
             setup.setProperty(runner, service);
             runner.enableControllerService(service);
 
             //  build schema, if needed
             try (CqlSession session=service.getSession()) {
-                CqlTestSchema schema = new CqlTestSchema(session, setup);
-                if (!schema.createSchema())
-                    schema.cleanData();
+//                CqlTestSchema schema = new CqlTestSchema(session, setup);
+//                if (!schema.createSchema())
+//                    schema.cleanData();
             }
             runner.disableControllerService(service);
         }
     }
 
-    protected ArrayList<TestSetupWrite> createSetup() throws IOException {
-        ArrayList<TestSetupWrite> setup= new ArrayList<TestSetupWrite>();
+    protected ArrayList<TestSetupRead> createSetup() throws IOException {
+        ArrayList<TestSetupRead> setup = new ArrayList<TestSetupRead>();
 
+//        addTestScope(setup,
+//                TestSetupWrite.getTestPropertyFile("./src/test",
+//                        new String[]{"test-cassandra.json", "test-properties.json"}));
         addTestScope(setup,
                 TestSetupWrite.getTestPropertyFile("./src/test",
-                        new String[]{"test-cassandra.json", "test-properties.json"}));
-        addTestScope(setup,
-                TestSetupWrite.getTestPropertyFile("./src/test",
-                        new String[]{"test-scylla.json", "test-properties.json"}));
-        addTestScope(setup,
-                TestSetupWrite.getTestPropertyFile("./src/test",
-                        new String[]{"test-astra.json", "test-properties.json"}));
+                        new String[]{"test-get-scylla.json", "test-properties.json"}));
+//        addTestScope(setup,
+//                TestSetupWrite.getTestPropertyFile("./src/test",
+//                        new String[]{"test-astra.json", "test-properties.json"}));
         return setup;
     }
 
-    protected void addTestScope(List<TestSetupWrite> setup, String propertyFile) throws IOException {
-        TestSetupWrite itm;
+    protected void addTestScope(List<TestSetupRead> setup, String propertyFile) throws IOException {
+        TestSetupRead itm;
 
-        itm = TestSetupWrite.getInstance(propertyFile);
+        itm = TestSetupRead.getInstance(propertyFile);
         if (itm!=null) setup.add(itm);
     }
 
     @BeforeEach
     public void init() throws IOException, InterruptedException, InitializationException {
-        testRunner = TestRunners.newTestRunner(PutCQL.class);
+        testRunner = TestRunners.newTestRunner(GetCQL.class);
         testService = new CQLControllerService();
         testRunner.addControllerService(PutCQL.SERVICE_CONTROLLER.getName(), testService);
 
-        for (TestSetupWrite setup: setups) {
+        for (TestSetupRead setup: setups) {
             System.out.println(String.format("Test scope: '%s'", setup.name));
         }
     }
 
     @AfterEach
     public void Close() throws InterruptedException {
-        for (TestSetupWrite setup: setups) {
+        for (TestSetupRead setup: setups) {
             setup.setProperty(testRunner, testService);
             testRunner.enableControllerService(testService);
 
             //  build schema, if needed
-            try (CqlSession session=testService.getSession()) {
-                CqlTestSchema schema = new CqlTestSchema(session, setup);
-                schema.cleanData();
-            }
+//            try (CqlSession session=testService.getSession()) {
+//                CqlTestSchema schema = new CqlTestSchema(session, setup);
+//                schema.cleanData();
+//            }
             testRunner.disableControllerService(testService);
         }
     }
 
-    protected MockFlowFile runTest(TestSetupWrite setup) throws Exception {
+    protected MockFlowFile runTest(TestSetupRead setup) throws Exception {
         return runTestWithProperty(setup, null, null, null, false);
     }
 
-    protected MockFlowFile runTest(TestSetupWrite setup, String content) throws Exception {
+    protected MockFlowFile runTest(TestSetupRead setup, String content) throws Exception {
         return runTestWithProperty(setup, content, null, null, false);
     }
 
-    protected MockFlowFile runTest(TestSetupWrite setup, String content, boolean validate) throws Exception {
+    protected MockFlowFile runTest(TestSetupRead setup, String content, boolean validate) throws Exception {
         return runTestWithProperty(setup, content, null, null, validate);
     }
 
-    protected MockFlowFile runTestWithProperty(TestSetupWrite setup, String content, PropertyDescriptor property, String propertyValue) throws Exception {
+    protected MockFlowFile runTestWithProperty(TestSetupRead setup, String content, PropertyDescriptor property, String propertyValue) throws Exception {
         return  runTestWithProperty(setup, content, property, propertyValue, false);
     }
 
-    protected MockFlowFile runTestWithProperty(TestSetupWrite setup, String content, PropertyDescriptor property, String propertyValue, boolean validate) throws Exception {
-        //HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
+    protected MockFlowFile runTestWithProperty(TestSetupRead setup, String content, PropertyDescriptor property, String propertyValue, boolean validate) throws Exception {
+        // HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
         MockFlowFile result;
 
+        //  TODO: test without the content
         if (content!=null)
             testRunner.enqueue(content);
         setup.setProperty(testRunner, testService);
@@ -128,9 +130,9 @@ public class PutCQLBase {
         return result;
     }
 
-    private MockFlowFile coreTest(TestSetupWrite setup, String content, boolean validate) throws Exception {
+    private MockFlowFile coreTest(TestSetupRead setup, String content, boolean validate) throws Exception {
         try {
-            long finish, start, countWrite, countRead;
+            long finish, start, countWrite;
             MockFlowFile result;
             boolean ok;
 
@@ -152,28 +154,28 @@ public class PutCQLBase {
                             countWrite / ((finish - start) / 1000.0),
                             System.lineSeparator());
 
-                    if (validate) {
-                        // delay (before read for synch on CQL side)
-                        Thread.sleep(3000);
-
-                        // validate (read value from CSV and from CQL and compare content)
-                        try (CqlSession session = testService.getSession()) {
-                            start = System.currentTimeMillis();
-                            countRead = (new CsvCqlValidate(session, setup, CqlTestSchema.primaryKeys)).executeContent(content);
-                            finish = System.currentTimeMillis();
-                        }
-                        System.out.printf("Source: '%s'; VALIDATE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-                                setup.name,
-                                "FlowFile",
-                                ReadableValue.fromMillisecond(finish - start),
-                                finish - start,
-                                countRead,
-                                countRead / ((finish - start) / 1000.0),
-                                System.lineSeparator());
-
-                        if (countWrite != countRead)
-                            throw new Exception("The amount of Write and Read operations are different");
-                    }
+//                    if (validate) {
+//                        // delay (before read for synch on CQL side)
+//                        Thread.sleep(3000);
+//
+//                        // validate (read value from CSV and from CQL and compare content)
+//                        try (CqlSession session = testService.getSession()) {
+//                            start = System.currentTimeMillis();
+//                            countRead = (new CsvCqlValidate(session, setup, CqlTestSchema.primaryKeys)).executeContent(content);
+//                            finish = System.currentTimeMillis();
+//                        }
+//                        System.out.printf("Source: '%s'; VALIDATE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+//                                result.getAttribute("CQLName"),
+//                                "FlowFile",
+//                                ReadableValue.fromMillisecond(finish - start),
+//                                finish - start,
+//                                countRead,
+//                                countRead / ((finish - start) / 1000.0),
+//                                System.lineSeparator());
+//
+//                        if (countWrite != countRead)
+//                            throw new Exception("The amount of Write and Read operations are different");
+//                    }
                     return result;
                 }
             }

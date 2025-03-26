@@ -18,6 +18,7 @@ package org.george0st.processors.cql;
 
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.reporting.InitializationException;
+import org.apache.nifi.util.MockFlowFile;
 import org.george0st.processors.cql.helper.TestSetupWrite;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +37,7 @@ public class PutCQLErrorFunction extends PutCQLBase {
         String content = "aaa\n" +
                 "0\n" +
                 "1\n";
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
@@ -49,7 +50,7 @@ public class PutCQLErrorFunction extends PutCQLBase {
         String content = "colbigint\n" +
                 "0\n" +
                 "1\n";
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
@@ -62,7 +63,7 @@ public class PutCQLErrorFunction extends PutCQLBase {
         String content = "colbigint,colint\n" +
                 "0,Peter\n" +
                 "1,John\n";
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);
@@ -75,7 +76,7 @@ public class PutCQLErrorFunction extends PutCQLBase {
         String content = "colbigint,colint,colfloat\n" +
                 "0,1064,Peter\n" +
                 "1,1709,John\n";
-        FlowFile result;
+        MockFlowFile result;
 
         for (TestSetupWrite setup: setups) {
             result = runTest(setup, content);

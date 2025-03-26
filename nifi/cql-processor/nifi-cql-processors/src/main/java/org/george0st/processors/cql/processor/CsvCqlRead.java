@@ -6,6 +6,7 @@ import com.datastax.oss.driver.api.core.cql.*;
 import com.datastax.oss.driver.api.core.type.DataType;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.nifi.util.Tuple;
 import org.george0st.processors.cql.helper.SetupRead;
 
 
@@ -25,11 +26,15 @@ public class CsvCqlRead extends CqlProcessor {
         BoundStatement bound;
         ResultSet rs;
 
+//        PreparedStatement stm = selectStatement(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause);
+//        bound = stm.bind(null);
+//        rs = session.execute(bound);
+        rs = session.execute(selectStatementSql(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause));
 
-        PreparedStatement stm = selectStatement(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause);
-        bound = stm.bind(null);
-        rs = session.execute(bound);
-
+        for (Row rw: rs){
+            writer.write(rw.getString(0));
+            System.out.println(rw.getString(0));
+        }
 //
 //        String itm;
 //        String[] line;
@@ -139,10 +144,19 @@ public class CsvCqlRead extends CqlProcessor {
 //    }
 
     private PreparedStatement selectStatement(CqlSession session, String prepareHeaders, String whereItems){
-        String selectQuery = "SELECT " + prepareHeaders + " FROM " + this.setup.table +
-                " WHERE " + whereItems + ";";
-        return session.prepare(SimpleStatement.newInstance(selectQuery)
+        return session.prepare(SimpleStatement.newInstance(selectStatementSql(session, prepareHeaders, whereItems))
                 .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
+    }
+
+    private String selectStatementSql(CqlSession session, String prepareHeaders, String whereItems){
+        StringBuilder selectQuery = new StringBuilder();
+
+        selectQuery.append("SELECT " + (prepareHeaders==null ? "*" : prepareHeaders));
+        selectQuery.append(" FROM " + this.setup.table);
+        if (whereItems!=null)
+            selectQuery.append(" WHERE " + whereItems);
+        selectQuery.append(";");
+        return selectQuery.toString();
     }
 
 }

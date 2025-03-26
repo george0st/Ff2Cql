@@ -28,6 +28,7 @@ import org.apache.nifi.components.PropertyDescriptor;
 import org.apache.nifi.expression.ExpressionLanguageScope;
 import org.apache.nifi.flowfile.FlowFile;
 import org.apache.nifi.processor.*;
+import org.apache.nifi.processor.io.OutputStreamCallback;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.george0st.cql.CQLClientService;
 import org.george0st.processors.cql.helper.SetupRead;
@@ -35,9 +36,7 @@ import org.george0st.processors.cql.helper.SetupWrite;
 import org.george0st.processors.cql.processor.CsvCqlRead;
 import org.george0st.processors.cql.processor.CsvCqlWrite;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 import java.util.Set;
 
@@ -145,6 +144,7 @@ public class GetCQL extends AbstractProcessor {
     @Override
     protected void init(final ProcessorInitializationContext context) {
         descriptors = List.of(SERVICE_CONTROLLER,
+                TABLE,
                 COLUMN_NAMES,
                 WHERE_CLAUSE,
                 CQL_QUERY,
@@ -181,16 +181,49 @@ public class GetCQL extends AbstractProcessor {
         return byteArrayOutputStream.toByteArray();
     }
 
+    /**
+     *
+     * @param flowFile
+     * @param session
+     * @param content
+     */
     private void updateContent(FlowFile flowFile, ProcessSession session, String content){
         InputStream inputStream = new ByteArrayInputStream(content.getBytes());
         session.importFrom(inputStream, flowFile);
     }
 
+    /**
+     * Create new content file
+     *
+     * @param flowFile
+     * @param session
+     * @param content
+     * @return
+     */
+    private FlowFile writeContent(FlowFile flowFile,ProcessSession session, String content) {
+        FlowFile nextFlowFile;
+
+        // only in case, if flow file is null
+        if (flowFile == null)
+            flowFile = session.create();
+
+        nextFlowFile = session.write(flowFile, new OutputStreamCallback() {
+            @Override
+            public void process(final OutputStream outputStream) throws IOException {
+                outputStream.write(content.getBytes());
+                outputStream.flush();
+            }
+        });
+        return nextFlowFile;
+    }
+
     @Override
     public void onTrigger(final ProcessContext context, final ProcessSession session) {
         FlowFile flowFile = session.get();
-        if (flowFile == null) return;
+        if (flowFile == null)
+            flowFile = session.create();
 
+        // TODO: or flowFile = session.create()
         try {
             //  1. get cql session (based on controller)
             try (CqlSession cqlSession = clientService.getSession()) {
@@ -202,8 +235,9 @@ public class GetCQL extends AbstractProcessor {
                 String data = read.executeContent();
 
                 //  4. write some information to the output (as write attributes)
-                //session.putAttribute(flowFile, ATTRIBUTE_COUNT, Long.toString(count));
-                updateContent(flowFile, session, data);
+                session.putAttribute(flowFile, CQLAttributes.COUNT, "4");
+                //updateContent(flowFile, session, data);
+                writeContent(flowFile, session, data);
 
                 //  5. success and provenance reporting
                 session.getProvenanceReporter().send(flowFile, clientService.getURI());
@@ -222,7 +256,5 @@ public class GetCQL extends AbstractProcessor {
             flowFile = session.penalize(flowFile);
             session.transfer(flowFile, REL_FAILURE);
         }
-        session.getProvenanceReporter().send(flowFile, clientService.getURI());
-        session.transfer(flowFile, REL_SUCCESS);
     }
 }

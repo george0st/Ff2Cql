@@ -1,0 +1,19 @@
+{
+  "enable": true,
+  "name": "scylla",
+  "ipAddresses": ["localhost"],
+  "port": 9042,
+  "localDC": "datacenter1",
+  "connectionTimeout": "900",
+  "requestTimeout": "60",
+  "defaultConsistencyLevel": "LOCAL_ONE",
+
+  "table": "prftest.csv2cql_test3",
+  //"columnNames": "",
+  //"whereClause": "",
+  //"cqlQuery": "",
+  "consistencyLevel": "LOCAL_ONE",
+
+  "replication": "{'class': 'SimpleStrategy', 'replication_factor': 1}",
+  "compaction": "{'class':'SizeTieredCompactionStrategy'}"
+}
