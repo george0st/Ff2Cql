@@ -132,7 +132,7 @@ public class GetCQLBase {
 
     private MockFlowFile coreTest(TestSetupRead setup, String content, boolean validate) throws Exception {
         try {
-            long finish, start, countWrite, countRead;
+            long finish, start, countWrite;
             MockFlowFile result;
             boolean ok;
 
@@ -147,7 +147,6 @@ public class GetCQLBase {
                     countWrite = Long.parseLong(result.getAttribute(CQLAttributes.COUNT));
                     System.out.printf("Source: '%s'; WRITE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
                             setup.name,
-                            //result.getAttribute("CQLName"),
                             "FlowFile",
                             ReadableValue.fromMillisecond(finish - start),
                             finish - start,

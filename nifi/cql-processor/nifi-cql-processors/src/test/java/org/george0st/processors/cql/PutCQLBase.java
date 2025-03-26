@@ -144,7 +144,7 @@ public class PutCQLBase {
                 if (ok) {
                     countWrite = Long.parseLong(result.getAttribute(CQLAttributes.COUNT));
                     System.out.printf("Source: '%s'; WRITE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-                            setup.name,//result.getAttribute("CQLName"),
+                            setup.name,
                             "FlowFile",
                             ReadableValue.fromMillisecond(finish - start),
                             finish - start,
@@ -163,7 +163,7 @@ public class PutCQLBase {
                             finish = System.currentTimeMillis();
                         }
                         System.out.printf("Source: '%s'; VALIDATE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-                                setup.name, //result.getAttribute("CQLName"),
+                                setup.name,
                                 "FlowFile",
                                 ReadableValue.fromMillisecond(finish - start),
                                 finish - start,
