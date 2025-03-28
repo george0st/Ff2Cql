@@ -39,7 +39,7 @@ public class PutCQLBase {
             setup.setProperty(runner, service);
             runner.enableControllerService(service);
 
-            //  build schema, if needed
+            //  build schema & cleaning, if needed
             try (CqlSession session=service.getSession()) {
                 CqlTestSchema schema = new CqlTestSchema(session, setup);
                 if (!schema.createSchema())
@@ -82,20 +82,20 @@ public class PutCQLBase {
         }
     }
 
-    @AfterEach
-    public void Close() throws InterruptedException {
-        for (TestSetupWrite setup: setups) {
-            setup.setProperty(testRunner, testService);
-            testRunner.enableControllerService(testService);
-
-            //  build schema, if needed
-            try (CqlSession session=testService.getSession()) {
-                CqlTestSchema schema = new CqlTestSchema(session, setup);
-                schema.cleanData();
-            }
-            testRunner.disableControllerService(testService);
-        }
-    }
+//    @AfterEach
+//    public void Close() throws InterruptedException {
+//        for (TestSetupWrite setup: setups) {
+//            setup.setProperty(testRunner, testService);
+//            testRunner.enableControllerService(testService);
+//
+//            //  clean data
+//            try (CqlSession session=testService.getSession()) {
+//                CqlTestSchema schema = new CqlTestSchema(session, setup);
+//                schema.cleanData();
+//            }
+//            testRunner.disableControllerService(testService);
+//        }
+//    }
 
     protected MockFlowFile runTest(TestSetupWrite setup) throws Exception {
         return runTestWithProperty(setup, null, null, null, false);

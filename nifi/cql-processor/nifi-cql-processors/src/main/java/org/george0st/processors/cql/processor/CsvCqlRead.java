@@ -30,10 +30,28 @@ public class CsvCqlRead extends CqlProcessor {
 //        bound = stm.bind(null);
 //        rs = session.execute(bound);
         rs = session.execute(selectStatementSql(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause));
+        long columnCount=0;
+        StringBuilder stringBuilder=new StringBuilder();
+
+        for (ColumnDefinition cd: rs.getColumnDefinitions()) {
+            stringBuilder.append(stringBuilder.isEmpty() ?
+                    String.format("\"%s\"",cd.getName()) :
+                    String.format(",\"%s\"",cd.getName()));
+            columnCount++;
+        }
+        writer.write(stringBuilder.toString()+"\r");
+        System.out.println(stringBuilder.toString()+"\r");
 
         for (Row rw: rs){
-            writer.write(rw.getString(0));
-            System.out.println(rw.getString(0));
+            stringBuilder=new StringBuilder();
+            for (int i=0;i<columnCount;i++) {
+                stringBuilder.append(stringBuilder.isEmpty() ?
+                        String.format("\"%s\"",rw.getString(i)) :
+                        String.format(",\"%s\"",rw.getString(i)));
+            }
+            stringBuilder.append("\r");
+            writer.write(stringBuilder.toString());
+            System.out.println(stringBuilder.toString());
         }
 //
 //        String itm;

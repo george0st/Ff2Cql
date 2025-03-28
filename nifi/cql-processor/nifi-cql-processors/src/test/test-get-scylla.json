@@ -9,7 +9,7 @@
   "defaultConsistencyLevel": "LOCAL_ONE",
 
   "table": "prftest.csv2cql_test3",
-  //"columnNames": "",
+  "columnNames": "colbigint, colint",
   //"whereClause": "",
   //"cqlQuery": "",
   "consistencyLevel": "LOCAL_ONE",
