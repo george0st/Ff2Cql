@@ -232,12 +232,12 @@ public class GetCQL extends AbstractProcessor {
                 CsvCqlRead read = new CsvCqlRead(cqlSession, new SetupRead(context));
 
                 //  3. put data (FlowFile) to CQL
-                String data = read.executeContent();
+                CsvCqlRead.ReadResult result = read.executeContent();
 
                 //  4. write some information to the output (as write attributes)
-                session.putAttribute(flowFile, CQLAttributes.COUNT, "4");
+                session.putAttribute(flowFile, CQLAttributes.COUNT, Long.toString(result.rows));
                 //updateContent(flowFile, session, data);
-                writeContent(flowFile, session, data);
+                writeContent(flowFile, session, result.content);
 
                 //  5. success and provenance reporting
                 session.getProvenanceReporter().send(flowFile, clientService.getURI());

@@ -28,40 +28,28 @@ public class GetCQLBase {
     protected CQLControllerService testService;
     protected List<TestSetupRead> setups;
 
-    public GetCQLBase() throws IOException, InitializationException, InterruptedException {
+    public GetCQLBase() throws Exception {
         //  create TestSetupWrite scope based on test-*.json files
         setups = createSetup();
 
-        //  prepare test scope
-        TestRunner runner = TestRunners.newTestRunner(PutCQL.class);
-        CQLControllerService service = new CQLControllerService();
-        runner.addControllerService(PutCQL.SERVICE_CONTROLLER.getName(), service);
-        for (TestSetupRead setup: setups) {
-            setup.setProperty(runner, service);
-            runner.enableControllerService(service);
-
-            //  build schema, if needed
-            try (CqlSession session=service.getSession()) {
-//                CqlTestSchema schema = new CqlTestSchema(session, setup);
-//                if (!schema.createSchema())
-//                    schema.cleanData();
-            }
-            runner.disableControllerService(service);
-        }
+        //  Prepare data for reading (including build schema, if not exist)
+        PutCQLFunction putCQL=new PutCQLFunction();
+        putCQL.init();
+        putCQL.testBasic();
     }
 
     protected ArrayList<TestSetupRead> createSetup() throws IOException {
         ArrayList<TestSetupRead> setup = new ArrayList<TestSetupRead>();
 
-//        addTestScope(setup,
-//                TestSetupWrite.getTestPropertyFile("./src/test",
-//                        new String[]{"test-cassandra.json", "test-properties.json"}));
+        addTestScope(setup,
+                TestSetupWrite.getTestPropertyFile("./src/test",
+                        new String[]{"test-get-cassandra.json", "test-properties.json"}));
         addTestScope(setup,
                 TestSetupWrite.getTestPropertyFile("./src/test",
                         new String[]{"test-get-scylla.json", "test-properties.json"}));
-//        addTestScope(setup,
-//                TestSetupWrite.getTestPropertyFile("./src/test",
-//                        new String[]{"test-astra.json", "test-properties.json"}));
+        addTestScope(setup,
+                TestSetupWrite.getTestPropertyFile("./src/test",
+                        new String[]{"test-get-astra.json", "test-properties.json"}));
         return setup;
     }
 
@@ -83,21 +71,6 @@ public class GetCQLBase {
         }
     }
 
-    @AfterEach
-    public void Close() throws InterruptedException {
-        for (TestSetupRead setup: setups) {
-            setup.setProperty(testRunner, testService);
-            testRunner.enableControllerService(testService);
-
-            //  build schema, if needed
-//            try (CqlSession session=testService.getSession()) {
-//                CqlTestSchema schema = new CqlTestSchema(session, setup);
-//                schema.cleanData();
-//            }
-            testRunner.disableControllerService(testService);
-        }
-    }
-
     protected MockFlowFile runTest(TestSetupRead setup) throws Exception {
         return runTestWithProperty(setup, null, null, null, false);
     }
@@ -115,10 +88,8 @@ public class GetCQLBase {
     }
 
     protected MockFlowFile runTestWithProperty(TestSetupRead setup, String content, PropertyDescriptor property, String propertyValue, boolean validate) throws Exception {
-        // HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
         MockFlowFile result;
 
-        //  TODO: test without the content
         if (content!=null)
             testRunner.enqueue(content);
         setup.setProperty(testRunner, testService);

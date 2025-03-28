@@ -19,10 +19,16 @@ import java.util.Iterator;
  */
 public class CsvCqlRead extends CqlProcessor {
 
+    public class ReadResult {
+        public ReadResult(String content, long rows) { this.content=content; this.rows=rows; }
+        public String content;
+        public long rows;
+    }
+
     public CsvCqlRead(CqlSession session, SetupRead setup) { super(session, setup); }
 
     private long executeCore(Writer writer) throws IOException {
-        long totalCount=0;
+        long rowCount=0, columnCount=0;
         BoundStatement bound;
         ResultSet rs;
 
@@ -30,34 +36,30 @@ public class CsvCqlRead extends CqlProcessor {
 //        bound = stm.bind(null);
 //        rs = session.execute(bound);
         rs = session.execute(selectStatementSql(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause));
+        StringBuilder stringBuilder=new StringBuilder();
+
+        for (ColumnDefinition cd: rs.getColumnDefinitions()) {
+            stringBuilder.append(stringBuilder.isEmpty() ?
+                    String.format("\"%s\"",cd.getName()) :
+                    String.format(",\"%s\"",cd.getName()));
+            columnCount++;
+        }
+        stringBuilder.append(System.lineSeparator());
+        writer.write(stringBuilder.toString());
+        System.out.print(stringBuilder.toString());
 
         for (Row rw: rs){
-            writer.write(rw.getString(0));
-            System.out.println(rw.getString(0));
+            stringBuilder=new StringBuilder();
+            for (int i=0;i<columnCount;i++) {
+                stringBuilder.append(stringBuilder.isEmpty() ?
+                        String.format("\"%s\"",rw.getString(i)) :
+                        String.format(",\"%s\"",rw.getString(i)));
+            }
+            stringBuilder.append(System.lineSeparator());
+            writer.write(stringBuilder.toString());
+            System.out.print(stringBuilder.toString());
+            rowCount++;
         }
-//
-//        String itm;
-//        String[] line;
-//        String[] newLine = new String[this.primaryKeys.length];
-//        Row row;
-//        DataType itmType;
-//
-//        for ( ; iterator.hasNext(); ) {
-//            line = iterator.next().values();
-//
-//            //  bind items for query
-//            for (int i : mapIndexes)
-//                newLine[i] = line[i];
-//            bound = stm.bind((Object[]) newLine);
-//            totalCount++;
-//
-//            // execute query
-//            row = session.execute(bound).one();
-
-
-
-
-
 
 
 //        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
@@ -92,14 +94,13 @@ public class CsvCqlRead extends CqlProcessor {
 //                if (!setup.dryRun)
 //                    session.execute(batch);
 //        }
-        return totalCount;
+        return rowCount;
     }
 
-    public String executeContent() throws IOException {
-
+    public ReadResult executeContent() throws IOException {
         try (Writer writer = new StringWriter()) {
-            this.executeCore(writer);
-            return writer.toString();
+            long rows = this.executeCore(writer);
+            return new ReadResult(writer.toString(), rows);
         }
     }
 

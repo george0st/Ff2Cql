@@ -9,9 +9,6 @@
   "defaultConsistencyLevel": "LOCAL_ONE",
 
   "table": "prftest.csv2cql_test3",
-  //"columnNames": "",
-  //"whereClause": "",
-  //"cqlQuery": "",
   "consistencyLevel": "LOCAL_ONE",
 
   "replication": "{'class': 'SimpleStrategy', 'replication_factor': 1}",
