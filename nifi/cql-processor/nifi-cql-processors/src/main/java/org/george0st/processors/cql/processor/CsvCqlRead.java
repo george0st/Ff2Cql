@@ -39,8 +39,9 @@ public class CsvCqlRead extends CqlProcessor {
                     String.format(",\"%s\"",cd.getName()));
             columnCount++;
         }
-        writer.write(stringBuilder.toString()+"\r");
-        System.out.println(stringBuilder.toString()+"\r");
+        stringBuilder.append(System.lineSeparator());
+        writer.write(stringBuilder.toString());
+        System.out.print(stringBuilder.toString());
 
         for (Row rw: rs){
             stringBuilder=new StringBuilder();
@@ -49,33 +50,10 @@ public class CsvCqlRead extends CqlProcessor {
                         String.format("\"%s\"",rw.getString(i)) :
                         String.format(",\"%s\"",rw.getString(i)));
             }
-            stringBuilder.append("\r");
+            stringBuilder.append(System.lineSeparator());
             writer.write(stringBuilder.toString());
-            System.out.println(stringBuilder.toString());
+            System.out.print(stringBuilder.toString());
         }
-//
-//        String itm;
-//        String[] line;
-//        String[] newLine = new String[this.primaryKeys.length];
-//        Row row;
-//        DataType itmType;
-//
-//        for ( ; iterator.hasNext(); ) {
-//            line = iterator.next().values();
-//
-//            //  bind items for query
-//            for (int i : mapIndexes)
-//                newLine[i] = line[i];
-//            bound = stm.bind((Object[]) newLine);
-//            totalCount++;
-//
-//            // execute query
-//            row = session.execute(bound).one();
-
-
-
-
-
 
 
 //        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()

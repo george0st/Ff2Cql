@@ -1,0 +1,18 @@
+{
+  "enable": false,
+  "name": "astradb",
+  "port": 9042,
+  "secureConnectionBundle": "c:/java/secure-connect-astradb-test.zip",
+  "username": "clientId, c:/Java/jiri.steuer@embedit.com-token.json",
+  "pwd": "secret, c:/Java/jiri.steuer@embedit.com-token.json",
+  "connectionTimeout": "900",
+  "requestTimeout": "60",
+  "defaultConsistencyLevel": "LOCAL_QUORUM",
+
+  "table": "prftest.csv2cql_test3",
+  "consistencyLevel": "LOCAL_QUORUM",
+
+  "replication": "{'class': 'NetworkTopologyStrategy', 'replication_factor': 3}",
+  "compaction": "{'class': 'UnifiedCompactionStrategy', 'scaling_parameters': 'L10, T10'}"
+}
+

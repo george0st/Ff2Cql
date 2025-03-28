@@ -10,12 +10,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GetCQLFunction extends GetCQLBase {
 
-    public GetCQLFunction() throws IOException, InitializationException, InterruptedException {
+    public GetCQLFunction() throws Exception {
         super();
     }
 
@@ -23,12 +22,6 @@ public class GetCQLFunction extends GetCQLBase {
     public void testGetWithEmptyContent() throws Exception {
         MockFlowFile result;
         String resultContent;
-
-
-        //  Prepare data for reading
-        PutCQLFunction putCQL=new PutCQLFunction();
-        putCQL.init();
-        putCQL.testBasic();
 
         // Read data
         for (TestSetupRead setup : setups) {
@@ -41,7 +34,7 @@ public class GetCQLFunction extends GetCQLBase {
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
             assertEquals(4, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
-            assertEquals(resultContent, "");
+            assertTrue(resultContent.indexOf("6998")!=-1,"Invalid output");
         }
 
     }
@@ -56,8 +49,8 @@ public class GetCQLFunction extends GetCQLBase {
         MockFlowFile result;
         String resultContent;
 
-        PutCQLFunction putCQL=new PutCQLFunction();
-        putCQL.testBasic();
+//        PutCQLFunction putCQL=new PutCQLFunction();
+//        putCQL.testBasic();
 
         for (TestSetupRead setup : setups) {
             setup.columnNames="colbigint, colint";

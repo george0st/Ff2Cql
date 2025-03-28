@@ -114,7 +114,6 @@ public class PutCQLBase {
     }
 
     protected MockFlowFile runTestWithProperty(TestSetupWrite setup, String content, PropertyDescriptor property, String propertyValue, boolean validate) throws Exception {
-        //HashMap<String, String> attributes = new HashMap<String, String>(Map.of("CQLName",setup.name));
         MockFlowFile result;
 
         if (content!=null)
