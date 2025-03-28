@@ -19,10 +19,16 @@ import java.util.Iterator;
  */
 public class CsvCqlRead extends CqlProcessor {
 
+    public class ReadResult {
+        public ReadResult(String content, long rows) { this.content=content; this.rows=rows; }
+        public String content;
+        public long rows;
+    }
+
     public CsvCqlRead(CqlSession session, SetupRead setup) { super(session, setup); }
 
     private long executeCore(Writer writer) throws IOException {
-        long totalCount=0;
+        long rowCount=0, columnCount=0;
         BoundStatement bound;
         ResultSet rs;
 
@@ -30,7 +36,6 @@ public class CsvCqlRead extends CqlProcessor {
 //        bound = stm.bind(null);
 //        rs = session.execute(bound);
         rs = session.execute(selectStatementSql(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause));
-        long columnCount=0;
         StringBuilder stringBuilder=new StringBuilder();
 
         for (ColumnDefinition cd: rs.getColumnDefinitions()) {
@@ -53,6 +58,7 @@ public class CsvCqlRead extends CqlProcessor {
             stringBuilder.append(System.lineSeparator());
             writer.write(stringBuilder.toString());
             System.out.print(stringBuilder.toString());
+            rowCount++;
         }
 
 
@@ -88,14 +94,13 @@ public class CsvCqlRead extends CqlProcessor {
 //                if (!setup.dryRun)
 //                    session.execute(batch);
 //        }
-        return totalCount;
+        return rowCount;
     }
 
-    public String executeContent() throws IOException {
-
+    public ReadResult executeContent() throws IOException {
         try (Writer writer = new StringWriter()) {
-            this.executeCore(writer);
-            return writer.toString();
+            long rows = this.executeCore(writer);
+            return new ReadResult(writer.toString(), rows);
         }
     }
 

@@ -4,8 +4,6 @@
    - GetCQL
 1. finish yugabyteDB
    - https://docs.yugabyte.com/preview/drivers-orms/java/ycql-ssl/
-2. CqlTestSchema with support of common TestSetup
-3. 
 
 
 ## Useful links
