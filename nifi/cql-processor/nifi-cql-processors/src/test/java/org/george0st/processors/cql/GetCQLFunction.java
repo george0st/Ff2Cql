@@ -60,6 +60,29 @@ public class GetCQLFunction extends GetCQLBase {
     }
 
     @Test
+    public void testWhereWithMore2() throws Exception {
+        MockFlowFile result;
+        String resultContent;
+
+        // Read data
+        for (TestSetupRead setup : setups) {
+            setup.columnNames="colbigint, colint";
+            //setup.whereClause="colbigint>=2 or colint>=1700";
+            setup.whereClause="colint>=1700";
+
+            result = runTest(setup);
+            resultContent = result.getContent();
+
+            //  check amount of write items
+            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
+            assertEquals(3, Long.parseLong(result.getAttribute(CQLAttributes.COUNT)));
+            assertTrue(resultContent.indexOf("6998")!=-1,"Invalid GetCQL");
+            assertTrue(resultContent.indexOf("6249")!=-1,"Invalid GetCQL");
+            assertTrue(resultContent.indexOf("1709")!=-1,"Invalid GetCQL");
+        }
+    }
+
+    @Test
     public void testNoWhere() throws Exception {
         MockFlowFile result;
         String resultContent;
