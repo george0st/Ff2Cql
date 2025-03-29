@@ -67,7 +67,6 @@ public class GetCQLFunction extends GetCQLBase {
         // Read data
         for (TestSetupRead setup : setups) {
             setup.columnNames="colbigint, colint";
-            //setup.whereClause="colbigint>=2 or colint>=1700";
             setup.whereClause="colint>=1700";
 
             result = runTest(setup);
