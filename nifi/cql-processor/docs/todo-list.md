@@ -6,6 +6,7 @@
 1. finish yugabyteDB
    - https://docs.yugabyte.com/preview/drivers-orms/java/ycql-ssl/
 2. Update all libraries to the new versions
+   - gson, commons-cvs, generate time uuid
 
 ## Useful links
 
