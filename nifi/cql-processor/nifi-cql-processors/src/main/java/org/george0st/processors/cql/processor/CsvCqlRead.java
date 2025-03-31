@@ -5,6 +5,7 @@ import com.datastax.oss.driver.api.core.DefaultConsistencyLevel;
 import com.datastax.oss.driver.api.core.cql.*;
 import com.datastax.oss.driver.api.core.type.DataType;
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.nifi.util.Tuple;
 import org.george0st.processors.cql.helper.SetupRead;
@@ -32,11 +33,23 @@ public class CsvCqlRead extends CqlProcessor {
         BoundStatement bound;
         ResultSet rs;
 
-//        PreparedStatement stm = selectStatement(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause);
-//        bound = stm.bind(null);
-//        rs = session.execute(bound);
         rs = session.execute(selectStatementSql(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause));
         StringBuilder stringBuilder=new StringBuilder();
+
+//        StringWriter sw = new StringWriter();
+//        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+//                .setHeader(HEADERS)
+//                .build();
+//
+//        try (final CSVPrinter printer = new CSVPrinter(sw, csvFormat)) {
+//            AUTHOR_BOOK_MAP.forEach((author, title) -> {
+//                try {
+//                    printer.printRecord(author, title);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            });
+//        }
 
         for (ColumnDefinition cd: rs.getColumnDefinitions()) {
             stringBuilder.append(stringBuilder.isEmpty() ?
