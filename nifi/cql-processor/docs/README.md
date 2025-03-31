@@ -2,21 +2,22 @@
 
 You can use NiFi processor (nifi-cql-nar-*.nar).
 - ✅ **PutCQL** as NiFi v2 processor with controller, where inputs are FlowFiles
+- ✅ **GetCQL** as NiFi v2 processor with controller, where outputs are FlowFiles
+
+### 1.1 Preconditions for usage
+
+You have to do these steps (only one-time action):
+1. You need the NAR file 'nifi-cql-nar-*.nar'
+    - the last version is [here](./../output/)
+2. Import the *.nar file to the NiFi lib directory
+    - expected location in Linux e.g. '/opt/nifi/current-nifi/lib'
+    - expected location in Windows e.g. 'C:\Program Files\Apache\Nifi\lib'
+3. STOP NiFi
+4. START NiFi
 
 ## 2. PutCQL (NiFi processor)
 
-### 2.1 Preconditions for usage
-
-You have to do these steps (only one-time action):
- 1. You need the NAR file 'nifi-cql-nar-*.nar'
-    - the last version is [here](./../output/)
- 2. Import the *.nar file to the NiFi lib directory
-    - expected location in Linux e.g. '/opt/nifi/current-nifi/lib'
-    - expected location in Windows e.g. 'C:\Program Files\Apache\Nifi\lib'
- 3. STOP NiFi
- 4. START NiFi
-
-### 2.2 Add controller and setup properties
+### 2.1 Add controller and setup properties
 
 ![CQLControllerService, select processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_controller_service_add.png)
 
@@ -52,7 +53,7 @@ You have to do these steps (only one-time action):
 - **SSL Context Service:**
     - SSL context service for CQL connection (default is without setting).  
 
-### 2.3 Add processor and setup properties
+### 2.2 Add processor and setup properties
 
 ![PutCQL, select processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_processor_add.png)
 
@@ -74,7 +75,7 @@ You have to do these steps (only one-time action):
 ### PutCQL setting (key items):
 
 - **Service Controller:**
-  - see relation to [CQLControllerService](#22-add-controller-and-setup-properties)
+  - see relation to [CQLControllerService](#21-add-controller-and-setup-properties)
 - **Write Consistency Level:**
   - Consistency level for write operation (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.,
     default is LOCAL_ONE).
@@ -87,3 +88,7 @@ You have to do these steps (only one-time action):
   - Batch type with relation to an atomicity of batch operation (default UNLOGGED, it is without atomicity).
 - **Dry Run:**
   - The simulation of write to CQL (default is false).
+
+## 3. GetCQL (NiFi processor)
+
+TBD.
