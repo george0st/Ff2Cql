@@ -16,8 +16,8 @@ ScyllaDB, AstraDB, etc.). The implementation details:
 ## 2. Usage in NiFi
 
 You can use this preferred way:
- - ✅ [**PutCQL**](./nifi/cql-processor/docs/README.md#2-putcql-nifi-processor) as NiFi processor with controller, where inputs are FlowFiles 
- - ✅ [**GetCQL**](./nifi/cql-processor/docs/README.md#3-getcql-nifi-processor) (in-progress) as NiFi processor with controller, where outputs are FlowFiles
+ - ✅ [**PutCQL**](./nifi/cql-processor/docs/README.md#3-putcql-nifi-processor) as NiFi processor with controller, where inputs are FlowFiles 
+ - ✅ [**GetCQL**](./nifi/cql-processor/docs/README.md#4-getcql-nifi-processor) (in-progress) as NiFi processor with controller, where outputs are FlowFiles
  - NOTE: You can download the [latest version](./nifi/cql-processor/output/), see 'nifi-cql-nar-*.nar' file 
 
 or two other old alternative ways:
