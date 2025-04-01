@@ -21,8 +21,8 @@ You can use this preferred way:
  - NOTE: You can download the [latest version](./nifi/cql-processor/output/), see 'nifi-cql-nar-*.nar' file 
 
 or two other old alternative ways:
- - ✅ **ExecuteProcess** with java application (see 'Ff2Cql-*.jar'), where inputs are CSV files ([addition detail](./console_app/Ff2Cql/docs/README.md#2-executeprocess-java-application)) 
- - ✅ **ExecuteStreamCommand** with java application (see 'Ff2Cql-*.jar'), where inputs are FlowFiles via stdin ([addition detail](./console_app/Ff2Cql/docs/README.md#3-executestreamcommand-java-application))
+ - ✅ [**ExecuteProcess**](./console_app/Ff2Cql/docs/README.md#2-executeprocess-java-application) with java application (see 'Ff2Cql-*.jar'), where inputs are CSV files 
+ - ✅ [**ExecuteStreamCommand**](./console_app/Ff2Cql/docs/README.md#3-executestreamcommand-java-application) with java application (see 'Ff2Cql-*.jar'), where inputs are FlowFiles via stdin
 
 ## 3. Connection setting
 
