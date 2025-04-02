@@ -1,8 +1,8 @@
 ## 1. Usage in NiFi
 
 You can use NiFi processor (nifi-cql-nar-*.nar).
-- ✅ **PutCQL** as NiFi v2 processor with controller, where inputs are FlowFiles
-- ✅ **GetCQL** as NiFi v2 processor with controller, where outputs are FlowFiles
+- ✅ [**PutCQL**](#3-putcql-nifi-processor) as NiFi v2 processor with controller, where inputs are FlowFiles
+- ✅ [**GetCQL**](#4-getcql-nifi-processor) as NiFi v2 processor with controller, where outputs are FlowFiles
 
 ### 1.1 Preconditions for usage
 
@@ -15,9 +15,7 @@ You have to do these steps (only one-time action):
 3. STOP NiFi
 4. START NiFi
 
-## 2. PutCQL (NiFi processor)
-
-### 2.1 Add controller and setup properties
+## 2. CQLControllerService (NiFi controller)
 
 ![CQLControllerService, select processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_controller_service_add.png)
 
@@ -25,7 +23,7 @@ You have to do these steps (only one-time action):
 
 ![CQLControllerService, properties](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_controller_service_properties.png)
 
-### CQLControllerService setting (key items):
+### CQLControllerService, key items:
 
 - **IP Addresses:**
     - IP addresses of CQL engine with comma delimiter e.g. '10.129.53.10,
@@ -34,7 +32,7 @@ You have to do these steps (only one-time action):
     - Port for communication with CQL engine (default is 9042).
 - **Secure Connection Bundle:**
     - Secure Connection Bundle for access to AstraDB (it is the link to '*.zip'
-      file, downloaded from AstraDB web). 
+      file, downloaded from AstraDB web).
     - NOTE: the 'username' is 'clientId' and 'password' id 'secret', these values
       are from the file '*-token.json', downloaded from AstraDB web.
 - **Username:**
@@ -51,9 +49,9 @@ You have to do these steps (only one-time action):
     - Default consistency level (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.,
       default is LOCAL_ONE).
 - **SSL Context Service:**
-    - SSL context service for CQL connection (default is without setting).  
+    - SSL context service for CQL connection (default is without setting).
 
-### 2.2 Add processor and setup properties
+## 3. PutCQL (NiFi processor)
 
 ![PutCQL, select processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_processor_add.png)
 
@@ -72,10 +70,10 @@ You have to do these steps (only one-time action):
 - **cql.count** (FlowFile attribute)
   - The amount of write rows to CQL.
 
-### PutCQL setting (key items):
+### PutCQL setting, key items:
 
 - **Service Controller:**
-  - see relation to [CQLControllerService](#21-add-controller-and-setup-properties)
+  - see relation to [CQLControllerService](#2-cqlcontrollerservice-nifi-controller)
 - **Write Consistency Level:**
   - Consistency level for write operation (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.,
     default is LOCAL_ONE).
@@ -89,6 +87,7 @@ You have to do these steps (only one-time action):
 - **Dry Run:**
   - The simulation of write to CQL (default is false).
 
-## 3. GetCQL (NiFi processor)
+## 4. GetCQL (NiFi processor)
 
 TBD.
+
