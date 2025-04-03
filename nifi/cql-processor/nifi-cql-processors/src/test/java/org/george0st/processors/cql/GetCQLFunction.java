@@ -67,7 +67,7 @@ public class GetCQLFunction extends GetCQLBase {
         // Read data
         for (TestSetupRead setup : setups) {
             setup.columnNames="colbigint, colint";
-            setup.whereClause="colint>=1700";
+            setup.whereClause="colint>=1700 ALLOW FILTERING";
 
             result = runTest(setup);
             resultContent = result.getContent();

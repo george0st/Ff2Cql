@@ -12,7 +12,9 @@ import org.george0st.processors.cql.helper.SetupRead;
 
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -29,84 +31,32 @@ public class CsvCqlRead extends CqlProcessor {
     public CsvCqlRead(CqlSession session, SetupRead setup) { super(session, setup); }
 
     private long executeCore(Writer writer) throws IOException {
-        long rowCount=0, columnCount=0;
-        BoundStatement bound;
+        List<String> columns=new ArrayList<>();
+        long rowCount=0;
         ResultSet rs;
 
+        //  execute CQL
         rs = session.execute(selectStatementSql(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause));
-        StringBuilder stringBuilder=new StringBuilder();
 
-//        StringWriter sw = new StringWriter();
-//        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
-//                .setHeader(HEADERS)
-//                .build();
-//
-//        try (final CSVPrinter printer = new CSVPrinter(sw, csvFormat)) {
-//            AUTHOR_BOOK_MAP.forEach((author, title) -> {
-//                try {
-//                    printer.printRecord(author, title);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//        }
+        //  get columns
+        for (ColumnDefinition cd: rs.getColumnDefinitions())
+            columns.add(cd.getName().toString());
 
-        for (ColumnDefinition cd: rs.getColumnDefinitions()) {
-            stringBuilder.append(stringBuilder.isEmpty() ?
-                    String.format("\"%s\"",cd.getName()) :
-                    String.format(",\"%s\"",cd.getName()));
-            columnCount++;
-        }
-        stringBuilder.append(System.lineSeparator());
-        writer.write(stringBuilder.toString());
-        System.out.print(stringBuilder.toString());
+        //  create CSV format
+        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+                .setHeader(columns.toArray(new String[0]))
+                .build();
 
-        for (Row rw: rs){
-            stringBuilder=new StringBuilder();
-            for (int i=0;i<columnCount;i++) {
-                stringBuilder.append(stringBuilder.isEmpty() ?
-                        String.format("\"%s\"",rw.getString(i)) :
-                        String.format(",\"%s\"",rw.getString(i)));
+        //  write CSV
+        try (final CSVPrinter printer = new CSVPrinter(writer, csvFormat)) {
+            String[] row=new String[columns.size()];
+            for (Row rw : rs) {
+                for (int i = 0; i < columns.size(); i++)
+                    row[i]=rw.getString(i);
+                printer.printRecord(row);
+                rowCount++;
             }
-            stringBuilder.append(System.lineSeparator());
-            writer.write(stringBuilder.toString());
-            System.out.print(stringBuilder.toString());
-            rowCount++;
         }
-
-
-//        CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
-//                .setSkipHeaderRecord(true)
-//                .get();
-//        Iterator<CSVRecord> iterator = csvFormat.parse(reader).iterator();
-//
-//        if (iterator.hasNext()) {
-//            String[] headers = iterator.next().values();
-//            String prepareHeaders = prepareHeaders(headers);
-//            String prepareItems = prepareItems(headers);
-//            PreparedStatement stm = insertStatement(session, prepareHeaders, prepareItems);
-//
-//            BatchStatement batch = BatchStatement.newInstance(DefaultBatchType.valueOf(setup.batchType));
-//            String[] line;
-//            int count = 0;
-//
-//            while (iterator.hasNext()) {
-//                line = iterator.next().values();
-//                batch = batch.addAll(stm.bind((Object[]) line));
-//                count++;
-//                totalCount++;
-//
-//                if (count == setup.getBatchSize()) {
-//                    if (!setup.dryRun)
-//                        session.execute(batch);
-//                    batch = batch.clear();
-//                    count = 0;
-//                }
-//            }
-//            if (count > 0)
-//                if (!setup.dryRun)
-//                    session.execute(batch);
-//        }
         return rowCount;
     }
 
