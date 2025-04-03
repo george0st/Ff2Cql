@@ -2,7 +2,7 @@
 
 ![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/docs/assets/nifi_cassandra.png?raw=true)
 
-A simple transfer data from NiFi to CQL (support Apache Cassandra, 
+A simple transfer data between NiFi and CQL (support Apache Cassandra, 
 ScyllaDB, AstraDB, etc.). The implementation details:
  - development NiFi v2 processor (with controller) and java application (support Java 17/21+)
  - support Apache Cassandra v4/v5, ScyllaDB, AstraDB based on CQL (Cassandra Query Language)
@@ -15,18 +15,18 @@ ScyllaDB, AstraDB, etc.). The implementation details:
 
 ## 2. Usage in NiFi
 
-You can use this preferred way:
- - ✅ [**PutCQL**](./nifi/cql-processor/docs/README.md#3-putcql-nifi-processor) as NiFi processor with controller, where inputs are FlowFiles 
- - ✅ [**GetCQL**](./nifi/cql-processor/docs/README.md#4-getcql-nifi-processor) (in-progress) as NiFi processor with controller, where outputs are FlowFiles
+You can use this preferred way (NiFi v2 processor with controller):
+ - ✅ [**PutCQL**](./nifi/cql-processor/docs/README.md#3-putcql-nifi-processor), where inputs are FlowFiles 
+ - ✅ [**GetCQL**](./nifi/cql-processor/docs/README.md#4-getcql-nifi-processor) (in-progress), where outputs are FlowFiles
  - NOTE: You can download the [latest version](./nifi/cql-processor/output/), see 'nifi-cql-nar-*.nar' file 
 
-or two other old alternative ways:
+or two other older alternative ways:
  - ✅ [**ExecuteProcess**](./console_app/Ff2Cql/docs/README.md#2-executeprocess-java-application) with java application (see 'Ff2Cql-*.jar'), where inputs are CSV files 
  - ✅ [**ExecuteStreamCommand**](./console_app/Ff2Cql/docs/README.md#3-executestreamcommand-java-application) with java application (see 'Ff2Cql-*.jar'), where inputs are FlowFiles via stdin
 
 ## 3. Connection setting
 
-You can see sample of relevant setting for CQL controllers:
+You can see sample of relevant setting for CQL controller here:
  - [Cassandra setting](./nifi/cql-processor/nifi-cql/src/test/test-cassandra.json)
    - access with IP addresses (name/password)
  - [Scylla setting](./nifi/cql-processor/nifi-cql/src/test/test-scylla.json)
