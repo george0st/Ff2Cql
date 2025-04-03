@@ -2,7 +2,6 @@
 
 0. Read values from CQL
    - GetCQL
-   - use commons-csv for save the CSV
 1. finish yugabyteDB
    - https://docs.yugabyte.com/preview/drivers-orms/java/ycql-ssl/
 
