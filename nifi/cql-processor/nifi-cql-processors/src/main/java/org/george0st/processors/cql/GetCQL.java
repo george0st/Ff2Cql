@@ -43,7 +43,7 @@ import java.util.Set;
 @CapabilityDescription("Read the contents of CQL engine (support Apache Cassandra, " +
         "ScyllaDB, AstraDB, etc.) to the FlowFile.")
 @SeeAlso({})
-@InputRequirement(InputRequirement.Requirement.INPUT_REQUIRED)
+@InputRequirement(InputRequirement.Requirement.INPUT_ALLOWED)
 @ReadsAttributes({@ReadsAttribute(attribute="", description="")})
 @WritesAttributes({
         @WritesAttribute(attribute=CQLAttributes.READ_COUNT, description=CQLAttributes.READ_COUNT_DESC),
