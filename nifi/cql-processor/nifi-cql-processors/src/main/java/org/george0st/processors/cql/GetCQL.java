@@ -32,9 +32,7 @@ import org.apache.nifi.processor.io.OutputStreamCallback;
 import org.apache.nifi.processor.util.StandardValidators;
 import org.george0st.cql.CQLClientService;
 import org.george0st.processors.cql.helper.SetupRead;
-import org.george0st.processors.cql.helper.SetupWrite;
 import org.george0st.processors.cql.processor.CsvCqlRead;
-import org.george0st.processors.cql.processor.CsvCqlWrite;
 
 import java.io.*;
 import java.util.List;
@@ -48,13 +46,9 @@ import java.util.Set;
 @InputRequirement(InputRequirement.Requirement.INPUT_REQUIRED)
 @ReadsAttributes({@ReadsAttribute(attribute="", description="")})
 @WritesAttributes({
-        @WritesAttribute(attribute = GetCQL.ATTRIBUTE_READ_COUNT, description = "Amount of read rows from CQL.")})
+        @WritesAttribute(attribute=CQLAttributes.READ_COUNT, description=CQLAttributes.READ_COUNT_DESC),
+        @WritesAttribute(attribute=CQLAttributes.ERROR_MESSAGE, description=CQLAttributes.ERROR_MESSAGE_DESC)})
 public class GetCQL extends AbstractProcessor {
-
-    static final String ATTRIBUTE_READ_COUNT = "cql.read.count";
-
-    static final AllowableValue BT_LOGGED = new AllowableValue("LOGGED", "LOGGED");
-    static final AllowableValue BT_UNLOGGED = new AllowableValue("UNLOGGED", "UNLOGGED");
 
     //  region All Properties
 
@@ -182,10 +176,11 @@ public class GetCQL extends AbstractProcessor {
     }
 
     /**
+     * Update current content file
      *
-     * @param flowFile
-     * @param session
-     * @param content
+     * @param flowFile  Current flow file
+     * @param session   Current session
+     * @param content   Content for write
      */
     private void updateContent(FlowFile flowFile, ProcessSession session, String content){
         InputStream inputStream = new ByteArrayInputStream(content.getBytes());
@@ -195,12 +190,12 @@ public class GetCQL extends AbstractProcessor {
     /**
      * Create new content file
      *
-     * @param flowFile
-     * @param session
-     * @param content
-     * @return
+     * @param flowFile  Old flow file (null is also valid)
+     * @param session   Current session
+     * @param content   Content for write
+     * @return          New flow file
      */
-    private FlowFile writeContent(FlowFile flowFile,ProcessSession session, String content) {
+    private FlowFile writeContent(FlowFile flowFile, ProcessSession session, String content) {
         FlowFile nextFlowFile;
 
         // only in case, if flow file is null
@@ -235,7 +230,7 @@ public class GetCQL extends AbstractProcessor {
                 CsvCqlRead.ReadResult result = read.executeContent();
 
                 //  4. write some information to the output (as write attributes)
-                session.putAttribute(flowFile, CQLAttributes.COUNT, Long.toString(result.rows));
+                session.putAttribute(flowFile, CQLAttributes.READ_COUNT, Long.toString(result.rows));
                 //updateContent(flowFile, session, data);
                 writeContent(flowFile, session, result.content);
 

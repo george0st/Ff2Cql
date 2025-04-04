@@ -50,7 +50,7 @@ import java.util.Set;
 @InputRequirement(InputRequirement.Requirement.INPUT_REQUIRED)
 @ReadsAttributes({@ReadsAttribute(attribute="", description="")})
 @WritesAttributes({
-        @WritesAttribute(attribute=CQLAttributes.COUNT, description=CQLAttributes.COUNT_DESC),
+        @WritesAttribute(attribute=CQLAttributes.WRITE_COUNT, description=CQLAttributes.WRITE_COUNT_DESC),
         @WritesAttribute(attribute=CQLAttributes.ERROR_MESSAGE, description=CQLAttributes.ERROR_MESSAGE_DESC)})
 public class PutCQL extends AbstractProcessor {
 
@@ -210,7 +210,7 @@ public class PutCQL extends AbstractProcessor {
                 long count = write.executeContent(this.getByteContent(flowFile, session));
 
                 //  4. write some information to the output (as write attributes)
-                session.putAttribute(flowFile, CQLAttributes.COUNT, Long.toString(count));
+                session.putAttribute(flowFile, CQLAttributes.WRITE_COUNT, Long.toString(count));
 
                 //  5. success and provenance reporting
                 session.getProvenanceReporter().send(flowFile, clientService.getURI());
