@@ -218,7 +218,6 @@ public class GetCQL extends AbstractProcessor {
         if (flowFile == null)
             flowFile = session.create();
 
-        // TODO: or flowFile = session.create()
         try {
             //  1. get cql session (based on controller)
             try (CqlSession cqlSession = clientService.getSession()) {
@@ -231,7 +230,6 @@ public class GetCQL extends AbstractProcessor {
 
                 //  4. write some information to the output (as write attributes)
                 session.putAttribute(flowFile, CQLAttributes.READ_COUNT, Long.toString(result.rows));
-                //updateContent(flowFile, session, data);
                 writeContent(flowFile, session, result.content);
 
                 //  5. success and provenance reporting
