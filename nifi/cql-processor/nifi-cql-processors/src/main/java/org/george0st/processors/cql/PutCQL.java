@@ -209,7 +209,7 @@ public class PutCQL extends AbstractProcessor {
                 //  3. put data (FlowFile) to CQL
                 long count = write.executeContent(this.getByteContent(flowFile, session));
 
-                //  4. write some information to the output (as write attributes)
+                //  4. write information to the output (as write attributes)
                 session.putAttribute(flowFile, CQLAttributes.WRITE_COUNT, Long.toString(count));
 
                 //  5. success and provenance reporting
@@ -218,13 +218,13 @@ public class PutCQL extends AbstractProcessor {
             }
         }
         catch (InvalidQueryException ex){
-            getLogger().error("PutCQL, OnTrigger: InvalidQuery error", ex);
+            getLogger().error("PutCQL, InvalidQuery error: ", ex);
             flowFile = session.putAttribute(flowFile, CQLAttributes.ERROR_MESSAGE, ex.getMessage());
             flowFile = session.penalize(flowFile);
             session.transfer(flowFile, REL_FAILURE);
         }
         catch (Exception ex) {
-            getLogger().error("PutCQL, OnTrigger: Error", ex);
+            getLogger().error("PutCQL, Error: ", ex);
             flowFile = session.putAttribute(flowFile, CQLAttributes.ERROR_MESSAGE, ex.getMessage());
             flowFile = session.penalize(flowFile);
             session.transfer(flowFile, REL_FAILURE);
