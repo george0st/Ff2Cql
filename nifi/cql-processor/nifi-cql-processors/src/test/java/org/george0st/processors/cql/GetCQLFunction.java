@@ -98,6 +98,28 @@ public class GetCQLFunction extends GetCQLBase {
     }
 
     @Test
+    public void testCqlQuery() throws Exception {
+        MockFlowFile result;
+        String resultContent;
+
+        // Read data
+        for (TestSetupRead setup : setups) {
+            setup.cqlQuery=String.format("SELECT colbigint, colint FROM %s;", setup.table);
+
+            result = runTest(setup);
+            resultContent = result.getContent();
+
+            //  check amount of write items
+            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
+            assertEquals(4, Long.parseLong(result.getAttribute(CQLAttributes.WRITE_COUNT)));
+            assertTrue(resultContent.indexOf("6998")!=-1,"Invalid GetCQL");
+            assertTrue(resultContent.indexOf("6249")!=-1,"Invalid GetCQL");
+            assertTrue(resultContent.indexOf("1709")!=-1,"Invalid GetCQL");
+            assertTrue(resultContent.indexOf("1064")!=-1,"Invalid GetCQL");
+        }
+    }
+
+    @Test
     public void testWithSomeContent() throws Exception {
         String content = "\"colbigint\",\"colint\",\"coltext\",\"colfloat\",\"coldouble\",\"coldate\",\"coltime\",\"coltimestamp\",\"colboolean\",\"coluuid\",\"colsmallint\",\"coltinyint\",\"coltimeuuid\",\"colvarchar\"\n" +
                 "\"0\",\"1064\",\"zeVOKGnORq\",\"627.6811\",\"395.8522407512559\",\"1971-11-12\",\"03:37:15\",\"2000-09-25T22:18:45Z\",\"false\",\"6080071f-4dd1-4ea5-b711-9ad0716e242a\",\"8966\",\"55\",\"f45e58f5-c3b7-11ef-8d19-97ae87be7c54\",\"Tzxsw\"\n" +

@@ -5,3 +5,4 @@
 1. finish yugabyteDB
    - https://docs.yugabyte.com/preview/drivers-orms/java/ycql-ssl/
 
+2. selectStatementSql with pure Setup
