@@ -50,7 +50,7 @@ import java.util.Set;
 @InputRequirement(InputRequirement.Requirement.INPUT_REQUIRED)
 @ReadsAttributes({@ReadsAttribute(attribute="", description="")})
 @WritesAttributes({
-        @WritesAttribute(attribute=CQLAttributes.COUNT, description=CQLAttributes.COUNT_DESC),
+        @WritesAttribute(attribute=CQLAttributes.WRITE_COUNT, description=CQLAttributes.WRITE_COUNT_DESC),
         @WritesAttribute(attribute=CQLAttributes.ERROR_MESSAGE, description=CQLAttributes.ERROR_MESSAGE_DESC)})
 public class PutCQL extends AbstractProcessor {
 
@@ -209,8 +209,8 @@ public class PutCQL extends AbstractProcessor {
                 //  3. put data (FlowFile) to CQL
                 long count = write.executeContent(this.getByteContent(flowFile, session));
 
-                //  4. write some information to the output (as write attributes)
-                session.putAttribute(flowFile, CQLAttributes.COUNT, Long.toString(count));
+                //  4. write information to the output (as write attributes)
+                session.putAttribute(flowFile, CQLAttributes.WRITE_COUNT, Long.toString(count));
 
                 //  5. success and provenance reporting
                 session.getProvenanceReporter().send(flowFile, clientService.getURI());
@@ -218,13 +218,13 @@ public class PutCQL extends AbstractProcessor {
             }
         }
         catch (InvalidQueryException ex){
-            getLogger().error("PutCQL, OnTrigger: InvalidQuery error", ex);
+            getLogger().error("PutCQL, InvalidQuery error: ", ex);
             flowFile = session.putAttribute(flowFile, CQLAttributes.ERROR_MESSAGE, ex.getMessage());
             flowFile = session.penalize(flowFile);
             session.transfer(flowFile, REL_FAILURE);
         }
         catch (Exception ex) {
-            getLogger().error("PutCQL, OnTrigger: Error", ex);
+            getLogger().error("PutCQL, Error: ", ex);
             flowFile = session.putAttribute(flowFile, CQLAttributes.ERROR_MESSAGE, ex.getMessage());
             flowFile = session.penalize(flowFile);
             session.transfer(flowFile, REL_FAILURE);

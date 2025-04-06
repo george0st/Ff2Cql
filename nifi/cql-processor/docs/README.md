@@ -67,7 +67,7 @@ You have to do these steps (only one-time action):
 
 ### Output
 
-- **cql.count** (FlowFile attribute)
+- **cql.write.count** (FlowFile attribute)
   - The amount of write rows to CQL.
 
 ### PutCQL setting, key items:
@@ -89,5 +89,34 @@ You have to do these steps (only one-time action):
 
 ## 4. GetCQL (NiFi processor)
 
-TBD.
+NOTE: Pictures TBD.
 
+### Input
+
+- **FlowFile** as optional.
+
+### Output
+
+- **cql.read.count** (FlowFile attribute)
+    - The amount of read rows from CQL.
+
+### GetCQL setting, key items:
+
+- **Service Controller:**
+    - see relation to [CQLControllerService](#2-cqlcontrollerservice-nifi-controller)
+- **Read Consistency Level:**
+    - Consistency level for write operation (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.,
+      default is LOCAL_ONE).
+- **Table:**
+    - Schema and table name in CQL for read/get a data (expected format 'keyspace.table', e.g. 'cqlschema.cqltable').
+    - The data types defined in the CQL table will be used for value conversions to the CSV file.
+- **Columns to Return:**
+    - A comma-separated list of column names to be used in the query. If your CQL requires 
+      special treatment of the names (quoting, e.g.), each name should include such treatment. If no
+      column names are supplied, all columns in the specified table will be returned. NOTE: It is important
+      to use consistent column names for a given table for incremental fetch to work properly.
+- **Additional WHERE clause:**
+    - A custom clause to be added in the WHERE condition when building CQL queries.
+- **Custom Query:**
+    - A custom CQL query used to retrieve data. Instead of building a CQL query from other
+      properties, this query will be wrapped as a sub-query. Query must have no ORDER BY statement.
