@@ -106,8 +106,8 @@ You have to do these steps (only one-time action):
     - Consistency level for write operation (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.,
       default is LOCAL_ONE).
 - **Table:**
-    - Schema and table name in CQL for write/put a data (expected format 'keyspace.table', e.g. 'cqlschema.cqltable').
-    - The data types defined in the CQL table will be used for value conversions from the CSV file.
+    - Schema and table name in CQL for read/get a data (expected format 'keyspace.table', e.g. 'cqlschema.cqltable').
+    - The data types defined in the CQL table will be used for value conversions to the CSV file.
 - **Columns to Return:**
     - A comma-separated list of column names to be used in the query. If your CQL requires 
       special treatment of the names (quoting, e.g.), each name should include such treatment. If no
