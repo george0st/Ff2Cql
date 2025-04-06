@@ -89,6 +89,8 @@ You have to do these steps (only one-time action):
 
 ## 4. GetCQL (NiFi processor)
 
+NOTE: Pictures TBD.
+
 ### Input
 
 - **FlowFile** as optional.
