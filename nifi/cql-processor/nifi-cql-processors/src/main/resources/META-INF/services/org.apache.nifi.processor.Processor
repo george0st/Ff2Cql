@@ -13,6 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 org.george0st.processors.cql.PutCQL
-
-# Temporary commented
-# org.george0st.processors.cql.GetCQL
+org.george0st.processors.cql.GetCQL

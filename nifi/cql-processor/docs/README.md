@@ -53,11 +53,11 @@ You have to do these steps (only one-time action):
 
 ## 3. PutCQL (NiFi processor)
 
-![PutCQL, select processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_processor_add.png)
+![PutCQL, select processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_put_processor_add.png)
 
-![PutCQL, processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_processor.png)
+![PutCQL, processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_put_processor.png)
 
-![PutCQL, properties](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_processor_properties.png)
+![PutCQL, properties](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_put_processor_properties.png)
 
 ### Input
 
@@ -89,7 +89,11 @@ You have to do these steps (only one-time action):
 
 ## 4. GetCQL (NiFi processor)
 
-NOTE: Pictures TBD.
+![GetCQL, select processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_get_processor_add.png)
+
+![GetCQL, processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_get_processor.png)
+
+![GetCQL, properties](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_get_processor_properties.png)
 
 ### Input
 
