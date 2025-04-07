@@ -89,7 +89,11 @@ You have to do these steps (only one-time action):
 
 ## 4. GetCQL (NiFi processor)
 
-NOTE: Pictures TBD.
+![GetCQL, select processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_get_processor_add.png)
+
+![GetCQL, processor](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_get_processor.png)
+
+![GetCQL, properties](https://github.com/george0st/Csv2Cql/blob/main/nifi/cql-processor/docs/assets/nifi_get_processor_properties.png)
 
 ### Input
 
