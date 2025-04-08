@@ -36,7 +36,8 @@ public class CsvCqlRead extends CqlProcessor {
         ResultSet rs;
 
         //  execute CQL
-        rs = session.execute(selectStatementSql(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause));
+        //rs = session.execute(selectStatementSql(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause));
+        rs = session.execute(selectStatementSql(session, (SetupRead)setup));
 
         //  get columns
         for (ColumnDefinition cd: rs.getColumnDefinitions())
@@ -107,18 +108,18 @@ public class CsvCqlRead extends CqlProcessor {
 //        return totalCount;
 //    }
 
-    private PreparedStatement selectStatement(CqlSession session, String prepareHeaders, String whereItems){
-        return session.prepare(SimpleStatement.newInstance(selectStatementSql(session, prepareHeaders, whereItems))
+    private PreparedStatement selectStatement(CqlSession session, SetupRead readSetup){
+        return session.prepare(SimpleStatement.newInstance(selectStatementSql(session, readSetup))
                 .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
     }
 
-    private String selectStatementSql(CqlSession session, String prepareHeaders, String whereItems){
+    private String selectStatementSql(CqlSession session, SetupRead readSetup){
         StringBuilder selectQuery = new StringBuilder();
 
-        selectQuery.append("SELECT " + (prepareHeaders==null ? "*" : prepareHeaders));
+        selectQuery.append("SELECT " + (readSetup.columnNames==null ? "*" : readSetup.columnNames));
         selectQuery.append(" FROM " + this.setup.table);
-        if (whereItems!=null)
-            selectQuery.append(" WHERE " + whereItems);
+        if (readSetup.whereClause!=null)
+            selectQuery.append(" WHERE " + readSetup.whereClause);
         selectQuery.append(";");
         return selectQuery.toString();
     }

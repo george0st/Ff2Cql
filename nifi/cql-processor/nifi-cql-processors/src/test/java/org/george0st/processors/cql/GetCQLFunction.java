@@ -27,7 +27,7 @@ public class GetCQLFunction extends GetCQLBase {
 
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(1, Long.parseLong(result.getAttribute(CQLAttributes.WRITE_COUNT)));
+            assertEquals(1, Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT)));
             assertTrue(resultContent.indexOf("6998")!=-1,"Invalid output");
         }
     }
@@ -47,7 +47,7 @@ public class GetCQLFunction extends GetCQLBase {
 
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(2, Long.parseLong(result.getAttribute(CQLAttributes.WRITE_COUNT)));
+            assertEquals(2, Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT)));
             assertTrue(resultContent.indexOf("6998")!=-1,"Invalid GetCQL");
             assertTrue(resultContent.indexOf("6249")!=-1,"Invalid GetCQL");
         }
@@ -68,7 +68,7 @@ public class GetCQLFunction extends GetCQLBase {
 
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(3, Long.parseLong(result.getAttribute(CQLAttributes.WRITE_COUNT)));
+            assertEquals(3, Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT)));
             assertTrue(resultContent.indexOf("6998")!=-1,"Invalid GetCQL");
             assertTrue(resultContent.indexOf("6249")!=-1,"Invalid GetCQL");
             assertTrue(resultContent.indexOf("1709")!=-1,"Invalid GetCQL");
@@ -89,7 +89,7 @@ public class GetCQLFunction extends GetCQLBase {
 
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(4, Long.parseLong(result.getAttribute(CQLAttributes.WRITE_COUNT)));
+            assertEquals(4, Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT)));
             assertTrue(resultContent.indexOf("6998")!=-1,"Invalid GetCQL");
             assertTrue(resultContent.indexOf("6249")!=-1,"Invalid GetCQL");
             assertTrue(resultContent.indexOf("1709")!=-1,"Invalid GetCQL");
@@ -111,7 +111,7 @@ public class GetCQLFunction extends GetCQLBase {
 
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(4, Long.parseLong(result.getAttribute(CQLAttributes.WRITE_COUNT)));
+            assertEquals(4, Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT)));
             assertTrue(resultContent.indexOf("6998")!=-1,"Invalid GetCQL");
             assertTrue(resultContent.indexOf("6249")!=-1,"Invalid GetCQL");
             assertTrue(resultContent.indexOf("1709")!=-1,"Invalid GetCQL");
@@ -137,7 +137,7 @@ public class GetCQLFunction extends GetCQLBase {
 
             //  check amount of write items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(1, Long.parseLong(result.getAttribute(CQLAttributes.WRITE_COUNT)));
+            assertEquals(1, Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT)));
             assertTrue(resultContent.indexOf("6998")!=-1,"Invalid output");
         }
 
