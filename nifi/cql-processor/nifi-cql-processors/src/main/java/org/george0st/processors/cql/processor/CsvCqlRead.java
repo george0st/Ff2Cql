@@ -36,7 +36,8 @@ public class CsvCqlRead extends CqlProcessor {
         ResultSet rs;
 
         //  execute CQL
-        rs = session.execute(selectStatementSql(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause));
+        //rs = session.execute(selectStatementSql(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause));
+        rs = session.execute(selectStatementSql(session, (SetupRead)setup));
 
         //  get columns
         for (ColumnDefinition cd: rs.getColumnDefinitions())
@@ -107,20 +108,24 @@ public class CsvCqlRead extends CqlProcessor {
 //        return totalCount;
 //    }
 
-    private PreparedStatement selectStatement(CqlSession session, String prepareHeaders, String whereItems){
-        return session.prepare(SimpleStatement.newInstance(selectStatementSql(session, prepareHeaders, whereItems))
-                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
+    private PreparedStatement selectStatement(CqlSession session, SetupRead readSetup){
+        return session.prepare(SimpleStatement.newInstance(selectStatementSql(session, readSetup))
+                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(readSetup.consistencyLevel)));
     }
 
-    private String selectStatementSql(CqlSession session, String prepareHeaders, String whereItems){
-        StringBuilder selectQuery = new StringBuilder();
+    private String selectStatementSql(CqlSession session, SetupRead readSetup){
 
-        selectQuery.append("SELECT " + (prepareHeaders==null ? "*" : prepareHeaders));
-        selectQuery.append(" FROM " + this.setup.table);
-        if (whereItems!=null)
-            selectQuery.append(" WHERE " + whereItems);
-        selectQuery.append(";");
-        return selectQuery.toString();
+        if (readSetup.cqlQuery==null) {
+            StringBuilder selectQuery = new StringBuilder();
+
+            selectQuery.append("SELECT " + (readSetup.columnNames == null ? "*" : readSetup.columnNames));
+            selectQuery.append(" FROM " + readSetup.table);
+            if (readSetup.whereClause != null)
+                selectQuery.append(" WHERE " + readSetup.whereClause);
+            selectQuery.append(";");
+            return selectQuery.toString();
+        }
+        return readSetup.cqlQuery;
     }
 
 }
