@@ -110,18 +110,22 @@ public class CsvCqlRead extends CqlProcessor {
 
     private PreparedStatement selectStatement(CqlSession session, SetupRead readSetup){
         return session.prepare(SimpleStatement.newInstance(selectStatementSql(session, readSetup))
-                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(this.setup.consistencyLevel)));
+                .setConsistencyLevel(DefaultConsistencyLevel.valueOf(readSetup.consistencyLevel)));
     }
 
     private String selectStatementSql(CqlSession session, SetupRead readSetup){
-        StringBuilder selectQuery = new StringBuilder();
 
-        selectQuery.append("SELECT " + (readSetup.columnNames==null ? "*" : readSetup.columnNames));
-        selectQuery.append(" FROM " + this.setup.table);
-        if (readSetup.whereClause!=null)
-            selectQuery.append(" WHERE " + readSetup.whereClause);
-        selectQuery.append(";");
-        return selectQuery.toString();
+        if (readSetup.cqlQuery==null) {
+            StringBuilder selectQuery = new StringBuilder();
+
+            selectQuery.append("SELECT " + (readSetup.columnNames == null ? "*" : readSetup.columnNames));
+            selectQuery.append(" FROM " + readSetup.table);
+            if (readSetup.whereClause != null)
+                selectQuery.append(" WHERE " + readSetup.whereClause);
+            selectQuery.append(";");
+            return selectQuery.toString();
+        }
+        return readSetup.cqlQuery;
     }
 
 }
