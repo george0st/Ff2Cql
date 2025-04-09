@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GetCQLFunction extends GetCQLBase {
 
     public GetCQLFunction() throws Exception {
-        super();
+        super(false);
     }
 
     @Test

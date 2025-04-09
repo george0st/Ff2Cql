@@ -21,14 +21,16 @@ public class GetCQLBase {
     protected CQLControllerService testService;
     protected List<TestSetupRead> setups;
 
-    public GetCQLBase() throws Exception {
+    public GetCQLBase(boolean performanceTest) throws Exception {
         //  create TestSetupWrite scope based on test-*.json files
         setups = createSetup();
 
-        //  Prepare data for reading (including build schema, if not exist)
-        PutCQLFunction putCQL=new PutCQLFunction();
-        putCQL.init();
-        putCQL.testBasic();
+        if (performanceTest) {
+            //  Prepare data for reading (including build schema, if not exist)
+            PutCQLFunction putCQL = new PutCQLFunction();
+            putCQL.init();
+            putCQL.testBasic();
+        }
     }
 
     protected ArrayList<TestSetupRead> createSetup() throws IOException {
