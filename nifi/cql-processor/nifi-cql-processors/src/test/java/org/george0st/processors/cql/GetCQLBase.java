@@ -25,7 +25,7 @@ public class GetCQLBase {
         //  create TestSetupWrite scope based on test-*.json files
         setups = createSetup();
 
-        if (performanceTest) {
+        if (!performanceTest){
             //  Prepare data for reading (including build schema, if not exist)
             PutCQLFunction putCQL = new PutCQLFunction();
             putCQL.init();
@@ -111,7 +111,7 @@ public class GetCQLBase {
 
                 if (ok) {
                     countWrite = Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT));
-                    System.out.printf("Source: '%s'; WRITE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+                    System.out.printf("Source: '%s'; READ; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
                             setup.name,
                             "FlowFile",
                             ReadableValue.fromMillisecond(finish - start),
