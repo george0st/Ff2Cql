@@ -20,6 +20,31 @@ public class GetCQLPerformance extends GetCQLBase {
     }
 
     @Test
+    public void testRead10K() throws Exception {
+        MockFlowFile result;
+
+        // Prepare data for performance test
+        PutCQLPerformance putCQL = new PutCQLPerformance();
+        putCQL.init();
+        putCQL.csvRandomWrite10K();
+
+        //  sleep before read (2 seconds)
+        Thread.sleep(2000);
+
+        // Read data
+        for (TestSetupRead setup : setups) {
+            setup.columnNames="colbigint, colint";
+
+            result = runTest(setup);
+
+            //  check amount of read items
+            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
+            assertEquals(10_000, Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT)));
+        }
+    }
+
+
+    @Test
     public void testRead30K() throws Exception {
         MockFlowFile result;
 

@@ -119,29 +119,6 @@ public class GetCQLBase {
                             countWrite,
                             countWrite / ((finish - start) / 1000.0),
                             System.lineSeparator());
-
-//                    if (validate) {
-//                        // delay (before read for synch on CQL side)
-//                        Thread.sleep(3000);
-//
-//                        // validate (read value from CSV and from CQL and compare content)
-//                        try (CqlSession session = testService.getSession()) {
-//                            start = System.currentTimeMillis();
-//                            countRead = (new CsvCqlValidate(session, setup, CqlTestSchema.primaryKeys)).executeContent(content);
-//                            finish = System.currentTimeMillis();
-//                        }
-//                        System.out.printf("Source: '%s'; VALIDATE; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-//                                result.getAttribute("CQLName"),
-//                                "FlowFile",
-//                                ReadableValue.fromMillisecond(finish - start),
-//                                finish - start,
-//                                countRead,
-//                                countRead / ((finish - start) / 1000.0),
-//                                System.lineSeparator());
-//
-//                        if (countWrite != countRead)
-//                            throw new Exception("The amount of Write and Read operations are different");
-//                    }
                     return result;
                 }
             }
