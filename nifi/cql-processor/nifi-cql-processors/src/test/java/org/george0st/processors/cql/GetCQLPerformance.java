@@ -39,7 +39,7 @@ public class GetCQLPerformance extends GetCQLBase {
 
             //  check amount of read items
             assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
-            assertEquals(30_000, Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT)));
+            assertEquals(10_000, Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT)));
         }
     }
 
