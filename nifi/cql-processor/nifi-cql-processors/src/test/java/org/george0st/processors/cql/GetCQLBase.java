@@ -116,7 +116,7 @@ public class GetCQLBase {
         testRunner.enableControllerService(testService);
         if (parallel>1)
             testRunner.setThreadCount(parallel);
-        results = coreTestParallel(setup, content, validate);
+        results = coreTestParallel(setup, content, validate, parallel);
         testRunner.disableControllerService(testService);
         return results;
     }
@@ -135,32 +135,22 @@ public class GetCQLBase {
                 System.lineSeparator());
     }
 
-    private List<MockFlowFile> coreTestParallel(TestSetupRead setup, String content, boolean validate) throws Exception {
+    private List<MockFlowFile> coreTestParallel(TestSetupRead setup, String content, boolean validate, int parallel) throws Exception {
         try {
             long finish, start, countWrite;
             List<MockFlowFile> results;
             boolean ok;
 
             start = System.currentTimeMillis();
-            testRunner.run(2);
+            testRunner.run(parallel);
             if (!testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS).isEmpty()) {
                 results = testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS);
                 ok = testRunner.getFlowFilesForRelationship(PutCQL.REL_FAILURE).isEmpty();
                 finish = System.currentTimeMillis();
 
                 if (ok) {
-                    for (MockFlowFile result: results) {
+                    for (MockFlowFile result: results)
                         printResult(result, setup, start, finish);
-//                        countWrite = Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT));
-//                        System.out.printf("Source: '%s'; READ; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-//                                setup.name,
-//                                "FlowFile",
-//                                ReadableValue.fromMillisecond(finish - start),
-//                                finish - start,
-//                                countWrite,
-//                                countWrite / ((finish - start) / 1000.0),
-//                                System.lineSeparator());
-                    }
                     return results;
                 }
             }
@@ -186,15 +176,6 @@ public class GetCQLBase {
 
                 if (ok) {
                     printResult(result, setup, start, finish);
-//                    countWrite = Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT));
-//                    System.out.printf("Source: '%s'; READ; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-//                            setup.name,
-//                            "FlowFile",
-//                            ReadableValue.fromMillisecond(finish - start),
-//                            finish - start,
-//                            countWrite,
-//                            countWrite / ((finish - start) / 1000.0),
-//                            System.lineSeparator());
                     return result;
                 }
             }
