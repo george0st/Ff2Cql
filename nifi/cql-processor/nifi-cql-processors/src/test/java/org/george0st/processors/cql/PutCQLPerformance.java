@@ -88,6 +88,21 @@ public class PutCQLPerformance extends PutCQLBase {
             assertEquals(100_000, Long.parseLong(result.getAttribute(CQLAttributes.WRITE_COUNT)));
         }
     }
+
+    @Test
+    @Disabled
+    @DisplayName("SEQ Write - 150K items")
+    void csvSequenceWrite150K() throws Exception {
+        String content=new CqlTestSchema().generateRndCSVString(150_000,true);
+        MockFlowFile result;
+
+        for (TestSetupWrite setup : setups) {
+            result = runTest(setup, content);
+            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
+            assertEquals(150_000, Long.parseLong(result.getAttribute(CQLAttributes.WRITE_COUNT)));
+        }
+    }
+
     // endregion SEQ Write
 
     // region SEQ Write/Validate
@@ -157,6 +172,21 @@ public class PutCQLPerformance extends PutCQLBase {
             assertEquals(100_000, Long.parseLong(result.getAttribute(CQLAttributes.WRITE_COUNT)));
         }
     }
+
+    @Test
+    @Disabled
+    @DisplayName("SEQ Write/Validate - 150K items")
+    void csvSequenceWriteValidate150K() throws Exception {
+        String content=new CqlTestSchema().generateRndCSVString(150_000,true);
+        MockFlowFile result;
+
+        for (TestSetupWrite setup : setups) {
+            result = runTest(setup, content, true);
+            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
+            assertEquals(150_000, Long.parseLong(result.getAttribute(CQLAttributes.WRITE_COUNT)));
+        }
+    }
+
     // endregion SEQ Write/Validate
 
     // region RND Write
@@ -226,6 +256,21 @@ public class PutCQLPerformance extends PutCQLBase {
             assertEquals(100_000, Long.parseLong(result.getAttribute(CQLAttributes.WRITE_COUNT)));
         }
     }
+
+    @Test
+    @Disabled
+    @DisplayName("RND Write - 150K items")
+    void csvRandomWrite150K() throws Exception {
+        String content=new CqlTestSchema().generateRndCSVString(150_000,false);
+        MockFlowFile result;
+
+        for (TestSetupWrite setup : setups) {
+            result = runTest(setup, content);
+            assertNotNull(result, String.format("Issue with processing in '%s'", setup.name));
+            assertEquals(150_000, Long.parseLong(result.getAttribute(CQLAttributes.WRITE_COUNT)));
+        }
+    }
+
     // endregion RND Write
 
 }
