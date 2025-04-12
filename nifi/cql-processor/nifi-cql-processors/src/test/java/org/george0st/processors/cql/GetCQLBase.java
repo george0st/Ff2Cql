@@ -70,8 +70,16 @@ public class GetCQLBase {
         return runTestWithProperty(setup, null, null, null, false);
     }
 
+    protected List<MockFlowFile> runTestParallel(TestSetupRead setup, int parallel) throws Exception {
+        return runTestParallelWithProperty(setup, null, null, null, false, parallel);
+    }
+
     protected MockFlowFile runTest(TestSetupRead setup, String content) throws Exception {
         return runTestWithProperty(setup, content, null, null, false);
+    }
+
+    protected List<MockFlowFile> runTestParallel(TestSetupRead setup, String content, int parallel) throws Exception {
+        return runTestParallelWithProperty(setup, content, null, null, false, parallel);
     }
 
     protected MockFlowFile runTest(TestSetupRead setup, String content, boolean validate) throws Exception {
@@ -96,6 +104,73 @@ public class GetCQLBase {
         return result;
     }
 
+    protected List<MockFlowFile> runTestParallelWithProperty(TestSetupRead setup, String content, PropertyDescriptor property, String propertyValue, boolean validate, int parallel) throws Exception {
+        List<MockFlowFile> results;
+
+        if (content!=null)
+            for (int i=0;i<parallel;i++)
+                testRunner.enqueue(content);
+        setup.setProperty(testRunner, testService);
+        if (property != null)
+            setup.setProperty(testRunner, property, propertyValue);
+        testRunner.enableControllerService(testService);
+        if (parallel>1)
+            testRunner.setThreadCount(parallel);
+        results = coreTestParallel(setup, content, validate);
+        testRunner.disableControllerService(testService);
+        return results;
+    }
+
+    private void printResult(MockFlowFile result, TestSetupRead setup, long start, long finish){
+        long countWrite;
+
+        countWrite = Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT));
+        System.out.printf("Source: '%s'; READ; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+                setup.name,
+                "FlowFile",
+                ReadableValue.fromMillisecond(finish - start),
+                finish - start,
+                countWrite,
+                countWrite / ((finish - start) / 1000.0),
+                System.lineSeparator());
+    }
+
+    private List<MockFlowFile> coreTestParallel(TestSetupRead setup, String content, boolean validate) throws Exception {
+        try {
+            long finish, start, countWrite;
+            List<MockFlowFile> results;
+            boolean ok;
+
+            start = System.currentTimeMillis();
+            testRunner.run(2);
+            if (!testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS).isEmpty()) {
+                results = testRunner.getFlowFilesForRelationship(PutCQL.REL_SUCCESS);
+                ok = testRunner.getFlowFilesForRelationship(PutCQL.REL_FAILURE).isEmpty();
+                finish = System.currentTimeMillis();
+
+                if (ok) {
+                    for (MockFlowFile result: results) {
+                        printResult(result, setup, start, finish);
+//                        countWrite = Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT));
+//                        System.out.printf("Source: '%s'; READ; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+//                                setup.name,
+//                                "FlowFile",
+//                                ReadableValue.fromMillisecond(finish - start),
+//                                finish - start,
+//                                countWrite,
+//                                countWrite / ((finish - start) / 1000.0),
+//                                System.lineSeparator());
+                    }
+                    return results;
+                }
+            }
+        }
+        catch (Exception ex) {
+            throw new Exception("Error in PROCESSOR");
+        }
+        return null;
+    }
+
     private MockFlowFile coreTest(TestSetupRead setup, String content, boolean validate) throws Exception {
         try {
             long finish, start, countWrite;
@@ -110,15 +185,16 @@ public class GetCQLBase {
                 finish = System.currentTimeMillis();
 
                 if (ok) {
-                    countWrite = Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT));
-                    System.out.printf("Source: '%s'; READ; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
-                            setup.name,
-                            "FlowFile",
-                            ReadableValue.fromMillisecond(finish - start),
-                            finish - start,
-                            countWrite,
-                            countWrite / ((finish - start) / 1000.0),
-                            System.lineSeparator());
+                    printResult(result, setup, start, finish);
+//                    countWrite = Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT));
+//                    System.out.printf("Source: '%s'; READ; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
+//                            setup.name,
+//                            "FlowFile",
+//                            ReadableValue.fromMillisecond(finish - start),
+//                            finish - start,
+//                            countWrite,
+//                            countWrite / ((finish - start) / 1000.0),
+//                            System.lineSeparator());
                     return result;
                 }
             }
