@@ -122,16 +122,14 @@ public class GetCQLBase {
     }
 
     private void printResult(MockFlowFile result, TestSetupRead setup, long start, long finish){
-        long countWrite;
-
-        countWrite = Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT));
+        long countRead = Long.parseLong(result.getAttribute(CQLAttributes.READ_COUNT));
         System.out.printf("Source: '%s'; READ; '%s': %s (%d ms); Items: %d; Perf: %.1f [calls/sec]%s",
                 setup.name,
                 "FlowFile",
                 ReadableValue.fromMillisecond(finish - start),
                 finish - start,
-                countWrite,
-                countWrite / ((finish - start) / 1000.0),
+                countRead,
+                countRead / ((finish - start) / 1000.0),
                 System.lineSeparator());
     }
 
