@@ -138,7 +138,8 @@ public class GetCQLPerformance extends GetCQLBase {
         for (TestSetupRead setup : setups) {
             setup.columnNames="colbigint, colint";
 
-            results = runTestParallel(setup, content, 2);
+            //results = runTestParallel(setup, content, 5);
+            results = runTestParallel(setup, 5);
 
             //  check amount of read items
             for (MockFlowFile result: results) {
