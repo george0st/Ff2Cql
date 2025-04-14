@@ -1,7 +1,7 @@
 {
   "enable": false,
   "name": "cassandra",
-  "ipAddresses": ["10.129.53.159", "10.129.53.154", "10.129.53.153"],
+  "ipAddresses": ["10.192.0.10", "10.192.0.11", "10.192.0.12"],
   "port": 9042,
   "username": "perf",
   "pwd": "perf",
