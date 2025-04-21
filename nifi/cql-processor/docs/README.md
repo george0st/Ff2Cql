@@ -1,8 +1,8 @@
 ## 1. Usage in NiFi
 
 You can use NiFi v2 processor with controller (nifi-cql-nar-*.nar).
-- ✅ [**PutCQL**](#3-putcql-nifi-processor), where inputs are FlowFiles
-- ✅ [**GetCQL**](#4-getcql-nifi-processor), where outputs are FlowFiles
+- ✅ [**PutCQL**](#3-putcql-nifi-processor), put data to CQL solution, where inputs are FlowFiles
+- ✅ [**GetCQL**](#4-getcql-nifi-processor), get data from CQL solution, where outputs are FlowFiles
 
 ### 1.1 Preconditions for usage
 
