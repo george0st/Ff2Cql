@@ -50,13 +50,13 @@ public class PutCQLBase {
 
         addTestScope(setup,
                 TestSetupWrite.getTestPropertyFile("./src/test",
-                        new String[]{"test-cassandra.json", "test-properties.json"}));
+                        new String[]{"test-put-cassandra.json", "test-properties.json"}));
         addTestScope(setup,
                 TestSetupWrite.getTestPropertyFile("./src/test",
-                        new String[]{"test-scylla.json", "test-properties.json"}));
+                        new String[]{"test-put-scylla.json", "test-properties.json"}));
         addTestScope(setup,
                 TestSetupWrite.getTestPropertyFile("./src/test",
-                        new String[]{"test-astra.json", "test-properties.json"}));
+                        new String[]{"test-put-astra.json", "test-properties.json"}));
         return setup;
     }
 
