@@ -111,10 +111,10 @@ public class GetCQL extends AbstractProcessor {
             .expressionLanguageSupported(ExpressionLanguageScope.ENVIRONMENT)
             .build();
 
-//    Fetch Size
-//    Max Rows Per Flow File
-//    Ouptput Batch Size
-
+    //  TOBE: Future extension for addition properties
+    //    Fetch Size
+    //    Max Rows Per Flow File
+    //    Output Batch Size
 
     //  endregion All Properties
 

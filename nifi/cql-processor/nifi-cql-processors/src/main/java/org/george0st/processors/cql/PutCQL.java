@@ -92,7 +92,7 @@ public class PutCQL extends AbstractProcessor {
     public static final PropertyDescriptor BATCH_SIZE = new PropertyDescriptor
             .Builder()
             .name("Batch Size")
-            .description("Size of batch for data ingest (in one operation).")
+            .description("Batch size for data ingest (in one operation).")
             .required(false)
             .defaultValue("200")
             .addValidator(StandardValidators.POSITIVE_LONG_VALIDATOR)
@@ -149,6 +149,10 @@ public class PutCQL extends AbstractProcessor {
         relationships = Set.of(REL_SUCCESS, REL_FAILURE);
     }
 
+    /**
+     * Mapping old and new properties for migration support
+     * @param config
+     */
     @Override
     public void migrateProperties(final PropertyConfiguration config) {
         //  support property migration
