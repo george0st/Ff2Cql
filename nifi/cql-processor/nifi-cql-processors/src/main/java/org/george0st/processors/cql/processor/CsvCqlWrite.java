@@ -23,6 +23,7 @@ public class CsvCqlWrite extends CqlProcessor {
 
     /**
      * Write core
+     *
      * @param reader        The reader (from different inputs)
      * @return              The amount of write rows
      * @throws IOException
