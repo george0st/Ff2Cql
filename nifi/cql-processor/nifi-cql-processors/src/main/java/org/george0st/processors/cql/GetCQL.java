@@ -116,7 +116,6 @@ public class GetCQL extends AbstractProcessor {
     //    Max Rows Per Flow File
     //    Output Batch Size
 
-
     //  endregion All Properties
 
     //  region All Relationships

@@ -36,7 +36,6 @@ public class CsvCqlRead extends CqlProcessor {
         ResultSet rs;
 
         //  execute CQL
-        //rs = session.execute(selectStatementSql(session, ((SetupRead)setup).columnNames, ((SetupRead)setup).whereClause));
         rs = session.execute(selectStatementSql(session, (SetupRead)setup));
 
         //  get columns
