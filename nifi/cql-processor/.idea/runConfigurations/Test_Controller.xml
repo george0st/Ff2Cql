@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Test Controller" type="JUnit" factoryName="JUnit">
+    <module name="nifi-cql" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="org.george0st.cql.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="PACKAGE_NAME" value="org.george0st.cql" />
+    <option name="MAIN_CLASS_NAME" value="org.george0st.cql.TestCQLControllerService" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="class" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
