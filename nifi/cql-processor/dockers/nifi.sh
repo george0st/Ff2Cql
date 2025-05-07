@@ -1,0 +1,5 @@
+#!/bin/sh
+
+docker network create testnet
+docker pull apache/nifi:2.4.0
+docker run --name nifi -p 8443:8443 -d --network testnet -e SINGLE_USER_CREDENTIALS_USERNAME=test -e SINGLE_USER_CREDENTIALS_PASSWORD=testUserXNifiv2 apache/nifi:2.4.0
