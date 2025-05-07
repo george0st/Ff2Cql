@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="TestCQLControllerService" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+  <configuration default="false" name="Test Controller" type="JUnit" factoryName="JUnit">
     <module name="nifi-cql" />
     <extension name="coverage">
       <pattern>
