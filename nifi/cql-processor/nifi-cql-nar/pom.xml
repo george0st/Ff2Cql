@@ -19,24 +19,24 @@
     <parent>
         <groupId>org.george0st</groupId>
         <artifactId>cql-processor</artifactId>
-        <version>2.2.5</version>
+        <version>2.2.6</version>
     </parent>
 
     <artifactId>nifi-cql-nar</artifactId>
     <packaging>nar</packaging>
-    <version>2.2.5</version>
+    <version>2.2.6</version>
 
     <dependencies>
         <!-- internal -->
         <dependency>
             <groupId>org.george0st</groupId>
             <artifactId>nifi-cql-processors</artifactId>
-            <version>2.2.5</version>
+            <version>2.2.6</version>
         </dependency>
         <dependency>
             <groupId>org.george0st</groupId>
             <artifactId>nifi-cql</artifactId>
-            <version>2.2.5</version>
+            <version>2.2.6</version>
         </dependency>
         <!-- core -->
         <dependency>
