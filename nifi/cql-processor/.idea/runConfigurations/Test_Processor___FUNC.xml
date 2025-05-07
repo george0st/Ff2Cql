@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Test Processor - FUNC" type="JUnit" factoryName="JUnit">
+    <module name="nifi-cql-processors" />
+    <option name="MAIN_CLASS_NAME" value="" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="pattern" />
+    <patterns>
+      <pattern testClass="org.george0st.processors.cql.GetCQLFunction" />
+      <pattern testClass="org.george0st.processors.cql.PutCQLFunction" />
+      <pattern testClass="org.george0st.processors.cql.PutCQLErrorFunction" />
+    </patterns>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

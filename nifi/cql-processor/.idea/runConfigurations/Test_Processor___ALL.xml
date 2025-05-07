@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Test Processor" type="JUnit" factoryName="JUnit">
+  <configuration default="false" name="Test Processor - ALL" type="JUnit" factoryName="JUnit">
     <module name="nifi-cql-processors" />
     <extension name="coverage">
       <pattern>
