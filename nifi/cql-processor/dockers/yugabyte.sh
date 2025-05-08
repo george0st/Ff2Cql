@@ -1,6 +1,20 @@
 #!/bin/sh
 
-docker network create testnet
-docker pull yugabytedb/yugabyte:2024.2.2.2-b2
-docker run --name yugabyte -p 9042:9042 -p 7199:7199 -d --network testnet yugabytedb/yugabyte:2024.2.2.2-b2
+# get/run '2.25.1.0-b381' yugabyte
 
+docker network create testnet
+docker pull yugabytedb/yugabyte:2.25.1.0-b381
+docker run --name yugabyte -p 7000:7000 -p 9000:9000 -p 15433:15433 -p 5433:5433 -p 9042:9042 -d --network testnet yugabytedb/yugabyte:2.25.1.0-b381 bin/yugabyted start --background=false
+
+
+# 1. show status
+# docker exec -it yugabyte yugabyted status
+
+# 2. run ycqlsh (CQL)
+# docker exec -it yugabyte bash -c "bin/ycqlsh yugabyte 9042 -u cassandra"
+
+# 3. web UI
+# http://localhost:15433/
+
+# 4. run ysqlsh (SQL)
+# docker exec -it yugabyte bash -c "bin/ysqlsh -h yugabyte -U yugabyte -d yugabyte"
