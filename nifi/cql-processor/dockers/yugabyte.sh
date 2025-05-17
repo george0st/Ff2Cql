@@ -9,14 +9,14 @@ docker run --name yugabyte -p 7000:7000 -p 9000:9000 -p 15433:15433 -p 5433:5433
 # Usage
 ########
 
-# 1. show status
+# 1. show yugabyte status
 # docker exec -it yugabyte yugabyted status
 
-# 2. run ycqlsh (CQL)
+# 2. run ycqlsh (yugabyte CQL)
 # docker exec -it yugabyte bash -c "bin/ycqlsh yugabyte 9042 -u cassandra"
 
-# 3. web UI
+# 3. web UI (yugabyte administration)
 # http://localhost:15433/
 
-# 4. run ysqlsh (SQL)
+# 4. run ysqlsh (yugabyte SQL)
 # docker exec -it yugabyte bash -c "bin/ysqlsh -h yugabyte -U yugabyte -d yugabyte"
