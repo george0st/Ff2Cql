@@ -4,10 +4,6 @@
    - https://docs.yugabyte.com/preview/drivers-orms/java/ycql-ssl/
 
 2. add complex sample in NiFi 
-   - reading and writing
-
-3. Add flow for separate Put, Get
-
-4. Add flow with both Put and Get
+   - reading and writing (add complex flow with both Put and Get)
 
 
