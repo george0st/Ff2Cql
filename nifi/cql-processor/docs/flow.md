@@ -1,10 +1,12 @@
 ## Sample flow definitions
 
 ### 1. PutCQL
-The easy sample of PutCQL (write/put data to CQL solution) [see](../flows/Test-PutCQL.json).
+The easy sample with PutCQL (write/put data to ScyllaDB,
+see controller setting) [see](../flows/Test-PutCQL.json).
 
 ### 2. GetCQL
-The easy sample of GetCQL (read/get data from CQL solution) [see](../flows/Test-GetCQL.json).
+The easy sample with GetCQL (read/get data from ScyllaDB,
+see controller setting) [see](../flows/Test-GetCQL.json).
 
 ### 3. PutCQL & GetCQL
 TBD.
