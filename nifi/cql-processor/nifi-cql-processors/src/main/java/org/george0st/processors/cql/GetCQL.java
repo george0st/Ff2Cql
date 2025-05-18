@@ -38,7 +38,7 @@ import java.io.*;
 import java.util.List;
 import java.util.Set;
 
-@Tags({"cql", "cassandra", "scylladb", "astradb", "cassandra query language",
+@Tags({"cql", "cassandra", "scylladb", "astradb", "yugabyte", "cassandra query language",
         "nosql", "read", "get"})
 @CapabilityDescription("Read the contents of CQL engine (support Apache Cassandra, " +
         "ScyllaDB, AstraDB, etc.) to the FlowFile.")

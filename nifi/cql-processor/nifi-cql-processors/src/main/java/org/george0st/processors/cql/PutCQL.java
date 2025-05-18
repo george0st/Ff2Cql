@@ -42,7 +42,7 @@ import java.io.*;
 import java.util.List;
 import java.util.Set;
 
-@Tags({"cql", "cassandra", "scylladb", "astradb", "cassandra query language",
+@Tags({"cql", "cassandra", "scylladb", "astradb", "yugabyte", "cassandra query language",
         "nosql", "write", "insert", "update", "put"})
 @CapabilityDescription("Writes the contents of FlowFile to an CQL engine (support Apache Cassandra, " +
         "ScyllaDB, AstraDB, etc.). The processor expects content in FlowFile/CSV with header.")
@@ -150,7 +150,7 @@ public class PutCQL extends AbstractProcessor {
     }
 
     /**
-     * Mapping old and new properties for migration support
+     * Mapping the old to the new properties for migration support
      * @param config
      */
     @Override
