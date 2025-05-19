@@ -3,9 +3,9 @@
 ![NiFi + Cassandra](https://github.com/george0st/Csv2Cql/blob/main/docs/assets/nifi_cassandra.png?raw=true)
 
 A simple transfer data between NiFi and CQL (support Apache Cassandra, 
-ScyllaDB, AstraDB, etc.). The implementation details:
+ScyllaDB, AstraDB, YugabyteDB, etc.). The implementation details:
  - development NiFi v2 processor (with controller) and java application (support Java 17/21+)
- - support Apache Cassandra v4/v5, ScyllaDB, AstraDB based on CQL (Cassandra Query Language)
+ - support Apache Cassandra v4/v5, ScyllaDB, AstraDB, YugabyteDB based on CQL (Cassandra Query Language)
 
 ## 1. The main motivation
 
@@ -28,22 +28,31 @@ or two other older alternative ways:
 
 ## 3. Connection setting
 
-You can see sample of relevant setting for CQL controller here:
+You can see sample of relevant setting for CQL controller here
+(these connection settings are used directly in unit tests):
+
+### 3.1 Cassandra
  - [Cassandra setting](./nifi/cql-processor/nifi-cql/src/test/test-cassandra.json)
-   - access with IP addresses (name/password)
+ - access with IP addresses (name/password)
+
+### 3.2 Scylla
  - [Scylla setting](./nifi/cql-processor/nifi-cql/src/test/test-scylla.json)
-   - access with IP address (without name/password)
+ - access with IP address (without name/password)
+
+### 3.3 AstraDB
  - [AstraDB setting](./nifi/cql-processor/nifi-cql/src/test/test-astra.json)
-   - access with Security Connection Bundle (SCB) and Token
-   - NOTE about SCB: see the file with **'.zip'** suffix
-     - How to get the SCB? Go to the https://astra.datastax.com/...,
-       Menu Databases/Your database/Region/[Download SCB](./docs/assets/astradb-download-SCB.png)
-   - NOTE about token: see the file with **'token.json'** suffix
-     - How to get the token? Go to the https://astra.datastax.com/...,
-       Menu Tokens/Generate Token/Token Details/[Download Token Details](./docs/assets/astradb-download-token.png)
-   
-NOTE: 
- - These connection settings are used directly in unit tests.
+ - access with Security Connection Bundle (SCB) and Token
+ - NOTE about SCB: see the file with **'.zip'** suffix
+   - How to get the SCB? Go to the https://astra.datastax.com/...,
+     Menu Databases/Your database/Region/[Download SCB](./docs/assets/astradb-download-SCB.png)
+ - NOTE about token: see the file with **'token.json'** suffix
+   - How to get the token? Go to the https://astra.datastax.com/...,
+     Menu Tokens/Generate Token/Token Details/[Download Token Details](./docs/assets/astradb-download-token.png)
+
+### 3.4 YugabyteDB
+ - [YugabyteDB setting](./nifi/cql-processor/nifi-cql/src/test/test-yugabyte.json)
+ - access with IP address (without name/password)
+
 
 ## 4. Apache NiFi v2 & Scylla/Cassandra v5
 
