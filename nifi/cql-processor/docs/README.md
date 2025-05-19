@@ -124,3 +124,7 @@ You have to do these steps (only one-time action):
 - **Custom Query:**
     - A custom CQL query used to retrieve data. Instead of building a CQL query from other
       properties, this query will be wrapped as a sub-query. Query must have no ORDER BY statement.
+
+## 5. Sample flow definitions
+
+The sample flow definition, [see](./nifi/cql-processor/docs/flow.md)
