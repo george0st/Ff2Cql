@@ -1,0 +1,22 @@
+{
+  "enable": true,
+  "name": "<name of setting e.g. cassandra, scylla, etc.>",
+  "ipAddresses": ["<add ip>", "<add ip2>", "..."],
+  "port": 9042,
+  "secureConnectionBundle": "<link to '*.zip' file, downloaded from AstraDB web>",
+  "username": "<add username>",
+  "pwd": "<add pwd>",
+  "localDC": "<local data center>",
+  "connectionTimeout": "<timeout in seconds>",
+  "requestTimeout": "<timeout in seconds>",
+  "defaultConsistencyLevel": "<consistency level e.g. LOCAL_ONE, LOCAL_QUORUM, etc.>",
+
+  "consistencyLevel": "<consistency level e.g. LOCAL_ONE, LOCAL_QUORUM, etc.>",
+  "table": "<add 'keyspace.table' in CQL>",
+  "batchSize": 200,
+  "batchType": "<batch type, possible values UNLOGGED, LOGGED>",
+  "dryRun": false,
+
+  "replication": "<setting for schema replication e.g. {'class' : 'NetworkTopologyStrategy', 'replication_factor' : 3}>",
+  "compaction": "<setting for compaction e.g. {'class':'SizeTieredCompactionStrategy'}>"
+}

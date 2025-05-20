@@ -10,8 +10,8 @@
   "requestTimeout": "60",
   "defaultConsistencyLevel": "LOCAL_ONE",
 
-  "table": "prftest.csv2cql_test3",
   "consistencyLevel": "LOCAL_ONE",
+  "table": "prftest.csv2cql_test3",
 
   "replication": "{'class': 'NetworkTopologyStrategy', 'replication_factor': 3}",
   "compaction": "{'class': 'UnifiedCompactionStrategy', 'scaling_parameters': 'L10, T10'}"
