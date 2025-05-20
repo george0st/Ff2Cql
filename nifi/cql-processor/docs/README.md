@@ -45,7 +45,7 @@ You have to do these steps (only one-time action):
     - Connection timeout in seconds (default is 900 seconds).
 - **Request Timeout:**
     - Request timeout in seconds (default is 60 seconds).
-- **Consistency Level:**
+- **Default Consistency Level:**
     - Default consistency level (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.,
       default is LOCAL_ONE).
 - **SSL Context Service:**
@@ -74,7 +74,7 @@ You have to do these steps (only one-time action):
 
 - **Service Controller:**
   - see relation to [CQLControllerService](#2-cqlcontrollerservice-nifi-controller)
-- **Write Consistency Level:**
+- **Consistency Level:**
   - Consistency level for write operation (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.,
     default is LOCAL_ONE).
 - **Table:**
@@ -108,8 +108,8 @@ You have to do these steps (only one-time action):
 
 - **Service Controller:**
     - see relation to [CQLControllerService](#2-cqlcontrollerservice-nifi-controller)
-- **Read Consistency Level:**
-    - Consistency level for write operation (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.,
+- **Consistency Level:**
+    - Consistency level for read operation (e.g. LOCAL_ONE, LOCAL_QUORUM, etc.,
       default is LOCAL_ONE).
 - **Table:**
     - Schema and table name in CQL for read/get a data (expected format 'keyspace.table', e.g. 'cqlschema.cqltable').

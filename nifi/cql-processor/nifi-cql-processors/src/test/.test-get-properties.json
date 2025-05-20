@@ -13,9 +13,9 @@
 
   "consistencyLevel": "<consistency level e.g. LOCAL_ONE, LOCAL_QUORUM, etc.>",
   "table": "<add 'keyspace.table' in CQL>",
-  "columnNames": "",
-  "whereClause": "",
-  "cqlQuery": "",
+  "columnNames": "<A comma-separated list of column names to be used in the query>",
+  "whereClause": "<A custom clause to be added in the WHERE condition when building CQL queries>",
+  "cqlQuery": "<A custom CQL query used to retrieve data>",
 
   "replication": "<setting for schema replication e.g. {'class' : 'NetworkTopologyStrategy', 'replication_factor' : 3}>",
   "compaction": "<setting for compaction e.g. {'class':'SizeTieredCompactionStrategy'}>"
