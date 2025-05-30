@@ -9,9 +9,9 @@
   "defaultConsistencyLevel": "LOCAL_ONE",
 
   "consistencyLevel": "LOCAL_ONE",
+  "table": "prftest.csv2cql_test3",
   "batchSize": 100,
   "batchType": "LOGGED",
-  "table": "prftest.csv2cql_test3",
   "dryRun": false,
 
   "replication": "{'class': 'SimpleStrategy', 'replication_factor': 1}",

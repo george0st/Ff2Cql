@@ -28,7 +28,7 @@ or two other older alternative ways:
 
 ## 3. Connection setting
 
-You can see sample of relevant setting for CQL controller here
+You can see a sample of relevant setting for CQL controller here
 (these connection settings are used directly in unit tests):
 
 ### 3.1 Cassandra
