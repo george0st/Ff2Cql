@@ -11,9 +11,9 @@ see CQL controller setting) [see](../flows/Test-GetCQL.json).
 ### 3. PutCQL & GetCQL (with ScyllaDB)
 TBD.
 
-### NOTE: Load/Use Flow definition 
+### NOTE: Load/Use Flow definition in Apache NiFi v2
 
-If you need to use JSON file with flow definition in Apache NiFi, follow next steps:
+If you need to use JSON file with flow definition, follow next steps:
 
 1. Choose 'Process Group' and you will see dialog with title 'Create Process Group'
 2. Click to the button 'Browse' (you can see in the dialog, the edit box 'Name' the browse icon) and 
