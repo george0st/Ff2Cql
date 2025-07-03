@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# get/run '2025.1.3' scylla
+# get/run '2025.2.0' scylla
 
 docker network create testnet
-docker pull scylladb/scylla:2025.1.3
-docker run --name scylla -p 9042:9042 -p 7199:7199 -d --network testnet scylladb/scylla:2025.1.3
+docker pull scylladb/scylla:2025.2.0
+docker run --name scylla -p 9042:9042 -p 7199:7199 -d --network testnet scylladb/scylla:2025.2.0
 
