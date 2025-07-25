@@ -8,4 +8,8 @@
    4. Update variable PATH=...;c:\Apps\maven\bin;
 1. mvn archetype:generate
 2. nifi
-3. ...
+3. Dialog settings
+   1. groupId:          org.george0st
+   2. artifactId:       sample-processor or sample-controller
+   3. version:          1.0
+   4. artifactBaseName: sample
