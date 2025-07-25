@@ -44,8 +44,7 @@ public class CsvCqlRead extends CqlProcessor {
 
         //  create CSV format
         CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
-                .setHeader(columns.toArray(new String[0]))
-                .build();
+                .setHeader(columns.toArray(new String[0])).get();
 
         //  write CSV
         try (final CSVPrinter printer = new CSVPrinter(writer, csvFormat)) {
