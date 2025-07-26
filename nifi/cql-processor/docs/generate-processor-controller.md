@@ -12,7 +12,7 @@
    1. Command line: **mvn archetype:generate**
    2. Filter: **nifi**
    3. Dialog settings, e.g.:
-      1. groupId:          org.george0st
-      2. artifactId:       sample-processor or sample-controller
-      3. version:          1.0
-      4. artifactBaseName: sample
+      1. groupId:          **org.george0st**
+      2. artifactId:       **sample-processor** or **sample-controller**
+      3. version:          **1.0**
+      4. artifactBaseName: **sample**
