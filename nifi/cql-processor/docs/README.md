@@ -10,8 +10,8 @@ You have to do these steps (only one-time action):
 1. You need the NAR file 'nifi-cql-nar-*.nar'
     - the last version is [here](./../output/)
 2. Import the *.nar file to the NiFi lib directory
-    - expected location in Linux e.g. '/opt/nifi/current-nifi/lib'
-    - expected location in Windows e.g. 'C:\Program Files\Apache\Nifi\lib'
+    - expected location in Linux **'/opt/nifi/nifi-current/lib'**
+    - expected location in Windows **'C:\Program Files\Apache\Nifi\lib'**
 3. STOP NiFi
 4. START NiFi
 
