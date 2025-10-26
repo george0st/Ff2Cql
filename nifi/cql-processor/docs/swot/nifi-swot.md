@@ -1,8 +1,11 @@
 # NiFi SWOT analysis
 
+The SWOT analysis from perspective of Strengths, Weaknesses, Opportunities
+and Threats.
+
 
 ## 1. Strengths
-  Strengths: items as advantages
+  Strengths: items as advantages, benefits.
 
   ### 1.1 Pricing:
   - free (open source)
@@ -14,32 +17,33 @@
     total queue size)
   - Native formats CSV, XML, JSON
 
-
   ### 1.3 Connectors
   - File transfer, AWS S2, Azure BlobStorage
   - SQL (Postgres, MySQL)
   - NoSQL (Mongo)
+  - Event streaming (MQ, Kafka)
 
   ### 1.4 Environment
   - Java 21
   - GitHub, GitLab
 
-  ### 1.5 Key contributors:
+  ### 1.5 Key contributors
   - Cloudera
   - Snowflake
   - Ksolves
   - etc. (see https://nifi.apache.org/community/powered-by/)
 
 ## 2. Weaknesses
-  Weaknesses: items as disadvantages
+  Weaknesses: items as disadvantages, limited functions.
 
-  - missing CI/CD
-  - limited privilegies 
+  - without deployment functionalities (package & env. extensions)
+  - only external relation on CI/CD
+  - limited privileges (without setting in project level)
 
 ## 3. Opportunities
 
-  Opportunities: items could exploit to its advantage.
+  Opportunities: items could exploit to its advantage, future direction.
 
 ## 4. Threats
 
-  Threats: items that could cause trouble.
+  Threats: items that could cause trouble, risk.
