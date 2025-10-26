@@ -25,7 +25,7 @@ and Threats.
 
   ### 1.4 Environment
   - Java 21
-  - GitHub, GitLab
+  - CI/CD - own, GitHub, GitLab
 
   ### 1.5 Key contributors
   - Cloudera
@@ -36,9 +36,15 @@ and Threats.
 ## 2. Weaknesses
   Weaknesses: items as disadvantages, limited functions.
 
+  ### 2.1 Testing
+  - missing default E2E test for validation of new Apache NiFi versions  
+
+  ### 2.2 Security
+  - limited privileges (without setting in project level)
+
+  ### 2.3 Others
   - without deployment functionalities (package & env. extensions)
   - only external relation on CI/CD
-  - limited privileges (without setting in project level)
 
 ## 3. Opportunities
 
