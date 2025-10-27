@@ -13,8 +13,8 @@ and Threats.
   ### 1.2 Functionalities
   - Support on-prem, cloud
   - Prevention of system overloading (via throttling)
-  - Throttling as default behavior (via amount of items in queue and 
-    total queue size)
+  - Throttling as default (via amount of items in queue and total queue size)
+  - Parallel processing as default (amount of executors, data distribution via queues)
   - Native formats CSV, XML, JSON
 
   ### 1.3 Connectors
@@ -27,7 +27,12 @@ and Threats.
   - Java 21
   - CI/CD - own, GitHub, GitLab
 
-  ### 1.5 Key contributors
+  ### 1.5 Architecture
+  - pear-to-pear cluster architecture
+  - node coordination and primary node definition via Zookeeper
+  - unlimited amount of nodes (real clusters with 2 to 1k nodes)
+
+  ### 1.6 Key contributors
   - Cloudera
   - Snowflake
   - Ksolves

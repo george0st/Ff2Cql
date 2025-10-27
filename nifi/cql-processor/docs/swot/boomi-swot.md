@@ -21,7 +21,10 @@ and Threats.
   - Java 11
   - CI/CD - own
 
-  ### 1.5 Key contributors
+  ### 1.5 Architecture
+  - limited amount of molecules, from 3 to 10
+
+  ### 1.6 Key contributors
 
 ## 2. Weaknesses
   Weaknesses: items as disadvantages, limited functions.
