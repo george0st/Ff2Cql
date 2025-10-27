@@ -28,9 +28,9 @@ and Threats.
   - CI/CD - own, GitHub, GitLab
 
   ### 1.5 Architecture
-  - pear-to-pear cluster architecture
-  - node coordination and primary node definition via Zookeeper
-  - unlimited amount of nodes (real clusters with 2 to 1k nodes)
+  - Pear-to-pear cluster architecture
+  - Node coordination and primary node definition via Zookeeper
+  - Unlimited amount of nodes (real clusters use from 2 to 1k nodes)
 
   ### 1.6 Key contributors
   - Cloudera

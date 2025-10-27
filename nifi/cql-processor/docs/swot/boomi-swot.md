@@ -22,7 +22,7 @@ and Threats.
   - CI/CD - own
 
   ### 1.5 Architecture
-  - limited amount of molecules, from 3 to 10
+  - Limited amount of molecules/nodes (from 3 to 10)
 
   ### 1.6 Key contributors
 
