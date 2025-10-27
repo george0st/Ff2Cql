@@ -8,8 +8,9 @@ and Threats.
   Strengths: items as advantages, benefits.
 
   ### 1.1 Pricing
-  - personal use (30 days, limited functionalities)
-  - paid
+  - Free trial (for 30 days, limited functionalities)
+  - Pay-as-you-go
+  - Subscription plans (for Integration, API Management, Data Hub, Data Integration)
 
   ### 1.2 Functionalities
   - Support on-prem, cloud
