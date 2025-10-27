@@ -7,7 +7,7 @@ and Threats.
 ## 1. Strengths
   Strengths: items as advantages, benefits.
 
-  ### 1.1 Pricing:
+  ### 1.1 Pricing
   - free (open source)
 
   ### 1.2 Functionalities

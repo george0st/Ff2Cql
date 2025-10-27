@@ -7,7 +7,7 @@ and Threats.
 ## 1. Strengths
   Strengths: items as advantages, benefits.
 
-  ### 1.1 Pricing:
+  ### 1.1 Pricing
   - personal use (30 days, limited functionalities)
   - paid
 
@@ -20,21 +20,30 @@ and Threats.
   - Java 11
   - CI/CD - own
 
-### 1.5 Key contributors
+  ### 1.5 Key contributors
 
 ## 2. Weaknesses
   Weaknesses: items as disadvantages, limited functions.
 
-### 2.1 Testing
+  ### 2.1 Testing
 
-### 2.2 Security
+  ### 2.2 Security
 
-### 2.3 Others
+  ### 2.3 Others
 
 ## 3. Opportunities
-
-Opportunities: items could exploit to its advantage, future direction.
+  Opportunities: items could exploit to its advantage, future direction.
 
 ## 4. Threats
-
-Threats: items that could cause trouble, risk.
+  Threats: items that could cause trouble, risk.
+  
+  ### 4.1 Addition costs based on complicated licence model
+  - Event Streams, Message Queuning, HUB Edition, EDI/B2B Framework, Parallel Processing, etc.
+    - Paid functions
+  - Dynamic Properties/Connections
+    - It can generate addition costs
+    - This function can be enabled only from Boomi side
+  - Platform full consumption
+    - The relation to amount of interactions e.g. 5 billions
+  
+  ### 4.2
